@@ -207,6 +207,20 @@ setInterval(()=>{
   const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
   document.getElementById('timer').textContent=pad(h)+':'+pad(m)+':'+pad(s);
 },1000);
+<script>
+let total = 4*3600 + 59*60 + 50;
+function pad(n){return String(n).padStart(2,'0')}
+setInterval(()=>{
+  if(total<=0)return;
+  total--;
+  const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
+  document.getElementById('timer').textContent=pad(h)+':'+pad(m)+':'+pad(s);
+},1000);
+
+// Semua tombol → ke register.html
+document.querySelector('.btn-nav').onclick = () => location.href = '/register.html';
+document.querySelector('.btn-cta-big').onclick = () => location.href = '/register.html';
+document.querySelector('.btn-sticky').onclick = () => location.href = '/register.html';
 </script>
 </body>
 </html>
