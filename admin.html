@@ -300,7 +300,7 @@ function renderOrders(orders) {
       <td><span class="badge ${isPending?'pending':'paid'}">${isPending?'Pending':'Paid'}</span></td>
       <td>
         ${isPending
-          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}','${o.uid}', this)">✓ Konfirmasi</button>`
+          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}','${o.uid}','${o.paket}', this)">✓ Konfirmasi</button>`
           : `<span style="font-size:12px;color:#aaa">Lunas</span>`
         }
       </td>
@@ -309,23 +309,32 @@ function renderOrders(orders) {
 }
 
 // ── Konfirmasi bayar ───────────────────────────────────
-window.confirmPaid = async function(orderId, uid, btn) {
-  if (!confirm('Konfirmasi pembayaran ini? Plan user akan otomatis diupdate ke Premium +30 hari.')) return;
+window.confirmPaid = async function(orderId, uid, paket, btn) {
+  const isBulanan = paket.toLowerCase().includes('bulanan');
+  const msg = isBulanan
+    ? 'Konfirmasi pembayaran ini? Plan user akan otomatis diupdate ke Premium +30 hari.'
+    : `Konfirmasi pembayaran ini? User akan tercatat sudah membeli ${paket}.`;
+  if (!confirm(msg)) return;
   btn.disabled = true; btn.textContent = '...';
 
   try {
     // 1. Update order → paid
     await updateDoc(doc(db, 'orders', orderId), { status: 'paid' });
 
-    // 2. Update user → premium + expiredAt +30 hari
-    const exp = new Date();
-    exp.setDate(exp.getDate() + 30);
-    await updateDoc(doc(db, 'users', uid), {
-      plan: 'premium',
-      expiredAt: Timestamp.fromDate(exp)
-    });
+    // 2. Kalau bulanan → set premium + expiredAt
+    if (isBulanan) {
+      const exp = new Date();
+      exp.setDate(exp.getDate() + 30);
+      await updateDoc(doc(db, 'users', uid), {
+        plan: 'premium',
+        expiredAt: Timestamp.fromDate(exp)
+      });
+      showToast('✅ Pembayaran dikonfirmasi! User sudah Premium 30 hari.');
+    } else {
+      // Bundling/à la carte → cukup catat order paid, plan tetap free
+      showToast('✅ Pembayaran dikonfirmasi! Akses sub-bab aktif.');
+    }
 
-    showToast('✅ Pembayaran dikonfirmasi! User sudah Premium 30 hari.');
     await Promise.all([loadOrders(), loadUsers()]);
 
   } catch(e) {
