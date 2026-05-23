@@ -98,119 +98,277 @@ h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── Referral code helpers ──────────────────────────────
-let generatedCode = '';
+// ── Harga ──────────────────────────────────────────────
+const HARGA = {
+  alacarte: 4900,
+  bundling: { 3: 12900, 5: 19900, 10: 34900 },
+  bulanan: 49900
+};
 
-function makeCode(name) {
-  const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4) || 'USER';
-  const suffix = Math.floor(1000 + Math.random() * 9000);
-  return 'CB-' + clean + suffix;
+const KOMISI_RATE = 0.15;
+
+const babs = {
+  Matematika: ['Bilangan bulat','Pecahan & desimal','FPB dan KPK','Bangun datar','Bangun ruang','Statistika dasar','Perbandingan','Skala & jarak'],
+  IPAS: ['Makhluk hidup','Ekosistem','Gaya & gerak','Energi & perubahannya','Bumi & alam semesta','Cuaca & iklim','Teknologi pangan','Kesehatan'],
+  'B.Inggris': ['Greetings','Tenses dasar','Reading comprehension','Vocabulary','Writing simple sentences','Listening skills','Speaking practice','Grammar dasar']
+};
+
+let curSubjAlacarte = 'Matematika';
+let curSubjBundling = 'Matematika';
+let selBabsAlacarte = [];
+let selBabsBundling = [];
+let bundlingMax = 3;
+let bundlingPrice = 12900;
+let curPkg = { name: '1 sub-bab Matematika', price: 4900 };
+let discApplied = false, validRefCode = '', currentUser = null, currentUserData = null;
+let activeTab = 'alacarte';
+
+// ── Auth ───────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = 'register.html'; return; }
+  currentUser = user;
+
+  // Ambil data user dari Firestore
+  const userSnap = await getDoc(doc(db, 'users', user.uid));
+  if (userSnap.exists()) {
+    currentUserData = userSnap.data();
+
+    // Kalau user punya referredBy, auto-apply diskon kalau belum pernah pakai
+    if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
+      validRefCode = currentUserData.referredBy;
+      discApplied = true;
+      // Update UI kode referral
+      document.getElementById('refCode').value = validRefCode;
+      applyRefUI();
+    }
+  }
+
+  const savedRef = sessionStorage.getItem('refCode');
+  if (savedRef && !discApplied) document.getElementById('refCode').value = savedRef;
+
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+  renderBabs('alacarte');
+  renderBabs('bundling');
+  updateOrder();
+});
+
+// ── Apply ref UI (tanpa fetch Firestore) ──────────────
+function applyRefUI() {
+  const box = document.getElementById('refBox');
+  const status = document.getElementById('refStatus');
+  const hint = document.getElementById('refHint');
+  box.className = 'ref-box unlocked';
+  status.className = 'ref-status ok';
+  status.textContent = 'Diskon aktif ✓';
+  document.getElementById('refInputRow').style.display = 'none';
+  hint.className = 'ref-ok-msg';
+  hint.textContent = '✅ Kode valid! Diskon 50% diterapkan untuk pembelian pertama.';
+  updateOrder();
 }
 
-window.updateCode = function() {
-  const nama = document.getElementById('nama').value;
-  generatedCode = makeCode(nama);
-  document.getElementById('previewCode').textContent = generatedCode;
+// ── Render babs ────────────────────────────────────────
+function renderBabs(tab) {
+  const subj = tab === 'alacarte' ? curSubjAlacarte : curSubjBundling;
+  const selBabs = tab === 'alacarte' ? selBabsAlacarte : selBabsBundling;
+  const listId = tab === 'alacarte' ? 'babListAlacarte' : 'babListBundling';
+  const list = document.getElementById(listId);
+  list.innerHTML = '';
+
+  babs[subj].forEach(b => {
+    const isSel = selBabs.includes(b);
+    const isDisabled = tab === 'bundling' && !isSel && selBabs.length >= bundlingMax;
+    const d = document.createElement('div');
+    d.className = 'bab' + (isSel ? ' sel' : '') + (isDisabled ? ' disabled' : '');
+    d.innerHTML = `<div class="bab-check">${isSel ? '✓' : ''}</div>${b}`;
+    if (!isDisabled) d.onclick = () => toggleBab(tab, b, d);
+    list.appendChild(d);
+  });
+
+  if (tab === 'bundling') updateQuota();
 }
 
-window.regenCode = function() {
-  const nama = document.getElementById('nama').value;
-  generatedCode = makeCode(nama);
-  document.getElementById('previewCode').textContent = generatedCode;
+function toggleBab(tab, b, el) {
+  let selBabs = tab === 'alacarte' ? selBabsAlacarte : selBabsBundling;
+  const idx = selBabs.indexOf(b);
+  if (idx > -1) selBabs.splice(idx, 1);
+  else {
+    if (tab === 'bundling' && selBabs.length >= bundlingMax) return;
+    selBabs.push(b);
+  }
+  if (tab === 'alacarte') {
+    selBabsAlacarte = selBabs;
+    const n = selBabsAlacarte.length || 1;
+    curPkg = { name: `${n} sub-bab ${curSubjAlacarte}`, price: n * HARGA.alacarte };
+  }
+  renderBabs(tab);
+  updateOrder();
 }
 
-// ── Init ───────────────────────────────────────────────
-generatedCode = makeCode('');
-document.getElementById('previewCode').textContent = generatedCode;
-
-const urlRef = new URLSearchParams(window.location.search).get('ref');
-if (urlRef) sessionStorage.setItem('refCode', urlRef);
-
-// ── Error helper ───────────────────────────────────────
-function showError(msg) {
-  const el = document.getElementById('errorMsg');
-  el.textContent = msg;
-  el.style.display = 'block';
+function updateQuota() {
+  document.getElementById('quotaCount').textContent = selBabsBundling.length;
+  document.getElementById('quotaMax').textContent = bundlingMax;
 }
 
-function hideError() {
-  document.getElementById('errorMsg').style.display = 'none';
+window.selBundlingPkg = function(el, max, price) {
+  document.querySelectorAll('#bundlingPkgs .pkg').forEach(p => p.className = 'pkg');
+  el.className = 'pkg selected';
+  bundlingMax = max; bundlingPrice = price;
+  if (selBabsBundling.length > max) selBabsBundling = selBabsBundling.slice(0, max);
+  curPkg = { name: `Bundling ${max} sub-bab`, price };
+  renderBabs('bundling');
+  updateOrder();
 }
 
-// ── Register ───────────────────────────────────────────
-window.doRegister = async function() {
-  hideError();
-  const nama  = document.getElementById('nama').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const wa    = document.getElementById('wa').value.trim();
-  const pass  = document.getElementById('pass').value;
-  const btn   = document.getElementById('btnDaftar');
+window.selSubj = function(tab, el, subj) {
+  const container = el.closest('.subject-grid');
+  container.querySelectorAll('.subj').forEach(s => s.className = 'subj');
+  el.className = 'subj sel';
+  if (tab === 'alacarte') { curSubjAlacarte = subj; selBabsAlacarte = []; }
+  else { curSubjBundling = subj; }
+  renderBabs(tab);
+  updateOrder();
+}
 
-  if (!nama || !email || !wa || !pass) { showError('Semua field wajib diisi.'); return; }
-  if (pass.length < 8) { showError('Password minimal 8 karakter.'); return; }
-  if (!generatedCode) generatedCode = makeCode(nama);
+window.selPkg = function(el, price, name) {
+  document.querySelectorAll('.pkg').forEach(p => p.className = 'pkg');
+  el.className = 'pkg selected';
+  curPkg = { name, price };
+  updateOrder();
+}
 
-  btn.disabled = true;
-  btn.textContent = 'Mendaftar...';
+window.switchTab = function(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+  el.className = 'tab active';
+  ['alacarte','bundling','bulanan'].forEach(t => document.getElementById(t).style.display = 'none');
+  document.getElementById(tab).style.display = 'block';
+  activeTab = tab;
+  if (tab === 'alacarte') {
+    const n = selBabsAlacarte.length || 1;
+    curPkg = { name: `${n} sub-bab ${curSubjAlacarte}`, price: n * HARGA.alacarte };
+  } else if (tab === 'bundling') {
+    curPkg = { name: `Bundling ${bundlingMax} sub-bab`, price: bundlingPrice };
+  } else {
+    curPkg = { name: 'Bulanan 1 bulan', price: HARGA.bulanan };
+  }
+  updateOrder();
+}
+
+// ── Validasi kode manual ───────────────────────────────
+window.applyRef = async function() {
+  // Cek dulu apakah user sudah pernah pakai referral
+  if (currentUserData?.hasUsedReferral) {
+    const hint = document.getElementById('refHint');
+    hint.style.color = '#E24B4A';
+    hint.textContent = 'Kamu sudah pernah menggunakan kode referral sebelumnya.';
+    setTimeout(() => { hint.style.color = ''; hint.textContent = 'Kode didapat dari teman atau dihubungi admin CerdasBersama.'; }, 3000);
+    return;
+  }
+
+  const code = document.getElementById('refCode').value.trim().toUpperCase();
+  const btn = document.getElementById('btnApply');
+  const hint = document.getElementById('refHint');
+  const status = document.getElementById('refStatus');
+  if (!code) return;
+
+  btn.disabled = true; btn.textContent = '...';
 
   try {
-    // 1. Buat akun di Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-    const user = userCredential.user;
-
-    // 2. Simpan data user ke Firestore
-    const refCode = sessionStorage.getItem('refCode') || null;
-    await setDoc(doc(db, 'users', user.uid), {
-      uid: user.uid,
-      nama: nama,
-      email: email,
-      wa: wa,
-      referralCode: generatedCode,
-      referredBy: refCode,
-      plan: 'free',
-      soalGratis: 30,
-      komisiTotal: 0,
-      hasUsedReferral: false,
-      createdAt: serverTimestamp()
-    });
-
-    // 3. Simpan ke sessionStorage
-    sessionStorage.setItem('userName', nama.split(' ')[0]);
-    sessionStorage.setItem('userCode', generatedCode);
-    sessionStorage.setItem('userEmail', email);
-    sessionStorage.setItem('userUid', user.uid);
-
-    // 4. Tampilkan success
-    document.getElementById('namaUser').textContent = nama.split(' ')[0];
-    document.getElementById('linkVal').textContent = 'cerdasbersama.vercel.app/register.html?ref=' + generatedCode;
-    document.getElementById('formView').style.display = 'none';
-    document.getElementById('successView').style.display = 'block';
-
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Daftar Sekarang →';
-    if (err.code === 'auth/email-already-in-use') {
-      showError('Email ini sudah terdaftar. Silakan masuk.');
-    } else if (err.code === 'auth/invalid-email') {
-      showError('Format email tidak valid.');
-    } else if (err.code === 'auth/weak-password') {
-      showError('Password terlalu lemah. Gunakan minimal 8 karakter.');
+    const q = query(collection(db, 'users'), where('referralCode', '==', code));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      discApplied = true; validRefCode = code;
+      applyRefUI();
     } else {
-      showError('Gagal mendaftar: ' + err.message);
+      hint.style.color = '#E24B4A'; hint.textContent = 'Kode tidak ditemukan.';
+      setTimeout(() => {
+        hint.style.color = ''; hint.textContent = 'Kode didapat dari teman atau dihubungi admin CerdasBersama.';
+        status.textContent = 'Belum dipakai'; btn.disabled = false; btn.textContent = 'Pakai';
+      }, 2500);
     }
+  } catch(e) {
+    hint.style.color = '#E24B4A'; hint.textContent = 'Gagal verifikasi. Coba lagi.';
+    btn.disabled = false; btn.textContent = 'Pakai';
   }
 }
 
-// ── Copy link ──────────────────────────────────────────
-window.copyLink = function() {
-  const txt = document.getElementById('linkVal').textContent;
-  navigator.clipboard.writeText(txt).then(() => {
-    document.getElementById('copyBtn').textContent = '✅ Tersalin!';
-    setTimeout(() => document.getElementById('copyBtn').textContent = '📋 Salin link referral', 2000);
-  });
+// ── Bayar & catat komisi ───────────────────────────────
+window.doPay = async function() {
+  const btn = document.getElementById('btnPay');
+  const payEl = document.querySelector('.pay.sel');
+  const payMethod = payEl ? payEl.textContent.trim() : 'Transfer Bank';
+  const base = curPkg.price;
+  const disc = discApplied ? Math.round(base * 0.5) : 0;
+  const total = base - disc;
+  const komisi = Math.round(total * KOMISI_RATE);
+
+  btn.disabled = true; btn.textContent = 'Memproses...';
+
+  try {
+    // 1. Simpan order
+    await addDoc(collection(db, 'orders'), {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      paket: curPkg.name,
+      hargaBase: base,
+      diskon: disc,
+      total,
+      refCode: validRefCode || currentUserData?.referredBy || null,
+      payMethod,
+      status: 'pending',
+      komisi,
+      createdAt: serverTimestamp()
+    });
+
+    // 2. Kalau ada referredBy → tambah komisi ke referrer
+    const referredBy = validRefCode || currentUserData?.referredBy;
+    if (referredBy) {
+      // Cari uid referrer dari referralCode
+      const q = query(collection(db, 'users'), where('referralCode', '==', referredBy));
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const referrerDoc = snap.docs[0];
+        await updateDoc(doc(db, 'users', referrerDoc.id), {
+          komisiTotal: increment(komisi)
+        });
+      }
+
+      // 3. Kalau ini first purchase dengan referral → tandai sudah dipakai
+      if (discApplied && !currentUserData?.hasUsedReferral) {
+        await updateDoc(doc(db, 'users', currentUser.uid), {
+          hasUsedReferral: true,
+          referredBy: referredBy
+        });
+      }
+    }
+
+    document.getElementById('mainView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Bayar Sekarang';
+    alert('Gagal menyimpan pesanan: ' + e.message);
+  }
+}
+
+// ── Update ringkasan ───────────────────────────────────
+function updateOrder() {
+  const base = curPkg.price;
+  const disc = discApplied ? Math.round(base * 0.5) : 0;
+  const total = base - disc;
+  document.getElementById('orderName').textContent = curPkg.name;
+  document.getElementById('orderBase').textContent = 'Rp ' + base.toLocaleString('id');
+  document.getElementById('discRow').style.display = disc > 0 ? 'flex' : 'none';
+  document.getElementById('discAmt').textContent = '-Rp ' + disc.toLocaleString('id');
+  document.getElementById('totalAmt').textContent = 'Rp ' + total.toLocaleString('id');
+}
+
+window.selPay = function(el) {
+  document.querySelectorAll('.pay').forEach(p => p.className = 'pay');
+  el.className = 'pay sel';
 }
 </script>
 </body>
