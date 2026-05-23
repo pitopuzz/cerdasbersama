@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — Kelola Soal CerdasBersama</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#faf8f5;color:#1a1714;min-height:100vh}
+nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.nav-logo{font-weight:800;font-size:17px;color:#C0392B}
+.nav-logo span{color:#1a1714}
+.nav-links{display:flex;gap:16px}
+.nav-links a{font-size:13px;font-weight:600;color:#7a7168;text-decoration:none;transition:color 0.18s}
+.nav-links a:hover{color:#C0392B}
+
+main{max-width:860px;margin:0 auto;padding:28px 20px 80px}
+.page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
+.page-sub{font-size:13px;color:#7a7168;margin-bottom:28px;font-weight:500}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content}
+.tab{padding:9px 22px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s}
+.tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+
+/* FORM CARD */
+.form-card{background:#fff;border:1px solid #e8e4dc;border-radius:20px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-bottom:16px}
+.form-title{font-size:16px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:800;color:#7a7168;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid #e8e4dc;border-radius:10px;padding:11px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:#1a1714;background:#fafaf8;outline:none;transition:border-color 0.18s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#C0392B;background:#fff}
+.field textarea{resize:vertical;min-height:80px;line-height:1.5}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+
+.opsi-grid{display:flex;flex-direction:column;gap:10px}
+.opsi-row{display:flex;align-items:center;gap:10px}
+.opsi-key{width:36px;height:36px;border-radius:50%;background:#f5f3ef;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#7a7168;flex-shrink:0}
+.opsi-row input{flex:1}
+.opsi-row.jawaban .opsi-key{background:#C0392B;color:#fff}
+
+.jawaban-select{display:flex;gap:8px;flex-wrap:wrap}
+.jaw-btn{width:40px;height:40px;border-radius:50%;border:2px solid #e8e4dc;background:#fff;font-size:13px;font-weight:800;color:#7a7168;cursor:pointer;transition:all 0.18s}
+.jaw-btn:hover{border-color:#C0392B}
+.jaw-btn.active{border-color:#C0392B;background:#C0392B;color:#fff}
+
+.btn-submit{width:100%;padding:14px;border-radius:50px;border:none;background:#C0392B;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:all 0.18s;margin-top:8px;box-shadow:0 4px 14px rgba(192,57,43,0.25)}
+.btn-submit:hover{background:#a93226;transform:translateY(-1px)}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
+
+.alert{border-radius:12px;padding:12px 16px;font-size:13px;font-weight:600;margin-bottom:16px;display:none}
+.alert.ok{background:#edfaf3;border:1px solid #b8e6d0;color:#1a7a4a}
+.alert.err{background:#fef2f2;border:1px solid #fdd;color:#C0392B}
+
+/* DAFTAR SOAL */
+.soal-list{display:flex;flex-direction:column;gap:10px}
+.soal-item{background:#fff;border:1px solid #e8e4dc;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.soal-item-left{flex:1;min-width:0}
+.soal-no{font-size:11px;font-weight:800;color:#7a7168;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.soal-q{font-size:14px;font-weight:700;color:#1a1714;line-height:1.4;margin-bottom:6px}
+.soal-tags{display:flex;gap:6px;flex-wrap:wrap}
+.soal-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:50px}
+.soal-tag.kat{background:#fff5f5;color:#C0392B;border:1px solid #fdd}
+.soal-tag.sub{background:#f5f3ef;color:#7a7168;border:1px solid #e8e4dc}
+.soal-tag.premium{background:#fff8e6;color:#8a5e00;border:1px solid #f5d06a}
+.soal-tag.free{background:#edfaf3;color:#1a7a4a;border:1px solid #b8e6d0}
+.soal-jawaban{font-size:12px;font-weight:700;color:#1a7a4a;margin-top:4px}
+.btn-hapus{flex-shrink:0;padding:7px 14px;border-radius:50px;border:1.5px solid #fdd;background:#fff;color:#C0392B;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-hapus:hover{background:#fef2f2}
+
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{padding:7px 16px;border-radius:50px;border:1.5px solid #e8e4dc;background:#fff;font-size:12px;font-weight:700;cursor:pointer;color:#7a7168;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif}
+.filter-btn:hover{border-color:#C0392B;color:#C0392B}
+.filter-btn.active{border-color:#C0392B;background:#C0392B;color:#fff}
+
+.empty{text-align:center;padding:40px;color:#b0a89c;font-size:14px;font-weight:500}
+.count-badge{background:#f5f3ef;color:#7a7168;font-size:12px;font-weight:700;padding:4px 12px;border-radius:50px;margin-left:8px}
+
+/* TUTORIAL */
+.tutorial-card{background:#fff;border:1px solid #e8e4dc;border-radius:20px;padding:28px;margin-bottom:16px}
+.tutorial-step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #f5f3ef}
+.tutorial-step:last-child{border-bottom:none}
+.step-num{width:32px;height:32px;border-radius:50%;background:#C0392B;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
+.step-content h4{font-size:14px;font-weight:800;margin-bottom:4px}
+.step-content p{font-size:13px;color:#7a7168;line-height:1.6;font-weight:500}
+.tip-box{background:#fff8e6;border:1px solid #f5d06a;border-radius:12px;padding:14px 16px;font-size:13px;color:#8a5e00;font-weight:600;margin-top:16px;line-height:1.6}
+
+#loadingView{text-align:center;padding:60px;color:#7a7168;font-size:14px;font-weight:500}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">Admin</span></div>
+  <div class="nav-links">
+    <a href="/admin.html">← Admin Panel</a>
+    <a href="/dashboard.html">Dashboard</a>
+  </div>
+</nav>
+
+<main>
+  <div id="loadingView">Memuat halaman admin…</div>
+
+  <div id="mainView" style="display:none">
+    <div class="page-title">Kelola Soal</div>
+    <div class="page-sub">Tambah, lihat, dan hapus soal latihan.</div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('tambah')">➕ Tambah Soal</button>
+      <button class="tab" onclick="switchTab('daftar')">📋 Daftar Soal</button>
+      <button class="tab" onclick="switchTab('tutorial')">📖 Tutorial</button>
+    </div>
+
+    <!-- TAB TAMBAH -->
+    <div id="tabTambah">
+      <div class="form-card">
+        <div class="form-title">➕ Tambah Soal Baru</div>
+
+        <div class="alert" id="alertMsg"></div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Mata Pelajaran</label>
+            <select id="fKategori">
+              <option value="Matematika">Matematika</option>
+              <option value="IPAS">IPAS</option>
+              <option value="B.Inggris">B.Inggris</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Sub-Bab / Topik</label>
+            <input type="text" id="fSubKategori" placeholder="cth: Bilangan Bulat" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Pertanyaan / Soal</label>
+          <textarea id="fPertanyaan" placeholder="Tulis soal di sini..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Pilihan Jawaban</label>
+          <div class="opsi-grid">
+            <div class="opsi-row" id="opsiA"><div class="opsi-key">A</div><input type="text" id="fOpsiA" placeholder="Pilihan A" /></div>
+            <div class="opsi-row" id="opsiB"><div class="opsi-key">B</div><input type="text" id="fOpsiB" placeholder="Pilihan B" /></div>
+            <div class="opsi-row" id="opsiC"><div class="opsi-key">C</div><input type="text" id="fOpsiC" placeholder="Pilihan C" /></div>
+            <div class="opsi-row" id="opsiD"><div class="opsi-key">D</div><input type="text" id="fOpsiD" placeholder="Pilihan D" /></div>
+            <div class="opsi-row" id="opsiE"><div class="opsi-key">E</div><input type="text" id="fOpsiE" placeholder="Pilihan E" /></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Kunci Jawaban</label>
+          <div class="jawaban-select">
+            <button class="jaw-btn" onclick="setJawaban('A')">A</button>
+            <button class="jaw-btn" onclick="setJawaban('B')">B</button>
+            <button class="jaw-btn" onclick="setJawaban('C')">C</button>
+            <button class="jaw-btn" onclick="setJawaban('D')">D</button>
+            <button class="jaw-btn" onclick="setJawaban('E')">E</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Pembahasan / Penjelasan Jawaban</label>
+          <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar..."></textarea>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Tingkat Kesulitan</label>
+            <select id="fTingkat">
+              <option value="mudah">Mudah</option>
+              <option value="sedang">Sedang</option>
+              <option value="sulit">Sulit</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Akses</label>
+            <select id="fAkses">
+              <option value="gratis">Gratis (semua user)</option>
+              <option value="premium">Premium only</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="btnSimpan" onclick="simpanSoal()">💾 Simpan Soal</button>
+      </div>
+    </div>
+
+    <!-- TAB DAFTAR -->
+    <div id="tabDaftar" style="display:none">
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" onclick="filterSoal('semua',this)">Semua <span class="count-badge" id="countSemua">0</span></button>
+        <button class="filter-btn" onclick="filterSoal('Matematika',this)">📐 Matematika</button>
+        <button class="filter-btn" onclick="filterSoal('IPAS',this)">🔬 IPAS</button>
+        <button class="filter-btn" onclick="filterSoal('B.Inggris',this)">🔤 B.Inggris</button>
+      </div>
+      <div class="soal-list" id="soalList">
+        <div class="empty">Memuat soal…</div>
+      </div>
+    </div>
+
+    <!-- TAB TUTORIAL -->
+    <div id="tabTutorial" style="display:none">
+      <div class="tutorial-card">
+        <div class="form-title">📖 Cara Tambah & Update Soal</div>
+
+        <div class="tutorial-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Pilih Mata Pelajaran & Sub-Bab</h4>
+            <p>Pilih mapel (Matematika / IPAS / B.Inggris) dan tulis nama sub-bab. Pastikan nama sub-bab konsisten — misalnya selalu tulis "Bilangan Bulat" bukan kadang "bilangan bulat" (huruf kapital penting!).</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Tulis Soal & 5 Pilihan Jawaban</h4>
+            <p>Isi pertanyaan di kolom "Soal", lalu isi semua pilihan A sampai E. Pastikan semua pilihan terisi — jangan ada yang kosong.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Pilih Kunci Jawaban</h4>
+            <p>Klik tombol A/B/C/D/E yang merupakan jawaban benar. Tombol akan berwarna merah saat dipilih. Pastikan kunci jawaban dipilih sebelum simpan.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Tulis Pembahasan</h4>
+            <p>Jelaskan mengapa jawaban tersebut benar — ini yang akan muncul setelah siswa menjawab. Pembahasan yang baik membantu siswa mengerti, bukan hanya tahu jawabannya.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Atur Tingkat & Akses</h4>
+            <p><strong>Tingkat:</strong> Mudah = soal dasar, Sedang = butuh pemahaman lebih, Sulit = butuh analisis.<br/><strong>Akses Gratis</strong> = bisa dikerjakan semua user. <strong>Premium</strong> = hanya user berbayar.</p>
+          </div>
+        </div>
+
+        <div class="tutorial-step">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h4>Update / Edit Soal</h4>
+            <p>Saat ini edit soal dilakukan via Firebase Console. Buka <strong>console.firebase.google.com</strong> → Firestore → collection "soal" → klik dokumen yang ingin diedit → ubah field yang diinginkan → klik Update.</p>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          💡 <strong>Tips:</strong> Idealnya setiap sub-bab punya minimal 5-10 soal agar latihan tidak terasa terlalu singkat. Campurkan tingkat mudah, sedang, dan sulit untuk pengalaman belajar yang baik.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mainView -->
+</main>
+
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const ADMIN_EMAILS = ['bersamacerdas1@gmail.com','test2@gmail.com'];
+const $ = id => document.getElementById(id);
+let selectedJawaban = '';
+let allSoal = [];
+let filterKat = 'semua';
+
+onAuthStateChanged(auth, async user => {
+  if (!user || !ADMIN_EMAILS.includes(user.email)) {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center"><div><div style="font-size:48px;margin-bottom:16px">🔒</div><h2 style="color:#C0392B">Akses Ditolak</h2><p style="color:#888;margin-top:8px">Halaman ini hanya untuk admin.</p><a href="/" style="color:#C0392B;font-weight:700;margin-top:16px;display:block">← Kembali</a></div></div>';
+    return;
+  }
+  $('loadingView').style.display = 'none';
+  $('mainView').style.display = 'block';
+  await loadSoal();
+});
+
+async function loadSoal() {
+  const snap = await getDocs(query(collection(db,'soal'), orderBy('kategori'), orderBy('urutan')));
+  allSoal = snap.docs.map(d => ({id:d.id,...d.data()}));
+  $('countSemua').textContent = allSoal.length;
+  renderSoalList();
+}
+
+function renderSoalList() {
+  const list = $('soalList');
+  const filtered = filterKat === 'semua' ? allSoal : allSoal.filter(s => s.kategori === filterKat);
+  if (!filtered.length) { list.innerHTML = '<div class="empty">Belum ada soal.</div>'; return; }
+
+  list.innerHTML = filtered.map((s,i) => `
+    <div class="soal-item">
+      <div class="soal-item-left">
+        <div class="soal-no">Soal ${i+1}</div>
+        <div class="soal-q">${s.pertanyaan}</div>
+        <div class="soal-tags">
+          <span class="soal-tag kat">${s.kategori}</span>
+          <span class="soal-tag sub">${s.subKategori}</span>
+          <span class="soal-tag ${s.isPremium?'premium':'free'}">${s.isPremium?'🔒 Premium':'✓ Gratis'}</span>
+          <span class="soal-tag sub">${s.tingkat||'—'}</span>
+        </div>
+        <div class="soal-jawaban">Kunci: ${s.jawaban} — ${s.opsi?.[s.jawaban]||''}</div>
+      </div>
+      <button class="btn-hapus" onclick="hapusSoal('${s.id}')">🗑️ Hapus</button>
+    </div>`).join('');
+}
+
+window.filterSoal = function(kat, el) {
+  filterKat = kat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderSoalList();
+};
+
+window.hapusSoal = async function(id) {
+  if (!confirm('Hapus soal ini?')) return;
+  await deleteDoc(doc(db,'soal',id));
+  allSoal = allSoal.filter(s => s.id !== id);
+  $('countSemua').textContent = allSoal.length;
+  renderSoalList();
+  showAlert('ok','Soal berhasil dihapus.');
+};
+
+window.setJawaban = function(key) {
+  selectedJawaban = key;
+  document.querySelectorAll('.jaw-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.jaw-btn').forEach(b => { if(b.textContent===key) b.classList.add('active'); });
+  // Highlight opsi row
+  ['A','B','C','D','E'].forEach(k => {
+    $(`opsi${k}`).classList.toggle('jawaban', k===key);
+  });
+};
+
+window.simpanSoal = async function() {
+  const kat = $('fKategori').value;
+  const sub = $('fSubKategori').value.trim();
+  const pertanyaan = $('fPertanyaan').value.trim();
+  const opsiA = $('fOpsiA').value.trim();
+  const opsiB = $('fOpsiB').value.trim();
+  const opsiC = $('fOpsiC').value.trim();
+  const opsiD = $('fOpsiD').value.trim();
+  const opsiE = $('fOpsiE').value.trim();
+  const pembahasan = $('fPembahasan').value.trim();
+  const tingkat = $('fTingkat').value;
+  const akses = $('fAkses').value;
+
+  if (!sub||!pertanyaan||!opsiA||!opsiB||!opsiC||!opsiD||!opsiE||!pembahasan) {
+    showAlert('err','Semua field wajib diisi!'); return;
+  }
+  if (!selectedJawaban) {
+    showAlert('err','Pilih kunci jawaban terlebih dahulu!'); return;
+  }
+
+  const isPremium = akses === 'premium';
+  const paket = isPremium
+    ? ['value','pro','ultimate','premium']
+    : ['gratis','starter','value','pro','ultimate','premium'];
+
+  const btn = $('btnSimpan');
+  btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+
+  try {
+    const newSoal = {
+      kategori: kat, subKategori: sub, pertanyaan,
+      opsi: {A:opsiA, B:opsiB, C:opsiC, D:opsiD, E:opsiE},
+      jawaban: selectedJawaban, pembahasan, tingkat, isPremium, paket,
+      urutan: allSoal.filter(s=>s.kategori===kat&&s.subKategori===sub).length + 1,
+      createdAt: serverTimestamp()
+    };
+    const ref = await addDoc(collection(db,'soal'), newSoal);
+    allSoal.push({id:ref.id,...newSoal});
+    $('countSemua').textContent = allSoal.length;
+    showAlert('ok','✅ Soal berhasil disimpan!');
+    resetForm();
+  } catch(err) {
+    showAlert('err','❌ Gagal: '+err.message);
+  }
+  btn.disabled = false; btn.textContent = '💾 Simpan Soal';
+};
+
+function resetForm() {
+  ['fSubKategori','fPertanyaan','fOpsiA','fOpsiB','fOpsiC','fOpsiD','fOpsiE','fPembahasan'].forEach(id => $(id).value='');
+  selectedJawaban = '';
+  document.querySelectorAll('.jaw-btn').forEach(b=>b.classList.remove('active'));
+  ['A','B','C','D','E'].forEach(k => $(`opsi${k}`).classList.remove('jawaban'));
+}
+
+function showAlert(type, msg) {
+  const el = $('alertMsg');
+  el.textContent = msg; el.className = 'alert '+type; el.style.display = 'block';
+  setTimeout(() => el.style.display='none', 4000);
+}
+
+window.switchTab = function(tab) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  $('tabTambah').style.display = tab==='tambah'?'block':'none';
+  $('tabDaftar').style.display = tab==='daftar'?'block':'none';
+  $('tabTutorial').style.display = tab==='tutorial'?'block':'none';
+  if(tab==='daftar') renderSoalList();
+};
+</script>
+</body>
+</html>
