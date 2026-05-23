@@ -3,137 +3,115 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CerdasBersama — Latihan Soal SD Kelas 6</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>CerdasBersama — Preview Parentia Style</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: #FAFAF8; color: #1a1a1a; }
-nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(250,250,248,0.92); backdrop-filter: blur(12px);
-  border-bottom: 1px solid #E8E6DF;
-  padding: 0 2rem; height: 60px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.logo { font-size: 18px; font-weight: 800; color: #1a6b4a; letter-spacing: -0.5px; }
-.logo span { color: #f5a623; }
-.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-.nav-links a { font-size: 14px; color: #555; text-decoration: none; font-weight: 500; }
-.btn-nav {
-  background: #1a6b4a; color: #fff;
-  padding: 8px 18px; border-radius: 8px; font-size: 14px;
-  font-weight: 600; cursor: pointer; border: none; font-family: inherit;
-  text-decoration: none; display: inline-block;
-}
-.btn-nav:hover { background: #145a3d; }
-.hero { padding: 5rem 2rem 4rem; max-width: 900px; margin: 0 auto; text-align: center; }
-.badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #E8F5EE; color: #1a6b4a;
-  padding: 6px 14px; border-radius: 20px;
-  font-size: 13px; font-weight: 600; margin-bottom: 1.5rem;
-}
-.badge-dot { width: 7px; height: 7px; background: #1a6b4a; border-radius: 50%; }
-h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 1.2rem; color: #111; }
-h1 em { font-style: normal; color: #1a6b4a; }
-.hero-sub { font-size: 17px; color: #666; line-height: 1.7; max-width: 560px; margin: 0 auto 2.5rem; }
-.form-box {
-  background: #fff; border: 1.5px solid #E0EDE7;
-  border-radius: 16px; padding: 2rem;
-  max-width: 480px; margin: 0 auto 1rem;
-  box-shadow: 0 4px 24px rgba(26,107,74,0.08);
-}
-.form-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: #111; }
-.form-box p { font-size: 13px; color: #888; margin-bottom: 1.2rem; }
-.form-row { display: flex; flex-direction: column; gap: 10px; }
-.form-row input {
-  border: 1.5px solid #E0EDE7; border-radius: 10px;
-  padding: 11px 14px; font-size: 14px; font-family: inherit;
-  color: #111; background: #FAFAF8; outline: none;
-}
-.form-row input:focus { border-color: #1a6b4a; }
-.btn-cta {
-  width: 100%; background: #1a6b4a; color: #fff;
-  border: none; border-radius: 10px; padding: 13px;
-  font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
-}
-.btn-cta:hover { background: #145a3d; }
-.free-label { font-size: 12px; color: #888; margin-top: 8px; text-align: center; }
-.free-label span { color: #f5a623; font-weight: 700; }
-.trial-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 1rem 0 0; }
-.pill {
-  background: #F5F3EE; border: 1px solid #E0DDD4;
-  border-radius: 20px; padding: 6px 14px;
-  font-size: 13px; color: #444; font-weight: 500;
-}
-.stats {
-  background: #1a6b4a; padding: 2.5rem 2rem;
-  display: grid; grid-template-columns: repeat(3, 1fr);
-}
-.stat-item { text-align: center; padding: 1.5rem 1rem; border-right: 1px solid rgba(255,255,255,0.15); }
-.stat-item:last-child { border-right: none; }
-.stat-num { font-size: 2.2rem; font-weight: 800; color: #fff; letter-spacing: -1px; }
-.stat-label { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
-section { padding: 4rem 2rem; max-width: 860px; margin: 0 auto; }
-.section-label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #1a6b4a; text-transform: uppercase; margin-bottom: 0.5rem; }
-.section-title { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; color: #111; letter-spacing: -0.5px; margin-bottom: 0.8rem; }
-.section-sub { font-size: 16px; color: #666; margin-bottom: 2.5rem; }
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-.feat-card { background: #fff; border: 1px solid #E8E6DF; border-radius: 14px; padding: 1.5rem; }
-.feat-icon { width: 42px; height: 42px; border-radius: 10px; background: #E8F5EE; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 1rem; }
-.feat-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #111; }
-.feat-card p { font-size: 13px; color: #777; line-height: 1.6; }
-.steps { display: flex; flex-direction: column; gap: 1rem; }
-.step { display: flex; gap: 1.2rem; align-items: flex-start; background: #fff; border: 1px solid #E8E6DF; border-radius: 14px; padding: 1.4rem 1.6rem; }
-.step-num { width: 36px; height: 36px; border-radius: 50%; background: #1a6b4a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0; }
-.step-content h4 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 4px; }
-.step-content p { font-size: 13px; color: #777; line-height: 1.6; }
-.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-.price-card { background: #fff; border: 1.5px solid #E8E6DF; border-radius: 16px; padding: 1.6rem; position: relative; }
-.price-card.popular { border-color: #1a6b4a; background: #F5FBF8; }
-.popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #1a6b4a; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
-.price-card h4 { font-size: 14px; font-weight: 700; color: #888; margin-bottom: 0.5rem; }
-.price-card .price { font-size: 1.8rem; font-weight: 800; color: #111; letter-spacing: -1px; }
-.price-card .price-desc { font-size: 12px; color: #aaa; margin-bottom: 1rem; }
-.price-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.price-card ul li { font-size: 13px; color: #555; display: flex; align-items: center; gap: 7px; }
-.check { color: #1a6b4a; font-weight: 700; }
-.referral-box { background: #1a6b4a; border-radius: 20px; padding: 3rem 2rem; text-align: center; margin: 0 2rem 4rem; max-width: 860px; margin-left: auto; margin-right: auto; }
-.referral-box h2 { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.8rem; }
-.referral-box p { color: rgba(255,255,255,0.8); font-size: 15px; margin-bottom: 1.5rem; }
-.referral-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-.ref-pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 8px 16px; font-size: 13px; color: #fff; font-weight: 500; }
-.ref-pill strong { color: #f5a623; }
-footer { background: #111; color: #aaa; text-align: center; padding: 2rem; font-size: 13px; }
-footer strong { color: #fff; }
-.divider { border: none; border-top: 1px solid #E8E6DF; margin: 0 2rem; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;color:#1a1a1a;max-width:480px;margin:0 auto}
+
+.flash{background:#C0392B;padding:10px 1rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.flash-text{color:#fff;font-size:13px;font-weight:700}
+.flash-timer{color:#FFD700;font-size:15px;font-weight:900;font-family:monospace;letter-spacing:1px}
+
+nav{padding:14px 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0}
+.logo{font-size:20px;font-weight:900;color:#C0392B}
+.logo span{color:#1a1a1a}
+.btn-nav{background:#FFD700;color:#1a1a1a;padding:9px 20px;border-radius:50px;font-size:13px;font-weight:800;border:none;font-family:inherit;cursor:pointer}
+
+.hero{padding:2.5rem 1.5rem 2rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:#FFF3CD;border:1.5px solid #FFD700;color:#856404;padding:7px 16px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:1.2rem}
+.badge-dot{width:8px;height:8px;background:#C0392B;border-radius:50%;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+h1{font-size:2rem;font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:0.5rem;color:#1a1a1a}
+h1 em{font-style:normal;color:#C0392B;text-decoration:underline;text-decoration-color:#FFD700;text-underline-offset:4px}
+.hero-tagline{font-size:17px;color:#C0392B;font-weight:700;font-style:italic;margin-bottom:1rem}
+.hero-sub{font-size:14px;color:#555;line-height:1.7;margin:0 auto 2rem}
+
+.btn-cta-big{display:block;width:100%;background:#C0392B;color:#fff;border:none;border-radius:50px;padding:18px;font-size:17px;font-weight:900;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn-cta-sec{display:block;width:100%;background:#FFD700;color:#1a1a1a;border:none;border-radius:50px;padding:14px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:1.2rem;text-align:center;text-decoration:none}
+
+.price-cross{font-size:13px;color:#aaa;text-align:center;margin-bottom:1.2rem}
+.price-cross s{color:#aaa}
+.price-cross strong{color:#C0392B}
+
+.trial-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.pill{background:#FFF3CD;border:1.5px solid #FFD700;border-radius:20px;padding:6px 12px;font-size:12px;color:#856404;font-weight:700}
+
+.divider{height:8px;background:#f5f5f5}
+
+.section{padding:2rem 1.5rem}
+.section-eyebrow{font-size:11px;font-weight:800;color:#C0392B;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px}
+.section-title{font-size:1.4rem;font-weight:900;color:#1a1a1a;margin-bottom:0.8rem;letter-spacing:-0.5px}
+.section-sub{font-size:14px;color:#666;margin-bottom:1.5rem;line-height:1.7}
+
+.feat-list{display:flex;flex-direction:column;gap:10px}
+.feat-item{display:flex;gap:12px;align-items:flex-start;background:#fff9f9;border:1.5px solid #fddcdc;border-radius:12px;padding:14px}
+.feat-num{width:32px;height:32px;background:#C0392B;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
+.feat-item h4{font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:3px}
+.feat-item p{font-size:13px;color:#777;line-height:1.5}
+
+.steps{display:flex;flex-direction:column}
+.step-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid #f0f0f0}
+.step-item:last-child{border-bottom:none}
+.step-num{width:32px;height:32px;background:#FFD700;color:#1a1a1a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px;flex-shrink:0}
+.step-item h4{font-size:14px;font-weight:800;color:#1a1a1a;margin-bottom:2px}
+.step-item p{font-size:13px;color:#777;line-height:1.5}
+
+.pricing-cards{display:flex;flex-direction:column;gap:10px}
+.price-card{border:2px solid #f0f0f0;border-radius:16px;padding:1.2rem}
+.price-card.featured{border-color:#C0392B;background:#fff9f9}
+.price-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.price-name{font-size:12px;font-weight:800;color:#aaa}
+.price-badge-feat{background:#C0392B;color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px}
+.price-amount{font-size:1.8rem;font-weight:900;color:#1a1a1a;letter-spacing:-1px}
+.price-desc{font-size:12px;color:#aaa;margin-bottom:10px}
+.price-items{list-style:none;display:flex;flex-direction:column;gap:5px}
+.price-items li{font-size:13px;color:#555;display:flex;gap:6px}
+.check{color:#C0392B;font-weight:900}
+
+.ref-section{background:#C0392B;padding:2rem 1.5rem;text-align:center}
+.ref-section h2{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:8px}
+.ref-section p{font-size:13px;color:rgba(255,255,255,0.85);margin-bottom:1.2rem;line-height:1.6}
+.ref-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ref-pill{background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:20px;padding:6px 12px;font-size:12px;color:#fff;font-weight:700}
+.ref-pill strong{color:#FFD700}
+
+footer{background:#1a1a1a;color:#aaa;text-align:center;padding:1.5rem;font-size:12px}
+footer strong{color:#fff}
+
+.sticky-cta{background:#C0392B;padding:12px 1.5rem;display:flex;align-items:center;gap:12px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;border-top:3px solid #FFD700;z-index:100}
+.sticky-icon{width:38px;height:38px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sticky-text{flex:1}
+.sticky-title{font-size:13px;font-weight:800;color:#fff}
+.sticky-sub{font-size:11px;color:rgba(255,255,255,0.75)}
+.btn-sticky{background:#FFD700;color:#1a1a1a;border:none;border-radius:50px;padding:9px 16px;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+.spacer{height:80px}
 </style>
 </head>
 <body>
+
+<div class="flash">
+  <span class="flash-text">⚡ DISKON 50% pembelian pertama dengan kode referral!</span>
+  <span class="flash-timer" id="timer">04:59:50</span>
+</div>
+
 <nav>
   <div class="logo">Cerdas<span>Bersama</span></div>
-  <div class="nav-links">
-    <a href="#fitur">Fitur</a>
-    <a href="#harga">Harga</a>
-    <a href="#referral">Referral</a>
-    <a href="register.html" class="btn-nav">Mulai Gratis</a>
-  </div>
+  <button class="btn-nav">Mulai Gratis</button>
 </nav>
 
 <div class="hero">
-  <div class="badge"><div class="badge-dot"></div> Platform Latihan Soal SD Kelas 6</div>
-  <h1>Bantu Anak Raih Nilai Terbaik dengan <em>Latihan Soal Terarah</em></h1>
-  <p class="hero-sub">Ribuan soal Matematika, IPAS & Bahasa Inggris terstruktur per bab. Cocok untuk orang tua dan guru yang ingin hasil nyata.</p>
-  <div class="form-box">
-    <h3>Coba Gratis Sekarang</h3>
-    <p>Daftar & langsung akses 30 soal gratis (Matematika, IPAS, B.Inggris)</p>
-    <div class="form-row">
-      <input type="email" placeholder="Email kamu" id="heroEmail" />
-      <input type="tel" placeholder="Nomor WhatsApp" id="heroWa" />
-      <button class="btn-cta" onclick="heroSubmit()">Daftar & Akses Soal Gratis →</button>
-    </div>
-    <div class="free-label">✓ Gratis, tanpa kartu kredit &nbsp;·&nbsp; Pembelian pertama <span>diskon 50%</span> dengan kode referral</div>
-  </div>
+  <div class="hero-badge"><span class="badge-dot"></span> Sudah dipakai 500+ keluarga Indonesia</div>
+  <h1>Latihan Soal Kelas 6 yang <em>Bikin Nilai Naik</em></h1>
+  <div class="hero-tagline">...tanpa les mahal!</div>
+  <p class="hero-sub">Matematika, IPAS & B.Inggris — terstruktur per sub-bab, lengkap dengan pembahasan. Cocok untuk orang tua & guru.</p>
+
+  <button class="btn-cta-big">Mulai Gratis Sekarang ▶</button>
+  <a href="#harga" class="btn-cta-sec">Lihat Paket & Harga →</a>
+  <div class="price-cross">Normal <s>Rp 10.000</s> → dengan kode referral cukup <strong>Rp 5.000</strong></div>
+
   <div class="trial-pills">
     <div class="pill">📐 10 soal Matematika</div>
     <div class="pill">🔬 10 soal IPAS</div>
@@ -141,115 +119,94 @@ footer strong { color: #fff; }
   </div>
 </div>
 
-<div class="stats">
-  <div class="stat-item">
-    <div class="stat-num">5.000+</div>
-    <div class="stat-label">Soal tersedia</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-num">Kelas 6 SD</div>
-    <div class="stat-label">Fokus persiapan ujian</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-num">3 Mapel</div>
-    <div class="stat-label">Matematika, IPAS & B.Inggris</div>
+<div class="divider"></div>
+
+<div class="section">
+  <div class="section-eyebrow">Kenapa CerdasBersama</div>
+  <div class="section-title">Belajar terarah, hasil nyata</div>
+  <p class="section-sub">Soal per sub-bab — anak fokus satu topik sampai tuntas, bukan campur aduk.</p>
+  <div class="feat-list">
+    <div class="feat-item"><div class="feat-num">1</div><div><h4>Terstruktur per Sub-Bab</h4><p>Setiap topik dilatih tuntas sebelum lanjut ke berikutnya.</p></div></div>
+    <div class="feat-item"><div class="feat-num">2</div><div><h4>Pembahasan Lengkap</h4><p>Anak mengerti cara menjawab, bukan sekadar tahu jawabannya.</p></div></div>
+    <div class="feat-item"><div class="feat-num">3</div><div><h4>Pantau dari Dashboard</h4><p>Orang tua & guru bisa lihat progres, skor, dan topik lemah.</p></div></div>
+    <div class="feat-item"><div class="feat-num">4</div><div><h4>Akses di Semua Perangkat</h4><p>HP, tablet, laptop — belajar kapan saja dan di mana saja.</p></div></div>
   </div>
 </div>
 
-<section id="fitur">
-  <div class="section-label">Kenapa CerdasBersama</div>
-  <div class="section-title">Belajar lebih efektif, hasil lebih terukur</div>
-  <p class="section-sub">Kami rancang soal per sub-bab, bukan campur aduk — supaya anak belajar satu topik sampai tuntas.</p>
-  <div class="features-grid">
-    <div class="feat-card"><div class="feat-icon">📚</div><h4>Terstruktur per Sub-Bab</h4><p>Soal dikelompokkan per topik sehingga fokus belajar lebih terarah dan tidak bingung.</p></div>
-    <div class="feat-card"><div class="feat-icon">📊</div><h4>Pantau Perkembangan</h4><p>Orang tua dan guru bisa melihat skor, waktu pengerjaan, dan topik yang masih lemah.</p></div>
-    <div class="feat-card"><div class="feat-icon">💡</div><h4>Pembahasan Lengkap</h4><p>Setiap soal dilengkapi pembahasan supaya anak mengerti, bukan sekadar tahu jawaban.</p></div>
-    <div class="feat-card"><div class="feat-icon">📱</div><h4>Akses di Semua Perangkat</h4><p>Bisa diakses dari HP, tablet, maupun laptop — kapan saja dan di mana saja.</p></div>
-  </div>
-</section>
+<div class="divider"></div>
 
-<hr class="divider">
-
-<section>
-  <div class="section-label">Cara Kerja</div>
-  <div class="section-title">Mulai dalam 3 langkah mudah</div>
-  <p class="section-sub">Tidak perlu ribet. Dalam hitungan menit, anak sudah bisa latihan soal.</p>
+<div class="section">
+  <div class="section-eyebrow">Cara Kerja</div>
+  <div class="section-title">3 langkah, langsung latihan</div>
   <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step-content"><h4>Daftar & Coba Gratis</h4><p>Masukkan email dan nomor WA. Langsung dapat 30 soal gratis untuk dicoba tanpa bayar.</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-content"><h4>Pilih Paket yang Sesuai</h4><p>Beli soal per sub-bab, bundling 3/5/10 sub-bab, atau berlangganan bulanan. Pembelian pertama diskon 50% dengan kode referral.</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-content"><h4>Anak Latihan, Orang Tua Pantau</h4><p>Anak langsung bisa mulai latihan. Orang tua dan guru bisa memantau progres dari dashboard.</p></div></div>
+    <div class="step-item"><div class="step-num">1</div><div><h4>Daftar & Coba Gratis</h4><p>Email + WA → langsung dapat 30 soal gratis, tanpa kartu kredit.</p></div></div>
+    <div class="step-item"><div class="step-num">2</div><div><h4>Pakai Kode Referral</h4><p>Dapatkan kode dari teman atau admin → diskon 50% pembelian pertama.</p></div></div>
+    <div class="step-item"><div class="step-num">3</div><div><h4>Anak Latihan, Nilai Naik</h4><p>Pilih sub-bab, kerjakan soal, lihat pembahasan, pantau progres.</p></div></div>
   </div>
-</section>
+</div>
 
-<hr class="divider">
+<div class="divider"></div>
 
-<section id="harga">
-  <div class="section-label">Harga</div>
-  <div class="section-title">Fleksibel sesuai kebutuhan</div>
-  <p class="section-sub">Tidak ada biaya tersembunyi. Bayar sesuai yang kamu butuhkan.</p>
-  <div class="pricing-grid">
+<div class="section" id="harga">
+  <div class="section-eyebrow">Harga</div>
+  <div class="section-title">Fleksibel, tanpa biaya tersembunyi</div>
+  <div class="pricing-cards">
     <div class="price-card">
-      <h4>À LA CARTE</h4>
-      <div class="price">Rp 5rb</div>
-      <div class="price-desc">per sub-bab materi</div>
-      <ul>
-        <li><span class="check">✓</span> 1 sub-bab pilihan</li>
-        <li><span class="check">✓</span> Pembahasan lengkap</li>
-        <li><span class="check">✓</span> Akses selamanya</li>
-      </ul>
+      <div class="price-card-top"><span class="price-name">À LA CARTE</span></div>
+      <div class="price-amount">Rp 5.000</div>
+      <div class="price-desc">per sub-bab, akses selamanya</div>
+      <ul class="price-items"><li><span class="check">✓</span> 1 sub-bab pilihan</li><li><span class="check">✓</span> Pembahasan lengkap</li></ul>
     </div>
-    <div class="price-card popular">
-      <div class="popular-badge">⭐ Paling Populer</div>
-      <h4>BUNDLING</h4>
-      <div class="price">Rp 20rb</div>
-      <div class="price-desc">5 sub-bab pilihan</div>
-      <ul>
-        <li><span class="check">✓</span> Hemat 20% vs satuan</li>
-        <li><span class="check">✓</span> Bebas pilih sub-bab</li>
-        <li><span class="check">✓</span> Pembahasan lengkap</li>
-        <li><span class="check">✓</span> Akses selamanya</li>
-      </ul>
+    <div class="price-card featured">
+      <div class="price-card-top"><span class="price-name">BUNDLING 5</span><span class="price-badge-feat">⭐ Populer</span></div>
+      <div class="price-amount">Rp 20.000</div>
+      <div class="price-desc">5 sub-bab pilihan — hemat Rp 5.000</div>
+      <ul class="price-items"><li><span class="check">✓</span> Bebas pilih sub-bab</li><li><span class="check">✓</span> Pembahasan lengkap</li><li><span class="check">✓</span> Akses selamanya</li></ul>
     </div>
     <div class="price-card">
-      <h4>BULANAN</h4>
-      <div class="price">Rp 49rb</div>
-      <div class="price-desc">per bulan, akses semua</div>
-      <ul>
-        <li><span class="check">✓</span> Semua sub-bab & mapel</li>
-        <li><span class="check">✓</span> Dashboard guru/ortu</li>
-        <li><span class="check">✓</span> Soal baru tiap bulan</li>
-        <li><span class="check">✓</span> Prioritas support</li>
-      </ul>
+      <div class="price-card-top"><span class="price-name">BULANAN</span></div>
+      <div class="price-amount">Rp 49.000</div>
+      <div class="price-desc">per bulan, akses semua mapel & bab</div>
+      <ul class="price-items"><li><span class="check">✓</span> Semua sub-bab & mapel</li><li><span class="check">✓</span> Dashboard guru/ortu</li><li><span class="check">✓</span> Soal baru tiap bulan</li></ul>
     </div>
   </div>
-</section>
+</div>
 
-<div class="referral-box" id="referral">
+<div class="ref-section">
   <h2>💰 Bagikan & Dapat Komisi</h2>
-  <p>Daftar sebagai referrer dan dapatkan komisi 15% setiap ada yang beli melalui link kamu.</p>
-  <div class="referral-pills">
-    <div class="ref-pill">Komisi <strong>15%</strong> setiap transaksi</div>
-    <div class="ref-pill">Cairkan kapan saja</div>
-    <div class="ref-pill">Min. cairkan <strong>Rp 20.000</strong></div>
-    <div class="ref-pill">Transfer langsung ke rekeningmu</div>
+  <p>Daftar jadi referrer — 15% komisi setiap ada yang beli lewat linkmu. Cairkan kapan saja.</p>
+  <div class="ref-pills">
+    <div class="ref-pill">Komisi <strong>15%</strong></div>
+    <div class="ref-pill">Min. <strong>Rp 20.000</strong></div>
+    <div class="ref-pill">Transfer langsung</div>
   </div>
 </div>
 
 <footer>
-  <strong>CerdasBersama</strong> · Platform Latihan Soal SD Kelas 6 Indonesia<br>
-  <span style="margin-top:6px;display:block;">© 2025 CerdasBersama · Syarat & Ketentuan · Kebijakan Privasi</span>
+  <strong>CerdasBersama</strong> · Platform Latihan Soal SD Kelas 6<br>
+  <span style="margin-top:4px;display:block">© 2025 CerdasBersama</span>
 </footer>
 
+<div class="spacer"></div>
+
+<div class="sticky-cta">
+  <div class="sticky-icon">📚</div>
+  <div class="sticky-text">
+    <div class="sticky-title">Mulai Gratis Sekarang</div>
+    <div class="sticky-sub">30 soal gratis · Diskon 50% dengan kode referral</div>
+  </div>
+  <button class="btn-sticky">Daftar →</button>
+</div>
+
 <script>
-function heroSubmit(){
-  const email=document.getElementById('heroEmail').value.trim();
-  const wa=document.getElementById('heroWa').value.trim();
-  if(!email||!wa){alert('Masukkan email dan nomor WA kamu.');return;}
-  window.location.href='register.html';
-}
-// Auto-fill referral code from URL
-const urlRef=new URLSearchParams(window.location.search).get('ref');
-if(urlRef) sessionStorage.setItem('refCode',urlRef);
+let total = 4*3600 + 59*60 + 50;
+function pad(n){return String(n).padStart(2,'0')}
+setInterval(()=>{
+  if(total<=0)return;
+  total--;
+  const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
+  document.getElementById('timer').textContent=pad(h)+':'+pad(m)+':'+pad(s);
+},1000);
 </script>
 </body>
 </html>
