@@ -18,6 +18,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5re
 .stat-val{font-size:22px;font-weight:800;color:#111}
 .stat-val.green{color:#1a6b4a}
 .stat-val.amber{color:#BA7517}
+.stat-val.red{color:#E24B4A}
 .tabs{display:flex;gap:6px;margin-bottom:1.5rem;background:#F5F3EE;padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap}
 .tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:none;color:#aaa;font-family:inherit}
 .tab.active{background:#fff;color:#1a6b4a;border:1px solid #E0EDE7}
@@ -28,29 +29,28 @@ th{text-align:left;font-size:11px;font-weight:700;color:#aaa;padding:0 0 8px;bor
 td{padding:10px 4px;border-bottom:1px solid #F0EEE8;color:#333;vertical-align:middle}
 tr:last-child td{border-bottom:none}
 .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700}
-.badge.pending{background:#FAEEDA;color:#854F0B}
+.badge.pending{background:#FCEBEB;color:#A32D2D}
 .badge.paid{background:#E8F5EE;color:#085041}
 .badge.process{background:#E6F1FB;color:#0C447C}
 .badge.active{background:#E8F5EE;color:#085041}
 .badge.free{background:#F5F3EE;color:#888}
-.badge.special{background:#EEEDFE;color:#3C3489}
+.badge.premium{background:#E8F5EE;color:#085041}
 .badge.inactive{background:#F5F3EE;color:#aaa}
 .btn-sm{font-size:12px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit;border:1.5px solid #E0EDE7;background:#fff;color:#333;font-weight:600;white-space:nowrap}
 .btn-sm:hover{background:#F5F3EE}
+.btn-sm:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm.green{border-color:#1a6b4a;color:#1a6b4a}
 .btn-sm.green:hover{background:#E8F5EE}
 .btn-sm.red{border-color:#E24B4A;color:#E24B4A}
 .btn-sm.red:hover{background:#FCEBEB}
 .btn-sm.amber{border-color:#BA7517;color:#BA7517}
 .btn-sm.amber:hover{background:#FAEEDA}
-.btn-sm.purple{border-color:#534AB7;color:#534AB7}
-.btn-sm.purple:hover{background:#EEEDFE}
 .btn-main{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-main:hover{background:#145a3d}
 .btn-logout{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#555}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
-.field input,.field select{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
+.field input{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
 .field input:focus{border-color:#1a6b4a}
 .code-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:8px}
 .code-val{font-size:15px;font-weight:800;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
@@ -63,6 +63,7 @@ tr:last-child td{border-bottom:none}
 .access-denied{text-align:center;padding:4rem 2rem}
 .access-denied h2{color:#E24B4A;margin-bottom:8px}
 .access-denied p{color:#aaa;font-size:13px}
+.expired-note{font-size:11px;color:#aaa;margin-top:2px}
 </style>
 </head>
 <body>
@@ -88,27 +89,43 @@ tr:last-child td{border-bottom:none}
   <div class="stat"><div class="stat-label">Total user</div><div class="stat-val" id="statTotal">–</div></div>
   <div class="stat"><div class="stat-label">User premium</div><div class="stat-val green" id="statPremium">–</div></div>
   <div class="stat"><div class="stat-label">User free</div><div class="stat-val amber" id="statFree">–</div></div>
-  <div class="stat"><div class="stat-label">Referrer aktif</div><div class="stat-val" id="statReferrer">–</div></div>
+  <div class="stat"><div class="stat-label">Order pending</div><div class="stat-val red" id="statPending">–</div></div>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab(this,'users')">Users</button>
+  <button class="tab active" onclick="switchTab(this,'transaksi')">Transaksi</button>
+  <button class="tab" onclick="switchTab(this,'users')">Users</button>
   <button class="tab" onclick="switchTab(this,'pencairan')">Pencairan</button>
   <button class="tab" onclick="switchTab(this,'kode')">Kode Promo</button>
-  <button class="tab" onclick="switchTab(this,'transaksi')">Transaksi</button>
 </div>
 
-<!-- USERS (dari Firestore) -->
-<div id="users">
+<!-- TRANSAKSI (real dari Firestore) -->
+<div id="transaksi">
+  <div class="card">
+    <div class="card-title">
+      <span>Semua transaksi</span>
+      <button class="btn-sm" onclick="loadOrders()">↻ Refresh</button>
+    </div>
+    <table>
+      <thead><tr><th>User</th><th>Paket</th><th>Total</th><th>Metode</th><th>Ref</th><th>Komisi</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody id="ordersBody">
+        <tr><td colspan="8" class="loading">Memuat transaksi...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- USERS -->
+<div id="users" style="display:none">
   <div class="card">
     <div class="card-title">
       <span>Daftar user</span>
       <input type="text" class="search-input" placeholder="Cari nama / email..." oninput="filterUsers(this.value)" />
     </div>
     <table>
-      <thead><tr><th>Nama</th><th>Email</th><th>Referral code</th><th>Plan</th><th>Komisi</th><th>Aksi</th></tr></thead>
+      <thead><tr><th>Nama</th><th>Email</th><th>Referral code</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Aksi</th></tr></thead>
       <tbody id="usersBody">
-        <tr><td colspan="6" class="loading">Memuat data user...</td></tr>
+        <tr><td colspan="7" class="loading">Memuat data user...</td></tr>
       </tbody>
     </table>
   </div>
@@ -121,13 +138,7 @@ tr:last-child td{border-bottom:none}
     <table>
       <thead><tr><th>User</th><th>Rekening</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
       <tbody>
-        <tr>
-          <td>Budi S.<br><span style="font-size:11px;color:#aaa">CB-BUDI7421</span></td>
-          <td style="font-size:12px">BCA 1234567890<br><span style="color:#aaa">a.n. Budi Santoso</span></td>
-          <td style="font-weight:700">Rp 20.000</td>
-          <td><span class="badge pending">Pending</span></td>
-          <td><div style="display:flex;gap:6px"><button class="btn-sm green" onclick="approve(this)">Setujui</button><button class="btn-sm red" onclick="reject(this)">Tolak</button></div></td>
-        </tr>
+        <tr><td colspan="5" style="text-align:center;color:#aaa;padding:2rem">Belum ada request pencairan.</td></tr>
       </tbody>
     </table>
   </div>
@@ -159,33 +170,16 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- TRANSAKSI (dummy) -->
-<div id="transaksi" style="display:none">
-  <div class="card">
-    <div class="card-title">Semua transaksi</div>
-    <table>
-      <thead><tr><th>User</th><th>Paket</th><th>Nominal</th><th>Referrer</th><th>Komisi</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Belum ada transaksi.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
 </div><!-- end mainView -->
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, Timestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── GANTI dengan email admin kamu ──────────────────────
 const ADMIN_EMAILS = ['test2@gmail.com'];
-// ───────────────────────────────────────────────────────
-
-let allUsers = [];
+let allUsers = [], allOrders = [];
 
 onAuthStateChanged(auth, async (user) => {
   if (!user || !ADMIN_EMAILS.includes(user.email)) {
@@ -193,118 +187,170 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('deniedView').style.display = 'block';
     return;
   }
-
-  // Load users dari Firestore
-  await loadUsers();
-
+  await Promise.all([loadUsers(), loadOrders()]);
   document.getElementById('loadingView').style.display = 'none';
   document.getElementById('mainView').style.display = 'block';
 });
 
+// ── Load users ─────────────────────────────────────────
 async function loadUsers() {
   const snap = await getDocs(collection(db, 'users'));
-  allUsers = snap.docs.map(d => d.data());
+  allUsers = snap.docs.map(d => ({...d.data(), docId: d.id}));
 
-  // Update stats
   const total = allUsers.length;
   const premium = allUsers.filter(u => u.plan === 'premium').length;
   const free = allUsers.filter(u => u.plan === 'free').length;
-  const referrer = allUsers.filter(u => u.komisiTotal > 0).length;
 
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statPremium').textContent = premium;
   document.getElementById('statFree').textContent = free;
-  document.getElementById('statReferrer').textContent = referrer;
 
   renderUsers(allUsers);
 }
 
 function renderUsers(users) {
   const tbody = document.getElementById('usersBody');
-  if (users.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user ditemukan.</td></tr>';
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>';
     return;
   }
-  tbody.innerHTML = users.map(u => `
+  tbody.innerHTML = users.map(u => {
+    const expiredAt = u.expiredAt ? new Date(u.expiredAt.seconds * 1000).toLocaleDateString('id-ID') : '–';
+    const isExpired = u.expiredAt && new Date(u.expiredAt.seconds * 1000) < new Date();
+    return `
     <tr>
-      <td><strong>${u.nama || '–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa || '–'}</span></td>
-      <td style="font-size:12px">${u.email || '–'}</td>
-      <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode || '–'}</td>
-      <td><span class="badge ${u.plan === 'premium' ? 'paid' : 'free'}">${u.plan === 'premium' ? 'Premium' : 'Free'}</span></td>
-      <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal || 0).toLocaleString('id-ID')}</td>
+      <td><strong>${u.nama||'–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa||'–'}</span></td>
+      <td style="font-size:12px">${u.email||'–'}</td>
+      <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode||'–'}</td>
+      <td><span class="badge ${u.plan==='premium'?'premium':'free'}">${u.plan==='premium'?'Premium':'Free'}</span></td>
+      <td style="font-size:12px">${expiredAt}${isExpired?'<div class="expired-note">⚠️ Expired</div>':''}</td>
+      <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal||0).toLocaleString('id-ID')}</td>
       <td>
         <div style="display:flex;gap:6px">
-          ${u.plan !== 'premium'
-            ? `<button class="btn-sm green" onclick="setPlan('${u.uid}', 'premium', this)">→ Premium</button>`
-            : `<button class="btn-sm red" onclick="setPlan('${u.uid}', 'free', this)">→ Free</button>`
+          ${u.plan!=='premium'
+            ? `<button class="btn-sm green" onclick="setPlan('${u.uid}','premium',this)">→ Premium</button>`
+            : `<button class="btn-sm red" onclick="setPlan('${u.uid}','free',this)">→ Free</button>`
           }
         </div>
       </td>
-    </tr>
-  `).join('');
+    </tr>`
+  }).join('');
 }
 
 window.filterUsers = function(q) {
-  const filtered = allUsers.filter(u =>
-    (u.nama || '').toLowerCase().includes(q.toLowerCase()) ||
-    (u.email || '').toLowerCase().includes(q.toLowerCase())
-  );
-  renderUsers(filtered);
+  renderUsers(allUsers.filter(u =>
+    (u.nama||'').toLowerCase().includes(q.toLowerCase()) ||
+    (u.email||'').toLowerCase().includes(q.toLowerCase())
+  ));
 }
 
 window.setPlan = async function(uid, plan, btn) {
-  btn.disabled = true;
-  btn.textContent = '...';
+  btn.disabled = true; btn.textContent = '...';
   try {
-    await updateDoc(doc(db, 'users', uid), { plan });
-    showToast(`✅ User diupdate ke plan ${plan}`);
+    const update = { plan };
+    if (plan === 'premium') {
+      const exp = new Date();
+      exp.setDate(exp.getDate() + 30);
+      update.expiredAt = Timestamp.fromDate(exp);
+    } else {
+      update.expiredAt = null;
+    }
+    await updateDoc(doc(db, 'users', uid), update);
+    showToast(`✅ User diupdate ke ${plan}${plan==='premium'?' (+30 hari)':''}`);
     await loadUsers();
   } catch(e) {
-    showToast('Gagal update: ' + e.message);
+    showToast('Gagal: ' + e.message);
     btn.disabled = false;
   }
 }
 
+// ── Load orders ────────────────────────────────────────
+window.loadOrders = async function() {
+  document.getElementById('ordersBody').innerHTML = '<tr><td colspan="8" class="loading">Memuat...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
+    allOrders = snap.docs.map(d => ({...d.data(), docId: d.id}));
+
+    const pending = allOrders.filter(o => o.status === 'pending').length;
+    document.getElementById('statPending').textContent = pending;
+
+    renderOrders(allOrders);
+  } catch(e) {
+    document.getElementById('ordersBody').innerHTML = `<tr><td colspan="8" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`;
+  }
+}
+
+function renderOrders(orders) {
+  const tbody = document.getElementById('ordersBody');
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:2rem">Belum ada transaksi.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.map(o => {
+    const tgl = o.createdAt ? new Date(o.createdAt.seconds*1000).toLocaleDateString('id-ID') : '–';
+    const isPending = o.status === 'pending';
+    return `
+    <tr>
+      <td style="font-size:12px">${o.email||'–'}<br><span style="color:#aaa">${tgl}</span></td>
+      <td style="font-size:12px">${o.paket||'–'}</td>
+      <td style="font-weight:700">Rp ${(o.total||0).toLocaleString('id-ID')}</td>
+      <td style="font-size:12px">${o.payMethod||'–'}</td>
+      <td style="font-family:monospace;font-size:11px;color:#1a6b4a">${o.refCode||'–'}</td>
+      <td style="color:#1a6b4a;font-weight:700">Rp ${(o.komisi||0).toLocaleString('id-ID')}</td>
+      <td><span class="badge ${isPending?'pending':'paid'}">${isPending?'Pending':'Paid'}</span></td>
+      <td>
+        ${isPending
+          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}','${o.uid}', this)">✓ Konfirmasi</button>`
+          : `<span style="font-size:12px;color:#aaa">Lunas</span>`
+        }
+      </td>
+    </tr>`
+  }).join('');
+}
+
+// ── Konfirmasi bayar ───────────────────────────────────
+window.confirmPaid = async function(orderId, uid, btn) {
+  if (!confirm('Konfirmasi pembayaran ini? Plan user akan otomatis diupdate ke Premium +30 hari.')) return;
+  btn.disabled = true; btn.textContent = '...';
+
+  try {
+    // 1. Update order → paid
+    await updateDoc(doc(db, 'orders', orderId), { status: 'paid' });
+
+    // 2. Update user → premium + expiredAt +30 hari
+    const exp = new Date();
+    exp.setDate(exp.getDate() + 30);
+    await updateDoc(doc(db, 'users', uid), {
+      plan: 'premium',
+      expiredAt: Timestamp.fromDate(exp)
+    });
+
+    showToast('✅ Pembayaran dikonfirmasi! User sudah Premium 30 hari.');
+    await Promise.all([loadOrders(), loadUsers()]);
+
+  } catch(e) {
+    showToast('Gagal konfirmasi: ' + e.message);
+    btn.disabled = false; btn.textContent = '✓ Konfirmasi';
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────
 window.doLogout = async function() {
   await signOut(auth);
   window.location.href = 'register.html';
 }
 
-// ── UI helpers ─────────────────────────────────────────
 window.switchTab = function(el, tab) {
   document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
   el.className = 'tab active';
-  ['users','pencairan','kode','transaksi'].forEach(t => document.getElementById(t).style.display = 'none');
+  ['transaksi','users','pencairan','kode'].forEach(t => document.getElementById(t).style.display = 'none');
   document.getElementById(tab).style.display = 'block';
 }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 2500);
-}
-
-window.approve = function(btn) {
-  const row = btn.closest('tr');
-  row.querySelector('.badge').className = 'badge process';
-  row.querySelector('.badge').textContent = 'Diproses';
-  btn.closest('td').innerHTML = '<button class="btn-sm amber" onclick="markPaid(this)">Tandai Lunas</button>';
-  showToast('✅ Request disetujui.');
-}
-window.reject = function(btn) {
-  const row = btn.closest('tr');
-  row.querySelector('.badge').className = 'badge inactive';
-  row.querySelector('.badge').textContent = 'Ditolak';
-  btn.closest('td').innerHTML = '<span style="font-size:12px;color:#aaa">Ditolak</span>';
-  showToast('Request ditolak.');
-}
-window.markPaid = function(btn) {
-  const row = btn.closest('tr');
-  row.querySelector('.badge').className = 'badge paid';
-  row.querySelector('.badge').textContent = 'Lunas';
-  btn.closest('td').innerHTML = '<span style="font-size:12px;color:#aaa">Selesai</span>';
-  showToast('✅ Ditandai lunas.');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 3000);
 }
 
 let revealed = false;
