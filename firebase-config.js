@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDYl792JM-8MLSqn_ismOecFbtA1tjH5-g",
   authDomain: "cerdas-bersama-b914e.firebaseapp.com",
   projectId: "cerdas-bersama-b914e",
