@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Referral — CerdasBersama</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5rem;max-width:860px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.logo{font-size:17px;font-weight:800;color:#1a6b4a}
+.logo span{color:#f5a623}
+.nav-links{display:flex;gap:1rem;align-items:center}
+.nav-links a{font-size:13px;color:#555;text-decoration:none;font-weight:500}
+.btn-nav{background:#1a6b4a;color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none}
+h2{font-size:20px;font-weight:800;color:#111;margin-bottom:2px}
+.sub{font-size:13px;color:#888;margin-bottom:1.5rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:#F5F3EE;border-radius:12px;padding:1rem}
+.stat-label{font-size:11px;color:#999;margin-bottom:6px;font-weight:600}
+.stat-val{font-size:22px;font-weight:800;color:#111}
+.stat-val.green{color:#1a6b4a}
+.stat-val.amber{color:#BA7517}
+.card{background:#fff;border:1px solid #E8E6DF;border-radius:14px;padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:14px;font-weight:700;color:#111;margin-bottom:1rem}
+.link-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:10px}
+.link-val{font-size:13px;color:#1a6b4a;font-family:monospace;font-weight:700;flex:1;word-break:break-all}
+.btn-sm{font-size:12px;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:inherit;border:1.5px solid #E0EDE7;background:#fff;color:#333;font-weight:600;white-space:nowrap}
+.btn-sm:hover{background:#F5F3EE}
+.share-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-share{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:8px 14px;font-size:13px;color:#333;cursor:pointer;font-family:inherit;font-weight:600}
+.btn-share:hover{background:#F5F3EE}
+.saldo-box{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:1rem;margin-bottom:10px}
+.saldo-label{font-size:11px;color:#aaa;margin-bottom:2px;font-weight:600}
+.saldo-amt{font-size:22px;font-weight:800;color:#1a6b4a}
+.btn-cairkan{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-cairkan:disabled{background:#ccc;cursor:not-allowed}
+.cairkan-note{font-size:12px;color:#aaa;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:700;color:#aaa;padding:0 0 8px;border-bottom:1px solid #F0EEE8;text-transform:uppercase;letter-spacing:.5px}
+td{padding:10px 0;border-bottom:1px solid #F0EEE8;color:#333}
+tr:last-child td{border-bottom:none}
+.badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
+.badge.pending{background:#FAEEDA;color:#854F0B}
+.badge.paid{background:#E8F5EE;color:#085041}
+.badge.process{background:#E6F1FB;color:#0C447C}
+.back{font-size:13px;color:#1a6b4a;text-decoration:none;font-weight:600;display:inline-block;margin-bottom:1rem}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">Cerdas<span>Bersama</span></div>
+  <div class="nav-links">
+    <a href="pricing.html">Beli Soal</a>
+    <a href="#" class="btn-nav">Dashboard</a>
+  </div>
+</div>
+
+<a href="index.html" class="back">← Beranda</a>
+<h2>Dashboard Referral</h2>
+<p class="sub" id="greeting">Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.</p>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Total klik</div><div class="stat-val">47</div></div>
+  <div class="stat"><div class="stat-label">Berhasil daftar</div><div class="stat-val">12</div></div>
+  <div class="stat"><div class="stat-label">Berhasil bayar</div><div class="stat-val">5</div></div>
+  <div class="stat"><div class="stat-label">Total komisi</div><div class="stat-val green">Rp 37.500</div></div>
+  <div class="stat"><div class="stat-label">Dicairkan</div><div class="stat-val">Rp 20.000</div></div>
+  <div class="stat"><div class="stat-label">Saldo aktif</div><div class="stat-val amber">Rp 17.500</div></div>
+</div>
+
+<div class="card">
+  <div class="card-title">🔗 Link referral kamu</div>
+  <div class="link-row">
+    <span class="link-val" id="refLink">cerdasbersama.id/?ref=CB-USER0000</span>
+    <button class="btn-sm" onclick="copyLink()" id="copyBtn">Salin</button>
+  </div>
+  <div class="share-btns">
+    <button class="btn-share" onclick="shareWa()">📲 WhatsApp</button>
+    <button class="btn-share" onclick="copyMsg()">📋 Salin pesan</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">💰 Cairkan komisi</div>
+  <div class="saldo-box">
+    <div>
+      <div class="saldo-label">Saldo bisa dicairkan</div>
+      <div class="saldo-amt">Rp 17.500</div>
+    </div>
+    <button class="btn-cairkan" disabled>Cairkan (min. Rp 20.000)</button>
+  </div>
+  <p class="cairkan-note">Kurang Rp 2.500 lagi untuk memenuhi minimum pencairan. Terus share linkmu!</p>
+</div>
+
+<div class="card">
+  <div class="card-title">📋 Riwayat transaksi referral</div>
+  <table>
+    <thead><tr><th>Pengguna</th><th>Paket</th><th>Komisi</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Ani S.</td><td>Bundling 5</td><td style="color:#1a6b4a;font-weight:600">+Rp 15.000</td><td><span class="badge paid">Dibayar</span></td></tr>
+      <tr><td>Rudi P.</td><td>Bulanan</td><td style="color:#1a6b4a;font-weight:600">+Rp 7.350</td><td><span class="badge pending">Pending</span></td></tr>
+      <tr><td>Siti M.</td><td>À la carte</td><td style="color:#1a6b4a;font-weight:600">+Rp 750</td><td><span class="badge pending">Pending</span></td></tr>
+      <tr><td>Hendra K.</td><td>Bundling 3</td><td style="color:#1a6b4a;font-weight:600">+Rp 9.000</td><td><span class="badge process">Diproses</span></td></tr>
+      <tr><td>Dewi R.</td><td>Bulanan</td><td style="color:#1a6b4a;font-weight:600">+Rp 7.350</td><td><span class="badge paid">Dibayar</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+const code = sessionStorage.getItem('userCode') || 'CB-USER0000';
+const name = sessionStorage.getItem('userName') || '';
+const link = 'cerdasbersama.id/?ref=' + code;
+document.getElementById('refLink').textContent = link;
+if (name) document.getElementById('greeting').textContent = 'Halo, ' + name + '! Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.';
+
+function copyLink() {
+  navigator.clipboard.writeText(link).then(() => {
+    document.getElementById('copyBtn').textContent = 'Tersalin!';
+    setTimeout(() => document.getElementById('copyBtn').textContent = 'Salin', 2000);
+  });
+}
+function shareWa() {
+  const msg = encodeURIComponent('Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + link);
+  window.open('https://wa.me/?text=' + msg, '_blank');
+}
+function copyMsg() {
+  const msg = 'Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + link;
+  navigator.clipboard.writeText(msg).then(() => alert('Pesan tersalin! Tinggal paste di WhatsApp.'));
+}
+</script>
+</body>
+</html>

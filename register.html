@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar — CerdasBersama</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.card{background:#fff;border:1px solid #E8E6DF;border-radius:16px;padding:2rem;width:100%;max-width:440px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.logo{font-size:17px;font-weight:800;color:#1a6b4a;margin-bottom:1.5rem;text-align:center}
+.logo span{color:#f5a623}
+h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
+.sub{font-size:13px;color:#888;margin-bottom:1.5rem}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
+.field input{width:100%;border:1.5px solid #E0EDE7;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;color:#111;background:#FAFAF8;outline:none}
+.field input:focus{border-color:#1a6b4a}
+.ref-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:4px}
+.ref-code{font-size:15px;font-weight:700;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
+.btn-refresh{background:none;border:none;cursor:pointer;font-size:18px;padding:0;line-height:1}
+.ref-hint{font-size:12px;color:#aaa;margin-bottom:1rem}
+.btn-cta{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-cta:hover{background:#145a3d}
+.divider{border:none;border-top:1px solid #F0EEE8;margin:1.2rem 0}
+.login-link{font-size:13px;color:#888;text-align:center}
+.login-link a{color:#1a6b4a;font-weight:600;text-decoration:none}
+
+.success{display:none;text-align:center}
+.success-icon{width:56px;height:56px;background:#E8F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:26px}
+.link-box{background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:12px;margin-bottom:12px;text-align:left}
+.link-label{font-size:11px;color:#aaa;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.link-val{font-size:13px;color:#1a6b4a;font-family:monospace;word-break:break-all;font-weight:600}
+.btn-copy{width:100%;background:none;border:1.5px solid #E0EDE7;border-radius:10px;padding:10px;font-size:13px;color:#333;cursor:pointer;font-family:inherit;margin-bottom:8px;font-weight:600}
+.btn-copy:hover{background:#F5FBF8}
+.info-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+.pill{background:#F5F3EE;border-radius:20px;padding:5px 12px;font-size:12px;color:#666;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="card" id="formView">
+  <div class="logo">Cerdas<span>Bersama</span></div>
+  <h2>Buat akun gratis</h2>
+  <p class="sub">Daftar & langsung dapat 30 soal gratis + link referral kamu</p>
+
+  <div class="field">
+    <label>Nama lengkap</label>
+    <input type="text" id="nama" placeholder="Nama lengkap kamu" oninput="updateCode()" />
+  </div>
+  <div class="field">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="email@kamu.com" />
+  </div>
+  <div class="field">
+    <label>Nomor WhatsApp</label>
+    <input type="tel" id="wa" placeholder="08123456789" />
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="pass" placeholder="Min. 8 karakter" />
+  </div>
+
+  <label style="display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:6px">Kode referral kamu (otomatis)</label>
+  <div class="ref-row">
+    <span class="ref-code" id="previewCode">CB-USER0000</span>
+    <button class="btn-refresh" onclick="regenCode()" title="Generate ulang">🔄</button>
+  </div>
+  <p class="ref-hint">Kode ini jadi link referral kamu. Klik 🔄 untuk generate ulang.</p>
+
+  <button class="btn-cta" onclick="doRegister()">Daftar Sekarang →</button>
+  <div class="divider"></div>
+  <p class="login-link">Sudah punya akun? <a href="#">Masuk di sini</a></p>
+</div>
+
+<div class="card success" id="successView">
+  <div class="success-icon">✅</div>
+  <h2 style="font-size:20px;margin-bottom:6px">Akun berhasil dibuat!</h2>
+  <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>! Cek WA kamu untuk verifikasi.</p>
+
+  <div class="link-box">
+    <div class="link-label">Link referral kamu</div>
+    <div class="link-val" id="linkVal"></div>
+  </div>
+  <button class="btn-copy" onclick="copyLink()" id="copyBtn">📋 Salin link referral</button>
+  <a href="dashboard-referral.html" class="btn-cta" style="display:block;text-align:center;text-decoration:none;padding:13px;border-radius:10px">Lihat dashboard referral →</a>
+
+  <div class="info-pills">
+    <div class="pill">💰 Komisi 15%</div>
+    <div class="pill">📚 30 soal gratis aktif</div>
+    <div class="pill">🏷️ Diskon 50% siap</div>
+  </div>
+</div>
+
+<script>
+let generatedCode = '';
+
+function makeCode(name) {
+  const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4) || 'USER';
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return 'CB-' + clean + suffix;
+}
+
+function updateCode() {
+  const nama = document.getElementById('nama').value;
+  generatedCode = makeCode(nama);
+  document.getElementById('previewCode').textContent = generatedCode;
+}
+
+function regenCode() {
+  const nama = document.getElementById('nama').value;
+  generatedCode = makeCode(nama);
+  document.getElementById('previewCode').textContent = generatedCode;
+}
+
+function doRegister() {
+  const nama = document.getElementById('nama').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const wa = document.getElementById('wa').value.trim();
+  const pass = document.getElementById('pass').value;
+  if (!nama || !email || !wa || !pass) { alert('Semua field wajib diisi.'); return; }
+  if (pass.length < 8) { alert('Password minimal 8 karakter.'); return; }
+  if (!generatedCode) generatedCode = makeCode(nama);
+
+  // Simpan ke sessionStorage untuk dipakai halaman lain
+  sessionStorage.setItem('userName', nama.split(' ')[0]);
+  sessionStorage.setItem('userCode', generatedCode);
+  sessionStorage.setItem('userEmail', email);
+
+  document.getElementById('namaUser').textContent = nama.split(' ')[0];
+  document.getElementById('linkVal').textContent = 'cerdasbersama.id/?ref=' + generatedCode;
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').style.display = 'block';
+}
+
+function copyLink() {
+  const txt = document.getElementById('linkVal').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    document.getElementById('copyBtn').textContent = '✅ Tersalin!';
+    setTimeout(() => document.getElementById('copyBtn').textContent = '📋 Salin link referral', 2000);
+  });
+}
+
+// Init
+generatedCode = makeCode('');
+document.getElementById('previewCode').textContent = generatedCode;
+
+// Ambil ref dari URL jika ada
+const urlRef = new URLSearchParams(window.location.search).get('ref');
+if (urlRef) sessionStorage.setItem('refCode', urlRef);
+</script>
+</body>
+</html>
