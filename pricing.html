@@ -103,7 +103,7 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
     <div class="subj" onclick="selSubj('alacarte',this,'IPAS')"><div class="subj-icon">🔬</div><div class="subj-name">IPAS</div></div>
     <div class="subj" onclick="selSubj('alacarte',this,'B.Inggris')"><div class="subj-icon">🔤</div><div class="subj-name">B.Inggris</div></div>
   </div>
-  <div class="section-label">Pilih sub-bab (Rp 4.900/sub-bab)</div>
+  <div class="section-label">Pilih sub-bab (Rp 7.900/sub-bab)</div>
   <div class="bab-list" id="babListAlacarte"></div>
 </div>
 
@@ -111,23 +111,23 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 <div id="bundling" style="display:none">
   <div class="section-label">Pilih paket bundling</div>
   <div class="grid" id="bundlingPkgs">
-    <div class="pkg selected" onclick="selBundlingPkg(this,3,12900)">
+    <div class="pkg selected" onclick="selBundlingPkg(this,3,21900)">
       <div class="pkg-name">Bundling 3</div>
-      <div class="pkg-price">Rp 12.900</div>
+      <div class="pkg-price">Rp 21.900</div>
       <div class="pkg-desc">3 sub-bab pilihan</div>
       <div class="pkg-save">Hemat Rp 1.800 vs satuan</div>
     </div>
-    <div class="pkg" onclick="selBundlingPkg(this,5,19900)">
+    <div class="pkg" onclick="selBundlingPkg(this,5,34900)">
       <div class="pkg-badge">Populer</div>
       <div class="pkg-name">Bundling 5</div>
-      <div class="pkg-price">Rp 19.900</div>
+      <div class="pkg-price">Rp 34.900</div>
       <div class="pkg-desc">5 sub-bab pilihan</div>
       <div class="pkg-save">Hemat Rp 4.600 vs satuan</div>
     </div>
-    <div class="pkg" onclick="selBundlingPkg(this,10,34900)">
+    <div class="pkg" onclick="selBundlingPkg(this,10,64900)">
       <div class="pkg-badge">Terbaik</div>
       <div class="pkg-name">Bundling 10</div>
-      <div class="pkg-price">Rp 34.900</div>
+      <div class="pkg-price">Rp 64.900</div>
       <div class="pkg-desc">10 sub-bab pilihan</div>
       <div class="pkg-save">Hemat Rp 14.100 vs satuan</div>
     </div>
@@ -146,10 +146,10 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 <div id="bulanan" style="display:none">
   <div class="section-label">Langganan bulanan</div>
   <div class="grid">
-    <div class="pkg selected" onclick="selPkg(this,49900,'Bulanan 1 bulan')">
+    <div class="pkg selected" onclick="selPkg(this,99900,'Bulanan 1 bulan')">
       <div class="pkg-badge">Akses penuh</div>
       <div class="pkg-name">1 bulan</div>
-      <div class="pkg-price">Rp 49.900</div>
+      <div class="pkg-price">Rp 99.900</div>
       <div class="pkg-desc">Semua mapel & bab tanpa batas</div>
     </div>
   </div>
@@ -173,9 +173,9 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 <!-- RINGKASAN -->
 <div class="order-box">
   <div class="section-label">Ringkasan pesanan</div>
-  <div class="order-row"><span id="orderName">1 sub-bab Matematika</span><span id="orderBase">Rp 4.900</span></div>
-  <div class="order-row disc" id="discRow" style="display:none"><span>Diskon 50% (first purchase)</span><span id="discAmt">-Rp 2.450</span></div>
-  <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#1a6b4a">Rp 4.900</span></div>
+  <div class="order-row"><span id="orderName">1 sub-bab Matematika</span><span id="orderBase">Rp 7.900</span></div>
+  <div class="order-row disc" id="discRow" style="display:none"><span>Diskon 50% (first purchase)</span><span id="discAmt">-Rp 3.950</span></div>
+  <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#1a6b4a">Rp 7.900</span></div>
 </div>
 
 <div class="section-label">Metode pembayaran</div>
@@ -202,7 +202,7 @@ import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const HARGA = { alacarte: 4900, bundling: {3:12900, 5:19900, 10:34900}, bulanan: 49900 };
+const HARGA = { alacarte: 7900, bundling: {3:21900, 5:34900, 10:64900}, bulanan: 99900 };
 const KOMISI_RATE = 0.15;
 const babs = {
   Matematika: ['Bilangan bulat','Pecahan & desimal','FPB dan KPK','Bangun datar','Bangun ruang','Statistika dasar','Perbandingan','Skala & jarak'],
@@ -212,11 +212,10 @@ const babs = {
 
 let curSubjAlacarte='Matematika', curSubjBundling='Matematika';
 let selBabsAlacarte=[], selBabsBundling=[];
-let bundlingMax=3, bundlingPrice=12900;
-let curPkg={name:'1 sub-bab Matematika',price:4900};
+let bundlingMax=3, bundlingPrice=21900;
+let curPkg={name:'1 sub-bab Matematika',price:7900};
 let discApplied=false, validRefCode='', currentUser=null, currentUserData=null;
 
-// ── Auth ───────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) { window.location.href='register.html'; return; }
   currentUser = user;
@@ -224,7 +223,6 @@ onAuthStateChanged(auth, async (user) => {
   const userSnap = await getDoc(doc(db, 'users', user.uid));
   if (userSnap.exists()) {
     currentUserData = userSnap.data();
-    // Auto-apply diskon kalau ada referredBy dan belum pernah pakai
     if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
       validRefCode = currentUserData.referredBy;
       discApplied = true;
@@ -254,7 +252,6 @@ function applyRefUI() {
   updateOrder();
 }
 
-// ── Render babs ────────────────────────────────────────
 function renderBabs(tab) {
   const subj = tab==='alacarte' ? curSubjAlacarte : curSubjBundling;
   const sel  = tab==='alacarte' ? selBabsAlacarte : selBabsBundling;
@@ -295,10 +292,10 @@ function updateQuota() {
 
 window.selBundlingPkg = function(el, max, price) {
   document.querySelectorAll('#bundlingPkgs .pkg').forEach(p=>p.className='pkg');
-  el.className = 'pkg selected';
+  el.className='pkg selected';
   bundlingMax=max; bundlingPrice=price;
   if (selBabsBundling.length>max) selBabsBundling=selBabsBundling.slice(0,max);
-  curPkg = {name:`Bundling ${max} sub-bab`, price};
+  curPkg={name:`Bundling ${max} sub-bab`,price};
   renderBabs('bundling');
   updateOrder();
 }
@@ -330,7 +327,6 @@ window.switchTab = function(el, tab) {
   updateOrder();
 }
 
-// ── Validasi kode manual ───────────────────────────────
 window.applyRef = async function() {
   if (currentUserData?.hasUsedReferral) {
     const hint = document.getElementById('refHint');
@@ -360,7 +356,6 @@ window.applyRef = async function() {
   }
 }
 
-// ── Bayar & catat komisi ───────────────────────────────
 window.doPay = async function() {
   const btn = document.getElementById('btnPay');
   const payMethod = document.querySelector('.pay.sel')?.textContent.trim() || 'Transfer Bank';
@@ -368,13 +363,10 @@ window.doPay = async function() {
   const disc = discApplied ? Math.round(base*0.5) : 0;
   const total = base-disc;
   const komisi = Math.round(total*KOMISI_RATE);
-
   btn.disabled=true; btn.textContent='Memproses...';
 
   try {
     const referredBy = validRefCode || currentUserData?.referredBy || null;
-
-    // 1. Simpan order
     await addDoc(collection(db,'orders'), {
       uid: currentUser.uid,
       email: currentUser.email,
@@ -389,20 +381,13 @@ window.doPay = async function() {
       createdAt: serverTimestamp()
     });
 
-    // 2. Tambah komisi ke referrer (melekat selamanya)
     if (referredBy) {
       const snap = await getDocs(query(collection(db,'users'), where('referralCode','==',referredBy)));
       if (!snap.empty) {
-        await updateDoc(doc(db,'users',snap.docs[0].id), {
-          komisiTotal: increment(komisi)
-        });
+        await updateDoc(doc(db,'users',snap.docs[0].id), { komisiTotal: increment(komisi) });
       }
-      // 3. Tandai first purchase sudah dipakai (diskon 1x)
       if (discApplied && !currentUserData?.hasUsedReferral) {
-        await updateDoc(doc(db,'users',currentUser.uid), {
-          hasUsedReferral: true,
-          referredBy: referredBy
-        });
+        await updateDoc(doc(db,'users',currentUser.uid), { hasUsedReferral: true, referredBy });
         if (currentUserData) currentUserData.hasUsedReferral = true;
       }
     }
