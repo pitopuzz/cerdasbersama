@@ -23,10 +23,11 @@ h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
 .ref-hint{font-size:12px;color:#aaa;margin-bottom:1rem}
 .btn-cta{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-cta:hover{background:#145a3d}
+.btn-cta:disabled{background:#aaa;cursor:not-allowed}
 .divider{border:none;border-top:1px solid #F0EEE8;margin:1.2rem 0}
 .login-link{font-size:13px;color:#888;text-align:center}
 .login-link a{color:#1a6b4a;font-weight:600;text-decoration:none}
-
+.error-msg{font-size:13px;color:#e53e3e;background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:none}
 .success{display:none;text-align:center}
 .success-icon{width:56px;height:56px;background:#E8F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:26px}
 .link-box{background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:12px;margin-bottom:12px;text-align:left}
@@ -44,6 +45,8 @@ h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
   <div class="logo">Cerdas<span>Bersama</span></div>
   <h2>Buat akun gratis</h2>
   <p class="sub">Daftar & langsung dapat 30 soal gratis + link referral kamu</p>
+
+  <div class="error-msg" id="errorMsg"></div>
 
   <div class="field">
     <label>Nama lengkap</label>
@@ -69,15 +72,15 @@ h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
   </div>
   <p class="ref-hint">Kode ini jadi link referral kamu. Klik 🔄 untuk generate ulang.</p>
 
-  <button class="btn-cta" onclick="doRegister()">Daftar Sekarang →</button>
+  <button class="btn-cta" id="btnDaftar" onclick="doRegister()">Daftar Sekarang →</button>
   <div class="divider"></div>
-  <p class="login-link">Sudah punya akun? <a href="#">Masuk di sini</a></p>
+  <p class="login-link">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
 </div>
 
 <div class="card success" id="successView">
   <div class="success-icon">✅</div>
   <h2 style="font-size:20px;margin-bottom:6px">Akun berhasil dibuat!</h2>
-  <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>! Cek WA kamu untuk verifikasi.</p>
+  <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>!</p>
 
   <div class="link-box">
     <div class="link-label">Link referral kamu</div>
@@ -93,7 +96,12 @@ h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
   </div>
 </div>
 
-<script>
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── Referral code helpers ──────────────────────────────
 let generatedCode = '';
 
 function makeCode(name) {
@@ -102,58 +110,107 @@ function makeCode(name) {
   return 'CB-' + clean + suffix;
 }
 
-function updateCode() {
+window.updateCode = function() {
   const nama = document.getElementById('nama').value;
   generatedCode = makeCode(nama);
   document.getElementById('previewCode').textContent = generatedCode;
 }
 
-function regenCode() {
+window.regenCode = function() {
   const nama = document.getElementById('nama').value;
   generatedCode = makeCode(nama);
   document.getElementById('previewCode').textContent = generatedCode;
 }
 
-function doRegister() {
-  const nama = document.getElementById('nama').value.trim();
+// ── Init ───────────────────────────────────────────────
+generatedCode = makeCode('');
+document.getElementById('previewCode').textContent = generatedCode;
+
+const urlRef = new URLSearchParams(window.location.search).get('ref');
+if (urlRef) sessionStorage.setItem('refCode', urlRef);
+
+// ── Error helper ───────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideError() {
+  document.getElementById('errorMsg').style.display = 'none';
+}
+
+// ── Register ───────────────────────────────────────────
+window.doRegister = async function() {
+  hideError();
+  const nama  = document.getElementById('nama').value.trim();
   const email = document.getElementById('email').value.trim();
-  const wa = document.getElementById('wa').value.trim();
-  const pass = document.getElementById('pass').value;
-  if (!nama || !email || !wa || !pass) { alert('Semua field wajib diisi.'); return; }
-  if (pass.length < 8) { alert('Password minimal 8 karakter.'); return; }
+  const wa    = document.getElementById('wa').value.trim();
+  const pass  = document.getElementById('pass').value;
+  const btn   = document.getElementById('btnDaftar');
+
+  if (!nama || !email || !wa || !pass) { showError('Semua field wajib diisi.'); return; }
+  if (pass.length < 8) { showError('Password minimal 8 karakter.'); return; }
   if (!generatedCode) generatedCode = makeCode(nama);
 
-  // Simpan ke sessionStorage untuk dipakai halaman lain
-  sessionStorage.setItem('userName', nama.split(' ')[0]);
-  sessionStorage.setItem('userCode', generatedCode);
-  sessionStorage.setItem('userEmail', email);
+  btn.disabled = true;
+  btn.textContent = 'Mendaftar...';
 
-  document.getElementById('namaUser').textContent = nama.split(' ')[0];
-  document.getElementById('linkVal').textContent = 'cerdasbersama.id/?ref=' + generatedCode;
-  document.getElementById('formView').style.display = 'none';
-  document.getElementById('successView').style.display = 'block';
+  try {
+    // 1. Buat akun di Firebase Auth
+    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+    const user = userCredential.user;
+
+    // 2. Simpan data user ke Firestore
+    const refCode = sessionStorage.getItem('refCode') || null;
+    await setDoc(doc(db, 'users', user.uid), {
+      uid: user.uid,
+      nama: nama,
+      email: email,
+      wa: wa,
+      referralCode: generatedCode,
+      referredBy: refCode,
+      plan: 'free',
+      soalGratis: 30,
+      komisiTotal: 0,
+      createdAt: serverTimestamp()
+    });
+
+    // 3. Simpan ke sessionStorage
+    sessionStorage.setItem('userName', nama.split(' ')[0]);
+    sessionStorage.setItem('userCode', generatedCode);
+    sessionStorage.setItem('userEmail', email);
+    sessionStorage.setItem('userUid', user.uid);
+
+    // 4. Tampilkan success
+    document.getElementById('namaUser').textContent = nama.split(' ')[0];
+    document.getElementById('linkVal').textContent = 'cerdasbersama.vercel.app/register.html?ref=' + generatedCode;
+    document.getElementById('formView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Daftar Sekarang →';
+    if (err.code === 'auth/email-already-in-use') {
+      showError('Email ini sudah terdaftar. Silakan masuk.');
+    } else if (err.code === 'auth/invalid-email') {
+      showError('Format email tidak valid.');
+    } else if (err.code === 'auth/weak-password') {
+      showError('Password terlalu lemah. Gunakan minimal 8 karakter.');
+    } else {
+      showError('Gagal mendaftar: ' + err.message);
+    }
+  }
 }
 
-function copyLink() {
+// ── Copy link ──────────────────────────────────────────
+window.copyLink = function() {
   const txt = document.getElementById('linkVal').textContent;
   navigator.clipboard.writeText(txt).then(() => {
     document.getElementById('copyBtn').textContent = '✅ Tersalin!';
     setTimeout(() => document.getElementById('copyBtn').textContent = '📋 Salin link referral', 2000);
   });
 }
-
-// Init
-generatedCode = makeCode('');
-document.getElementById('previewCode').textContent = generatedCode;
-
-// Ambil ref dari URL jika ada
-const urlRef = new URLSearchParams(window.location.search).get('ref');
-if (urlRef) sessionStorage.setItem('refCode', urlRef);
-</script>
-  
-<script type="module">
-  import { auth, db } from "./firebase-config.js";
-  console.log("Firebase OK:", auth.app.name);
 </script>
 </body>
 </html>
