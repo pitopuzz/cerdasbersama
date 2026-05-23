@@ -53,6 +53,7 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 .ref-input-row input:focus{border-color:#1a6b4a}
 .btn-apply{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:#333;font-weight:600;white-space:nowrap}
 .btn-apply:hover{background:#F5F3EE}
+.btn-apply:disabled{opacity:.5;cursor:not-allowed}
 .ref-hint{font-size:12px;color:#aaa;margin-top:6px}
 .ref-ok-msg{font-size:12px;color:#1a6b4a;margin-top:6px;font-weight:600}
 .order-box{background:#fff;border:1px solid #E8E6DF;border-radius:14px;padding:1.25rem;margin-bottom:1rem}
@@ -66,18 +67,23 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 .pay-icon{font-size:20px;margin-bottom:4px}
 .btn-pay{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
 .btn-pay:hover{background:#145a3d}
+.btn-pay:disabled{background:#aaa;cursor:not-allowed}
 .secure-note{text-align:center;font-size:12px;color:#aaa;margin-top:8px}
 .success{display:none;text-align:center;padding:2rem 0}
 .success-icon{font-size:48px;margin-bottom:1rem}
+.loading{text-align:center;padding:3rem;color:#aaa;font-size:14px}
 </style>
 </head>
 <body>
+
+<div id="loadingView" class="loading">Memuat halaman...</div>
+
+<div id="mainView" style="display:none">
 <div class="topbar">
   <div class="logo">Cerdas<span>Bersama</span></div>
   <a href="dashboard-referral.html" class="btn-nav">Dashboard</a>
 </div>
 
-<div id="mainView">
 <a href="index.html" class="back">← Beranda</a>
 <h2>Pilih paket belajar</h2>
 <p class="sub">Punya kode referral? Masukkan untuk dapat diskon 50% pembelian pertama.</p>
@@ -126,7 +132,7 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
   </div>
   <div class="ref-input-row" id="refInputRow">
     <input type="text" id="refCode" placeholder="Masukkan kode referral kamu" />
-    <button class="btn-apply" onclick="applyRef()">Pakai</button>
+    <button class="btn-apply" id="btnApply" onclick="applyRef()">Pakai</button>
   </div>
   <p class="ref-hint" id="refHint">Kode didapat dari teman atau dihubungi admin CerdasBersama.</p>
 </div>
@@ -145,90 +151,203 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
   <div class="pay" onclick="selPay(this)"><div class="pay-icon">📱</div>GoPay / OVO</div>
 </div>
 
-<button class="btn-pay" onclick="doPay()">Bayar Sekarang</button>
+<button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
 <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
-</div>
+</div><!-- end mainView -->
 
 <div class="success" id="successView">
   <div class="success-icon">🎉</div>
-  <h2 style="margin-bottom:8px">Pembayaran berhasil!</h2>
-  <p style="font-size:14px;color:#888;margin-bottom:1.5rem">Soal kamu sudah aktif. Selamat belajar!</p>
+  <h2 style="margin-bottom:8px">Pesanan tersimpan!</h2>
+  <p style="font-size:14px;color:#888;margin-bottom:4px">Pesananmu sudah dicatat. Admin akan konfirmasi pembayaran segera.</p>
+  <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Integrasi Midtrans akan aktif di fase berikutnya.</p>
   <a href="dashboard-referral.html" class="btn-pay" style="display:inline-block;width:auto;padding:13px 32px;text-decoration:none;border-radius:10px">Lihat dashboard →</a>
 </div>
 
-<script>
-// Kode valid disimpan di backend nanti — ini hanya untuk prototype
-const VALID_CODES = ['PLACEHOLDER_CODE_1', 'PLACEHOLDER_CODE_2'];
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, query, where, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 const babs = {
   Matematika: ['Bilangan bulat','Pecahan & desimal','FPB dan KPK','Bangun datar','Bangun ruang','Statistika dasar','Perbandingan','Skala & jarak'],
   IPAS: ['Makhluk hidup','Ekosistem','Gaya & gerak','Energi & perubahannya','Bumi & alam semesta','Cuaca & iklim','Teknologi pangan','Kesehatan'],
   'B.Inggris': ['Greetings','Tenses dasar','Reading comprehension','Vocabulary','Writing simple sentences','Listening skills','Speaking practice','Grammar dasar']
 };
-let curSubj='Matematika', selBabs=[], curPkg={name:'1 sub-bab Matematika',price:5000}, discApplied=false;
 
-function renderBabs(){
-  const list=document.getElementById('babList'); list.innerHTML='';
-  babs[curSubj].forEach(b=>{
-    const d=document.createElement('div'); d.className='bab';
-    d.innerHTML=`<div class="bab-check"></div>${b}`;
-    d.onclick=()=>toggleBab(b,d); list.appendChild(d);
-  }); updateOrder();
-}
-function toggleBab(b,el){
-  const idx=selBabs.indexOf(b);
-  if(idx>-1){selBabs.splice(idx,1);el.className='bab';el.querySelector('.bab-check').textContent='';}
-  else{selBabs.push(b);el.className='bab sel';el.querySelector('.bab-check').textContent='✓';}
-  const n=selBabs.length||1; curPkg={name:`${n} sub-bab ${curSubj}`,price:n*5000}; updateOrder();
-}
-function selSubj(el,subj){
-  document.querySelectorAll('.subj').forEach(s=>s.className='subj');
-  el.className='subj sel'; curSubj=subj; selBabs=[]; curPkg={name:`1 sub-bab ${subj}`,price:5000}; renderBabs();
-}
-function selPkg(el,price,name){
-  document.querySelectorAll('.pkg').forEach(p=>p.className='pkg');
-  el.className='pkg selected'; curPkg={name,price}; updateOrder();
-}
-function switchTab(el,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-  el.className='tab active';
-  ['alacarte','bundling','bulanan'].forEach(t=>document.getElementById(t).style.display='none');
-  document.getElementById(tab).style.display='block';
-  if(tab==='alacarte'){curPkg={name:'1 sub-bab Matematika',price:5000};renderBabs();}
-  else if(tab==='bundling'){curPkg={name:'Bundling 5 sub-bab',price:20000};}
-  else{curPkg={name:'Bulanan 1 bulan',price:49000};}
-  updateOrder();
-}
-function applyRef(){
-  const code=document.getElementById('refCode').value.trim().toUpperCase();
-  const box=document.getElementById('refBox'),status=document.getElementById('refStatus'),hint=document.getElementById('refHint');
-  if(VALID_CODES.includes(code)){
-    discApplied=true; box.className='ref-box unlocked';
-    status.className='ref-status ok'; status.textContent='Diskon aktif ✓';
-    document.getElementById('refInputRow').style.display='none';
-    hint.className='ref-ok-msg'; hint.textContent='✅ Kode valid! Diskon 50% diterapkan untuk pembelian pertama.';
-  } else {
-    status.textContent='Kode tidak valid';
-    hint.style.color='#E24B4A'; hint.textContent='Kode tidak ditemukan. Coba cek kembali ejaannya.';
-    setTimeout(()=>{hint.style.color='';hint.textContent='Kode didapat dari teman atau dihubungi admin CerdasBersama.';status.textContent='Belum dipakai';},2500);
+let curSubj = 'Matematika', selBabs = [], curPkg = {name:'1 sub-bab Matematika', price:5000};
+let discApplied = false, validRefCode = '', currentUser = null, currentUserData = null;
+
+// ── Auth check ─────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = 'register.html';
+    return;
   }
+  currentUser = user;
+
+  // Auto-isi kode referral dari sessionStorage (kalau datang dari link referral)
+  const savedRef = sessionStorage.getItem('refCode');
+  if (savedRef) {
+    document.getElementById('refCode').value = savedRef;
+  }
+
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+  renderBabs();
+});
+
+// ── Validasi kode referral ke Firestore ────────────────
+window.applyRef = async function() {
+  const code = document.getElementById('refCode').value.trim().toUpperCase();
+  const btn = document.getElementById('btnApply');
+  const box = document.getElementById('refBox');
+  const status = document.getElementById('refStatus');
+  const hint = document.getElementById('refHint');
+
+  if (!code) return;
+
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  try {
+    // Cek ke Firestore: ada user dengan referralCode ini?
+    const q = query(collection(db, 'users'), where('referralCode', '==', code));
+    const snap = await getDocs(q);
+
+    if (!snap.empty) {
+      // Kode valid
+      discApplied = true;
+      validRefCode = code;
+      box.className = 'ref-box unlocked';
+      status.className = 'ref-status ok';
+      status.textContent = 'Diskon aktif ✓';
+      document.getElementById('refInputRow').style.display = 'none';
+      hint.className = 'ref-ok-msg';
+      hint.textContent = '✅ Kode valid! Diskon 50% diterapkan.';
+    } else {
+      // Kode tidak valid
+      status.textContent = 'Kode tidak valid';
+      hint.style.color = '#E24B4A';
+      hint.textContent = 'Kode tidak ditemukan. Coba cek kembali ejaannya.';
+      setTimeout(() => {
+        hint.style.color = '';
+        hint.textContent = 'Kode didapat dari teman atau dihubungi admin CerdasBersama.';
+        status.textContent = 'Belum dipakai';
+        btn.disabled = false;
+        btn.textContent = 'Pakai';
+      }, 2500);
+    }
+  } catch(e) {
+    hint.style.color = '#E24B4A';
+    hint.textContent = 'Gagal memverifikasi kode. Coba lagi.';
+    btn.disabled = false;
+    btn.textContent = 'Pakai';
+  }
+
   updateOrder();
 }
-function updateOrder(){
-  const base=curPkg.price, disc=discApplied?Math.round(base*0.5):0, total=base-disc;
-  document.getElementById('orderName').textContent=curPkg.name;
-  document.getElementById('orderBase').textContent='Rp '+base.toLocaleString('id');
-  document.getElementById('discRow').style.display=disc>0?'flex':'none';
-  document.getElementById('discAmt').textContent='-Rp '+disc.toLocaleString('id');
-  document.getElementById('totalAmt').textContent='Rp '+total.toLocaleString('id');
+
+// ── Simpan order ke Firestore ──────────────────────────
+window.doPay = async function() {
+  const btn = document.getElementById('btnPay');
+  const payEl = document.querySelector('.pay.sel');
+  const payMethod = payEl ? payEl.textContent.trim() : 'Transfer Bank';
+
+  const base = curPkg.price;
+  const disc = discApplied ? Math.round(base * 0.5) : 0;
+  const total = base - disc;
+
+  btn.disabled = true;
+  btn.textContent = 'Memproses...';
+
+  try {
+    await addDoc(collection(db, 'orders'), {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      paket: curPkg.name,
+      hargaBase: base,
+      diskon: disc,
+      total: total,
+      refCode: validRefCode || null,
+      payMethod: payMethod,
+      status: 'pending',
+      createdAt: serverTimestamp()
+    });
+
+    document.getElementById('mainView').style.display = 'none';
+    document.getElementById('successView').style.display = 'block';
+
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Bayar Sekarang';
+    alert('Gagal menyimpan pesanan: ' + e.message);
+  }
 }
-function selPay(el){document.querySelectorAll('.pay').forEach(p=>p.className='pay');el.className='pay sel';}
-function doPay(){document.getElementById('mainView').style.display='none';document.getElementById('successView').style.display='block';}
 
-// Auto-isi kode jika dari link referral
-const savedRef = sessionStorage.getItem('refCode');
-if(savedRef){document.getElementById('refCode').value=savedRef;}
+// ── UI helpers ─────────────────────────────────────────
+function renderBabs() {
+  const list = document.getElementById('babList');
+  list.innerHTML = '';
+  babs[curSubj].forEach(b => {
+    const d = document.createElement('div');
+    d.className = 'bab';
+    d.innerHTML = `<div class="bab-check"></div>${b}`;
+    d.onclick = () => toggleBab(b, d);
+    list.appendChild(d);
+  });
+  updateOrder();
+}
 
-renderBabs();
+function toggleBab(b, el) {
+  const idx = selBabs.indexOf(b);
+  if (idx > -1) { selBabs.splice(idx,1); el.className='bab'; el.querySelector('.bab-check').textContent=''; }
+  else { selBabs.push(b); el.className='bab sel'; el.querySelector('.bab-check').textContent='✓'; }
+  const n = selBabs.length || 1;
+  curPkg = {name:`${n} sub-bab ${curSubj}`, price: n*5000};
+  updateOrder();
+}
+
+window.selSubj = function(el, subj) {
+  document.querySelectorAll('.subj').forEach(s => s.className='subj');
+  el.className = 'subj sel';
+  curSubj = subj; selBabs = [];
+  curPkg = {name:`1 sub-bab ${subj}`, price:5000};
+  renderBabs();
+}
+
+window.selPkg = function(el, price, name) {
+  document.querySelectorAll('.pkg').forEach(p => p.className='pkg');
+  el.className = 'pkg selected';
+  curPkg = {name, price};
+  updateOrder();
+}
+
+window.switchTab = function(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.className='tab');
+  el.className = 'tab active';
+  ['alacarte','bundling','bulanan'].forEach(t => document.getElementById(t).style.display='none');
+  document.getElementById(tab).style.display = 'block';
+  if (tab==='alacarte') { curPkg={name:'1 sub-bab Matematika',price:5000}; renderBabs(); }
+  else if (tab==='bundling') { curPkg={name:'Bundling 5 sub-bab',price:20000}; }
+  else { curPkg={name:'Bulanan 1 bulan',price:49000}; }
+  updateOrder();
+}
+
+window.selPay = function(el) {
+  document.querySelectorAll('.pay').forEach(p => p.className='pay');
+  el.className = 'pay sel';
+}
+
+function updateOrder() {
+  const base = curPkg.price;
+  const disc = discApplied ? Math.round(base*0.5) : 0;
+  const total = base - disc;
+  document.getElementById('orderName').textContent = curPkg.name;
+  document.getElementById('orderBase').textContent = 'Rp ' + base.toLocaleString('id');
+  document.getElementById('discRow').style.display = disc > 0 ? 'flex' : 'none';
+  document.getElementById('discAmt').textContent = '-Rp ' + disc.toLocaleString('id');
+  document.getElementById('totalAmt').textContent = 'Rp ' + total.toLocaleString('id');
+}
 </script>
 </body>
 </html>
