@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beli Soal — CerdasBersama</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-Pl_dQaoEXpcirChu"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5rem;max-width:860px;margin:0 auto}
@@ -63,11 +64,6 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
 .order-row{display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:8px}
 .order-row.total{font-size:15px;font-weight:800;color:#111;border-top:1px solid #F0EEE8;padding-top:10px;margin-top:4px}
 .order-row.disc{color:#1a6b4a;font-weight:600}
-.pay-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem}
-.pay{border:1.5px solid #E8E6DF;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#888;font-weight:600}
-.pay:hover{border-color:#1a6b4a}
-.pay.sel{border:2px solid #1a6b4a;background:#F5FBF8;color:#1a6b4a}
-.pay-icon{font-size:20px;margin-bottom:4px}
 .btn-pay{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
 .btn-pay:hover{background:#145a3d}
 .btn-pay:disabled{background:#aaa;cursor:not-allowed}
@@ -178,22 +174,14 @@ h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
   <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#1a6b4a">Rp 7.900</span></div>
 </div>
 
-<div class="section-label">Metode pembayaran</div>
-<div class="pay-methods">
-  <div class="pay sel" onclick="selPay(this)"><div class="pay-icon">🏦</div>Transfer Bank</div>
-  <div class="pay" onclick="selPay(this)"><div class="pay-icon">💳</div>QRIS</div>
-  <div class="pay" onclick="selPay(this)"><div class="pay-icon">📱</div>GoPay / OVO</div>
-</div>
-
 <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
 <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
 </div>
 
 <div id="successView" style="display:none;text-align:center;padding:2rem 0">
   <div style="font-size:48px;margin-bottom:1rem">🎉</div>
-  <h2 style="margin-bottom:8px">Pesanan tersimpan!</h2>
-  <p style="font-size:14px;color:#888;margin-bottom:4px">Pesananmu sudah dicatat. Admin akan konfirmasi pembayaran segera.</p>
-  <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Integrasi Midtrans akan aktif di fase berikutnya.</p>
+  <h2 style="margin-bottom:8px">Pembayaran berhasil!</h2>
+  <p style="font-size:14px;color:#888;margin-bottom:1.5rem">Terima kasih! Akses soal kamu sudah aktif.</p>
   <a href="dashboard-referral.html" class="btn-pay" style="display:inline-block;width:auto;padding:13px 32px;text-decoration:none;border-radius:10px">Lihat dashboard →</a>
 </div>
 
@@ -356,17 +344,20 @@ window.applyRef = async function() {
   }
 }
 
+// ── BAYAR VIA MIDTRANS SNAP ────────────────────────────
 window.doPay = async function() {
   const btn = document.getElementById('btnPay');
-  const payMethod = document.querySelector('.pay.sel')?.textContent.trim() || 'Transfer Bank';
   const base = curPkg.price;
   const disc = discApplied ? Math.round(base*0.5) : 0;
-  const total = base-disc;
-  const komisi = Math.round(total*KOMISI_RATE);
+  const total = base - disc;
+  const komisi = Math.round(total * KOMISI_RATE);
+  const referredBy = validRefCode || currentUserData?.referredBy || null;
+  const orderId = 'CB-' + Date.now() + '-' + currentUser.uid.slice(0,6);
+
   btn.disabled=true; btn.textContent='Memproses...';
 
   try {
-    const referredBy = validRefCode || currentUserData?.referredBy || null;
+    // 1. Simpan order ke Firestore dulu (status: pending)
     await addDoc(collection(db,'orders'), {
       uid: currentUser.uid,
       email: currentUser.email,
@@ -375,29 +366,69 @@ window.doPay = async function() {
       diskon: disc,
       total,
       refCode: referredBy,
-      payMethod,
-      status: 'pending',
       komisi,
+      midtransOrderId: orderId,
+      status: 'pending',
       createdAt: serverTimestamp()
     });
 
-    if (referredBy) {
-      const snap = await getDocs(query(collection(db,'users'), where('referralCode','==',referredBy)));
-      if (!snap.empty) {
-        await updateDoc(doc(db,'users',snap.docs[0].id), { komisiTotal: increment(komisi) });
-      }
-      if (discApplied && !currentUserData?.hasUsedReferral) {
-        await updateDoc(doc(db,'users',currentUser.uid), { hasUsedReferral: true, referredBy });
-        if (currentUserData) currentUserData.hasUsedReferral = true;
-      }
+    // 2. Catat referredBy kalau first purchase
+    if (referredBy && discApplied && !currentUserData?.hasUsedReferral) {
+      await updateDoc(doc(db,'users',currentUser.uid), {
+        hasUsedReferral: true,
+        referredBy
+      });
+      if (currentUserData) currentUserData.hasUsedReferral = true;
     }
 
-    document.getElementById('mainView').style.display='none';
-    document.getElementById('successView').style.display='block';
+    // 3. Minta token dari Vercel API
+    const res = await fetch('/api/create-transaction', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId,
+        amount: total,
+        customerEmail: currentUser.email,
+        customerName: currentUserData?.nama || 'User',
+        itemName: curPkg.name
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.token) {
+      throw new Error(JSON.stringify(data.error));
+    }
+
+    // 4. Buka Midtrans Snap popup
+    window.snap.pay(data.token, {
+      onSuccess: async function(result) {
+        // Update komisi referrer
+        if (referredBy) {
+          const snap = await getDocs(query(collection(db,'users'), where('referralCode','==',referredBy)));
+          if (!snap.empty) {
+            await updateDoc(doc(db,'users',snap.docs[0].id), { komisiTotal: increment(komisi) });
+          }
+        }
+        document.getElementById('mainView').style.display='none';
+        document.getElementById('successView').style.display='block';
+      },
+      onPending: function() {
+        document.getElementById('mainView').style.display='none';
+        document.getElementById('successView').style.display='block';
+      },
+      onError: function() {
+        btn.disabled=false; btn.textContent='Bayar Sekarang';
+        alert('Pembayaran gagal. Silakan coba lagi.');
+      },
+      onClose: function() {
+        btn.disabled=false; btn.textContent='Bayar Sekarang';
+      }
+    });
 
   } catch(e) {
     btn.disabled=false; btn.textContent='Bayar Sekarang';
-    alert('Gagal menyimpan pesanan: '+e.message);
+    alert('Error: ' + e.message);
   }
 }
 
@@ -408,11 +439,6 @@ function updateOrder() {
   document.getElementById('discRow').style.display=disc>0?'flex':'none';
   document.getElementById('discAmt').textContent='-Rp '+disc.toLocaleString('id');
   document.getElementById('totalAmt').textContent='Rp '+total.toLocaleString('id');
-}
-
-window.selPay = function(el) {
-  document.querySelectorAll('.pay').forEach(p=>p.className='pay');
-  el.className='pay sel';
 }
 </script>
 </body>
