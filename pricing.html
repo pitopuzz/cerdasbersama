@@ -3,420 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beli Soal — CerdasBersama</title>
+<title>Daftar — CerdasBersama</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5rem;max-width:860px;margin:0 auto}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
-.logo{font-size:17px;font-weight:800;color:#1a6b4a}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+.card{background:#fff;border:1px solid #E8E6DF;border-radius:16px;padding:2rem;width:100%;max-width:440px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.logo{font-size:17px;font-weight:800;color:#1a6b4a;margin-bottom:1.5rem;text-align:center}
 .logo span{color:#f5a623}
-.btn-nav{background:#1a6b4a;color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none}
-h2{font-size:22px;font-weight:800;color:#111;margin-bottom:4px}
+h2{font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
 .sub{font-size:13px;color:#888;margin-bottom:1.5rem}
-.back{font-size:13px;color:#1a6b4a;text-decoration:none;font-weight:600;display:inline-block;margin-bottom:1rem}
-.tabs{display:flex;gap:6px;margin-bottom:1.5rem;background:#F5F3EE;padding:4px;border-radius:10px;width:fit-content}
-.tab{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:#888;font-family:inherit}
-.tab.active{background:#fff;color:#1a6b4a;border:1px solid #E0EDE7}
-.section-label{font-size:11px;font-weight:700;color:#aaa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:1.5rem}
-.pkg{background:#fff;border:1.5px solid #E8E6DF;border-radius:14px;padding:1.1rem;cursor:pointer}
-.pkg:hover{border-color:#1a6b4a}
-.pkg.selected{border:2px solid #1a6b4a;background:#F5FBF8}
-.pkg-name{font-size:12px;font-weight:700;color:#aaa;margin-bottom:4px}
-.pkg-price{font-size:20px;font-weight:800;color:#111;margin-bottom:2px}
-.pkg-desc{font-size:11px;color:#bbb}
-.pkg-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;background:#E8F5EE;color:#085041;font-weight:700;margin-bottom:6px}
-.pkg-save{font-size:11px;color:#1a6b4a;margin-top:4px;font-weight:600}
-.subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem}
-.subj{border:1.5px solid #E8E6DF;border-radius:10px;padding:10px;cursor:pointer;text-align:center;background:#fff}
-.subj:hover{border-color:#1a6b4a}
-.subj.sel{border:2px solid #1a6b4a;background:#F5FBF8}
-.subj-icon{font-size:20px;margin-bottom:4px}
-.subj-name{font-size:12px;font-weight:700;color:#333}
-.bab-list{display:flex;flex-direction:column;gap:6px;margin-bottom:1.5rem;max-height:220px;overflow-y:auto}
-.bab{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid #E8E6DF;border-radius:10px;cursor:pointer;background:#fff;font-size:13px;color:#333;font-weight:500}
-.bab:hover{border-color:#1a6b4a}
-.bab.sel{border-color:#1a6b4a;background:#F5FBF8}
-.bab.disabled{opacity:.4;cursor:not-allowed}
-.bab-check{width:18px;height:18px;border-radius:5px;border:1.5px solid #ccc;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:#fff;font-weight:700}
-.bab.sel .bab-check{background:#1a6b4a;border-color:#1a6b4a}
-.quota-bar{font-size:12px;color:#888;margin-bottom:8px;font-weight:600}
-.quota-bar span{color:#1a6b4a;font-weight:800}
-.ref-box{border-radius:10px;margin-bottom:1.5rem;padding:12px}
-.ref-box.locked{border:1.5px dashed #E0EDE7;background:#F5F3EE}
-.ref-box.unlocked{border:1.5px solid #1a6b4a;background:#F5FBF8}
-.ref-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.ref-top-label{font-size:13px;font-weight:700;color:#333;flex:1}
-.ref-status{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700}
-.ref-status.no{background:#FAEEDA;color:#854F0B}
-.ref-status.ok{background:#E8F5EE;color:#085041}
-.ref-input-row{display:flex;gap:8px}
-.ref-input-row input{flex:1;border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
-.ref-input-row input:focus{border-color:#1a6b4a}
-.btn-apply{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 14px;font-size:13px;cursor:pointer;font-family:inherit;color:#333;font-weight:600;white-space:nowrap}
-.btn-apply:hover{background:#F5F3EE}
-.btn-apply:disabled{opacity:.5;cursor:not-allowed}
-.ref-hint{font-size:12px;color:#aaa;margin-top:6px}
-.ref-ok-msg{font-size:12px;color:#1a6b4a;margin-top:6px;font-weight:600}
-.order-box{background:#fff;border:1px solid #E8E6DF;border-radius:14px;padding:1.25rem;margin-bottom:1rem}
-.order-row{display:flex;justify-content:space-between;font-size:13px;color:#888;margin-bottom:8px}
-.order-row.total{font-size:15px;font-weight:800;color:#111;border-top:1px solid #F0EEE8;padding-top:10px;margin-top:4px}
-.order-row.disc{color:#1a6b4a;font-weight:600}
-.pay-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.5rem}
-.pay{border:1.5px solid #E8E6DF;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#888;font-weight:600}
-.pay:hover{border-color:#1a6b4a}
-.pay.sel{border:2px solid #1a6b4a;background:#F5FBF8;color:#1a6b4a}
-.pay-icon{font-size:20px;margin-bottom:4px}
-.btn-pay{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
-.btn-pay:hover{background:#145a3d}
-.btn-pay:disabled{background:#aaa;cursor:not-allowed}
-.secure-note{text-align:center;font-size:12px;color:#aaa;margin-top:8px}
-.success{display:none;text-align:center;padding:2rem 0}
-.loading{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:4px}
+.field input{width:100%;border:1.5px solid #E0EDE7;border-radius:10px;padding:10px 14px;font-size:14px;font-family:inherit;color:#111;background:#FAFAF8;outline:none}
+.field input:focus{border-color:#1a6b4a}
+.ref-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:4px}
+.ref-code{font-size:15px;font-weight:700;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
+.btn-refresh{background:none;border:none;cursor:pointer;font-size:18px;padding:0;line-height:1}
+.ref-hint{font-size:12px;color:#aaa;margin-bottom:1rem}
+.btn-cta{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-cta:hover{background:#145a3d}
+.btn-cta:disabled{background:#aaa;cursor:not-allowed}
+.divider{border:none;border-top:1px solid #F0EEE8;margin:1.2rem 0}
+.login-link{font-size:13px;color:#888;text-align:center}
+.login-link a{color:#1a6b4a;font-weight:600;text-decoration:none}
+.error-msg{font-size:13px;color:#e53e3e;background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:none}
+.success{display:none;text-align:center}
+.success-icon{width:56px;height:56px;background:#E8F5EE;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:26px}
+.link-box{background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:12px;margin-bottom:12px;text-align:left}
+.link-label{font-size:11px;color:#aaa;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.link-val{font-size:13px;color:#1a6b4a;font-family:monospace;word-break:break-all;font-weight:600}
+.btn-copy{width:100%;background:none;border:1.5px solid #E0EDE7;border-radius:10px;padding:10px;font-size:13px;color:#333;cursor:pointer;font-family:inherit;margin-bottom:8px;font-weight:600}
+.btn-copy:hover{background:#F5FBF8}
+.info-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:1rem}
+.pill{background:#F5F3EE;border-radius:20px;padding:5px 12px;font-size:12px;color:#666;font-weight:500}
 </style>
 </head>
 <body>
 
-<div id="loadingView" class="loading">Memuat halaman...</div>
-
-<div id="mainView" style="display:none">
-<div class="topbar">
+<div class="card" id="formView">
   <div class="logo">Cerdas<span>Bersama</span></div>
-  <a href="dashboard-referral.html" class="btn-nav">Dashboard</a>
-</div>
+  <h2>Buat akun gratis</h2>
+  <p class="sub">Daftar & langsung dapat 30 soal gratis + link referral kamu</p>
 
-<a href="index.html" class="back">← Beranda</a>
-<h2>Pilih paket belajar</h2>
-<p class="sub">Punya kode referral? Masukkan untuk dapat diskon 50% pembelian pertama.</p>
+  <div class="error-msg" id="errorMsg"></div>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab(this,'alacarte')">À la carte</button>
-  <button class="tab" onclick="switchTab(this,'bundling')">Bundling</button>
-  <button class="tab" onclick="switchTab(this,'bulanan')">Bulanan</button>
-</div>
-
-<!-- À LA CARTE -->
-<div id="alacarte">
-  <div class="section-label">Pilih mata pelajaran</div>
-  <div class="subject-grid">
-    <div class="subj sel" onclick="selSubj('alacarte',this,'Matematika')"><div class="subj-icon">📐</div><div class="subj-name">Matematika</div></div>
-    <div class="subj" onclick="selSubj('alacarte',this,'IPAS')"><div class="subj-icon">🔬</div><div class="subj-name">IPAS</div></div>
-    <div class="subj" onclick="selSubj('alacarte',this,'B.Inggris')"><div class="subj-icon">🔤</div><div class="subj-name">B.Inggris</div></div>
+  <div class="field">
+    <label>Nama lengkap</label>
+    <input type="text" id="nama" placeholder="Nama lengkap kamu" oninput="updateCode()" />
   </div>
-  <div class="section-label">Pilih sub-bab (Rp 4.900/sub-bab)</div>
-  <div class="bab-list" id="babListAlacarte"></div>
-</div>
-
-<!-- BUNDLING -->
-<div id="bundling" style="display:none">
-  <div class="section-label">Pilih paket bundling</div>
-  <div class="grid" id="bundlingPkgs">
-    <div class="pkg selected" onclick="selBundlingPkg(this,3,12900)">
-      <div class="pkg-name">Bundling 3</div>
-      <div class="pkg-price">Rp 12.900</div>
-      <div class="pkg-desc">3 sub-bab pilihan</div>
-      <div class="pkg-save">Hemat Rp 1.800 vs satuan</div>
-    </div>
-    <div class="pkg" onclick="selBundlingPkg(this,5,19900)">
-      <div class="pkg-badge">Populer</div>
-      <div class="pkg-name">Bundling 5</div>
-      <div class="pkg-price">Rp 19.900</div>
-      <div class="pkg-desc">5 sub-bab pilihan</div>
-      <div class="pkg-save">Hemat Rp 4.600 vs satuan</div>
-    </div>
-    <div class="pkg" onclick="selBundlingPkg(this,10,34900)">
-      <div class="pkg-badge">Terbaik</div>
-      <div class="pkg-name">Bundling 10</div>
-      <div class="pkg-price">Rp 34.900</div>
-      <div class="pkg-desc">10 sub-bab pilihan</div>
-      <div class="pkg-save">Hemat Rp 14.100 vs satuan</div>
-    </div>
+  <div class="field">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="email@kamu.com" />
+  </div>
+  <div class="field">
+    <label>Nomor WhatsApp</label>
+    <input type="tel" id="wa" placeholder="08123456789" />
+  </div>
+  <div class="field">
+    <label>Password</label>
+    <input type="password" id="pass" placeholder="Min. 8 karakter" />
   </div>
 
-  <div class="section-label">Pilih mata pelajaran</div>
-  <div class="subject-grid">
-    <div class="subj sel" onclick="selSubj('bundling',this,'Matematika')"><div class="subj-icon">📐</div><div class="subj-name">Matematika</div></div>
-    <div class="subj" onclick="selSubj('bundling',this,'IPAS')"><div class="subj-icon">🔬</div><div class="subj-name">IPAS</div></div>
-    <div class="subj" onclick="selSubj('bundling',this,'B.Inggris')"><div class="subj-icon">🔤</div><div class="subj-name">B.Inggris</div></div>
+  <label style="display:block;font-size:12px;font-weight:600;color:#555;margin-bottom:6px">Kode referral kamu (otomatis)</label>
+  <div class="ref-row">
+    <span class="ref-code" id="previewCode">CB-USER0000</span>
+    <button class="btn-refresh" onclick="regenCode()" title="Generate ulang">🔄</button>
   </div>
-  <div class="quota-bar" id="quotaBar">Dipilih: <span id="quotaCount">0</span> / <span id="quotaMax">3</span> sub-bab</div>
-  <div class="bab-list" id="babListBundling"></div>
+  <p class="ref-hint">Kode ini jadi link referral kamu. Klik 🔄 untuk generate ulang.</p>
+
+  <button class="btn-cta" id="btnDaftar" onclick="doRegister()">Daftar Sekarang →</button>
+  <div class="divider"></div>
+  <p class="login-link">Sudah punya akun? <a href="login.html">Masuk di sini</a></p>
 </div>
 
-<!-- BULANAN -->
-<div id="bulanan" style="display:none">
-  <div class="section-label">Langganan bulanan</div>
-  <div class="grid">
-    <div class="pkg selected" onclick="selPkg(this,49900,'Bulanan 1 bulan')">
-      <div class="pkg-badge">Akses penuh</div>
-      <div class="pkg-name">1 bulan</div>
-      <div class="pkg-price">Rp 49.900</div>
-      <div class="pkg-desc">Semua mapel & bab tanpa batas</div>
-    </div>
+<div class="card success" id="successView">
+  <div class="success-icon">✅</div>
+  <h2 style="font-size:20px;margin-bottom:6px">Akun berhasil dibuat!</h2>
+  <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>!</p>
+
+  <div class="link-box">
+    <div class="link-label">Link referral kamu</div>
+    <div class="link-val" id="linkVal"></div>
   </div>
-</div>
+  <button class="btn-copy" onclick="copyLink()" id="copyBtn">📋 Salin link referral</button>
+  <a href="dashboard-referral.html" class="btn-cta" style="display:block;text-align:center;text-decoration:none;padding:13px;border-radius:10px">Lihat dashboard referral →</a>
 
-<!-- KODE REFERRAL -->
-<div class="section-label">Kode referral / promo</div>
-<div class="ref-box locked" id="refBox">
-  <div class="ref-top">
-    <span>🏷️</span>
-    <span class="ref-top-label">Punya kode diskon?</span>
-    <span class="ref-status no" id="refStatus">Belum dipakai</span>
+  <div class="info-pills">
+    <div class="pill">💰 Komisi 15%</div>
+    <div class="pill">📚 30 soal gratis aktif</div>
+    <div class="pill">🏷️ Diskon 50% siap</div>
   </div>
-  <div class="ref-input-row" id="refInputRow">
-    <input type="text" id="refCode" placeholder="Masukkan kode referral kamu" />
-    <button class="btn-apply" id="btnApply" onclick="applyRef()">Pakai</button>
-  </div>
-  <p class="ref-hint" id="refHint">Kode didapat dari teman atau dihubungi admin CerdasBersama.</p>
-</div>
-
-<!-- RINGKASAN -->
-<div class="order-box">
-  <div class="section-label">Ringkasan pesanan</div>
-  <div class="order-row"><span id="orderName">1 sub-bab Matematika</span><span id="orderBase">Rp 4.900</span></div>
-  <div class="order-row disc" id="discRow" style="display:none"><span>Diskon 50% (first purchase)</span><span id="discAmt">-Rp 2.450</span></div>
-  <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#1a6b4a">Rp 4.900</span></div>
-</div>
-
-<div class="section-label">Metode pembayaran</div>
-<div class="pay-methods">
-  <div class="pay sel" onclick="selPay(this)"><div class="pay-icon">🏦</div>Transfer Bank</div>
-  <div class="pay" onclick="selPay(this)"><div class="pay-icon">💳</div>QRIS</div>
-  <div class="pay" onclick="selPay(this)"><div class="pay-icon">📱</div>GoPay / OVO</div>
-</div>
-
-<button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
-<div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
-</div>
-
-<div class="success" id="successView">
-  <div style="font-size:48px;margin-bottom:1rem">🎉</div>
-  <h2 style="margin-bottom:8px">Pesanan tersimpan!</h2>
-  <p style="font-size:14px;color:#888;margin-bottom:4px">Pesananmu sudah dicatat. Admin akan konfirmasi pembayaran segera.</p>
-  <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Integrasi Midtrans akan aktif di fase berikutnya.</p>
-  <a href="dashboard-referral.html" class="btn-pay" style="display:inline-block;width:auto;padding:13px 32px;text-decoration:none;border-radius:10px">Lihat dashboard →</a>
 </div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, where, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── Harga ──────────────────────────────────────────────
-const HARGA = {
-  alacarte: 4900,
-  bundling: { 3: 12900, 5: 19900, 10: 34900 },
-  bulanan: 49900
-};
+let generatedCode = '';
 
-const babs = {
-  Matematika: ['Bilangan bulat','Pecahan & desimal','FPB dan KPK','Bangun datar','Bangun ruang','Statistika dasar','Perbandingan','Skala & jarak'],
-  IPAS: ['Makhluk hidup','Ekosistem','Gaya & gerak','Energi & perubahannya','Bumi & alam semesta','Cuaca & iklim','Teknologi pangan','Kesehatan'],
-  'B.Inggris': ['Greetings','Tenses dasar','Reading comprehension','Vocabulary','Writing simple sentences','Listening skills','Speaking practice','Grammar dasar']
-};
-
-let curSubjAlacarte = 'Matematika';
-let curSubjBundling = 'Matematika';
-let selBabsAlacarte = [];
-let selBabsBundling = [];
-let bundlingMax = 3;
-let bundlingPrice = 12900;
-let curPkg = { name: '1 sub-bab Matematika', price: 4900 };
-let discApplied = false, validRefCode = '', currentUser = null;
-let activeTab = 'alacarte';
-
-// ── Auth ───────────────────────────────────────────────
-onAuthStateChanged(auth, async (user) => {
-  if (!user) { window.location.href = 'register.html'; return; }
-  currentUser = user;
-
-  const savedRef = sessionStorage.getItem('refCode');
-  if (savedRef) document.getElementById('refCode').value = savedRef;
-
-  document.getElementById('loadingView').style.display = 'none';
-  document.getElementById('mainView').style.display = 'block';
-  renderBabs('alacarte');
-  renderBabs('bundling');
-  updateOrder();
-});
-
-// ── Render babs ────────────────────────────────────────
-function renderBabs(tab) {
-  const subj = tab === 'alacarte' ? curSubjAlacarte : curSubjBundling;
-  const selBabs = tab === 'alacarte' ? selBabsAlacarte : selBabsBundling;
-  const listId = tab === 'alacarte' ? 'babListAlacarte' : 'babListBundling';
-  const list = document.getElementById(listId);
-  list.innerHTML = '';
-
-  babs[subj].forEach(b => {
-    const isSel = selBabs.includes(b);
-    const isDisabled = tab === 'bundling' && !isSel && selBabs.length >= bundlingMax;
-    const d = document.createElement('div');
-    d.className = 'bab' + (isSel ? ' sel' : '') + (isDisabled ? ' disabled' : '');
-    d.innerHTML = `<div class="bab-check">${isSel ? '✓' : ''}</div>${b}`;
-    if (!isDisabled) d.onclick = () => toggleBab(tab, b, d);
-    list.appendChild(d);
-  });
-
-  if (tab === 'bundling') updateQuota();
+function makeCode(name) {
+  const clean = (name || 'USER').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 4) || 'USER';
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return 'CB-' + clean + suffix;
 }
 
-function toggleBab(tab, b, el) {
-  const selBabs = tab === 'alacarte' ? selBabsAlacarte : selBabsBundling;
-  const idx = selBabs.indexOf(b);
-  if (idx > -1) {
-    selBabs.splice(idx, 1);
-  } else {
-    if (tab === 'bundling' && selBabs.length >= bundlingMax) return;
-    selBabs.push(b);
-  }
-  if (tab === 'alacarte') {
-    selBabsAlacarte = selBabs;
-    const n = selBabsAlacarte.length || 1;
-    curPkg = { name: `${n} sub-bab ${curSubjAlacarte}`, price: n * HARGA.alacarte };
-  }
-  renderBabs(tab);
-  updateOrder();
+window.updateCode = function() {
+  const nama = document.getElementById('nama').value;
+  generatedCode = makeCode(nama);
+  document.getElementById('previewCode').textContent = generatedCode;
 }
 
-function updateQuota() {
-  document.getElementById('quotaCount').textContent = selBabsBundling.length;
-  document.getElementById('quotaMax').textContent = bundlingMax;
+window.regenCode = function() {
+  const nama = document.getElementById('nama').value;
+  generatedCode = makeCode(nama);
+  document.getElementById('previewCode').textContent = generatedCode;
 }
 
-// ── Pilih bundling paket ───────────────────────────────
-window.selBundlingPkg = function(el, max, price) {
-  document.querySelectorAll('#bundlingPkgs .pkg').forEach(p => p.className = 'pkg');
-  el.className = 'pkg selected';
-  bundlingMax = max;
-  bundlingPrice = price;
-  // Reset pilihan yang melebihi max baru
-  if (selBabsBundling.length > max) selBabsBundling = selBabsBundling.slice(0, max);
-  curPkg = { name: `Bundling ${max} sub-bab`, price };
-  renderBabs('bundling');
-  updateOrder();
+generatedCode = makeCode('');
+document.getElementById('previewCode').textContent = generatedCode;
+
+const urlRef = new URLSearchParams(window.location.search).get('ref');
+if (urlRef) sessionStorage.setItem('refCode', urlRef);
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
 }
 
-// ── Pilih mapel ────────────────────────────────────────
-window.selSubj = function(tab, el, subj) {
-  const container = el.closest('.subject-grid');
-  container.querySelectorAll('.subj').forEach(s => s.className = 'subj');
-  el.className = 'subj sel';
-  if (tab === 'alacarte') { curSubjAlacarte = subj; selBabsAlacarte = []; }
-  else { curSubjBundling = subj; }
-  renderBabs(tab);
-  updateOrder();
+function hideError() {
+  document.getElementById('errorMsg').style.display = 'none';
 }
 
-// ── Pilih paket bulanan ────────────────────────────────
-window.selPkg = function(el, price, name) {
-  document.querySelectorAll('.pkg').forEach(p => p.className = 'pkg');
-  el.className = 'pkg selected';
-  curPkg = { name, price };
-  updateOrder();
-}
+window.doRegister = async function() {
+  hideError();
+  const nama  = document.getElementById('nama').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const wa    = document.getElementById('wa').value.trim();
+  const pass  = document.getElementById('pass').value;
+  const btn   = document.getElementById('btnDaftar');
 
-// ── Switch tab ─────────────────────────────────────────
-window.switchTab = function(el, tab) {
-  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
-  el.className = 'tab active';
-  ['alacarte','bundling','bulanan'].forEach(t => document.getElementById(t).style.display = 'none');
-  document.getElementById(tab).style.display = 'block';
-  activeTab = tab;
+  if (!nama || !email || !wa || !pass) { showError('Semua field wajib diisi.'); return; }
+  if (pass.length < 8) { showError('Password minimal 8 karakter.'); return; }
+  if (!generatedCode) generatedCode = makeCode(nama);
 
-  if (tab === 'alacarte') {
-    const n = selBabsAlacarte.length || 1;
-    curPkg = { name: `${n} sub-bab ${curSubjAlacarte}`, price: n * HARGA.alacarte };
-  } else if (tab === 'bundling') {
-    curPkg = { name: `Bundling ${bundlingMax} sub-bab`, price: bundlingPrice };
-  } else {
-    curPkg = { name: 'Bulanan 1 bulan', price: HARGA.bulanan };
-  }
-  updateOrder();
-}
-
-// ── Validasi kode ──────────────────────────────────────
-window.applyRef = async function() {
-  const code = document.getElementById('refCode').value.trim().toUpperCase();
-  const btn = document.getElementById('btnApply');
-  const box = document.getElementById('refBox');
-  const status = document.getElementById('refStatus');
-  const hint = document.getElementById('refHint');
-  if (!code) return;
-  btn.disabled = true; btn.textContent = '...';
+  btn.disabled = true;
+  btn.textContent = 'Mendaftar...';
 
   try {
-    const q = query(collection(db, 'users'), where('referralCode', '==', code));
-    const snap = await getDocs(q);
-    if (!snap.empty) {
-      discApplied = true; validRefCode = code;
-      box.className = 'ref-box unlocked';
-      status.className = 'ref-status ok'; status.textContent = 'Diskon aktif ✓';
-      document.getElementById('refInputRow').style.display = 'none';
-      hint.className = 'ref-ok-msg'; hint.textContent = '✅ Kode valid! Diskon 50% diterapkan.';
-    } else {
-      hint.style.color = '#E24B4A'; hint.textContent = 'Kode tidak ditemukan.';
-      setTimeout(() => {
-        hint.style.color = ''; hint.textContent = 'Kode didapat dari teman atau dihubungi admin CerdasBersama.';
-        status.textContent = 'Belum dipakai'; btn.disabled = false; btn.textContent = 'Pakai';
-      }, 2500);
-    }
-  } catch(e) {
-    hint.style.color = '#E24B4A'; hint.textContent = 'Gagal verifikasi. Coba lagi.';
-    btn.disabled = false; btn.textContent = 'Pakai';
-  }
-  updateOrder();
-}
+    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+    const user = userCredential.user;
+    const refCode = sessionStorage.getItem('refCode') || null;
 
-// ── Bayar ──────────────────────────────────────────────
-window.doPay = async function() {
-  const btn = document.getElementById('btnPay');
-  const payEl = document.querySelector('.pay.sel');
-  const payMethod = payEl ? payEl.textContent.trim() : 'Transfer Bank';
-  const base = curPkg.price;
-  const disc = discApplied ? Math.round(base * 0.5) : 0;
-  const total = base - disc;
-
-  btn.disabled = true; btn.textContent = 'Memproses...';
-
-  try {
-    await addDoc(collection(db, 'orders'), {
-      uid: currentUser.uid,
-      email: currentUser.email,
-      paket: curPkg.name,
-      hargaBase: base,
-      diskon: disc,
-      total,
-      refCode: validRefCode || null,
-      payMethod,
-      status: 'pending',
+    await setDoc(doc(db, 'users', user.uid), {
+      uid: user.uid,
+      nama: nama,
+      email: email,
+      wa: wa,
+      referralCode: generatedCode,
+      referredBy: refCode,
+      plan: 'free',
+      soalGratis: 30,
+      komisiTotal: 0,
+      hasUsedReferral: false,
       createdAt: serverTimestamp()
     });
-    document.getElementById('mainView').style.display = 'none';
+
+    sessionStorage.setItem('userName', nama.split(' ')[0]);
+    sessionStorage.setItem('userCode', generatedCode);
+    sessionStorage.setItem('userEmail', email);
+    sessionStorage.setItem('userUid', user.uid);
+
+    document.getElementById('namaUser').textContent = nama.split(' ')[0];
+    document.getElementById('linkVal').textContent = 'cerdasbersama.vercel.app/register.html?ref=' + generatedCode;
+    document.getElementById('formView').style.display = 'none';
     document.getElementById('successView').style.display = 'block';
-  } catch(e) {
-    btn.disabled = false; btn.textContent = 'Bayar Sekarang';
-    alert('Gagal menyimpan pesanan: ' + e.message);
+
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Daftar Sekarang →';
+    if (err.code === 'auth/email-already-in-use') {
+      showError('Email ini sudah terdaftar. Silakan masuk.');
+    } else if (err.code === 'auth/invalid-email') {
+      showError('Format email tidak valid.');
+    } else if (err.code === 'auth/weak-password') {
+      showError('Password terlalu lemah. Gunakan minimal 8 karakter.');
+    } else {
+      showError('Gagal mendaftar: ' + err.message);
+    }
   }
 }
 
-// ── Update ringkasan ───────────────────────────────────
-function updateOrder() {
-  const base = curPkg.price;
-  const disc = discApplied ? Math.round(base * 0.5) : 0;
-  const total = base - disc;
-  document.getElementById('orderName').textContent = curPkg.name;
-  document.getElementById('orderBase').textContent = 'Rp ' + base.toLocaleString('id');
-  document.getElementById('discRow').style.display = disc > 0 ? 'flex' : 'none';
-  document.getElementById('discAmt').textContent = '-Rp ' + disc.toLocaleString('id');
-  document.getElementById('totalAmt').textContent = 'Rp ' + total.toLocaleString('id');
-}
-
-window.selPay = function(el) {
-  document.querySelectorAll('.pay').forEach(p => p.className = 'pay');
-  el.className = 'pay sel';
+window.copyLink = function() {
+  const txt = document.getElementById('linkVal').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    document.getElementById('copyBtn').textContent = '✅ Tersalin!';
+    setTimeout(() => document.getElementById('copyBtn').textContent = '📋 Salin link referral', 2000);
+  });
 }
 </script>
 </body>
