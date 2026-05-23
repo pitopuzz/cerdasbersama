@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seeder Soal — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #faf8f5; color: #1a1714; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .wrap { max-width: 560px; width: 100%; }
+    h1 { font-size: 22px; font-weight: 800; color: #d93025; margin-bottom: 6px; }
+    p { font-size: 13px; color: #7a7168; margin-bottom: 24px; font-weight: 500; line-height: 1.6; }
+    .card { background: #fff; border: 1px solid #e8e4dc; border-radius: 16px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; }
+    .log { background: #1a1714; border-radius: 12px; padding: 16px; font-family: monospace; font-size: 12px; color: #eef0f5; max-height: 320px; overflow-y: auto; display: none; }
+    .log-line { padding: 2px 0; }
+    .log-line.ok { color: #3ecf8e; }
+    .log-line.err { color: #f76060; }
+    .log-line.info { color: #f5c842; }
+    .btn { width: 100%; padding: 14px; border-radius: 50px; border: none; background: #d93025; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.18s; margin-bottom: 10px; }
+    .btn:hover { background: #c12820; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    .btn.green { background: #1a7a4a; }
+    .status { text-align: center; font-size: 13px; font-weight: 600; color: #7a7168; margin-top: 8px; }
+    .warning { background: #fff8e6; border: 1px solid #f5d06a; border-radius: 10px; padding: 12px 16px; font-size: 12px; color: #8a5e00; font-weight: 600; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🌱 Seeder Soal</h1>
+  <p>Tool ini akan upload 12 soal sample ke Firestore. Hanya bisa dijalankan oleh admin yang sudah login.</p>
+
+  <div class="warning">⚠️ Pastikan kamu sudah login sebagai admin di tab lain sebelum menjalankan seeder ini.</div>
+
+  <div class="card">
+    <button class="btn" id="btnSeed">🚀 Upload 12 Soal ke Firestore</button>
+    <div class="status" id="statusText">Siap dijalankan</div>
+  </div>
+
+  <div class="log" id="logBox"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  let firebaseConfig;
+  try {
+    const mod = await import('./firebase-config.js');
+    firebaseConfig = mod.firebaseConfig || mod.default;
+  } catch {
+    firebaseConfig = window._fbConfig || {};
+  }
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const logBox = document.getElementById('logBox');
+  const btnSeed = document.getElementById('btnSeed');
+  const statusText = document.getElementById('statusText');
+
+  function log(msg, type = '') {
+    logBox.style.display = 'block';
+    const line = document.createElement('div');
+    line.className = 'log-line ' + type;
+    line.textContent = msg;
+    logBox.appendChild(line);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  const soalData = [
+    { kategori:"TWK", subKategori:"Pancasila", pertanyaan:"Sila keempat Pancasila berbunyi...", opsi:{A:"Ketuhanan Yang Maha Esa",B:"Kemanusiaan yang Adil dan Beradab",C:"Persatuan Indonesia",D:"Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan",E:"Keadilan Sosial bagi Seluruh Rakyat Indonesia"}, jawaban:"D", pembahasan:"Sila keempat Pancasila adalah 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan', mencerminkan sistem demokrasi musyawarah mufakat.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:1 },
+    { kategori:"TWK", subKategori:"UUD 1945", pertanyaan:"Pasal berapa UUD 1945 yang mengatur tentang hak atas pendidikan?", opsi:{A:"Pasal 27",B:"Pasal 28C",C:"Pasal 31",D:"Pasal 33",E:"Pasal 34"}, jawaban:"C", pembahasan:"Pasal 31 UUD 1945 ayat (1) menyatakan bahwa setiap warga negara berhak mendapat pendidikan.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:2 },
+    { kategori:"TWK", subKategori:"Nasionalisme", pertanyaan:"Hari Sumpah Pemuda diperingati setiap tanggal...", opsi:{A:"17 Agustus",B:"28 Oktober",C:"20 Mei",D:"10 November",E:"21 April"}, jawaban:"B", pembahasan:"Sumpah Pemuda diperingati setiap 28 Oktober, berdasarkan Kongres Pemuda II pada 27-28 Oktober 1928.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:3 },
+    { kategori:"TIU", subKategori:"Aritmatika", pertanyaan:"Jika 3x + 7 = 22, maka nilai x adalah...", opsi:{A:"3",B:"4",C:"5",D:"6",E:"7"}, jawaban:"C", pembahasan:"3x + 7 = 22 → 3x = 15 → x = 5.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:4 },
+    { kategori:"TIU", subKategori:"Deret Angka", pertanyaan:"Lanjutan dari deret: 2, 4, 8, 16, ... adalah...", opsi:{A:"24",B:"28",C:"30",D:"32",E:"36"}, jawaban:"D", pembahasan:"Pola deret adalah kelipatan 2 (×2). 2→4→8→16→32.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:5 },
+    { kategori:"TKP", subKategori:"Integritas", pertanyaan:"Anda menemukan dompet berisi uang dan KTP di toilet kantor. Apa yang Anda lakukan?", opsi:{A:"Mengambil uangnya saja karena tidak ada yang tahu",B:"Menyerahkan ke satpam dan melaporkan ke atasan",C:"Meninggalkan dompet di tempat karena bukan urusan Anda",D:"Mengambil dompet dan menyimpannya sampai ada yang mencari",E:"Mengumumkan di grup WhatsApp kantor saja"}, jawaban:"B", pembahasan:"Tindakan terbaik adalah menyerahkan ke pihak berwenang (satpam) dan melapor ke atasan. Ini mencerminkan integritas dan tanggung jawab sebagai ASN.", tingkat:"mudah", isPremium:false, paket:["gratis","starter","value","pro","ultimate","premium"], urutan:6 },
+    { kategori:"TWK", subKategori:"Ideologi", pertanyaan:"Konsep Bhinneka Tunggal Ika pertama kali muncul dalam kitab...", opsi:{A:"Negarakertagama",B:"Sutasoma",C:"Arjunawiwaha",D:"Pararaton",E:"Ramayana"}, jawaban:"B", pembahasan:"Bhinneka Tunggal Ika diambil dari Kitab Sutasoma karangan Mpu Tantular pada masa Kerajaan Majapahit.", tingkat:"sedang", isPremium:true, paket:["value","pro","ultimate","premium"], urutan:7 },
+    { kategori:"TWK", subKategori:"Sistem Pemerintahan", pertanyaan:"Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 adalah...", opsi:{A:"Mahkamah Agung",B:"Komisi Yudisial",C:"Mahkamah Konstitusi",D:"Dewan Perwakilan Rakyat",E:"Badan Pemeriksa Keuangan"}, jawaban:"C", pembahasan:"Mahkamah Konstitusi (MK) memiliki kewenangan judicial review berdasarkan Pasal 24C UUD 1945.", tingkat:"sedang", isPremium:true, paket:["value","pro","ultimate","premium"], urutan:8 },
+    { kategori:"TIU", subKategori:"Logika", pertanyaan:"Semua dokter adalah sarjana. Budi adalah sarjana. Kesimpulan yang tepat adalah...", opsi:{A:"Budi pasti seorang dokter",B:"Budi mungkin seorang dokter",C:"Budi bukan seorang dokter",D:"Semua sarjana adalah dokter",E:"Tidak dapat disimpulkan"}, jawaban:"B", pembahasan:"Dari premis ini tidak bisa disimpulkan Budi pasti dokter karena ada sarjana yang bukan dokter.", tingkat:"sedang", isPremium:true, paket:["value","pro","ultimate","premium"], urutan:9 },
+    { kategori:"TIU", subKategori:"Verbal", pertanyaan:"ANTONYM dari kata EFISIEN adalah...", opsi:{A:"Cermat",B:"Hemat",C:"Boros",D:"Produktif",E:"Tepat"}, jawaban:"C", pembahasan:"Efisien berarti tepat guna. Antonimnya adalah BOROS yang berarti tidak hemat dan tidak tepat guna.", tingkat:"sedang", isPremium:true, paket:["pro","ultimate","premium"], urutan:10 },
+    { kategori:"TKP", subKategori:"Kerja Tim", pertanyaan:"Rekan kerja Anda sering datang terlambat sehingga mengganggu produktivitas tim. Apa yang Anda lakukan?", opsi:{A:"Langsung melaporkan ke atasan tanpa bicara dulu",B:"Mengabaikan karena bukan tanggung jawab Anda",C:"Berbicara langsung dengan rekan tersebut secara baik-baik dan pribadi",D:"Membicarakan hal ini dengan rekan kerja lain",E:"Mengancam akan melapor jika masih terlambat"}, jawaban:"C", pembahasan:"Komunikasi langsung dan personal terlebih dahulu menunjukkan sikap profesional dan empati.", tingkat:"sedang", isPremium:true, paket:["pro","ultimate","premium"], urutan:11 },
+    { kategori:"SKB", subKategori:"Manajemen ASN", pertanyaan:"Berdasarkan UU No. 5 Tahun 2014 tentang ASN, yang dimaksud dengan merit system adalah...", opsi:{A:"Sistem kepegawaian berdasarkan senioritas",B:"Kebijakan manajemen ASN berdasarkan kualifikasi, kompetensi, dan kinerja",C:"Sistem promosi berdasarkan kedekatan dengan pimpinan",D:"Pengelolaan ASN berdasarkan kebutuhan daerah masing-masing",E:"Sistem rekrutmen berdasarkan afiliasi politik"}, jawaban:"B", pembahasan:"Merit system adalah kebijakan manajemen ASN berdasarkan kualifikasi, kompetensi, dan kinerja secara adil dan wajar.", tingkat:"sulit", isPremium:true, paket:["ultimate","premium"], urutan:12 },
+  ];
+
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      statusText.textContent = '❌ Kamu belum login! Login dulu di tab lain.';
+      btnSeed.disabled = true;
+    } else {
+      statusText.textContent = `✅ Login sebagai: ${user.email}`;
+    }
+  });
+
+  btnSeed.addEventListener('click', async () => {
+    btnSeed.disabled = true;
+    btnSeed.textContent = '⏳ Mengupload...';
+    log('🚀 Mulai upload soal ke Firestore...', 'info');
+
+    let sukses = 0;
+    for (const soal of soalData) {
+      try {
+        await addDoc(collection(db, 'soal'), {
+          ...soal,
+          createdAt: serverTimestamp(),
+        });
+        log(`✅ [${soal.kategori}] ${soal.pertanyaan.substring(0, 55)}...`, 'ok');
+        sukses++;
+      } catch (err) {
+        log(`❌ Gagal: ${soal.pertanyaan.substring(0, 40)} — ${err.message}`, 'err');
+      }
+    }
+
+    if (sukses === soalData.length) {
+      log(`\n✨ Berhasil upload ${sukses} soal!`, 'ok');
+      btnSeed.textContent = '✅ Selesai!';
+      btnSeed.className = 'btn green';
+      statusText.textContent = `${sukses} soal berhasil diupload ke Firestore!`;
+    } else {
+      log(`\n⚠️ ${sukses}/${soalData.length} soal berhasil diupload.`, 'info');
+      btnSeed.textContent = 'Ada yang gagal — coba lagi';
+      btnSeed.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
