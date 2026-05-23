@@ -32,6 +32,7 @@ tr:last-child td{border-bottom:none}
 .badge.paid{background:#E8F5EE;color:#085041}
 .badge.process{background:#E6F1FB;color:#0C447C}
 .badge.active{background:#E8F5EE;color:#085041}
+.badge.free{background:#F5F3EE;color:#888}
 .badge.special{background:#EEEDFE;color:#3C3489}
 .badge.inactive{background:#F5F3EE;color:#aaa}
 .btn-sm{font-size:12px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit;border:1.5px solid #E0EDE7;background:#fff;color:#333;font-weight:600;white-space:nowrap}
@@ -46,6 +47,7 @@ tr:last-child td{border-bottom:none}
 .btn-sm.purple:hover{background:#EEEDFE}
 .btn-main{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-main:hover{background:#145a3d}
+.btn-logout{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#555}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
 .field input,.field select{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
@@ -57,30 +59,63 @@ tr:last-child td{border-bottom:none}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a6b4a;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
 .flex-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
 .section-label{font-size:11px;font-weight:700;color:#aaa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.loading{text-align:center;padding:2rem;color:#aaa;font-size:13px}
+.access-denied{text-align:center;padding:4rem 2rem}
+.access-denied h2{color:#E24B4A;margin-bottom:8px}
+.access-denied p{color:#aaa;font-size:13px}
 </style>
 </head>
 <body>
+
+<div id="loadingView" class="loading">Memeriksa akses admin...</div>
+<div id="deniedView" class="access-denied" style="display:none">
+  <h2>Akses Ditolak</h2>
+  <p>Kamu tidak memiliki akses ke halaman ini.</p>
+  <br>
+  <a href="index.html" style="color:#1a6b4a;font-weight:600;font-size:13px">← Kembali ke beranda</a>
+</div>
+
+<div id="mainView" style="display:none">
 <div class="topbar">
   <div class="logo">Cerdas<span>Bersama</span> <span style="font-size:12px;font-weight:400;color:#aaa;margin-left:4px">Admin Panel</span></div>
-  <span class="admin-badge">Super Admin</span>
+  <div style="display:flex;gap:8px;align-items:center">
+    <span class="admin-badge">Super Admin</span>
+    <button class="btn-logout" onclick="doLogout()">Keluar</button>
+  </div>
 </div>
 
 <div class="stats">
-  <div class="stat"><div class="stat-label">Total user</div><div class="stat-val">128</div></div>
-  <div class="stat"><div class="stat-label">Transaksi bulan ini</div><div class="stat-val green">Rp 1,2 jt</div></div>
-  <div class="stat"><div class="stat-label">Komisi pending</div><div class="stat-val amber">Rp 184 rb</div></div>
-  <div class="stat"><div class="stat-label">Referrer aktif</div><div class="stat-val">34</div></div>
+  <div class="stat"><div class="stat-label">Total user</div><div class="stat-val" id="statTotal">–</div></div>
+  <div class="stat"><div class="stat-label">User premium</div><div class="stat-val green" id="statPremium">–</div></div>
+  <div class="stat"><div class="stat-label">User free</div><div class="stat-val amber" id="statFree">–</div></div>
+  <div class="stat"><div class="stat-label">Referrer aktif</div><div class="stat-val" id="statReferrer">–</div></div>
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab(this,'pencairan')">Pencairan</button>
-  <button class="tab" onclick="switchTab(this,'users')">Users</button>
+  <button class="tab active" onclick="switchTab(this,'users')">Users</button>
+  <button class="tab" onclick="switchTab(this,'pencairan')">Pencairan</button>
   <button class="tab" onclick="switchTab(this,'kode')">Kode Promo</button>
   <button class="tab" onclick="switchTab(this,'transaksi')">Transaksi</button>
 </div>
 
-<!-- PENCAIRAN -->
-<div id="pencairan">
+<!-- USERS (dari Firestore) -->
+<div id="users">
+  <div class="card">
+    <div class="card-title">
+      <span>Daftar user</span>
+      <input type="text" class="search-input" placeholder="Cari nama / email..." oninput="filterUsers(this.value)" />
+    </div>
+    <table>
+      <thead><tr><th>Nama</th><th>Email</th><th>Referral code</th><th>Plan</th><th>Komisi</th><th>Aksi</th></tr></thead>
+      <tbody id="usersBody">
+        <tr><td colspan="6" class="loading">Memuat data user...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PENCAIRAN (dummy) -->
+<div id="pencairan" style="display:none">
   <div class="card">
     <div class="card-title">Request pencairan masuk</div>
     <table>
@@ -93,65 +128,12 @@ tr:last-child td{border-bottom:none}
           <td><span class="badge pending">Pending</span></td>
           <td><div style="display:flex;gap:6px"><button class="btn-sm green" onclick="approve(this)">Setujui</button><button class="btn-sm red" onclick="reject(this)">Tolak</button></div></td>
         </tr>
-        <tr>
-          <td>Siti M.<br><span style="font-size:11px;color:#aaa">CB-SITI1234</span></td>
-          <td style="font-size:12px">Mandiri 0987654321<br><span style="color:#aaa">a.n. Siti Mardiana</span></td>
-          <td style="font-weight:700">Rp 50.000</td>
-          <td><span class="badge pending">Pending</span></td>
-          <td><div style="display:flex;gap:6px"><button class="btn-sm green" onclick="approve(this)">Setujui</button><button class="btn-sm red" onclick="reject(this)">Tolak</button></div></td>
-        </tr>
-        <tr>
-          <td>Hendra K.<br><span style="font-size:11px;color:#aaa">CB-HENK9921</span></td>
-          <td style="font-size:12px">BNI 1122334455<br><span style="color:#aaa">a.n. Hendra Kusuma</span></td>
-          <td style="font-weight:700">Rp 30.000</td>
-          <td><span class="badge process">Diproses</span></td>
-          <td><button class="btn-sm amber" onclick="markPaid(this)">Tandai Lunas</button></td>
-        </tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- USERS -->
-<div id="users" style="display:none">
-  <div class="card">
-    <div class="card-title">
-      <span>Daftar user</span>
-      <input type="text" class="search-input" placeholder="Cari nama / email..." />
-    </div>
-    <table>
-      <thead><tr><th>Nama</th><th>Status akun</th><th>Status referral</th><th>Aksi</th></tr></thead>
-      <tbody>
-        <tr>
-          <td>Budi Santoso<br><span style="font-size:11px;color:#aaa">budi@gmail.com</span></td>
-          <td><span class="badge active">Aktif</span></td>
-          <td><span class="badge active">Aktif</span></td>
-          <td><button class="btn-sm purple" onclick="toggleSpecial(this)">Jadikan Khusus</button></td>
-        </tr>
-        <tr>
-          <td>Siti Mardiana<br><span style="font-size:11px;color:#aaa">siti@gmail.com</span></td>
-          <td><span class="badge active">Aktif</span></td>
-          <td><span class="badge special">Khusus</span></td>
-          <td><button class="btn-sm red" onclick="revokeSpecial(this)">Cabut Khusus</button></td>
-        </tr>
-        <tr>
-          <td>Dewi Rahayu<br><span style="font-size:11px;color:#aaa">dewi@gmail.com</span></td>
-          <td><span class="badge active">Aktif</span></td>
-          <td><span class="badge inactive">Belum aktif</span></td>
-          <td><button class="btn-sm purple" onclick="toggleSpecial(this)">Jadikan Khusus</button></td>
-        </tr>
-        <tr>
-          <td>Rudi Pratama<br><span style="font-size:11px;color:#aaa">rudi@gmail.com</span></td>
-          <td><span class="badge pending">Gratis</span></td>
-          <td><span class="badge inactive">Belum aktif</span></td>
-          <td><button class="btn-sm purple" onclick="toggleSpecial(this)">Jadikan Khusus</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- KODE PROMO -->
+<!-- KODE PROMO (dummy) -->
 <div id="kode" style="display:none">
   <div class="card">
     <div class="card-title">Kode promo aktif</div>
@@ -161,9 +143,8 @@ tr:last-child td{border-bottom:none}
       <button class="btn-sm" onclick="toggleReveal(this)" id="revealBtn">Tampilkan</button>
       <button class="btn-sm red" onclick="deactivateCode()">Nonaktifkan</button>
     </div>
-    <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Kode ini berlaku untuk semua user baru. Share secara terpisah — jangan tampilkan di website.</p>
-
-    <div class="section-label">Buat kode baru / campaign</div>
+    <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Kode ini berlaku untuk semua user baru.</p>
+    <div class="section-label">Buat kode baru</div>
     <div class="flex-row">
       <div class="field" style="flex:1;min-width:140px;margin-bottom:0">
         <label>Nama kode</label>
@@ -173,118 +154,176 @@ tr:last-child td{border-bottom:none}
         <label>Diskon %</label>
         <input type="number" id="newDisc" value="50" min="1" max="100" style="width:100%" />
       </div>
-      <button class="btn-main" onclick="createCode()" style="margin-bottom:0">Buat & Aktifkan</button>
+      <button class="btn-main" onclick="createCode()">Buat & Aktifkan</button>
     </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Riwayat kode</div>
-    <table>
-      <thead><tr><th>Kode</th><th>Diskon</th><th>Dipakai</th><th>Status</th></tr></thead>
-      <tbody id="codeHistory">
-        <tr>
-          <td style="font-family:monospace;font-weight:700">••••••••</td>
-          <td>50%</td><td>47x</td>
-          <td><span class="badge active">Aktif</span></td>
-        </tr>
-        <tr>
-          <td style="font-family:monospace;font-weight:700">••••••••</td>
-          <td>50%</td><td>23x</td>
-          <td><span class="badge inactive">Nonaktif</span></td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
-<!-- TRANSAKSI -->
+<!-- TRANSAKSI (dummy) -->
 <div id="transaksi" style="display:none">
   <div class="card">
     <div class="card-title">Semua transaksi</div>
     <table>
       <thead><tr><th>User</th><th>Paket</th><th>Nominal</th><th>Referrer</th><th>Komisi</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>Ani S.</td><td>Bundling 5</td><td style="font-weight:700">Rp 10.000</td><td style="font-size:12px;color:#aaa;font-family:monospace">CB-BUDI7421</td><td style="color:#1a6b4a;font-weight:700">Rp 1.500</td><td><span class="badge paid">Lunas</span></td></tr>
-        <tr><td>Rudi P.</td><td>Bulanan</td><td style="font-weight:700">Rp 24.500</td><td style="font-size:12px;color:#aaa;font-family:monospace">CB-SITI1234</td><td style="color:#1a6b4a;font-weight:700">Rp 3.675</td><td><span class="badge process">Diproses</span></td></tr>
-        <tr><td>Dewi R.</td><td>À la carte</td><td style="font-weight:700">Rp 2.500</td><td style="font-size:12px;color:#aaa">—</td><td style="color:#aaa">—</td><td><span class="badge paid">Lunas</span></td></tr>
-        <tr><td>Hendra K.</td><td>Bundling 3</td><td style="font-weight:700">Rp 6.000</td><td style="font-size:12px;color:#aaa;font-family:monospace">CB-BUDI7421</td><td style="color:#1a6b4a;font-weight:700">Rp 900</td><td><span class="badge pending">Pending</span></td></tr>
+        <tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Belum ada transaksi.</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
+</div><!-- end mainView -->
+
 <div class="toast" id="toast"></div>
 
-<script>
-function switchTab(el,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-  el.className='tab active';
-  ['pencairan','users','kode','transaksi'].forEach(t=>document.getElementById(t).style.display='none');
-  document.getElementById(tab).style.display='block';
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── GANTI dengan email admin kamu ──────────────────────
+const ADMIN_EMAILS = ['test2@gmail.com'];
+// ───────────────────────────────────────────────────────
+
+let allUsers = [];
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user || !ADMIN_EMAILS.includes(user.email)) {
+    document.getElementById('loadingView').style.display = 'none';
+    document.getElementById('deniedView').style.display = 'block';
+    return;
+  }
+
+  // Load users dari Firestore
+  await loadUsers();
+
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+});
+
+async function loadUsers() {
+  const snap = await getDocs(collection(db, 'users'));
+  allUsers = snap.docs.map(d => d.data());
+
+  // Update stats
+  const total = allUsers.length;
+  const premium = allUsers.filter(u => u.plan === 'premium').length;
+  const free = allUsers.filter(u => u.plan === 'free').length;
+  const referrer = allUsers.filter(u => u.komisiTotal > 0).length;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPremium').textContent = premium;
+  document.getElementById('statFree').textContent = free;
+  document.getElementById('statReferrer').textContent = referrer;
+
+  renderUsers(allUsers);
 }
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.style.display='block';
-  setTimeout(()=>t.style.display='none',2500);
+
+function renderUsers(users) {
+  const tbody = document.getElementById('usersBody');
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user ditemukan.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = users.map(u => `
+    <tr>
+      <td><strong>${u.nama || '–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa || '–'}</span></td>
+      <td style="font-size:12px">${u.email || '–'}</td>
+      <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode || '–'}</td>
+      <td><span class="badge ${u.plan === 'premium' ? 'paid' : 'free'}">${u.plan === 'premium' ? 'Premium' : 'Free'}</span></td>
+      <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal || 0).toLocaleString('id-ID')}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          ${u.plan !== 'premium'
+            ? `<button class="btn-sm green" onclick="setPlan('${u.uid}', 'premium', this)">→ Premium</button>`
+            : `<button class="btn-sm red" onclick="setPlan('${u.uid}', 'free', this)">→ Free</button>`
+          }
+        </div>
+      </td>
+    </tr>
+  `).join('');
 }
-function approve(btn){
-  const row=btn.closest('tr');
-  row.querySelector('.badge').className='badge process';
-  row.querySelector('.badge').textContent='Diproses';
-  btn.closest('td').innerHTML='<button class="btn-sm amber" onclick="markPaid(this)">Tandai Lunas</button>';
-  showToast('✅ Request disetujui — segera transfer.');
+
+window.filterUsers = function(q) {
+  const filtered = allUsers.filter(u =>
+    (u.nama || '').toLowerCase().includes(q.toLowerCase()) ||
+    (u.email || '').toLowerCase().includes(q.toLowerCase())
+  );
+  renderUsers(filtered);
 }
-function reject(btn){
-  const row=btn.closest('tr');
-  row.querySelector('.badge').className='badge inactive';
-  row.querySelector('.badge').textContent='Ditolak';
-  btn.closest('td').innerHTML='<span style="font-size:12px;color:#aaa">Ditolak</span>';
+
+window.setPlan = async function(uid, plan, btn) {
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    await updateDoc(doc(db, 'users', uid), { plan });
+    showToast(`✅ User diupdate ke plan ${plan}`);
+    await loadUsers();
+  } catch(e) {
+    showToast('Gagal update: ' + e.message);
+    btn.disabled = false;
+  }
+}
+
+window.doLogout = async function() {
+  await signOut(auth);
+  window.location.href = 'register.html';
+}
+
+// ── UI helpers ─────────────────────────────────────────
+window.switchTab = function(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+  el.className = 'tab active';
+  ['users','pencairan','kode','transaksi'].forEach(t => document.getElementById(t).style.display = 'none');
+  document.getElementById(tab).style.display = 'block';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+window.approve = function(btn) {
+  const row = btn.closest('tr');
+  row.querySelector('.badge').className = 'badge process';
+  row.querySelector('.badge').textContent = 'Diproses';
+  btn.closest('td').innerHTML = '<button class="btn-sm amber" onclick="markPaid(this)">Tandai Lunas</button>';
+  showToast('✅ Request disetujui.');
+}
+window.reject = function(btn) {
+  const row = btn.closest('tr');
+  row.querySelector('.badge').className = 'badge inactive';
+  row.querySelector('.badge').textContent = 'Ditolak';
+  btn.closest('td').innerHTML = '<span style="font-size:12px;color:#aaa">Ditolak</span>';
   showToast('Request ditolak.');
 }
-function markPaid(btn){
-  const row=btn.closest('tr');
-  row.querySelector('.badge').className='badge paid';
-  row.querySelector('.badge').textContent='Lunas';
-  btn.closest('td').innerHTML='<span style="font-size:12px;color:#aaa">Selesai</span>';
+window.markPaid = function(btn) {
+  const row = btn.closest('tr');
+  row.querySelector('.badge').className = 'badge paid';
+  row.querySelector('.badge').textContent = 'Lunas';
+  btn.closest('td').innerHTML = '<span style="font-size:12px;color:#aaa">Selesai</span>';
   showToast('✅ Ditandai lunas.');
 }
-function toggleSpecial(btn){
-  const row=btn.closest('tr');
-  const refBadge=row.querySelectorAll('td')[2].querySelector('.badge');
-  refBadge.className='badge special'; refBadge.textContent='Khusus';
-  btn.className='btn-sm red'; btn.textContent='Cabut Khusus';
-  btn.onclick=()=>revokeSpecial(btn);
-  showToast('✅ User dijadikan referrer khusus — bisa dapat komisi tanpa beli.');
+
+let revealed = false;
+window.toggleReveal = function(btn) {
+  revealed = !revealed;
+  document.getElementById('activeCode').textContent = revealed ? 'CB-DISKON50' : '••••••••';
+  btn.textContent = revealed ? 'Sembunyikan' : 'Tampilkan';
 }
-function revokeSpecial(btn){
-  const row=btn.closest('tr');
-  const refBadge=row.querySelectorAll('td')[2].querySelector('.badge');
-  refBadge.className='badge inactive'; refBadge.textContent='Belum aktif';
-  btn.className='btn-sm purple'; btn.textContent='Jadikan Khusus';
-  btn.onclick=()=>toggleSpecial(btn);
-  showToast('Status khusus dicabut.');
-}
-let revealed=false;
-function toggleReveal(btn){
-  revealed=!revealed;
-  document.getElementById('activeCode').textContent=revealed?'[TERSIMPAN DI BACKEND]':'••••••••';
-  btn.textContent=revealed?'Sembunyikan':'Tampilkan';
-}
-function deactivateCode(){
-  document.getElementById('activeCode').textContent='••••••••';
-  revealed=false;
-  document.getElementById('revealBtn').textContent='Tampilkan';
+window.deactivateCode = function() {
+  document.getElementById('activeCode').textContent = '••••••••';
+  revealed = false;
+  document.getElementById('revealBtn').textContent = 'Tampilkan';
   showToast('Kode dinonaktifkan.');
 }
-function createCode(){
-  const code=document.getElementById('newCode').value.trim();
-  const disc=document.getElementById('newDisc').value;
-  if(!code){alert('Masukkan nama kode.');return;}
-  const tbody=document.getElementById('codeHistory');
-  const row=document.createElement('tr');
-  row.innerHTML=`<td style="font-family:monospace;font-weight:700">${code}</td><td>${disc}%</td><td>0x</td><td><span class="badge active">Aktif</span></td>`;
-  tbody.insertBefore(row,tbody.firstChild);
-  document.getElementById('newCode').value='';
+window.createCode = function() {
+  const code = document.getElementById('newCode').value.trim();
+  const disc = document.getElementById('newDisc').value;
+  if (!code) { alert('Masukkan nama kode.'); return; }
+  document.getElementById('newCode').value = '';
   showToast(`✅ Kode ${code} (${disc}%) aktif.`);
 }
 </script>
