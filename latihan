@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --white: #fff;
+      --surface2: #f5f3ef;
+      --border: #e8e4dc;
+      --text: #1a1714;
+      --muted: #7a7168;
+      --muted2: #b0a89c;
+      --red: #C0392B;
+      --red2: #a93226;
+      --gold: #e8970a;
+      --gold-bg: #fff8e6;
+      --gold-border: #f5d06a;
+      --green: #1a7a4a;
+      --green-bg: #edfaf3;
+      --blue: #1a5fb4;
+      --blue-bg: #eef3fc;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 56px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-logo { font-weight: 800; font-size: 17px; color: var(--red); }
+    .nav-logo span { color: var(--text); }
+    .nav-back {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .nav-back:hover { color: var(--red); }
+
+    /* LOADING */
+    #loadingScreen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; z-index: 200; transition: opacity 0.3s;
+    }
+    .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
+
+    /* MAIN */
+    main { max-width: 760px; margin: 0 auto; padding: 28px 20px 80px; }
+
+    /* PHASE SCREENS */
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeUp 0.35s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+    /* ── SCREEN 1: PILIH KATEGORI ── */
+    .page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .page-sub { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
+
+    .kategori-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+    @media(max-width: 500px) { .kategori-grid { grid-template-columns: 1fr; } }
+
+    .kat-card {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .kat-card:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: var(--shadow); }
+    .kat-card.selected { border-color: var(--red); background: #fff5f5; box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
+    .kat-icon { font-size: 36px; margin-bottom: 10px; display: block; }
+    .kat-name { font-size: 15px; font-weight: 800; color: var(--text); }
+    .kat-count { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 600; }
+
+    /* ── SCREEN 2: PILIH SUB-BAB ── */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 700; color: var(--muted);
+      cursor: pointer; margin-bottom: 20px; background: none; border: none;
+      transition: color 0.18s;
+    }
+    .back-btn:hover { color: var(--red); }
+
+    .subbab-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+    .subbab-item {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .subbab-item:hover { border-color: var(--red); }
+    .subbab-item.locked { opacity: 0.5; cursor: not-allowed; }
+    .subbab-item.locked:hover { border-color: var(--border); }
+
+    .subbab-left { display: flex; align-items: center; gap: 12px; }
+    .subbab-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--muted);
+      flex-shrink: 0;
+    }
+    .subbab-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .subbab-soal { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+
+    .lock-badge {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 50px;
+      background: var(--gold-bg); color: #8a5e00;
+      border: 1px solid var(--gold-border);
+      white-space: nowrap;
+    }
+    .free-badge {
+      font-size: 11px; font-weight: 700;
+      padding: 4px 10px; border-radius: 50px;
+      background: var(--green-bg); color: var(--green);
+      white-space: nowrap;
+    }
+    .arrow-icon { color: var(--muted2); font-size: 16px; }
+
+    /* ── SCREEN 3: SOAL ── */
+    .soal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+    }
+    .soal-progress-wrap { flex: 1; }
+    .soal-progress-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+    .soal-progress-bar { height: 6px; background: var(--border); border-radius: 50px; overflow: hidden; }
+    .soal-progress-fill { height: 100%; background: var(--red); border-radius: 50px; transition: width 0.4s ease; }
+
+    .soal-counter {
+      font-size: 13px; font-weight: 800; color: var(--red);
+      background: #fff5f5; border: 1.5px solid #fdd;
+      padding: 6px 14px; border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .soal-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .soal-kategori-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: var(--red);
+      background: #fff5f5; border: 1px solid #fdd;
+      padding: 4px 12px; border-radius: 50px;
+      margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .soal-text {
+      font-size: 16px; font-weight: 700; line-height: 1.6;
+      color: var(--text); margin-bottom: 20px;
+    }
+
+    .opsi-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .opsi-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: var(--white);
+    }
+    .opsi-item:hover:not(.answered) { border-color: var(--red); background: #fff8f8; }
+    .opsi-item.selected { border-color: var(--red); background: #fff5f5; }
+    .opsi-item.correct { border-color: var(--green); background: var(--green-bg); }
+    .opsi-item.wrong { border-color: var(--red); background: #fef2f2; }
+    .opsi-item.show-correct { border-color: var(--green); background: var(--green-bg); }
+
+    .opsi-key {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--surface2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--muted);
+      flex-shrink: 0; transition: all 0.18s;
+    }
+    .opsi-item.selected .opsi-key { background: var(--red); color: #fff; }
+    .opsi-item.correct .opsi-key { background: var(--green); color: #fff; }
+    .opsi-item.wrong .opsi-key { background: var(--red); color: #fff; }
+    .opsi-item.show-correct .opsi-key { background: var(--green); color: #fff; }
+
+    .opsi-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
+
+    /* PEMBAHASAN */
+    .pembahasan-box {
+      background: var(--green-bg);
+      border: 1.5px solid #b8e6d0;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-top: 14px;
+      display: none;
+      animation: fadeUp 0.3s ease;
+    }
+    .pembahasan-box.wrong-box { background: #fef2f2; border-color: #fdd; }
+    .pembahasan-title { font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .pembahasan-box.wrong-box .pembahasan-title { color: var(--red); }
+    .pembahasan-text { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 500; }
+
+    /* NAVIGATION BUTTONS */
+    .soal-nav { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
+
+    .btn-soal {
+      padding: 12px 28px; border-radius: 50px; border: none;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px; font-weight: 800; cursor: pointer;
+      transition: all 0.18s;
+    }
+    .btn-soal.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
+    .btn-soal.primary:hover { background: var(--red2); transform: translateY(-1px); }
+    .btn-soal.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-soal.secondary:hover { background: var(--border); }
+    .btn-soal:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* ── SCREEN 4: HASIL ── */
+    .hasil-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .hasil-emoji { font-size: 56px; margin-bottom: 16px; display: block; }
+    .hasil-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .hasil-sub { font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
+
+    .skor-display {
+      font-size: 64px; font-weight: 900; letter-spacing: -3px;
+      color: var(--red); line-height: 1; margin-bottom: 6px;
+    }
+    .skor-label { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 28px; }
+
+    .hasil-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+    .hasil-stat { background: var(--surface2); border-radius: 14px; padding: 16px 12px; }
+    .hasil-stat .val { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
+    .hasil-stat .lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+    .hasil-stat.green .val { color: var(--green); }
+    .hasil-stat.red .val { color: var(--red); }
+
+    .btn-hasil {
+      display: block; width: 100%; padding: 14px;
+      border-radius: 50px; border: none; cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px; font-weight: 800; margin-bottom: 10px;
+      transition: all 0.18s;
+    }
+    .btn-hasil.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
+    .btn-hasil.primary:hover { background: var(--red2); }
+    .btn-hasil.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-hasil.secondary:hover { background: var(--border); }
+
+    /* REVIEW */
+    .review-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+    .review-item {
+      background: var(--white); border-radius: 16px; padding: 20px;
+      border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
+    }
+    .review-item.benar { border-color: #b8e6d0; }
+    .review-item.salah { border-color: #fdd; }
+    .review-no { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .review-q { font-size: 14px; font-weight: 700; margin-bottom: 10px; line-height: 1.5; }
+    .review-ans { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .review-pill { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
+    .review-pill.user-benar { background: var(--green-bg); color: var(--green); }
+    .review-pill.user-salah { background: #fef2f2; color: var(--red); }
+    .review-pill.correct { background: var(--green-bg); color: var(--green); }
+    .review-pembahasan { font-size: 12px; color: var(--muted); line-height: 1.6; font-weight: 500; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+
+    /* UPGRADE WALL */
+    .upgrade-wall {
+      background: linear-gradient(135deg, #fff9f2, #fff5f5);
+      border: 2px solid var(--gold-border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .upgrade-wall h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+    .upgrade-wall p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
+    .btn-upgrade-wall {
+      display: inline-block; padding: 13px 32px; border-radius: 50px;
+      background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px; font-weight: 800; text-decoration: none;
+      box-shadow: 0 4px 14px rgba(192,57,43,0.25); transition: all 0.18s;
+    }
+    .btn-upgrade-wall:hover { background: var(--red2); transform: translateY(-1px); }
+
+    /* TOAST */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--text); color: #fff;
+      border-radius: 50px; padding: 10px 22px;
+      font-size: 13px; font-weight: 600;
+      opacity: 0; transition: all 0.25s;
+      pointer-events: none; z-index: 999;
+      white-space: nowrap; box-shadow: var(--shadow);
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <p>Memuat soal…</p>
+</div>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span></div>
+  <a href="/dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<main>
+
+  <!-- SCREEN 1: PILIH KATEGORI -->
+  <div class="screen active" id="screenKategori">
+    <div class="page-title">Pilih Mata Pelajaran</div>
+    <div class="page-sub">Pilih pelajaran yang ingin kamu latih hari ini.</div>
+    <div class="kategori-grid" id="kategoriGrid"></div>
+  </div>
+
+  <!-- SCREEN 2: PILIH SUB-BAB -->
+  <div class="screen" id="screenSubbab">
+    <button class="back-btn" onclick="goToScreen('screenKategori')">← Ganti Pelajaran</button>
+    <div class="page-title" id="subbabTitle">Pilih Sub-Bab</div>
+    <div class="page-sub" id="subbabSub">Pilih topik yang ingin kamu pelajari.</div>
+    <div class="subbab-list" id="subbabList"></div>
+  </div>
+
+  <!-- SCREEN 3: SOAL -->
+  <div class="screen" id="screenSoal">
+    <div class="soal-header">
+      <div class="soal-progress-wrap">
+        <div class="soal-progress-label" id="progressLabel">Soal 1 dari 5</div>
+        <div class="soal-progress-bar">
+          <div class="soal-progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="soal-counter" id="soalCounter">1 / 5</div>
+    </div>
+
+    <div class="soal-card" id="soalCard">
+      <div class="soal-kategori-tag" id="soalTag">Matematika</div>
+      <div class="soal-text" id="soalText">—</div>
+      <div class="opsi-list" id="opsiList"></div>
+      <div class="pembahasan-box" id="pembahasanBox">
+        <div class="pembahasan-title" id="pembahasanTitle">✓ Jawaban Benar</div>
+        <div class="pembahasan-text" id="pembahasanText">—</div>
+      </div>
+    </div>
+
+    <div class="soal-nav">
+      <button class="btn-soal secondary" id="btnSkip" onclick="nextSoal()">Lewati</button>
+      <button class="btn-soal primary" id="btnNext" onclick="nextSoal()" disabled>Lanjut →</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: HASIL -->
+  <div class="screen" id="screenHasil">
+    <div class="hasil-card">
+      <span class="hasil-emoji" id="hasilEmoji">🎉</span>
+      <div class="hasil-title" id="hasilTitle">Latihan Selesai!</div>
+      <div class="hasil-sub" id="hasilSub">Berikut hasil latihan kamu</div>
+      <div class="skor-display" id="skorDisplay">0</div>
+      <div class="skor-label">Skor kamu</div>
+      <div class="hasil-stats">
+        <div class="hasil-stat green">
+          <div class="val" id="statBenar">0</div>
+          <div class="lbl">Benar</div>
+        </div>
+        <div class="hasil-stat red">
+          <div class="val" id="statSalah">0</div>
+          <div class="lbl">Salah</div>
+        </div>
+        <div class="hasil-stat">
+          <div class="val" id="statTotal">0</div>
+          <div class="lbl">Total</div>
+        </div>
+      </div>
+      <button class="btn-hasil primary" onclick="ulangiLatihan()">🔄 Ulangi Sub-Bab Ini</button>
+      <button class="btn-hasil secondary" onclick="goToScreen('screenSubbab')">← Pilih Sub-Bab Lain</button>
+    </div>
+
+    <div id="reviewSection"></div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  let firebaseConfig;
+  try {
+    const mod = await import('./firebase-config.js');
+    firebaseConfig = mod.firebaseConfig || mod.default;
+  } catch { firebaseConfig = window._fbConfig || {}; }
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const $ = id => document.getElementById(id);
+  let currentUser = null, userData = null;
+  let isPremium = false;
+  let allSoal = [];
+  let currentKategori = '';
+  let currentSubbab = '';
+  let soalLatihan = [];
+  let currentIdx = 0;
+  let jawaban = [];
+  let answered = false;
+
+  const KATEGORI = [
+    { nama: 'Matematika', icon: '📐', color: '#fff5f5' },
+    { nama: 'IPAS',       icon: '🔬', color: '#f0f9ff' },
+    { nama: 'B.Inggris',  icon: '🔤', color: '#f5fff8' },
+  ];
+
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  function goToScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  // ── AUTH ──
+  onAuthStateChanged(auth, async user => {
+    if (!user) { window.location.href = '/register.html'; return; }
+    currentUser = user;
+
+    const userSnap = await getDoc(doc(db, 'users', user.uid));
+    userData = userSnap.exists() ? userSnap.data() : {};
+    isPremium = userData.plan === 'premium';
+
+    // Load semua soal
+    const snap = await getDocs(collection(db, 'soal'));
+    allSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    $('loadingScreen').style.opacity = '0';
+    setTimeout(() => $('loadingScreen').style.display = 'none', 300);
+
+    renderKategori();
+  });
+
+  // ── SCREEN 1: KATEGORI ──
+  function renderKategori() {
+    const grid = $('kategoriGrid');
+    grid.innerHTML = '';
+    KATEGORI.forEach(k => {
+      const soalKat = allSoal.filter(s => s.kategori === k.nama);
+      const div = document.createElement('div');
+      div.className = 'kat-card';
+      div.innerHTML = `
+        <span class="kat-icon">${k.icon}</span>
+        <div class="kat-name">${k.nama}</div>
+        <div class="kat-count">${soalKat.length} soal tersedia</div>`;
+      div.onclick = () => selectKategori(k.nama);
+      grid.appendChild(div);
+    });
+  }
+
+  function selectKategori(kat) {
+    currentKategori = kat;
+    document.querySelectorAll('.kat-card').forEach(c => c.classList.remove('selected'));
+    renderSubbab(kat);
+    goToScreen('screenSubbab');
+  }
+
+  // ── SCREEN 2: SUB-BAB ──
+  function renderSubbab(kat) {
+    const katInfo = KATEGORI.find(k => k.nama === kat);
+    $('subbabTitle').textContent = `${katInfo?.icon || ''} ${kat}`;
+    $('subbabSub').textContent = 'Pilih topik yang ingin kamu pelajari.';
+
+    const soalKat = allSoal.filter(s => s.kategori === kat);
+    const subBabs = [...new Set(soalKat.map(s => s.subKategori))].sort((a,b) => {
+      const minA = Math.min(...soalKat.filter(s=>s.subKategori===a).map(s=>s.urutan||99));
+      const minB = Math.min(...soalKat.filter(s=>s.subKategori===b).map(s=>s.urutan||99));
+      return minA - minB;
+    });
+
+    const list = $('subbabList');
+    list.innerHTML = '';
+
+    subBabs.forEach((sb, i) => {
+      const soalSb = soalKat.filter(s => s.subKategori === sb);
+      const hasPremium = soalSb.some(s => s.isPremium);
+      const isLocked = hasPremium && !isPremium && soalSb.every(s => s.isPremium);
+
+      const div = document.createElement('div');
+      div.className = 'subbab-item' + (isLocked ? ' locked' : '');
+      div.innerHTML = `
+        <div class="subbab-left">
+          <div class="subbab-num">${i+1}</div>
+          <div>
+            <div class="subbab-name">${sb}</div>
+            <div class="subbab-soal">${soalSb.length} soal</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          ${isLocked
+            ? '<span class="lock-badge">🔒 Premium</span>'
+            : soalSb.some(s => !s.isPremium) && !isPremium
+              ? '<span class="free-badge">✓ Gratis</span>'
+              : '<span class="free-badge">✓ Akses</span>'
+          }
+          ${!isLocked ? '<span class="arrow-icon">›</span>' : ''}
+        </div>`;
+
+      if (!isLocked) {
+        div.onclick = () => startLatihan(sb, soalSb);
+      } else {
+        div.onclick = () => showToast('Soal ini membutuhkan akun Premium 🔒');
+      }
+      list.appendChild(div);
+    });
+
+    // Tampilkan upgrade wall kalau free
+    if (!isPremium) {
+      const wall = document.createElement('div');
+      wall.className = 'upgrade-wall';
+      wall.innerHTML = `
+        <h3>🔒 Buka Semua Sub-Bab</h3>
+        <p>Upgrade ke Premium untuk akses semua soal ${kat} dan mapel lainnya tanpa batas.</p>
+        <a href="/pricing.html" class="btn-upgrade-wall">Upgrade Premium →</a>`;
+      list.appendChild(wall);
+    }
+  }
+
+  // ── SCREEN 3: SOAL ──
+  function startLatihan(subbab, soalList) {
+    currentSubbab = subbab;
+    // Filter soal yang bisa diakses
+    soalLatihan = soalList.filter(s => !s.isPremium || isPremium);
+    soalLatihan.sort((a,b) => (a.urutan||99) - (b.urutan||99));
+    currentIdx = 0;
+    jawaban = [];
+    answered = false;
+    goToScreen('screenSoal');
+    renderSoal();
+  }
+
+  function renderSoal() {
+    const soal = soalLatihan[currentIdx];
+    const total = soalLatihan.length;
+    const pct = ((currentIdx) / total) * 100;
+
+    $('progressLabel').textContent = `Soal ${currentIdx+1} dari ${total}`;
+    $('progressFill').style.width = pct + '%';
+    $('soalCounter').textContent = `${currentIdx+1} / ${total}`;
+    $('soalTag').textContent = `${soal.kategori} · ${soal.subKategori}`;
+    $('soalText').textContent = soal.pertanyaan;
+    $('pembahasanBox').style.display = 'none';
+    $('pembahasanBox').className = 'pembahasan-box';
+
+    answered = false;
+    $('btnNext').disabled = true;
+    $('btnSkip').style.display = 'inline-block';
+
+    const opsiList = $('opsiList');
+    opsiList.innerHTML = '';
+    Object.entries(soal.opsi).forEach(([key, val]) => {
+      const div = document.createElement('div');
+      div.className = 'opsi-item';
+      div.dataset.key = key;
+      div.innerHTML = `<div class="opsi-key">${key}</div><div class="opsi-text">${val}</div>`;
+      div.onclick = () => pilihJawaban(key, soal);
+      opsiList.appendChild(div);
+    });
+  }
+
+  function pilihJawaban(key, soal) {
+    if (answered) return;
+    answered = true;
+    $('btnNext').disabled = false;
+    $('btnSkip').style.display = 'none';
+
+    const isBenar = key === soal.jawaban;
+    jawaban.push({ soal, pilihan: key, benar: isBenar });
+
+    // Update kuota soal gratis
+    if (!isPremium && userData?.soalGratis > 0) {
+      updateDoc(doc(db, 'users', currentUser.uid), { soalGratis: increment(-1) }).catch(()=>{});
+      userData.soalGratis = Math.max(0, (userData.soalGratis || 0) - 1);
+    }
+
+    // Warnai opsi
+    document.querySelectorAll('.opsi-item').forEach(item => {
+      item.classList.add('answered');
+      const k = item.dataset.key;
+      if (k === soal.jawaban) item.classList.add('show-correct');
+      else if (k === key) item.classList.add('wrong');
+      item.style.cursor = 'default';
+    });
+
+    // Tampilkan pembahasan
+    const box = $('pembahasanBox');
+    box.style.display = 'block';
+    if (isBenar) {
+      box.className = 'pembahasan-box';
+      $('pembahasanTitle').textContent = '✓ Jawaban Benar!';
+    } else {
+      box.className = 'pembahasan-box wrong-box';
+      $('pembahasanTitle').textContent = `✗ Jawaban Salah — Kunci: ${soal.jawaban}`;
+    }
+    $('pembahasanText').textContent = soal.pembahasan;
+
+    $('btnNext').textContent = currentIdx + 1 >= soalLatihan.length ? 'Lihat Hasil →' : 'Lanjut →';
+  }
+
+  window.nextSoal = function() {
+    if (!answered) {
+      // Lewati soal
+      jawaban.push({ soal: soalLatihan[currentIdx], pilihan: null, benar: false });
+    }
+    currentIdx++;
+    if (currentIdx >= soalLatihan.length) {
+      showHasil();
+    } else {
+      renderSoal();
+    }
+  };
+
+  // ── SCREEN 4: HASIL ──
+  function showHasil() {
+    const total = jawaban.length;
+    const benar = jawaban.filter(j => j.benar).length;
+    const salah = total - benar;
+    const skor = Math.round((benar / total) * 100);
+
+    let emoji = '😢', title = 'Terus Semangat!';
+    if (skor >= 80) { emoji = '🎉'; title = 'Luar Biasa!'; }
+    else if (skor >= 60) { emoji = '👍'; title = 'Bagus!'; }
+    else if (skor >= 40) { emoji = '💪'; title = 'Terus Berlatih!'; }
+
+    $('hasilEmoji').textContent = emoji;
+    $('hasilTitle').textContent = title;
+    $('hasilSub').textContent = `Kamu menyelesaikan latihan ${currentSubbab}`;
+    $('skorDisplay').textContent = skor;
+    $('statBenar').textContent = benar;
+    $('statSalah').textContent = salah;
+    $('statTotal').textContent = total;
+
+    // Review
+    const review = $('reviewSection');
+    review.innerHTML = '<div style="font-size:15px;font-weight:800;margin-bottom:12px">📋 Review Jawaban</div>';
+    const reviewList = document.createElement('div');
+    reviewList.className = 'review-list';
+
+    jawaban.forEach((j, i) => {
+      const item = document.createElement('div');
+      item.className = 'review-item ' + (j.benar ? 'benar' : 'salah');
+      const userAns = j.pilihan ? `${j.pilihan}: ${j.soal.opsi[j.pilihan]}` : 'Dilewati';
+      const correctAns = `${j.soal.jawaban}: ${j.soal.opsi[j.soal.jawaban]}`;
+      item.innerHTML = `
+        <div class="review-no">Soal ${i+1}</div>
+        <div class="review-q">${j.soal.pertanyaan}</div>
+        <div class="review-ans">
+          <span class="review-pill ${j.benar ? 'user-benar' : 'user-salah'}">Jawaban kamu: ${userAns}</span>
+          ${!j.benar ? `<span class="review-pill correct">Kunci: ${correctAns}</span>` : ''}
+        </div>
+        <div class="review-pembahasan">${j.soal.pembahasan}</div>`;
+      reviewList.appendChild(item);
+    });
+
+    review.appendChild(reviewList);
+    goToScreen('screenHasil');
+  }
+
+  window.ulangiLatihan = function() {
+    const soalList = allSoal.filter(s => s.subKategori === currentSubbab);
+    startLatihan(currentSubbab, soalList);
+  };
+
+  window.goToScreen = goToScreen;
+</script>
+</body>
+</html>
