@@ -150,5 +150,10 @@ document.getElementById('previewCode').textContent = generatedCode;
 const urlRef = new URLSearchParams(window.location.search).get('ref');
 if (urlRef) sessionStorage.setItem('refCode', urlRef);
 </script>
+  
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  console.log("Firebase OK:", auth.app.name);
+</script>
 </body>
 </html>
