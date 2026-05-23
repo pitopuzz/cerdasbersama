@@ -31,8 +31,6 @@ tr:last-child td{border-bottom:none}
 .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700}
 .badge.pending{background:#FCEBEB;color:#A32D2D}
 .badge.paid{background:#E8F5EE;color:#085041}
-.badge.process{background:#E6F1FB;color:#0C447C}
-.badge.active{background:#E8F5EE;color:#085041}
 .badge.free{background:#F5F3EE;color:#888}
 .badge.premium{background:#E8F5EE;color:#085041}
 .badge.inactive{background:#F5F3EE;color:#aaa}
@@ -48,14 +46,10 @@ tr:last-child td{border-bottom:none}
 .btn-main{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-main:hover{background:#145a3d}
 .btn-logout{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#555}
-.field{margin-bottom:12px}
-.field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
-.field input{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
-.field input:focus{border-color:#1a6b4a}
-.code-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:8px}
-.code-val{font-size:15px;font-weight:800;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
 .search-input{border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none;width:200px}
 .search-input:focus{border-color:#1a6b4a}
+.date-input{border:1.5px solid #E0EDE7;border-radius:8px;padding:5px 8px;font-size:12px;font-family:inherit;color:#333;background:#fff;outline:none}
+.date-input:focus{border-color:#1a6b4a}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a6b4a;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
 .flex-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
 .section-label{font-size:11px;font-weight:700;color:#aaa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
@@ -63,7 +57,12 @@ tr:last-child td{border-bottom:none}
 .access-denied{text-align:center;padding:4rem 2rem}
 .access-denied h2{color:#E24B4A;margin-bottom:8px}
 .access-denied p{color:#aaa;font-size:13px}
-.expired-note{font-size:11px;color:#aaa;margin-top:2px}
+.expired-warn{font-size:10px;color:#E24B4A;font-weight:700}
+.code-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:8px}
+.code-val{font-size:15px;font-weight:800;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
+.field input{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
 </style>
 </head>
 <body>
@@ -99,7 +98,7 @@ tr:last-child td{border-bottom:none}
   <button class="tab" onclick="switchTab(this,'kode')">Kode Promo</button>
 </div>
 
-<!-- TRANSAKSI (real dari Firestore) -->
+<!-- TRANSAKSI -->
 <div id="transaksi">
   <div class="card">
     <div class="card-title">
@@ -123,7 +122,7 @@ tr:last-child td{border-bottom:none}
       <input type="text" class="search-input" placeholder="Cari nama / email..." oninput="filterUsers(this.value)" />
     </div>
     <table>
-      <thead><tr><th>Nama</th><th>Email</th><th>Referral code</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Aksi</th></tr></thead>
+      <thead><tr><th>Nama</th><th>Email</th><th>Ref code</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Aksi</th></tr></thead>
       <tbody id="usersBody">
         <tr><td colspan="7" class="loading">Memuat data user...</td></tr>
       </tbody>
@@ -131,7 +130,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- PENCAIRAN (dummy) -->
+<!-- PENCAIRAN -->
 <div id="pencairan" style="display:none">
   <div class="card">
     <div class="card-title">Request pencairan masuk</div>
@@ -144,7 +143,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- KODE PROMO (dummy) -->
+<!-- KODE PROMO -->
 <div id="kode" style="display:none">
   <div class="card">
     <div class="card-title">Kode promo aktif</div>
@@ -170,7 +169,7 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-</div><!-- end mainView -->
+</div>
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -197,13 +196,9 @@ async function loadUsers() {
   const snap = await getDocs(collection(db, 'users'));
   allUsers = snap.docs.map(d => ({...d.data(), docId: d.id}));
 
-  const total = allUsers.length;
-  const premium = allUsers.filter(u => u.plan === 'premium').length;
-  const free = allUsers.filter(u => u.plan === 'free').length;
-
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statPremium').textContent = premium;
-  document.getElementById('statFree').textContent = free;
+  document.getElementById('statTotal').textContent = allUsers.length;
+  document.getElementById('statPremium').textContent = allUsers.filter(u => u.plan === 'premium').length;
+  document.getElementById('statFree').textContent = allUsers.filter(u => u.plan === 'free').length;
 
   renderUsers(allUsers);
 }
@@ -214,20 +209,33 @@ function renderUsers(users) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>';
     return;
   }
+
+  // Default expired date = 30 hari dari sekarang
+  const def30 = new Date();
+  def30.setDate(def30.getDate() + 30);
+  const defVal = def30.toISOString().split('T')[0];
+
   tbody.innerHTML = users.map(u => {
-    const expiredAt = u.expiredAt ? new Date(u.expiredAt.seconds * 1000).toLocaleDateString('id-ID') : '–';
-    const isExpired = u.expiredAt && new Date(u.expiredAt.seconds * 1000) < new Date();
+    const expiredAt = u.expiredAt ? new Date(u.expiredAt.seconds * 1000) : null;
+    const expStr = expiredAt ? expiredAt.toLocaleDateString('id-ID') : '–';
+    const isExpired = expiredAt && expiredAt < new Date();
+    const expInputVal = expiredAt ? expiredAt.toISOString().split('T')[0] : defVal;
+
     return `
     <tr>
       <td><strong>${u.nama||'–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa||'–'}</span></td>
       <td style="font-size:12px">${u.email||'–'}</td>
       <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode||'–'}</td>
       <td><span class="badge ${u.plan==='premium'?'premium':'free'}">${u.plan==='premium'?'Premium':'Free'}</span></td>
-      <td style="font-size:12px">${expiredAt}${isExpired?'<div class="expired-note">⚠️ Expired</div>':''}</td>
+      <td style="font-size:12px">
+        ${expStr}
+        ${isExpired ? '<div class="expired-warn">⚠️ Expired</div>' : ''}
+      </td>
       <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal||0).toLocaleString('id-ID')}</td>
       <td>
-        <div style="display:flex;gap:6px">
-          ${u.plan!=='premium'
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <input type="date" class="date-input" id="exp_${u.uid}" value="${expInputVal}" />
+          ${u.plan !== 'premium'
             ? `<button class="btn-sm green" onclick="setPlan('${u.uid}','premium',this)">→ Premium</button>`
             : `<button class="btn-sm red" onclick="setPlan('${u.uid}','free',this)">→ Free</button>`
           }
@@ -249,14 +257,15 @@ window.setPlan = async function(uid, plan, btn) {
   try {
     const update = { plan };
     if (plan === 'premium') {
-      const exp = new Date();
-      exp.setDate(exp.getDate() + 30);
-      update.expiredAt = Timestamp.fromDate(exp);
+      const dateInput = document.getElementById('exp_' + uid);
+      const expDate = dateInput ? new Date(dateInput.value) : new Date();
+      if (isNaN(expDate)) { showToast('Tanggal expired tidak valid.'); btn.disabled = false; btn.textContent = '→ Premium'; return; }
+      update.expiredAt = Timestamp.fromDate(expDate);
     } else {
       update.expiredAt = null;
     }
     await updateDoc(doc(db, 'users', uid), update);
-    showToast(`✅ User diupdate ke ${plan}${plan==='premium'?' (+30 hari)':''}`);
+    showToast(`✅ User diupdate ke ${plan}${plan==='premium'?' dengan expired baru':''}`);
     await loadUsers();
   } catch(e) {
     showToast('Gagal: ' + e.message);
@@ -271,9 +280,7 @@ window.loadOrders = async function() {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({...d.data(), docId: d.id}));
 
-    const pending = allOrders.filter(o => o.status === 'pending').length;
-    document.getElementById('statPending').textContent = pending;
-
+    document.getElementById('statPending').textContent = allOrders.filter(o => o.status === 'pending').length;
     renderOrders(allOrders);
   } catch(e) {
     document.getElementById('ordersBody').innerHTML = `<tr><td colspan="8" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`;
@@ -300,7 +307,7 @@ function renderOrders(orders) {
       <td><span class="badge ${isPending?'pending':'paid'}">${isPending?'Pending':'Paid'}</span></td>
       <td>
         ${isPending
-          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}','${o.uid}','${o.paket}', this)">✓ Konfirmasi</button>`
+          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}', this)">✓ Konfirmasi</button>`
           : `<span style="font-size:12px;color:#aaa">Lunas</span>`
         }
       </td>
@@ -308,37 +315,16 @@ function renderOrders(orders) {
   }).join('');
 }
 
-// ── Konfirmasi bayar ───────────────────────────────────
-window.confirmPaid = async function(orderId, uid, paket, btn) {
-  const isBulanan = paket.toLowerCase().includes('bulanan');
-  const msg = isBulanan
-    ? 'Konfirmasi pembayaran ini? Plan user akan otomatis diupdate ke Premium +30 hari.'
-    : `Konfirmasi pembayaran ini? User akan tercatat sudah membeli ${paket}.`;
-  if (!confirm(msg)) return;
+// ── Konfirmasi bayar — hanya update status order ───────
+window.confirmPaid = async function(orderId, btn) {
+  if (!confirm('Konfirmasi pembayaran ini sudah diterima?')) return;
   btn.disabled = true; btn.textContent = '...';
-
   try {
-    // 1. Update order → paid
     await updateDoc(doc(db, 'orders', orderId), { status: 'paid' });
-
-    // 2. Kalau bulanan → set premium + expiredAt
-    if (isBulanan) {
-      const exp = new Date();
-      exp.setDate(exp.getDate() + 30);
-      await updateDoc(doc(db, 'users', uid), {
-        plan: 'premium',
-        expiredAt: Timestamp.fromDate(exp)
-      });
-      showToast('✅ Pembayaran dikonfirmasi! User sudah Premium 30 hari.');
-    } else {
-      // Bundling/à la carte → cukup catat order paid, plan tetap free
-      showToast('✅ Pembayaran dikonfirmasi! Akses sub-bab aktif.');
-    }
-
-    await Promise.all([loadOrders(), loadUsers()]);
-
+    showToast('✅ Pembayaran dikonfirmasi! Jangan lupa update plan user di tab Users.');
+    await loadOrders();
   } catch(e) {
-    showToast('Gagal konfirmasi: ' + e.message);
+    showToast('Gagal: ' + e.message);
     btn.disabled = false; btn.textContent = '✓ Konfirmasi';
   }
 }
@@ -359,7 +345,7 @@ window.switchTab = function(el, tab) {
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3000);
+  setTimeout(() => t.style.display = 'none', 3500);
 }
 
 let revealed = false;
