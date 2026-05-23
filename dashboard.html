@@ -43,7 +43,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── FLASH BANNER ── */
     #flashBanner {
       background: var(--red);
       color: #fff;
@@ -57,7 +56,6 @@
     #flashBanner span { color: var(--gold-border); }
     #flashTimer { font-weight: 800; color: #ffe066; }
 
-    /* ── NAV ── */
     nav {
       background: var(--white);
       border-bottom: 1px solid var(--border);
@@ -72,530 +70,150 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .nav-logo {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--red);
-      letter-spacing: -0.3px;
-    }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px; color: var(--red); letter-spacing: -0.3px; }
     .nav-logo span { color: var(--text); }
-
     .nav-right { display: flex; align-items: center; gap: 12px; }
-
-    #navName {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-    }
+    #navName { font-size: 13px; font-weight: 600; color: var(--muted); }
 
     .btn-logout {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 7px 16px;
-      cursor: pointer;
-      transition: all 0.18s;
+      font-size: 13px; font-weight: 600; color: var(--muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 50px; padding: 7px 16px; cursor: pointer; transition: all 0.18s;
     }
     .btn-logout:hover { background: var(--border); color: var(--text); }
 
-    /* ── LOADING ── */
     #loadingScreen {
-      position: fixed; inset: 0;
-      background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px; z-index: 200;
-      transition: opacity 0.35s;
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 16px; z-index: 200; transition: opacity 0.35s;
     }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--red);
-      border-radius: 50%;
-      animation: spin 0.75s linear infinite;
-    }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    /* ── MAIN ── */
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 20px 120px;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.45s, transform 0.45s;
-    }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 20px 120px; opacity: 0; transform: translateY(12px); transition: opacity 0.45s, transform 0.45s; }
     main.visible { opacity: 1; transform: none; }
 
-    /* ── HERO GREETING ── */
-    .hero {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px 28px 24px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .hero { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px 28px 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .hero-left h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; color: var(--text); }
+    .hero-left p { margin-top: 6px; font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    .hero-left h1 {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      color: var(--text);
-    }
-
-    .hero-left p {
-      margin-top: 6px;
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .plan-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 18px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: 700;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .plan-badge.free {
-      background: var(--blue-bg);
-      border: 1.5px solid #c2d6f5;
-      color: var(--blue);
-    }
-    .plan-badge.premium {
-      background: var(--gold-bg);
-      border: 1.5px solid var(--gold-border);
-      color: #b07008;
-    }
-    .plan-badge .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: currentColor;
-      animation: blink 2s ease-in-out infinite;
-    }
+    .plan-badge { display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+    .plan-badge.free { background: var(--blue-bg); border: 1.5px solid #c2d6f5; color: var(--blue); }
+    .plan-badge.premium { background: var(--gold-bg); border: 1.5px solid var(--gold-border); color: #b07008; }
+    .plan-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-    /* ── STATS GRID ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 20px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
     @media(max-width: 680px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
 
-    .stat-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 18px 16px;
-      box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; }
     .stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+    .stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
+    .stat-sub { margin-top: 4px; font-size: 11px; color: var(--muted2); font-weight: 500; }
 
-    .stat-icon {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      margin-bottom: 12px;
-    }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .stat-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+    .card-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
-    .stat-value {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-      color: var(--text);
-    }
+    .ref-code-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .ref-code-box { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; letter-spacing: 3px; color: var(--red); background: #fff5f5; border: 2px dashed #f5b8b5; border-radius: 10px; padding: 10px 20px; }
 
-    .stat-sub {
-      margin-top: 4px;
-      font-size: 11px;
-      color: var(--muted2);
-      font-weight: 500;
-    }
-
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── CARD ── */
-    .card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px 24px;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* ── REFERRAL ── */
-    .ref-code-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .ref-code-box {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: 3px;
-      color: var(--red);
-      background: #fff5f5;
-      border: 2px dashed #f5b8b5;
-      border-radius: 10px;
-      padding: 10px 20px;
-    }
-
-    .btn-sm {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 9px 18px;
-      border-radius: 50px;
-      border: 1.5px solid var(--border);
-      background: var(--surface2);
-      color: var(--text);
-      cursor: pointer;
-      transition: all 0.18s;
-      white-space: nowrap;
-    }
+    .btn-sm { display: inline-flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 50px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
     .btn-sm:hover { background: var(--border); }
     .btn-sm.red { background: var(--red); color: #fff; border-color: var(--red); }
     .btn-sm.red:hover { background: var(--red2); border-color: var(--red2); }
     .btn-sm.copied { background: var(--green-bg); color: var(--green); border-color: #a3e0c0; }
 
-    .ref-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .ref-stat {
-      background: var(--surface2);
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
+    .ref-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+    .ref-stat { background: var(--surface2); border-radius: 12px; padding: 14px 16px; }
     .ref-stat .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
     .ref-stat .val { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
     .ref-stat .val.green { color: var(--green); }
 
-    /* ── FREE: PAKET GRID ── */
-    .paket-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .paket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width: 500px) { .paket-grid { grid-template-columns: 1fr; } }
 
-    .paket-item {
-      background: var(--surface2);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.18s;
-      position: relative;
-      overflow: hidden;
-    }
+    .paket-item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.18s; position: relative; overflow: hidden; }
     .paket-item:hover { border-color: var(--red); box-shadow: 0 0 0 3px rgba(217,48,37,0.07); transform: translateY(-2px); }
-    .paket-item.popular {
-      border-color: var(--gold);
-      background: var(--gold-bg);
-    }
+    .paket-item.popular { border-color: var(--gold); background: var(--gold-bg); }
     .paket-item.popular:hover { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,151,10,0.1); }
-
-    .popular-tag {
-      position: absolute;
-      top: 0; right: 0;
-      background: var(--gold);
-      color: #fff;
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.6px;
-      padding: 4px 10px;
-      border-radius: 0 14px 0 10px;
-    }
-
+    .popular-tag { position: absolute; top: 0; right: 0; background: var(--gold); color: #fff; font-size: 9px; font-weight: 800; letter-spacing: 0.6px; padding: 4px 10px; border-radius: 0 14px 0 10px; }
     .paket-nama { font-size: 13px; font-weight: 700; color: var(--text); }
     .paket-soal { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; }
     .paket-harga { margin-top: 10px; font-size: 18px; font-weight: 800; color: var(--red); letter-spacing: -0.5px; }
     .paket-harga span { font-size: 12px; font-weight: 500; color: var(--muted); }
-
-    .btn-beli {
-      width: 100%;
-      margin-top: 10px;
-      padding: 9px;
-      border-radius: 8px;
-      border: none;
-      background: var(--red);
-      color: #fff;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.18s;
-    }
+    .btn-beli { width: 100%; margin-top: 10px; padding: 9px; border-radius: 8px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.18s; }
     .btn-beli:hover { background: var(--red2); }
     .paket-item.popular .btn-beli { background: var(--gold); }
     .paket-item.popular .btn-beli:hover { background: #c97d06; }
 
-    /* ── SOAL BAR ── */
     .soal-bar-wrap { margin-top: 10px; }
     .soal-bar-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 7px; }
     .soal-bar { height: 8px; border-radius: 50px; background: var(--surface2); overflow: hidden; }
     .soal-bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--red), #f56058); transition: width 0.9s cubic-bezier(0.4,0,0.2,1); }
 
-    /* ── PREMIUM BANNER ── */
-    .premium-banner {
-      background: linear-gradient(135deg, #fffbf0, #fff8e0);
-      border: 1.5px solid var(--gold-border);
-      border-radius: 16px;
-      padding: 20px 22px;
-      margin-bottom: 14px;
-      position: relative;
-      overflow: hidden;
-    }
-    .premium-banner::before {
-      content: '⭐';
-      position: absolute;
-      right: 20px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 56px;
-      opacity: 0.12;
-    }
+    .premium-banner { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 1.5px solid var(--gold-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
+    .premium-banner::before { content: '⭐'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 56px; opacity: 0.12; }
     .premium-banner h3 { font-size: 15px; font-weight: 800; color: #8a5e00; }
     .premium-banner p { font-size: 13px; color: #9a7020; margin-top: 4px; line-height: 1.5; font-weight: 500; }
+    .expiry-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; }
 
-    .expiry-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 14px;
-      border-radius: 50px;
-      background: var(--gold-bg);
-      border: 1px solid var(--gold-border);
-      color: #8a5e00;
-    }
-
-    /* ── ACCESS LIST ── */
     .access-list { display: flex; flex-direction: column; gap: 8px; }
-    .access-item {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--surface2);
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .access-item .check {
-      width: 22px; height: 22px;
-      background: var(--green-bg);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--green);
-      font-size: 12px;
-      flex-shrink: 0;
-    }
+    .access-item { display: flex; align-items: center; gap: 10px; background: var(--surface2); border-radius: 10px; padding: 11px 14px; font-size: 13px; font-weight: 600; color: var(--text); }
+    .access-item .check { width: 22px; height: 22px; background: var(--green-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 12px; flex-shrink: 0; }
 
-    /* ── UPGRADE CTA ── */
-    .upgrade-cta {
-      background: var(--red);
-      border-radius: 20px;
-      padding: 24px 26px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .upgrade-cta { background: var(--red); border-radius: 20px; padding: 24px 26px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     .upgrade-cta h3 { font-size: 17px; font-weight: 800; color: #fff; }
     .upgrade-cta p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
-
-    .btn-upgrade {
-      flex-shrink: 0;
-      padding: 12px 28px;
-      border-radius: 50px;
-      border: none;
-      background: #fff;
-      color: var(--red);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.18s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
+    .btn-upgrade { flex-shrink: 0; padding: 12px 28px; border-radius: 50px; border: none; background: #fff; color: var(--red); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
     .btn-upgrade:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
-    /* ── ORDER LIST ── */
     .order-list { display: flex; flex-direction: column; gap: 10px; }
-    .order-item {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--surface2);
-      border-radius: 12px;
-      padding: 13px 16px;
-    }
+    .order-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 12px; padding: 13px 16px; }
     .order-info { flex: 1; min-width: 0; }
     .order-paket { font-size: 13px; font-weight: 700; color: var(--text); }
     .order-date { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
     .order-total { font-size: 14px; font-weight: 800; color: var(--text); white-space: nowrap; }
-
-    .status-pill {
-      font-size: 10px; font-weight: 700;
-      letter-spacing: 0.3px; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 50px;
-      white-space: nowrap;
-    }
+    .status-pill { font-size: 10px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; padding: 4px 10px; border-radius: 50px; white-space: nowrap; }
     .status-pill.paid { background: var(--green-bg); color: var(--green); }
     .status-pill.pending { background: var(--gold-bg); color: var(--gold); }
     .status-pill.failed { background: #fef2f2; color: var(--red); }
+    .empty-state { text-align: center; padding: 28px; color: var(--muted2); font-size: 13px; font-weight: 500; }
 
-    .empty-state {
-      text-align: center; padding: 28px;
-      color: var(--muted2); font-size: 13px; font-weight: 500;
-    }
-
-    /* ── PROFILE ── */
-    .profile-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-    }
+    .profile-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .profile-row:last-child { border-bottom: none; }
     .profile-row .lbl { color: var(--muted); font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
     .profile-row .val { font-weight: 700; color: var(--text); word-break: break-all; }
 
-    /* ── STICKY CTA ── */
-    #stickyCta {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: var(--white);
-      border-top: 1px solid var(--border);
-      padding: 12px 20px;
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      z-index: 90;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-    }
+    #stickyCta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 20px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 90; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
     #stickyCta .info { font-size: 13px; }
     #stickyCta .info strong { font-weight: 800; color: var(--red); font-size: 15px; }
     #stickyCta .info span { color: var(--muted); font-weight: 500; font-size: 12px; display: block; }
-    .btn-sticky {
-      padding: 12px 28px;
-      border-radius: 50px;
-      border: none;
-      background: var(--red);
-      color: #fff;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.18s;
-    }
+    .btn-sticky { padding: 12px 28px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.18s; }
     .btn-sticky:hover { background: var(--red2); }
 
-    /* ── TOAST ── */
-    #toast {
-      position: fixed; bottom: 80px; left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: var(--text); color: #fff;
-      border-radius: 50px;
-      padding: 10px 22px;
-      font-size: 13px; font-weight: 600;
-      opacity: 0; transition: all 0.25s;
-      pointer-events: none; z-index: 999;
-      white-space: nowrap;
-      box-shadow: var(--shadow);
-    }
+    #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 22px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── TWO COL ── */
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     @media(max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
-    /* ── STAGGER ── */
     [data-s] { opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.4s; }
     [data-s].in { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
 
-<!-- FLASH BANNER (free only) -->
 <div id="flashBanner">
-  ⚡ PROMO TERBATAS: Hemat <span>Rp150.000</span> untuk Premium Bulanan — Berakhir dalam <span id="flashTimer">05:00:00</span>
+  ⚡ PROMO TERBATAS: Hemat <span>Rp50.000</span> untuk Premium Bulanan — Berakhir dalam <span id="flashTimer">05:00:00</span>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">Cerdas<span>Bersama</span></div>
   <div class="nav-right">
@@ -604,16 +222,13 @@
   </div>
 </nav>
 
-<!-- LOADING -->
 <div id="loadingScreen">
   <div class="spinner"></div>
   <p>Memuat dashboard…</p>
 </div>
 
-<!-- MAIN -->
 <main id="mainContent">
 
-  <!-- HERO -->
   <div class="hero" data-s>
     <div class="hero-left">
       <h1 id="greetText">Halo! 👋</h1>
@@ -622,7 +237,6 @@
     <div id="planBadgeWrap"></div>
   </div>
 
-  <!-- STATS -->
   <div class="stats-grid" data-s style="transition-delay:.06s">
     <div class="stat-card">
       <div class="stat-icon" style="background:#fff0ef">📝</div>
@@ -650,7 +264,6 @@
     </div>
   </div>
 
-  <!-- REFERRAL -->
   <div class="section-label" data-s style="transition-delay:.12s">🔗 Referral Kamu</div>
   <div class="card" data-s style="transition-delay:.14s">
     <div class="card-title">Kode & Link Referral</div>
@@ -677,10 +290,8 @@
     </div>
   </div>
 
-  <!-- DYNAMIC SECTION -->
   <div id="dynamicSection"></div>
 
-  <!-- ORDER HISTORY -->
   <div class="section-label" data-s style="transition-delay:.28s">🧾 Riwayat Order</div>
   <div class="card" data-s style="transition-delay:.3s">
     <div class="order-list" id="orderList">
@@ -688,7 +299,6 @@
     </div>
   </div>
 
-  <!-- PROFILE -->
   <div class="section-label" data-s style="transition-delay:.36s">👤 Profil Saya</div>
   <div class="card" data-s style="transition-delay:.38s">
     <div id="profileInfo"></div>
@@ -696,19 +306,16 @@
 
 </main>
 
-<!-- STICKY CTA (free only) -->
 <div id="stickyCta">
   <div class="info">
     <strong>Upgrade Premium</strong>
-    <span>Rp99.000/bln • Akses semua soal TWK, TIU, TKP & SKB</span>
+    <span>Rp99.900/bln • Akses semua soal Matematika, IPAS & B.Inggris</span>
   </div>
   <button class="btn-sticky" onclick="location.href='/pricing.html'">Upgrade →</button>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -718,9 +325,7 @@
   try {
     const mod = await import('./firebase-config.js');
     firebaseConfig = mod.firebaseConfig || mod.default;
-  } catch {
-    firebaseConfig = window._fbConfig || {};
-  }
+  } catch { firebaseConfig = window._fbConfig || {}; }
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -741,7 +346,6 @@
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // Flash timer (5 hours countdown)
   function startFlashTimer() {
     let secs = 5 * 3600;
     const el = $('flashTimer');
@@ -801,10 +405,7 @@
     const nama = ud.nama || user.email;
     const namaFirst = nama.split(' ')[0];
 
-    // Nav
     $('navName').textContent = namaFirst;
-
-    // Hero
     $('greetText').textContent = `Halo, ${namaFirst}! 👋`;
     $('greetSub').textContent = isPremium
       ? 'Akses penuh aktif — selamat belajar tanpa batas!'
@@ -815,7 +416,6 @@
     badge.innerHTML = `<span class="dot"></span>${isPremium ? '⭐ Akun Premium' : '🆓 Akun Gratis'}`;
     $('planBadgeWrap').appendChild(badge);
 
-    // Stats
     $('statSoal').textContent = ud.soalGratis ?? 3;
     $('statKomisi').textContent = fmtRp(ud.komisiTotal || 0);
     $('statPlan').textContent = isPremium ? '⭐ Premium' : '🆓 Free';
@@ -829,7 +429,6 @@
       $('statExpiry').textContent = isPremium ? 'Aktif' : 'Upgrade untuk akses penuh';
     }
 
-    // Referral
     const code = ud.referralCode || '';
     $('refCodeBig').textContent = code || '—';
     $('refCount').textContent = refCount;
@@ -848,11 +447,10 @@
       });
     });
     $('btnCopyWA').addEventListener('click', () => {
-      const msg = `Halo! Aku belajar CPNS di CerdasBersama. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
+      const msg = `Halo! Aku pakai CerdasBersama buat belajar soal SD Kelas 6. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
 
-    // Dynamic Section
     const ds = $('dynamicSection');
     if (isPremium) {
       const exp = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
@@ -864,7 +462,7 @@
         <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
         <div class="premium-banner" data-s style="transition-delay:.22s">
           <h3>✨ Akses Premium Aktif</h3>
-          <p>Kamu punya akses penuh ke semua bank soal CPNS & PPPK tanpa batas waktu per sesi.</p>
+          <p>Kamu punya akses penuh ke semua soal Matematika, IPAS & B.Inggris tanpa batas waktu per sesi.</p>
           <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
           ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:6px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
         </div>
@@ -872,7 +470,7 @@
           <div class="card" style="margin-bottom:0">
             <div class="card-title">📚 Materi Tersedia</div>
             <div class="access-list">
-              ${['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi','SKB — Kompetensi Bidang'].map(m =>
+              ${['Matematika — Semua Sub-Bab','IPAS — Semua Sub-Bab','B.Inggris — Semua Sub-Bab'].map(m =>
                 `<div class="access-item"><div class="check">✓</div>${m}</div>`
               ).join('')}
             </div>
@@ -887,7 +485,6 @@
           </div>
         </div>`;
     } else {
-      // FREE
       const soalGratis = ud.soalGratis ?? 3;
       const maxSoal = 3;
       const pct = Math.max(0, Math.min(100, (soalGratis / maxSoal) * 100));
@@ -897,10 +494,10 @@
       startFlashTimer();
 
       const pakets = [
-        { nama: 'Starter Pack', soal: 20, harga: 15000, popular: false },
-        { nama: 'Value Pack', soal: 50, harga: 29000, popular: true },
-        { nama: 'Pro Pack', soal: 100, harga: 49000, popular: false },
-        { nama: 'Ultimate Pack', soal: 200, harga: 79000, popular: false },
+        { nama: 'Bundling 3', soal: '3 sub-bab', harga: 21900, popular: false },
+        { nama: 'Bundling 5', soal: '5 sub-bab', harga: 34900, popular: true },
+        { nama: 'Bundling 10', soal: '10 sub-bab', harga: 64900, popular: false },
+        { nama: 'Bulanan', soal: 'Semua mapel', harga: 99900, popular: false },
       ];
 
       ds.innerHTML = `
@@ -922,14 +519,14 @@
             </p>
           </div>
           <div class="card" style="margin-bottom:0">
-            <div class="card-title">📦 Beli À La Carte</div>
+            <div class="card-title">📦 Beli Paket</div>
             <div class="paket-grid" id="paketGrid"></div>
           </div>
         </div>
         <div class="upgrade-cta" data-s style="transition-delay:.28s">
           <div>
             <h3>🚀 Upgrade ke Premium Bulanan</h3>
-            <p>Mulai Rp99.000/bln — akses semua soal TWK, TIU, TKP & SKB tanpa batas. Ribuan soal siap dikerjakan!</p>
+            <p>Mulai Rp99.900/bln — akses semua soal Matematika, IPAS & B.Inggris tanpa batas!</p>
           </div>
           <button class="btn-upgrade" onclick="location.href='/pricing.html'">Lihat Paket →</button>
         </div>`;
@@ -947,15 +544,14 @@
           div.innerHTML = `
             ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
             <div class="paket-nama">${p.nama}</div>
-            <div class="paket-soal">${p.soal} soal</div>
+            <div class="paket-soal">${p.soal}</div>
             <div class="paket-harga">${fmtRp(p.harga)} <span>sekali bayar</span></div>
-            <button class="btn-beli" onclick="location.href='/pricing.html?paket=${encodeURIComponent(p.nama)}'">Beli Sekarang</button>`;
+            <button class="btn-beli" onclick="location.href='/pricing.html'">Beli Sekarang</button>`;
           grid.appendChild(div);
         });
       }
     }
 
-    // Orders
     const list = $('orderList');
     if (!orders.length) {
       list.innerHTML = '<div class="empty-state">Belum ada riwayat order.</div>';
@@ -974,7 +570,6 @@
       }).join('');
     }
 
-    // Profile
     $('profileInfo').innerHTML = [
       { lbl: 'Nama', val: ud.nama || '—' },
       { lbl: 'Email', val: user.email },
