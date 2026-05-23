@@ -608,7 +608,7 @@
 
     const opsiList = $('opsiList');
     opsiList.innerHTML = '';
-    Object.entries(soal.opsi).forEach(([key, val]) => {
+    ['A','B','C','D','E'].filter(k => soal.opsi[k] !== undefined).forEach(key => { const val = soal.opsi[key];
       const div = document.createElement('div');
       div.className = 'opsi-item';
       div.dataset.key = key;
