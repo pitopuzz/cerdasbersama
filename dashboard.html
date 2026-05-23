@@ -5,693 +5,705 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — CerdasBersama</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,600;1,500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0d0f14;
-      --surface: #161920;
-      --surface2: #1e2229;
-      --border: #2a2f3a;
-      --border2: #363d4a;
-      --text: #eef0f5;
-      --muted: #7a8299;
-      --accent: #4f8ef7;
-      --accent2: #7c5af7;
-      --gold: #f5c842;
-      --gold2: #e8a020;
-      --green: #3ecf8e;
-      --red: #f76060;
-      --premium-glow: rgba(124, 90, 247, 0.18);
-      --free-glow: rgba(79, 142, 247, 0.12);
+      --bg: #faf8f5;
+      --white: #ffffff;
+      --surface: #ffffff;
+      --surface2: #f5f3ef;
+      --border: #e8e4dc;
+      --border2: #d4cfc5;
+      --text: #1a1714;
+      --muted: #7a7168;
+      --muted2: #b0a89c;
+      --red: #d93025;
+      --red2: #c12820;
+      --gold: #e8970a;
+      --gold-bg: #fff8e6;
+      --gold-border: #f5d06a;
+      --green: #1a7a4a;
+      --green-bg: #edfaf3;
+      --blue: #1a5fb4;
+      --blue-bg: #eef3fc;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
+      --radius: 16px;
+      --radius-sm: 10px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── BG MESH ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 800px 600px at 10% 10%, rgba(79,142,247,0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 600px 500px at 90% 80%, rgba(124,90,247,0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+    /* ── FLASH BANNER ── */
+    #flashBanner {
+      background: var(--red);
+      color: #fff;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1px;
+      display: none;
     }
+    #flashBanner span { color: var(--gold-border); }
+    #flashTimer { font-weight: 800; color: #ffe066; }
 
     /* ── NAV ── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 32px;
-      height: 60px;
-      background: rgba(13,15,20,0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
     }
 
     .nav-logo {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-weight: 800;
-      font-size: 17px;
+      font-size: 18px;
+      color: var(--red);
       letter-spacing: -0.3px;
-      background: linear-gradient(135deg, #4f8ef7, #7c5af7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
+    .nav-logo span { color: var(--text); }
 
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
 
     #navName {
       font-size: 13px;
+      font-weight: 600;
       color: var(--muted);
     }
 
     .btn-logout {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--muted);
-      background: none;
+      background: var(--surface2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 6px 14px;
+      border-radius: 50px;
+      padding: 7px 16px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s;
     }
-    .btn-logout:hover { color: var(--text); border-color: var(--border2); }
+    .btn-logout:hover { background: var(--border); color: var(--text); }
 
     /* ── LOADING ── */
     #loadingScreen {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      z-index: 200;
-      transition: opacity 0.4s;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 200;
+      transition: opacity 0.35s;
     }
-
     .spinner {
-      width: 40px;
-      height: 40px;
+      width: 36px; height: 36px;
       border: 3px solid var(--border);
-      border-top-color: var(--accent);
+      border-top-color: var(--red);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.75s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    #loadingScreen p {
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    /* ── MAIN WRAPPER ── */
+    /* ── MAIN ── */
     main {
-      position: relative;
-      z-index: 1;
-      max-width: 1080px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 32px 20px 120px;
       opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.5s, transform 0.5s;
+      transform: translateY(12px);
+      transition: opacity 0.45s, transform 0.45s;
     }
     main.visible { opacity: 1; transform: none; }
 
-    /* ── HEADER BAND ── */
-    .dash-header {
+    /* ── HERO GREETING ── */
+    .hero {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 32px;
       flex-wrap: wrap;
     }
 
-    .dash-greeting h1 {
-      font-family: 'Syne', sans-serif;
+    .hero-left h1 {
       font-size: 26px;
       font-weight: 800;
-      line-height: 1.2;
       letter-spacing: -0.5px;
+      line-height: 1.2;
+      color: var(--text);
     }
 
-    .dash-greeting p {
+    .hero-left p {
       margin-top: 6px;
       font-size: 14px;
       color: var(--muted);
+      font-weight: 500;
     }
 
-    /* ── PLAN BADGE ── */
     .plan-badge {
       display: inline-flex;
       align-items: center;
       gap: 7px;
-      padding: 7px 16px;
+      padding: 8px 18px;
       border-radius: 50px;
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-
     .plan-badge.free {
-      background: rgba(79,142,247,0.12);
-      border: 1px solid rgba(79,142,247,0.3);
-      color: var(--accent);
+      background: var(--blue-bg);
+      border: 1.5px solid #c2d6f5;
+      color: var(--blue);
     }
-
     .plan-badge.premium {
-      background: linear-gradient(135deg, rgba(245,200,66,0.15), rgba(124,90,247,0.15));
-      border: 1px solid rgba(245,200,66,0.35);
-      color: var(--gold);
+      background: var(--gold-bg);
+      border: 1.5px solid var(--gold-border);
+      color: #b07008;
     }
-
     .plan-badge .dot {
-      width: 7px; height: 7px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: currentColor;
-      animation: pulse 2s ease-in-out infinite;
+      animation: blink 2s ease-in-out infinite;
     }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-    /* ── STAT CARDS ── */
+    /* ── STATS GRID ── */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
     }
+    @media(max-width: 680px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
 
     .stat-card {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.25s, transform 0.2s;
+      border-radius: var(--radius);
+      padding: 18px 18px 16px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, transform 0.2s;
     }
-    .stat-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
 
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--accent-line, linear-gradient(90deg, var(--accent), var(--accent2)));
+    .stat-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      margin-bottom: 12px;
     }
 
     .stat-label {
       font-size: 11px;
-      font-weight: 500;
+      font-weight: 700;
       color: var(--muted);
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
     }
 
     .stat-value {
-      font-family: 'Syne', sans-serif;
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 800;
-      line-height: 1;
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      color: var(--text);
     }
 
     .stat-sub {
-      margin-top: 6px;
-      font-size: 12px;
-      color: var(--muted);
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--muted2);
+      font-weight: 500;
     }
 
-    /* ── SECTION TITLE ── */
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: -0.2px;
-      margin-bottom: 16px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .section-title::after {
+    .section-label::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--border);
     }
 
-    /* ── TWO-COLUMN LAYOUT ── */
-    .dash-cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    @media(max-width: 700px) { .dash-cols { grid-template-columns: 1fr; } }
-
-    /* ── CARD BASE ── */
+    /* ── CARD ── */
     .card {
-      background: var(--surface);
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 24px;
-      transition: border-color 0.25s;
-    }
-    .card:hover { border-color: var(--border2); }
-
-    /* ── REFERRAL CARD ── */
-    .referral-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 20px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
     }
 
-    .ref-code-display {
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-top: 14px;
+      gap: 8px;
+    }
+
+    /* ── REFERRAL ── */
+    .ref-code-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .ref-code-box {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
       font-weight: 800;
       letter-spacing: 3px;
-      color: var(--accent);
-      background: rgba(79,142,247,0.08);
-      border: 1px dashed rgba(79,142,247,0.4);
+      color: var(--red);
+      background: #fff5f5;
+      border: 2px dashed #f5b8b5;
       border-radius: 10px;
       padding: 10px 20px;
     }
 
-    .btn-copy {
-      font-family: 'DM Sans', sans-serif;
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 13px;
-      font-weight: 500;
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: 1px solid var(--border2);
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
       background: var(--surface2);
       color: var(--text);
       cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      transition: all 0.18s;
+      white-space: nowrap;
     }
-    .btn-copy:hover { background: var(--border); }
-    .btn-copy.copied { color: var(--green); border-color: rgba(62,207,142,0.4); }
+    .btn-sm:hover { background: var(--border); }
+    .btn-sm.red { background: var(--red); color: #fff; border-color: var(--red); }
+    .btn-sm.red:hover { background: var(--red2); border-color: var(--red2); }
+    .btn-sm.copied { background: var(--green-bg); color: var(--green); border-color: #a3e0c0; }
 
     .ref-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
-    .ref-stat-item {
+    .ref-stat {
       background: var(--surface2);
       border-radius: 12px;
       padding: 14px 16px;
     }
-    .ref-stat-item .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .ref-stat-item .val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-top: 4px; }
-    .ref-stat-item .val.green { color: var(--green); }
+    .ref-stat .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .ref-stat .val { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
+    .ref-stat .val.green { color: var(--green); }
 
-    /* ── FREE PLAN: PAKET BUNDLING ── */
+    /* ── FREE: PAKET GRID ── */
     .paket-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
+    @media(max-width: 500px) { .paket-grid { grid-template-columns: 1fr; } }
 
     .paket-item {
       background: var(--surface2);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       border-radius: 14px;
       padding: 16px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.18s;
       position: relative;
       overflow: hidden;
     }
-    .paket-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .paket-item.popular::before {
-      content: 'POPULER';
+    .paket-item:hover { border-color: var(--red); box-shadow: 0 0 0 3px rgba(217,48,37,0.07); transform: translateY(-2px); }
+    .paket-item.popular {
+      border-color: var(--gold);
+      background: var(--gold-bg);
+    }
+    .paket-item.popular:hover { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,151,10,0.1); }
+
+    .popular-tag {
       position: absolute;
-      top: 10px; right: -22px;
+      top: 0; right: 0;
       background: var(--gold);
-      color: #000;
+      color: #fff;
       font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      padding: 3px 28px;
-      transform: rotate(45deg);
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      padding: 4px 10px;
+      border-radius: 0 14px 0 10px;
     }
 
-    .paket-nama { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-    .paket-soal { font-size: 11px; color: var(--muted); }
-    .paket-harga {
-      margin-top: 10px;
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--accent);
-    }
-    .paket-harga span { font-size: 12px; font-weight: 400; color: var(--muted); }
+    .paket-nama { font-size: 13px; font-weight: 700; color: var(--text); }
+    .paket-soal { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+    .paket-harga { margin-top: 10px; font-size: 18px; font-weight: 800; color: var(--red); letter-spacing: -0.5px; }
+    .paket-harga span { font-size: 12px; font-weight: 500; color: var(--muted); }
 
     .btn-beli {
       width: 100%;
       margin-top: 10px;
-      padding: 8px;
+      padding: 9px;
       border-radius: 8px;
       border: none;
-      background: var(--accent);
+      background: var(--red);
       color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 600;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: background 0.18s;
     }
-    .btn-beli:hover { opacity: 0.85; }
+    .btn-beli:hover { background: var(--red2); }
+    .paket-item.popular .btn-beli { background: var(--gold); }
+    .paket-item.popular .btn-beli:hover { background: #c97d06; }
 
-    /* ── PREMIUM: SOAL AKSES ── */
+    /* ── SOAL BAR ── */
+    .soal-bar-wrap { margin-top: 10px; }
+    .soal-bar-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 7px; }
+    .soal-bar { height: 8px; border-radius: 50px; background: var(--surface2); overflow: hidden; }
+    .soal-bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--red), #f56058); transition: width 0.9s cubic-bezier(0.4,0,0.2,1); }
+
+    /* ── PREMIUM BANNER ── */
     .premium-banner {
-      background: linear-gradient(135deg, #1a1430, #110f20);
-      border: 1px solid rgba(124,90,247,0.3);
-      border-radius: 20px;
-      padding: 24px;
-      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fffbf0, #fff8e0);
+      border: 1.5px solid var(--gold-border);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 14px;
       position: relative;
       overflow: hidden;
     }
-
     .premium-banner::before {
-      content: '';
+      content: '⭐';
       position: absolute;
-      top: -60px; right: -60px;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(124,90,247,0.25), transparent 70%);
-      pointer-events: none;
+      right: 20px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 56px;
+      opacity: 0.12;
     }
+    .premium-banner h3 { font-size: 15px; font-weight: 800; color: #8a5e00; }
+    .premium-banner p { font-size: 13px; color: #9a7020; margin-top: 4px; line-height: 1.5; font-weight: 500; }
 
-    .premium-banner h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-
-    .premium-banner p {
-      font-size: 13px;
-      color: #a89fcc;
-      line-height: 1.5;
-    }
-
-    .expired-badge {
+    .expiry-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: 12px;
+      margin-top: 10px;
       font-size: 12px;
-      padding: 5px 12px;
+      font-weight: 700;
+      padding: 5px 14px;
       border-radius: 50px;
-      background: rgba(245,200,66,0.1);
-      border: 1px solid rgba(245,200,66,0.25);
-      color: var(--gold);
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-border);
+      color: #8a5e00;
     }
 
-    /* ── SOAL GRATIS SISA ── */
-    .soal-bar-wrap {
-      margin-top: 12px;
-    }
-    .soal-bar-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .soal-bar {
-      height: 6px;
-      border-radius: 50px;
-      background: var(--border);
-      overflow: hidden;
-    }
-    .soal-bar-fill {
-      height: 100%;
-      border-radius: 50px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
-    }
-
-    /* ── RIWAYAT ORDER ── */
-    .order-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .order-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* ── ACCESS LIST ── */
+    .access-list { display: flex; flex-direction: column; gap: 8px; }
+    .access-item {
+      display: flex; align-items: center; gap: 10px;
       background: var(--surface2);
-      border-radius: 12px;
-      padding: 14px 16px;
-      gap: 12px;
-    }
-
-    .order-info { flex: 1; min-width: 0; }
-    .order-paket { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .order-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .order-total { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; white-space: nowrap; }
-
-    .status-pill {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 50px;
-      white-space: nowrap;
-    }
-    .status-pill.paid { background: rgba(62,207,142,0.12); color: var(--green); }
-    .status-pill.pending { background: rgba(245,200,66,0.12); color: var(--gold); }
-    .status-pill.failed { background: rgba(247,96,96,0.12); color: var(--red); }
-
-    .empty-state {
-      text-align: center;
-      padding: 32px 16px;
-      color: var(--muted);
+      border-radius: 10px;
+      padding: 11px 14px;
       font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .access-item .check {
+      width: 22px; height: 22px;
+      background: var(--green-bg);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green);
+      font-size: 12px;
+      flex-shrink: 0;
     }
 
     /* ── UPGRADE CTA ── */
     .upgrade-cta {
-      margin-top: 20px;
-      background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(124,90,247,0.1));
-      border: 1px solid rgba(124,90,247,0.25);
+      background: var(--red);
       border-radius: 20px;
-      padding: 28px;
+      padding: 24px 26px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
     }
-
-    .upgrade-cta h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 16px;
-      font-weight: 800;
-    }
-    .upgrade-cta p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
+    .upgrade-cta h3 { font-size: 17px; font-weight: 800; color: #fff; }
+    .upgrade-cta p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
 
     .btn-upgrade {
       flex-shrink: 0;
       padding: 12px 28px;
       border-radius: 50px;
       border: none;
-      background: linear-gradient(135deg, #4f8ef7, #7c5af7);
-      color: #fff;
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
+      background: #fff;
+      color: var(--red);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
-      transition: opacity 0.2s, transform 0.2s;
-      box-shadow: 0 4px 20px rgba(79,142,247,0.25);
+      transition: all 0.18s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     }
-    .btn-upgrade:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-upgrade:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
-    /* ── PROFILE INFO ── */
+    /* ── ORDER LIST ── */
+    .order-list { display: flex; flex-direction: column; gap: 10px; }
+    .order-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 13px 16px;
+    }
+    .order-info { flex: 1; min-width: 0; }
+    .order-paket { font-size: 13px; font-weight: 700; color: var(--text); }
+    .order-date { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+    .order-total { font-size: 14px; font-weight: 800; color: var(--text); white-space: nowrap; }
+
+    .status-pill {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.3px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 50px;
+      white-space: nowrap;
+    }
+    .status-pill.paid { background: var(--green-bg); color: var(--green); }
+    .status-pill.pending { background: var(--gold-bg); color: var(--gold); }
+    .status-pill.failed { background: #fef2f2; color: var(--red); }
+
+    .empty-state {
+      text-align: center; padding: 28px;
+      color: var(--muted2); font-size: 13px; font-weight: 500;
+    }
+
+    /* ── PROFILE ── */
     .profile-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 0;
       border-bottom: 1px solid var(--border);
       font-size: 13px;
     }
     .profile-row:last-child { border-bottom: none; }
-    .profile-row .lbl { color: var(--muted); width: 90px; flex-shrink: 0; }
-    .profile-row .val { font-weight: 500; word-break: break-all; }
+    .profile-row .lbl { color: var(--muted); font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
+    .profile-row .val { font-weight: 700; color: var(--text); word-break: break-all; }
+
+    /* ── STICKY CTA ── */
+    #stickyCta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 90;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+    #stickyCta .info { font-size: 13px; }
+    #stickyCta .info strong { font-weight: 800; color: var(--red); font-size: 15px; }
+    #stickyCta .info span { color: var(--muted); font-weight: 500; font-size: 12px; display: block; }
+    .btn-sticky {
+      padding: 12px 28px;
+      border-radius: 50px;
+      border: none;
+      background: var(--red);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s;
+    }
+    .btn-sticky:hover { background: var(--red2); }
 
     /* ── TOAST ── */
     #toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--surface2);
-      border: 1px solid var(--border2);
+      position: fixed; bottom: 80px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--text); color: #fff;
       border-radius: 50px;
       padding: 10px 22px;
-      font-size: 13px;
-      color: var(--text);
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-      pointer-events: none;
-      z-index: 999;
+      font-size: 13px; font-weight: 600;
+      opacity: 0; transition: all 0.25s;
+      pointer-events: none; z-index: 999;
       white-space: nowrap;
+      box-shadow: var(--shadow);
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── STAGGER ANIMATION ── */
-    [data-stagger] { opacity: 0; transform: translateY(12px); transition: opacity 0.4s, transform 0.4s; }
-    [data-stagger].in { opacity: 1; transform: none; }
+    /* ── TWO COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    @media(max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ── STAGGER ── */
+    [data-s] { opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.4s; }
+    [data-s].in { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div id="loadingScreen">
-  <div class="spinner"></div>
-  <p>Memuat dashboard kamu…</p>
+<!-- FLASH BANNER (free only) -->
+<div id="flashBanner">
+  ⚡ PROMO TERBATAS: Hemat <span>Rp150.000</span> untuk Premium Bulanan — Berakhir dalam <span id="flashTimer">05:00:00</span>
 </div>
 
 <!-- NAV -->
 <nav>
-  <span class="nav-logo">CerdasBersama</span>
+  <div class="nav-logo">Cerdas<span>Bersama</span></div>
   <div class="nav-right">
-    <span id="navName">—</span>
+    <span id="navName"></span>
     <button class="btn-logout" id="btnLogout">Keluar</button>
   </div>
 </nav>
 
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <p>Memuat dashboard…</p>
+</div>
+
 <!-- MAIN -->
 <main id="mainContent">
 
-  <!-- HEADER -->
-  <div class="dash-header" data-stagger>
-    <div class="dash-greeting">
-      <h1 id="greetText">Halo, —</h1>
-      <p id="greetSub">Selamat datang kembali di CerdasBersama.</p>
+  <!-- HERO -->
+  <div class="hero" data-s>
+    <div class="hero-left">
+      <h1 id="greetText">Halo! 👋</h1>
+      <p id="greetSub">Selamat datang di CerdasBersama.</p>
     </div>
     <div id="planBadgeWrap"></div>
   </div>
 
   <!-- STATS -->
-  <div class="stats-grid" data-stagger style="transition-delay:0.07s">
-    <div class="stat-card" style="--accent-line: linear-gradient(90deg, #4f8ef7, #7c5af7)">
-      <div class="stat-label">Soal Gratis Sisa</div>
+  <div class="stats-grid" data-s style="transition-delay:.06s">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fff0ef">📝</div>
+      <div class="stat-label">Soal Gratis</div>
       <div class="stat-value" id="statSoal">—</div>
-      <div class="stat-sub">dari kuota gratis kamu</div>
+      <div class="stat-sub">sisa kuota kamu</div>
     </div>
-    <div class="stat-card" style="--accent-line: linear-gradient(90deg, #3ecf8e, #4f8ef7)">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#edfaf3">💰</div>
       <div class="stat-label">Komisi Referral</div>
-      <div class="stat-value" id="statKomisi">—</div>
+      <div class="stat-value" id="statKomisi" style="font-size:16px">—</div>
       <div class="stat-sub">total terkumpul</div>
     </div>
-    <div class="stat-card" style="--accent-line: linear-gradient(90deg, #f5c842, #e8a020)">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#fff8e6">🏅</div>
       <div class="stat-label">Status Akun</div>
-      <div class="stat-value" id="statPlan" style="font-size:20px">—</div>
+      <div class="stat-value" id="statPlan" style="font-size:16px">—</div>
       <div class="stat-sub" id="statExpiry">—</div>
     </div>
-    <div class="stat-card" style="--accent-line: linear-gradient(90deg, #7c5af7, #f5c842)">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eef3fc">🔗</div>
       <div class="stat-label">Kode Referral</div>
-      <div class="stat-value" id="statRefCode" style="font-size:20px;letter-spacing:2px;color:var(--accent)">—</div>
-      <div class="stat-sub">bagikan ke temanmu</div>
+      <div class="stat-value" id="statRefCode" style="font-size:15px;color:var(--red);letter-spacing:1px">—</div>
+      <div class="stat-sub">bagikan ke teman</div>
     </div>
   </div>
 
-  <!-- REFERRAL CARD (full) -->
-  <div class="referral-card" data-stagger style="transition-delay:0.14s">
-    <div class="section-title">🔗 Referral Kamu</div>
-    <div class="ref-code-display">
+  <!-- REFERRAL -->
+  <div class="section-label" data-s style="transition-delay:.12s">🔗 Referral Kamu</div>
+  <div class="card" data-s style="transition-delay:.14s">
+    <div class="card-title">Kode & Link Referral</div>
+    <div class="ref-code-row">
       <div class="ref-code-box" id="refCodeBig">———</div>
-      <button class="btn-copy" id="btnCopyLink">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      <button class="btn-sm" id="btnCopyLink">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         Salin Link
       </button>
-      <button class="btn-copy" id="btnCopyWA">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      <button class="btn-sm red" id="btnCopyWA">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
         Kirim WA
       </button>
     </div>
     <div class="ref-stats">
-      <div class="ref-stat-item">
-        <div class="label">Teman Diundang</div>
+      <div class="ref-stat">
+        <div class="lbl">Teman Diundang</div>
         <div class="val" id="refCount">—</div>
       </div>
-      <div class="ref-stat-item">
-        <div class="label">Total Komisi</div>
+      <div class="ref-stat">
+        <div class="lbl">Total Komisi</div>
         <div class="val green" id="refKomisi">—</div>
       </div>
     </div>
   </div>
 
-  <!-- DYNAMIC SECTION (Free vs Premium) -->
-  <div id="dynamicSection" data-stagger style="transition-delay:0.21s"></div>
+  <!-- DYNAMIC SECTION -->
+  <div id="dynamicSection"></div>
 
   <!-- ORDER HISTORY -->
-  <div class="referral-card" data-stagger style="transition-delay:0.28s">
-    <div class="section-title">🧾 Riwayat Order</div>
+  <div class="section-label" data-s style="transition-delay:.28s">🧾 Riwayat Order</div>
+  <div class="card" data-s style="transition-delay:.3s">
     <div class="order-list" id="orderList">
       <div class="empty-state">Memuat riwayat…</div>
     </div>
   </div>
 
-  <!-- PROFILE CARD -->
-  <div class="referral-card" data-stagger style="transition-delay:0.35s">
-    <div class="section-title">👤 Profil Saya</div>
+  <!-- PROFILE -->
+  <div class="section-label" data-s style="transition-delay:.36s">👤 Profil Saya</div>
+  <div class="card" data-s style="transition-delay:.38s">
     <div id="profileInfo"></div>
   </div>
 
 </main>
+
+<!-- STICKY CTA (free only) -->
+<div id="stickyCta">
+  <div class="info">
+    <strong>Upgrade Premium</strong>
+    <span>Rp99.000/bln • Akses semua soal TWK, TIU, TKP & SKB</span>
+  </div>
+  <button class="btn-sticky" onclick="location.href='/pricing.html'">Upgrade →</button>
+</div>
 
 <!-- TOAST -->
 <div id="toast"></div>
@@ -702,23 +714,18 @@
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ── CONFIG ── ganti dengan firebase-config.js kamu jika pakai module bundler
-  // atau import dari firebase-config.js
   let firebaseConfig;
   try {
     const mod = await import('./firebase-config.js');
     firebaseConfig = mod.firebaseConfig || mod.default;
   } catch {
-    // fallback: letakkan config di sini jika static hosting tidak support dynamic import
     firebaseConfig = window._fbConfig || {};
-    console.warn('firebase-config.js tidak ditemukan, set window._fbConfig sebelum load.');
   }
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // ── HELPERS ──
   const $ = id => document.getElementById(id);
   const fmtRp = n => 'Rp ' + Number(n).toLocaleString('id-ID');
   const fmtDate = ts => {
@@ -727,94 +734,88 @@
     return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
   };
 
-  function showToast(msg, duration = 2500) {
+  function showToast(msg) {
     const t = $('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), duration);
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  function staggerIn() {
-    const els = document.querySelectorAll('[data-stagger]');
-    els.forEach((el, i) => {
-      setTimeout(() => el.classList.add('in'), i * 80);
-    });
+  // Flash timer (5 hours countdown)
+  function startFlashTimer() {
+    let secs = 5 * 3600;
+    const el = $('flashTimer');
+    const tick = () => {
+      if (secs <= 0) return;
+      const h = String(Math.floor(secs/3600)).padStart(2,'0');
+      const m = String(Math.floor((secs%3600)/60)).padStart(2,'0');
+      const s = String(secs%60).padStart(2,'0');
+      el.textContent = `${h}:${m}:${s}`;
+      secs--;
+    };
+    tick();
+    setInterval(tick, 1000);
   }
 
-  // ── AUTH GUARD ──
   onAuthStateChanged(auth, async user => {
-    if (!user) {
-      window.location.href = '/register.html';
-      return;
-    }
+    if (!user) { window.location.href = '/register.html'; return; }
     await loadDashboard(user);
   });
 
   async function loadDashboard(user) {
     try {
-      // Fetch user doc
       const userSnap = await getDoc(doc(db, 'users', user.uid));
-      const userData = userSnap.exists() ? userSnap.data() : {};
-      const plan = userData.plan || 'free';
+      const ud = userSnap.exists() ? userSnap.data() : {};
+      const plan = ud.plan || 'free';
       const isPremium = plan === 'premium';
 
-      // Fetch orders
-      const ordQ = query(
-        collection(db, 'orders'),
-        where('uid', '==', user.uid),
-        orderBy('createdAt', 'desc'),
-        limit(10)
-      );
+      const ordQ = query(collection(db, 'orders'), where('uid','==',user.uid), orderBy('createdAt','desc'), limit(10));
       const ordSnap = await getDocs(ordQ);
       const orders = ordSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-      // Count referrals
       let refCount = 0;
       try {
-        const refQ = query(collection(db, 'users'), where('referredBy', '==', userData.referralCode || ''));
+        const refQ = query(collection(db,'users'), where('referredBy','==',(ud.referralCode||'')));
         const refSnap = await getDocs(refQ);
         refCount = refSnap.size;
       } catch(_) {}
 
-      // ── RENDER ──
-      renderNav(userData, user);
-      renderHeader(userData, plan, isPremium);
-      renderStats(userData, plan, isPremium);
-      renderReferral(userData, refCount);
-      renderDynamicSection(userData, plan, isPremium, orders);
-      renderOrders(orders);
-      renderProfile(userData, user);
+      renderAll(user, ud, plan, isPremium, orders, refCount);
 
-      // Show
       $('loadingScreen').style.opacity = '0';
-      setTimeout(() => { $('loadingScreen').style.display = 'none'; }, 400);
+      setTimeout(() => $('loadingScreen').style.display = 'none', 350);
       $('mainContent').classList.add('visible');
-      staggerIn();
+      setTimeout(() => {
+        document.querySelectorAll('[data-s]').forEach((el,i) => {
+          setTimeout(() => el.classList.add('in'), i * 70);
+        });
+      }, 50);
 
-    } catch (err) {
+    } catch(err) {
       console.error(err);
       $('loadingScreen').querySelector('p').textContent = 'Gagal memuat data. Coba refresh.';
     }
   }
 
-  function renderNav(ud, user) {
-    $('navName').textContent = ud.nama || user.email;
-  }
+  function renderAll(user, ud, plan, isPremium, orders, refCount) {
+    const nama = ud.nama || user.email;
+    const namaFirst = nama.split(' ')[0];
 
-  function renderHeader(ud, plan, isPremium) {
-    const nama = ud.nama ? ud.nama.split(' ')[0] : 'Kamu';
-    $('greetText').textContent = `Halo, ${nama} 👋`;
+    // Nav
+    $('navName').textContent = namaFirst;
+
+    // Hero
+    $('greetText').textContent = `Halo, ${namaFirst}! 👋`;
     $('greetSub').textContent = isPremium
       ? 'Akses penuh aktif — selamat belajar tanpa batas!'
-      : 'Manfaatkan soal gratis & referral kamu ya!';
+      : 'Yuk manfaatkan kuota soal & referral kamu!';
 
     const badge = document.createElement('div');
     badge.className = `plan-badge ${plan}`;
-    badge.innerHTML = `<span class="dot"></span> ${isPremium ? '⭐ Premium' : 'Free Plan'}`;
+    badge.innerHTML = `<span class="dot"></span>${isPremium ? '⭐ Akun Premium' : '🆓 Akun Gratis'}`;
     $('planBadgeWrap').appendChild(badge);
-  }
 
-  function renderStats(ud, plan, isPremium) {
+    // Stats
     $('statSoal').textContent = ud.soalGratis ?? 3;
     $('statKomisi').textContent = fmtRp(ud.komisiTotal || 0);
     $('statPlan').textContent = isPremium ? '⭐ Premium' : '🆓 Free';
@@ -822,15 +823,13 @@
 
     if (isPremium && ud.expiredAt) {
       const exp = ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt);
-      const now = new Date();
-      const diff = Math.ceil((exp - now) / 86400000);
-      $('statExpiry').textContent = diff > 0 ? `Aktif ${diff} hari lagi` : 'Expired';
+      const diff = Math.ceil((exp - new Date()) / 86400000);
+      $('statExpiry').textContent = diff > 0 ? `Aktif ${diff} hari lagi` : 'Sudah expired';
     } else {
       $('statExpiry').textContent = isPremium ? 'Aktif' : 'Upgrade untuk akses penuh';
     }
-  }
 
-  function renderReferral(ud, refCount) {
+    // Referral
     const code = ud.referralCode || '';
     $('refCodeBig').textContent = code || '—';
     $('refCount').textContent = refCount;
@@ -840,72 +839,62 @@
     $('btnCopyLink').addEventListener('click', () => {
       navigator.clipboard.writeText(baseUrl + code).then(() => {
         $('btnCopyLink').classList.add('copied');
-        $('btnCopyLink').textContent = '✓ Tersalin!';
+        $('btnCopyLink').innerHTML = '✓ Tersalin!';
         showToast('Link referral berhasil disalin!');
         setTimeout(() => {
           $('btnCopyLink').classList.remove('copied');
-          $('btnCopyLink').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Salin Link`;
+          $('btnCopyLink').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Salin Link`;
         }, 2500);
       });
     });
-
     $('btnCopyWA').addEventListener('click', () => {
-      const msg = `Halo! Aku pakai CerdasBersama buat latihan soal. Daftar pake link aku dan dapet diskon:\n${baseUrl + code}`;
+      const msg = `Halo! Aku belajar CPNS di CerdasBersama. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
-  }
 
-  function renderDynamicSection(ud, plan, isPremium, orders) {
-    const wrap = $('dynamicSection');
-
+    // Dynamic Section
+    const ds = $('dynamicSection');
     if (isPremium) {
-      // ── PREMIUM SECTION ──
       const exp = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
       const expStr = exp ? fmtDate(exp) : '—';
       const diff = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
       const isExpired = diff <= 0;
 
-      wrap.innerHTML = `
-        <div class="premium-banner">
+      ds.innerHTML = `
+        <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
+        <div class="premium-banner" data-s style="transition-delay:.22s">
           <h3>✨ Akses Premium Aktif</h3>
           <p>Kamu punya akses penuh ke semua bank soal CPNS & PPPK tanpa batas waktu per sesi.</p>
-          <div class="expired-badge">
-            <span>📅</span>
-            ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}
-          </div>
+          <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
+          ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:6px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
         </div>
-        <div class="dash-cols" style="margin-bottom:20px">
-          <div class="card">
-            <div class="section-title">📚 Akses Materi</div>
-            <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
-              ${['TWK — Tes Wawasan Kebangsaan','TIU — Tes Intelejensi Umum','TKP — Tes Karakteristik Pribadi','SKB — Seleksi Kompetensi Bidang'].map(m => `
-                <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface2);border-radius:10px;font-size:13px">
-                  <span style="color:var(--green)">✓</span> ${m}
-                </div>
-              `).join('')}
+        <div class="two-col" data-s style="transition-delay:.24s">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title">📚 Materi Tersedia</div>
+            <div class="access-list">
+              ${['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi','SKB — Kompetensi Bidang'].map(m =>
+                `<div class="access-item"><div class="check">✓</div>${m}</div>`
+              ).join('')}
             </div>
           </div>
-          <div class="card">
-            <div class="section-title">📊 Statistik Belajar</div>
-            <div style="color:var(--muted);font-size:13px;margin-top:8px">
-              Fitur statistik belajar detail akan segera hadir di update berikutnya.
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title">📊 Statistik Belajar</div>
+            <div style="text-align:center;padding:24px 0">
+              <div style="font-size:40px">🚀</div>
+              <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Coming soon…</div>
+              <div style="font-size:12px;color:var(--muted2);margin-top:4px">Statistik detail akan hadir di update berikutnya</div>
             </div>
-            <div style="margin-top:20px;padding:20px;background:var(--surface2);border-radius:12px;text-align:center">
-              <div style="font-size:32px">🚀</div>
-              <div style="font-size:13px;color:var(--muted);margin-top:8px">Coming soon…</div>
-            </div>
-            ${isExpired ? `
-              <a href="/pricing.html" style="display:block;margin-top:16px;text-align:center;padding:10px;background:linear-gradient(135deg,#4f8ef7,#7c5af7);border-radius:10px;color:#fff;font-size:13px;font-weight:600;text-decoration:none">
-                🔄 Perpanjang Premium
-              </a>
-            ` : ''}
           </div>
         </div>`;
     } else {
-      // ── FREE SECTION ──
+      // FREE
       const soalGratis = ud.soalGratis ?? 3;
       const maxSoal = 3;
       const pct = Math.max(0, Math.min(100, (soalGratis / maxSoal) * 100));
+
+      $('flashBanner').style.display = 'block';
+      $('stickyCta').style.display = 'flex';
+      startFlashTimer();
 
       const pakets = [
         { nama: 'Starter Pack', soal: 20, harga: 15000, popular: false },
@@ -914,92 +903,86 @@
         { nama: 'Ultimate Pack', soal: 200, harga: 79000, popular: false },
       ];
 
-      wrap.innerHTML = `
-        <div class="dash-cols" style="margin-bottom:20px">
-          <div class="card">
-            <div class="section-title">🎯 Kuota Soal Gratis</div>
+      ds.innerHTML = `
+        <div class="section-label" data-s style="transition-delay:.2s">📦 Paket Soal</div>
+        <div class="two-col" data-s style="transition-delay:.22s">
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title">🎯 Kuota Soal Gratis</div>
             <div class="soal-bar-wrap">
-              <div class="soal-bar-label">
-                <span>Sisa ${soalGratis} soal</span>
-                <span>${maxSoal} total</span>
+              <div class="soal-bar-meta">
+                <span>Sisa <strong>${soalGratis} soal</strong></span>
+                <span>${maxSoal} total gratis</span>
               </div>
               <div class="soal-bar">
                 <div class="soal-bar-fill" id="soalBarFill" style="width:0%"></div>
               </div>
             </div>
-            <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6">
-              Soal gratis habis? Beli bundling à la carte di bawah atau upgrade ke Premium untuk akses tanpa batas.
+            <p style="font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6;font-weight:500">
+              Soal gratis habis? Beli bundling à la carte atau upgrade ke Premium untuk akses tanpa batas.
             </p>
           </div>
-          <div class="card">
-            <div class="section-title">📦 Beli À La Carte</div>
+          <div class="card" style="margin-bottom:0">
+            <div class="card-title">📦 Beli À La Carte</div>
             <div class="paket-grid" id="paketGrid"></div>
           </div>
         </div>
-        <div class="upgrade-cta">
+        <div class="upgrade-cta" data-s style="transition-delay:.28s">
           <div>
-            <h3>Upgrade ke Premium Bulanan</h3>
-            <p>Mulai Rp 99.000/bln — akses semua soal TWK, TIU, TKP & SKB tanpa batas.</p>
+            <h3>🚀 Upgrade ke Premium Bulanan</h3>
+            <p>Mulai Rp99.000/bln — akses semua soal TWK, TIU, TKP & SKB tanpa batas. Ribuan soal siap dikerjakan!</p>
           </div>
           <button class="btn-upgrade" onclick="location.href='/pricing.html'">Lihat Paket →</button>
         </div>`;
 
-      // Animate bar
       setTimeout(() => {
         const fill = document.getElementById('soalBarFill');
         if (fill) fill.style.width = pct + '%';
-      }, 300);
+      }, 400);
 
-      // Render paket
       const grid = document.getElementById('paketGrid');
       if (grid) {
         pakets.forEach(p => {
           const div = document.createElement('div');
           div.className = 'paket-item' + (p.popular ? ' popular' : '');
           div.innerHTML = `
+            ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
             <div class="paket-nama">${p.nama}</div>
             <div class="paket-soal">${p.soal} soal</div>
             <div class="paket-harga">${fmtRp(p.harga)} <span>sekali bayar</span></div>
-            <button class="btn-beli" onclick="location.href='/pricing.html?paket=${encodeURIComponent(p.nama)}'">Beli</button>`;
+            <button class="btn-beli" onclick="location.href='/pricing.html?paket=${encodeURIComponent(p.nama)}'">Beli Sekarang</button>`;
           grid.appendChild(div);
         });
       }
     }
-  }
 
-  function renderOrders(orders) {
+    // Orders
     const list = $('orderList');
     if (!orders.length) {
       list.innerHTML = '<div class="empty-state">Belum ada riwayat order.</div>';
-      return;
-    }
-    list.innerHTML = orders.map(o => {
-      const statusClass = o.status === 'paid' ? 'paid' : o.status === 'pending' ? 'pending' : 'failed';
-      const statusLabel = o.status === 'paid' ? 'Lunas' : o.status === 'pending' ? 'Menunggu' : 'Gagal';
-      return `
-        <div class="order-item">
+    } else {
+      list.innerHTML = orders.map(o => {
+        const sc = o.status === 'paid' ? 'paid' : o.status === 'pending' ? 'pending' : 'failed';
+        const sl = o.status === 'paid' ? 'Lunas' : o.status === 'pending' ? 'Menunggu' : 'Gagal';
+        return `<div class="order-item">
           <div class="order-info">
             <div class="order-paket">${o.paket || '—'}</div>
             <div class="order-date">${fmtDate(o.createdAt)} · ${o.refCode ? `Ref: ${o.refCode}` : 'Tanpa referral'}</div>
           </div>
-          <div class="order-total">${fmtRp(o.total || 0)}</div>
-          <span class="status-pill ${statusClass}">${statusLabel}</span>
+          <div class="order-total">${fmtRp(o.total||0)}</div>
+          <span class="status-pill ${sc}">${sl}</span>
         </div>`;
-    }).join('');
-  }
+      }).join('');
+    }
 
-  function renderProfile(ud, user) {
-    const rows = [
+    // Profile
+    $('profileInfo').innerHTML = [
       { lbl: 'Nama', val: ud.nama || '—' },
       { lbl: 'Email', val: user.email },
       { lbl: 'WhatsApp', val: ud.wa || '—' },
       { lbl: 'Plan', val: (ud.plan || 'free').toUpperCase() },
-      { lbl: 'Referral', val: ud.referralCode || '—' },
-      { lbl: 'Direferral', val: ud.referredBy || 'Tidak ada' },
-    ];
-    $('profileInfo').innerHTML = rows.map(r =>
-      `<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`
-    ).join('');
+      { lbl: 'Kode Referral', val: ud.referralCode || '—' },
+      { lbl: 'Direferral oleh', val: ud.referredBy || 'Tidak ada' },
+    ].map(r => `<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`).join('');
   }
 
   $('btnLogout').addEventListener('click', async () => {
@@ -1007,6 +990,5 @@
     window.location.href = '/';
   });
 </script>
-
 </body>
 </html>
