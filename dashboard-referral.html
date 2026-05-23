@@ -14,6 +14,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5re
 .nav-links{display:flex;gap:1rem;align-items:center}
 .nav-links a{font-size:13px;color:#555;text-decoration:none;font-weight:500}
 .btn-nav{background:#1a6b4a;color:#fff;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none}
+.btn-logout{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#555}
+.btn-logout:hover{background:#F5F3EE}
 h2{font-size:20px;font-weight:800;color:#111;margin-bottom:2px}
 .sub{font-size:13px;color:#888;margin-bottom:1.5rem}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.5rem}
@@ -46,87 +48,153 @@ tr:last-child td{border-bottom:none}
 .badge.paid{background:#E8F5EE;color:#085041}
 .badge.process{background:#E6F1FB;color:#0C447C}
 .back{font-size:13px;color:#1a6b4a;text-decoration:none;font-weight:600;display:inline-block;margin-bottom:1rem}
+.loading{text-align:center;padding:3rem;color:#aaa;font-size:14px}
+.plan-badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;background:#E8F5EE;color:#085041;margin-left:8px;vertical-align:middle}
+.plan-badge.free{background:#F5F3EE;color:#666}
 </style>
 </head>
 <body>
-<div class="topbar">
-  <div class="logo">Cerdas<span>Bersama</span></div>
-  <div class="nav-links">
-    <a href="pricing.html">Beli Soal</a>
-    <a href="#" class="btn-nav">Dashboard</a>
-  </div>
-</div>
 
-<a href="index.html" class="back">← Beranda</a>
-<h2>Dashboard Referral</h2>
-<p class="sub" id="greeting">Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.</p>
+<div id="loadingView" class="loading">Memuat dashboard...</div>
 
-<div class="stats">
-  <div class="stat"><div class="stat-label">Total klik</div><div class="stat-val">47</div></div>
-  <div class="stat"><div class="stat-label">Berhasil daftar</div><div class="stat-val">12</div></div>
-  <div class="stat"><div class="stat-label">Berhasil bayar</div><div class="stat-val">5</div></div>
-  <div class="stat"><div class="stat-label">Total komisi</div><div class="stat-val green">Rp 37.500</div></div>
-  <div class="stat"><div class="stat-label">Dicairkan</div><div class="stat-val">Rp 20.000</div></div>
-  <div class="stat"><div class="stat-label">Saldo aktif</div><div class="stat-val amber">Rp 17.500</div></div>
-</div>
-
-<div class="card">
-  <div class="card-title">🔗 Link referral kamu</div>
-  <div class="link-row">
-    <span class="link-val" id="refLink">cerdasbersama.id/?ref=CB-USER0000</span>
-    <button class="btn-sm" onclick="copyLink()" id="copyBtn">Salin</button>
-  </div>
-  <div class="share-btns">
-    <button class="btn-share" onclick="shareWa()">📲 WhatsApp</button>
-    <button class="btn-share" onclick="copyMsg()">📋 Salin pesan</button>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-title">💰 Cairkan komisi</div>
-  <div class="saldo-box">
-    <div>
-      <div class="saldo-label">Saldo bisa dicairkan</div>
-      <div class="saldo-amt">Rp 17.500</div>
+<div id="mainView" style="display:none">
+  <div class="topbar">
+    <div class="logo">Cerdas<span>Bersama</span></div>
+    <div class="nav-links">
+      <a href="pricing.html">Beli Soal</a>
+      <button class="btn-logout" onclick="doLogout()">Keluar</button>
     </div>
-    <button class="btn-cairkan" disabled>Cairkan (min. Rp 20.000)</button>
   </div>
-  <p class="cairkan-note">Kurang Rp 2.500 lagi untuk memenuhi minimum pencairan. Terus share linkmu!</p>
+
+  <a href="index.html" class="back">← Beranda</a>
+  <h2>Dashboard Referral <span class="plan-badge free" id="planBadge">Free</span></h2>
+  <p class="sub" id="greeting">Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Soal gratis</div><div class="stat-val" id="statSoal">30</div></div>
+    <div class="stat"><div class="stat-label">Berhasil daftar</div><div class="stat-val">–</div></div>
+    <div class="stat"><div class="stat-label">Berhasil bayar</div><div class="stat-val">–</div></div>
+    <div class="stat"><div class="stat-label">Total komisi</div><div class="stat-val green" id="statKomisi">Rp 0</div></div>
+    <div class="stat"><div class="stat-label">Dicairkan</div><div class="stat-val">Rp 0</div></div>
+    <div class="stat"><div class="stat-label">Saldo aktif</div><div class="stat-val amber" id="statSaldo">Rp 0</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔗 Link referral kamu</div>
+    <div class="link-row">
+      <span class="link-val" id="refLink">–</span>
+      <button class="btn-sm" onclick="copyLink()" id="copyBtn">Salin</button>
+    </div>
+    <div class="share-btns">
+      <button class="btn-share" onclick="shareWa()">📲 WhatsApp</button>
+      <button class="btn-share" onclick="copyMsg()">📋 Salin pesan</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💰 Cairkan komisi</div>
+    <div class="saldo-box">
+      <div>
+        <div class="saldo-label">Saldo bisa dicairkan</div>
+        <div class="saldo-amt" id="saldoAmt">Rp 0</div>
+      </div>
+      <button class="btn-cairkan" disabled id="btnCairkan">Cairkan (min. Rp 20.000)</button>
+    </div>
+    <p class="cairkan-note" id="cairkanNote">Terus share linkmu untuk mengumpulkan komisi!</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Riwayat transaksi referral</div>
+    <table>
+      <thead><tr><th>Pengguna</th><th>Paket</th><th>Komisi</th><th>Status</th></tr></thead>
+      <tbody id="riwayatBody">
+        <tr><td colspan="4" style="color:#aaa;text-align:center;padding:1.5rem 0">Belum ada transaksi referral.</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<div class="card">
-  <div class="card-title">📋 Riwayat transaksi referral</div>
-  <table>
-    <thead><tr><th>Pengguna</th><th>Paket</th><th>Komisi</th><th>Status</th></tr></thead>
-    <tbody>
-      <tr><td>Ani S.</td><td>Bundling 5</td><td style="color:#1a6b4a;font-weight:600">+Rp 15.000</td><td><span class="badge paid">Dibayar</span></td></tr>
-      <tr><td>Rudi P.</td><td>Bulanan</td><td style="color:#1a6b4a;font-weight:600">+Rp 7.350</td><td><span class="badge pending">Pending</span></td></tr>
-      <tr><td>Siti M.</td><td>À la carte</td><td style="color:#1a6b4a;font-weight:600">+Rp 750</td><td><span class="badge pending">Pending</span></td></tr>
-      <tr><td>Hendra K.</td><td>Bundling 3</td><td style="color:#1a6b4a;font-weight:600">+Rp 9.000</td><td><span class="badge process">Diproses</span></td></tr>
-      <tr><td>Dewi R.</td><td>Bulanan</td><td style="color:#1a6b4a;font-weight:600">+Rp 7.350</td><td><span class="badge paid">Dibayar</span></td></tr>
-    </tbody>
-  </table>
-</div>
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<script>
-const code = sessionStorage.getItem('userCode') || 'CB-USER0000';
-const name = sessionStorage.getItem('userName') || '';
-const link = 'cerdasbersama.id/?ref=' + code;
-document.getElementById('refLink').textContent = link;
-if (name) document.getElementById('greeting').textContent = 'Halo, ' + name + '! Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.';
+let userLink = '';
 
-function copyLink() {
-  navigator.clipboard.writeText(link).then(() => {
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // Belum login → redirect ke register
+    window.location.href = 'register.html';
+    return;
+  }
+
+  // Ambil data dari Firestore
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (!snap.exists()) {
+    window.location.href = 'register.html';
+    return;
+  }
+
+  const data = snap.data();
+  const nama = data.nama?.split(' ')[0] || 'Kamu';
+  const komisi = data.komisiTotal || 0;
+  const soal = data.soalGratis || 0;
+  const plan = data.plan || 'free';
+  const refCode = data.referralCode || '';
+
+  userLink = 'cerdasbersama.vercel.app/register.html?ref=' + refCode;
+
+  // Update UI
+  document.getElementById('greeting').textContent = 'Halo, ' + nama + '! Bagikan linkmu dan dapatkan komisi 15% setiap transaksi.';
+  document.getElementById('refLink').textContent = userLink;
+  document.getElementById('statSoal').textContent = soal;
+  document.getElementById('statKomisi').textContent = 'Rp ' + komisi.toLocaleString('id-ID');
+  document.getElementById('statSaldo').textContent = 'Rp ' + komisi.toLocaleString('id-ID');
+  document.getElementById('saldoAmt').textContent = 'Rp ' + komisi.toLocaleString('id-ID');
+
+  // Plan badge
+  const planBadge = document.getElementById('planBadge');
+  planBadge.textContent = plan === 'free' ? 'Free' : 'Premium';
+  planBadge.className = 'plan-badge ' + plan;
+
+  // Cairkan button
+  if (komisi >= 20000) {
+    document.getElementById('btnCairkan').disabled = false;
+    document.getElementById('btnCairkan').textContent = 'Cairkan sekarang';
+    document.getElementById('cairkanNote').textContent = 'Saldo kamu sudah bisa dicairkan!';
+  } else {
+    const kurang = 20000 - komisi;
+    document.getElementById('cairkanNote').textContent = 'Kurang Rp ' + kurang.toLocaleString('id-ID') + ' lagi untuk memenuhi minimum pencairan.';
+  }
+
+  // Tampilkan dashboard
+  document.getElementById('loadingView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+});
+
+// Logout
+window.doLogout = async function() {
+  await signOut(auth);
+  window.location.href = 'register.html';
+}
+
+// Copy link
+window.copyLink = function() {
+  navigator.clipboard.writeText(userLink).then(() => {
     document.getElementById('copyBtn').textContent = 'Tersalin!';
     setTimeout(() => document.getElementById('copyBtn').textContent = 'Salin', 2000);
   });
 }
-function shareWa() {
-  const msg = encodeURIComponent('Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + link);
+
+// Share WA
+window.shareWa = function() {
+  const msg = encodeURIComponent('Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + userLink);
   window.open('https://wa.me/?text=' + msg, '_blank');
 }
-function copyMsg() {
-  const msg = 'Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + link;
+
+// Copy pesan
+window.copyMsg = function() {
+  const msg = 'Hei! Coba CerdasBersama buat latihan soal anak SD kelas 6. Ada Matematika, IPAS, dan B.Inggris. Daftar pakai linkku dan dapat diskon: https://' + userLink;
   navigator.clipboard.writeText(msg).then(() => alert('Pesan tersalin! Tinggal paste di WhatsApp.'));
 }
 </script>
