@@ -7,146 +7,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
-body{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  background:#fff;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-}
-
-/* ── TOP BAR merah ala Parentia ── */
-.topbar{
-  position:fixed;top:0;left:0;right:0;
-  background:#C0392B;
-  padding:10px 1rem;
-  text-align:center;
-  font-size:13px;font-weight:700;color:#fff;
-  z-index:100;
-}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0}
+.topbar{position:fixed;top:0;left:0;right:0;background:#C0392B;padding:10px 1rem;text-align:center;font-size:13px;font-weight:700;color:#fff;z-index:100}
 .topbar span{color:#FFD700}
-
-/* ── SPLIT LAYOUT ── */
-.page{
-  display:flex;
-  min-height:100vh;
-  width:100%;
-  max-width:900px;
-  margin:0 auto;
-  padding-top:44px;
-}
-
-/* LEFT: branding panel */
-.left{
-  flex:1;
-  background:#C0392B;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:3rem 2.5rem;
-  position:relative;
-  overflow:hidden;
-}
-.left::before{
-  content:'';
-  position:absolute;
-  bottom:-80px;right:-80px;
-  width:280px;height:280px;
-  background:rgba(255,255,255,0.06);
-  border-radius:50%;
-}
-.left::after{
-  content:'';
-  position:absolute;
-  top:-60px;left:-60px;
-  width:200px;height:200px;
-  background:rgba(255,255,255,0.04);
-  border-radius:50%;
-}
-
+.page{display:flex;min-height:100vh;width:100%;max-width:900px;margin:0 auto;padding-top:44px}
+.left{flex:1;background:#C0392B;display:flex;flex-direction:column;justify-content:center;padding:3rem 2.5rem;position:relative;overflow:hidden}
+.left::before{content:'';position:absolute;bottom:-80px;right:-80px;width:280px;height:280px;background:rgba(255,255,255,0.06);border-radius:50%}
+.left::after{content:'';position:absolute;top:-60px;left:-60px;width:200px;height:200px;background:rgba(255,255,255,0.04);border-radius:50%}
 .left-logo{font-size:22px;font-weight:900;color:#fff;margin-bottom:2rem}
 .left-logo span{color:#FFD700}
-
 .left h2{font-size:1.7rem;font-weight:900;color:#fff;line-height:1.2;letter-spacing:-0.5px;margin-bottom:0.8rem}
 .left h2 em{font-style:normal;color:#FFD700}
 .left p{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.7;margin-bottom:2rem}
-
 .benefit-list{display:flex;flex-direction:column;gap:10px}
 .benefit-item{display:flex;align-items:center;gap:10px;font-size:13px;color:#fff;font-weight:600}
 .benefit-icon{width:28px;height:28px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-
-/* RIGHT: form panel */
-.right{
-  flex:1;
-  background:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:2.5rem 2rem;
-  overflow-y:auto;
-}
-
-/* TABS */
+.right{flex:1;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2rem;overflow-y:auto}
 .tabs{display:flex;background:#f5f5f5;border-radius:50px;padding:4px;margin-bottom:1.5rem;gap:4px}
 .tab{flex:1;padding:9px;border-radius:50px;border:none;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;background:none;color:#999}
 .tab.active{background:#C0392B;color:#fff;box-shadow:0 2px 8px rgba(192,57,43,0.3)}
-
 h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0.3px}
 .sub{font-size:13px;color:#888;margin-bottom:1.5rem;line-height:1.5}
-
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px}
-.field input{
-  width:100%;
-  border:1.5px solid #e8e8e8;
-  border-radius:10px;
-  padding:11px 14px;
-  font-size:14px;
-  font-family:inherit;
-  color:#111;
-  background:#fafafa;
-  outline:none;
-  transition:border-color 0.2s,background 0.2s;
-}
+.field input{width:100%;border:1.5px solid #e8e8e8;border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit;color:#111;background:#fafafa;outline:none;transition:border-color 0.2s,background 0.2s}
 .field input:focus{border-color:#C0392B;background:#fff}
-
-.ref-row{
-  display:flex;gap:8px;align-items:center;
-  background:#fff9f9;border:1.5px solid #f5c6c2;
-  border-radius:10px;padding:10px 14px;margin-bottom:4px;
-}
+.ref-row{display:flex;gap:8px;align-items:center;background:#fff9f9;border:1.5px solid #f5c6c2;border-radius:10px;padding:10px 14px;margin-bottom:4px}
 .ref-code{font-size:15px;font-weight:800;color:#C0392B;font-family:monospace;flex:1;letter-spacing:2px}
 .btn-refresh{background:none;border:none;cursor:pointer;font-size:18px;padding:0;line-height:1}
 .ref-hint{font-size:12px;color:#bbb;margin-bottom:1rem}
-
-.btn-cta{
-  width:100%;background:#C0392B;color:#fff;border:none;
-  border-radius:50px;padding:14px;font-size:15px;font-weight:800;
-  cursor:pointer;font-family:inherit;transition:all 0.2s;
-  box-shadow:0 4px 16px rgba(192,57,43,0.25);
-}
+.btn-cta{width:100%;background:#C0392B;color:#fff;border:none;border-radius:50px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.2s;box-shadow:0 4px 16px rgba(192,57,43,0.25)}
 .btn-cta:hover{background:#a93226;transform:translateY(-1px)}
 .btn-cta:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
-
-.forgot{
-  font-size:12px;color:#C0392B;font-weight:700;
-  text-decoration:none;display:block;
-  text-align:right;margin-top:-4px;margin-bottom:12px;
-}
-
+.forgot{font-size:12px;color:#C0392B;font-weight:700;text-decoration:none;display:block;text-align:right;margin-top:-4px;margin-bottom:12px}
 .divider{border:none;border-top:1px solid #f0f0f0;margin:1.2rem 0}
-
 .switch-link{font-size:13px;color:#888;text-align:center}
 .switch-link a{color:#C0392B;font-weight:700;text-decoration:none}
-
 .error-msg{font-size:13px;color:#C0392B;background:#fff5f5;border:1.5px solid #ffd5d2;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:none;font-weight:600}
 .success-msg{font-size:13px;color:#276749;background:#f0faf5;border:1.5px solid #b8e6d0;border-radius:10px;padding:10px 14px;margin-bottom:12px;display:none;font-weight:600}
-
-/* SUCCESS VIEW */
 .success-panel{display:none;text-align:center}
 .success-icon{width:64px;height:64px;background:#fff3f2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:30px}
 .link-box{background:#fff9f9;border:1.5px solid #f5c6c2;border-radius:12px;padding:14px;margin-bottom:12px;text-align:left}
@@ -156,13 +54,7 @@ h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0
 .btn-copy:hover{background:#f5f5f5}
 .info-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:1rem}
 .pill{background:#fff3f2;border:1px solid #ffd5d2;border-radius:20px;padding:5px 12px;font-size:12px;color:#C0392B;font-weight:700}
-
-/* MOBILE */
-@media(max-width:620px){
-  .left{display:none}
-  .right{padding:2rem 1.5rem;min-height:100vh}
-  .page{padding-top:44px}
-}
+@media(max-width:620px){.left{display:none}.right{padding:2rem 1.5rem;min-height:100vh}.page{padding-top:44px}}
 </style>
 </head>
 <body>
@@ -175,22 +67,19 @@ h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0
   <!-- LEFT PANEL -->
   <div class="left">
     <div class="left-logo">Cerdas<span>Bersama</span></div>
-    <h2>Latihan Soal Kelas 6<br><em>Bikin Nilai Naik!</em></h2>
+    <h2>Latihan Soal<br><em>Bikin Nilai Naik!</em></h2>
     <p>Matematika, IPAS & B.Inggris — terstruktur per sub-bab, lengkap dengan pembahasan. Cocok untuk orang tua & guru.</p>
     <div class="benefit-list">
-      <div class="benefit-item"><div class="benefit-icon">✅</div> 30 soal gratis langsung aktif</div>
+      <div class="benefit-item"><div class="benefit-icon">✅</div> Soal lengkap per sub-bab</div>
       <div class="benefit-item"><div class="benefit-icon">💰</div> Komisi referral 15%</div>
-      <div class="benefit-item"><div class="benefit-icon">📊</div> Dashboard progres anak</div>
+      <div class="benefit-item"><div class="benefit-icon">📊</div> Dashboard progres belajar</div>
       <div class="benefit-item"><div class="benefit-icon">🏷️</div> Diskon 50% pakai kode referral</div>
     </div>
   </div>
 
   <!-- RIGHT PANEL -->
   <div class="right">
-
-    <!-- FORM CARD -->
     <div id="formCard">
-      <!-- TABS -->
       <div class="tabs">
         <button class="tab active" id="tabDaftar" onclick="switchTab('daftar')">Daftar</button>
         <button class="tab" id="tabMasuk" onclick="switchTab('masuk')">Masuk</button>
@@ -202,20 +91,17 @@ h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0
       <!-- FORM DAFTAR -->
       <div id="viewDaftar">
         <h2>Buat akun gratis</h2>
-        <p class="sub">Daftar & langsung dapat soal gratis + link referral kamu</p>
-
+        <p class="sub">Daftar & langsung dapat link referral kamu</p>
         <div class="field"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Nama lengkap kamu" oninput="updateCode()" /></div>
         <div class="field"><label>Email</label><input type="email" id="email" placeholder="email@kamu.com" /></div>
         <div class="field"><label>Nomor WhatsApp</label><input type="tel" id="wa" placeholder="08123456789" /></div>
         <div class="field"><label>Password</label><input type="password" id="pass" placeholder="Min. 8 karakter" /></div>
-
         <label style="display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.4px">Kode Referral Kamu</label>
         <div class="ref-row">
           <span class="ref-code" id="previewCode">CB-USER0000</span>
           <button class="btn-refresh" onclick="regenCode()" title="Generate ulang">🔄</button>
         </div>
         <p class="ref-hint">Kode ini jadi link referral kamu. Klik 🔄 untuk generate ulang.</p>
-
         <button class="btn-cta" id="btnDaftar" onclick="doRegister()">Daftar Sekarang →</button>
         <div class="divider"></div>
         <p class="switch-link">Sudah punya akun? <a href="#" onclick="switchTab('masuk');return false">Masuk di sini</a></p>
@@ -225,11 +111,9 @@ h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0
       <div id="viewMasuk" style="display:none">
         <h2>Masuk ke akun</h2>
         <p class="sub">Lanjutkan latihan soal kamu</p>
-
         <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="email@kamu.com" /></div>
         <div class="field"><label>Password</label><input type="password" id="loginPass" placeholder="Password kamu" /></div>
         <a href="#" class="forgot" onclick="doForgot();return false">Lupa password?</a>
-
         <button class="btn-cta" id="btnMasuk" onclick="doLogin()">Masuk →</button>
         <div class="divider"></div>
         <p class="switch-link">Belum punya akun? <a href="#" onclick="switchTab('daftar');return false">Daftar gratis</a></p>
@@ -240,32 +124,35 @@ h2{font-size:20px;font-weight:900;color:#111;margin-bottom:4px;letter-spacing:-0
     <div class="success-panel" id="successCard">
       <div class="success-icon">🎉</div>
       <h2 style="margin-bottom:6px">Akun berhasil dibuat!</h2>
-      <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>! Soal gratis sudah aktif.</p>
-
+      <p style="font-size:13px;color:#888;margin-bottom:1.5rem">Selamat datang, <strong id="namaUser"></strong>!</p>
       <div class="link-box">
         <div class="link-label">Link referral kamu</div>
         <div class="link-val" id="linkVal"></div>
       </div>
       <button class="btn-copy" onclick="copyLink()" id="copyBtn">📋 Salin link referral</button>
       <a href="/dashboard.html" class="btn-cta" style="display:block;text-align:center;text-decoration:none;padding:14px;border-radius:50px">Buka Dashboard →</a>
-
       <div class="info-pills">
         <div class="pill">💰 Komisi 15%</div>
-        <div class="pill">📚 Soal gratis aktif</div>
         <div class="pill">🏷️ Diskon 50% siap</div>
       </div>
     </div>
-
-  </div><!-- /right -->
-</div><!-- /page -->
+  </div>
+</div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// ── FLAG: mencegah redirect saat proses register ──
+let isRegistering = false;
+
 onAuthStateChanged(auth, user => {
-  if (user) location.href = '/dashboard.html';
+  // Kalau sedang proses register, jangan redirect dulu
+  // Tunggu setDoc selesai, baru redirect dari doRegister
+  if (user && !isRegistering) {
+    location.href = '/dashboard.html';
+  }
 });
 
 let generatedCode = '';
@@ -300,25 +187,51 @@ window.doRegister = async function() {
   const wa=document.getElementById('wa').value.trim();
   const pass=document.getElementById('pass').value;
   const btn=document.getElementById('btnDaftar');
+
   if(!nama||!email||!wa||!pass){showError('Semua field wajib diisi.');return;}
   if(pass.length<8){showError('Password minimal 8 karakter.');return;}
   if(!generatedCode) generatedCode=makeCode(nama);
+
+  // Set flag SEBELUM createUserWithEmailAndPassword
+  // supaya onAuthStateChanged tidak redirect duluan
+  isRegistering = true;
+
   btn.disabled=true; btn.textContent='Mendaftar...';
   try {
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    const uid=cred.user.uid;
-    const refCode=sessionStorage.getItem('refCode')||null;
-    await setDoc(doc(db,'users',uid),{uid,nama,email,wa,referralCode:generatedCode,referredBy:refCode,plan:'free',soalGratis:3,komisiTotal:0,hasUsedReferral:false,createdAt:serverTimestamp()});
-    document.getElementById('namaUser').textContent=nama.split(' ')[0];
-    document.getElementById('linkVal').textContent=window.location.origin+'/register.html?ref='+generatedCode;
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    const uid = cred.user.uid;
+    const refCode = sessionStorage.getItem('refCode') || null;
+
+    // setDoc HARUS selesai sebelum redirect
+    await setDoc(doc(db,'users',uid), {
+      uid,
+      nama,
+      email,
+      wa,
+      referralCode: generatedCode,
+      referredBy: refCode,
+      plan: 'free',
+      soalGratis: 0,
+      komisiTotal: 0,
+      hasUsedReferral: false,
+      subBabAkses: [],
+      createdAt: serverTimestamp()
+    });
+
+    // setDoc berhasil → tampilkan success panel
+    isRegistering = false;
+    document.getElementById('namaUser').textContent = nama.split(' ')[0];
+    document.getElementById('linkVal').textContent = window.location.origin+'/register.html?ref='+generatedCode;
     document.getElementById('formCard').style.display='none';
     document.getElementById('successCard').style.display='block';
+
   } catch(err) {
+    isRegistering = false;
     btn.disabled=false; btn.textContent='Daftar Sekarang →';
     if(err.code==='auth/email-already-in-use') showError('Email sudah terdaftar. Silakan masuk.');
     else if(err.code==='auth/invalid-email') showError('Format email tidak valid.');
     else if(err.code==='auth/weak-password') showError('Password terlalu lemah, minimal 8 karakter.');
-    else showError('Gagal: '+err.message);
+    else showError('Gagal mendaftar: '+err.message);
   }
 }
 
@@ -330,7 +243,8 @@ window.doLogin = async function() {
   if(!email||!pass){showError('Email dan password wajib diisi.');return;}
   btn.disabled=true; btn.textContent='Masuk...';
   try {
-    await signInWithEmailAndPassword(auth,email,pass);
+    await signInWithEmailAndPassword(auth, email, pass);
+    // onAuthStateChanged akan handle redirect ke dashboard
   } catch(err) {
     btn.disabled=false; btn.textContent='Masuk →';
     if(err.code==='auth/invalid-credential'||err.code==='auth/wrong-password') showError('Email atau password salah.');
@@ -344,7 +258,7 @@ window.doForgot = async function() {
   const email=document.getElementById('loginEmail').value.trim();
   if(!email){showError('Isi email dulu sebelum reset password.');return;}
   try {
-    await sendPasswordResetEmail(auth,email);
+    await sendPasswordResetEmail(auth, email);
     showSuccess('Link reset password dikirim ke '+email+'. Cek inbox/spam kamu.');
   } catch(err) { showError('Gagal kirim email reset: '+err.message); }
 }
@@ -356,8 +270,6 @@ window.copyLink = function() {
     setTimeout(()=>document.getElementById('copyBtn').textContent='📋 Salin link referral',2000);
   });
 }
-
-
 </script>
 </body>
 </html>
