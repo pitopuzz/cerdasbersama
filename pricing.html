@@ -418,6 +418,10 @@ function goStep(step) {
 window.goStep = goStep;
 
 // ── STEP 1: PILIH SEGMEN ──
+const _params = new URLSearchParams(window.location.search);
+const _initTab = _params.get('tab') || 'alacarte';
+const _initPkg = _params.get('pkg') || null;
+
 window.selectSegmen = function(segmen) {
   selectedSegmen = segmen;
   $('paketTitle').textContent = `Paket untuk ${segmen}`;
@@ -432,6 +436,28 @@ window.selectSegmen = function(segmen) {
   renderMapelGrid('bundling');
   renderBabs('alacarte');
   renderBabs('bundling');
+
+  // Pre-select tab & paket dari query parameter
+  if (_initTab === 'bundling') {
+    document.querySelectorAll('.tab').forEach(t=>t.className='tab');
+    document.querySelectorAll('.tab')[1].className='tab active';
+    ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
+    $('bundling').style.display='block';
+    if (_initPkg === '5') {
+      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[1], 5, 34900);
+    } else if (_initPkg === '10') {
+      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[2], 10, 64900);
+    } else {
+      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[0], 3, 21900);
+    }
+  } else if (_initTab === 'bulanan') {
+    document.querySelectorAll('.tab').forEach(t=>t.className='tab');
+    document.querySelectorAll('.tab')[2].className='tab active';
+    ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
+    $('bulanan').style.display='block';
+    curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};
+  }
+
   updateOrder();
   goStep(2);
 };
