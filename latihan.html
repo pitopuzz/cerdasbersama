@@ -286,7 +286,14 @@
     currentUser = user;
 
     const userSnap = await getDoc(doc(db, 'users', user.uid));
-    userData = userSnap.exists() ? userSnap.data() : {};
+
+    // Kalau doc Firestore tidak ada → paksa daftar ulang
+    if (!userSnap.exists()) {
+      window.location.href = '/register.html';
+      return;
+    }
+
+    userData = userSnap.data();
     isPremium = userData.plan === 'premium';
     subBabAkses = userData.subBabAkses || [];
 
