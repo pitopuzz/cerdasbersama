@@ -4,29 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beli Soal — CerdasBersama</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-Pl_dQaoEXpcirChu"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;color:#1a1714;min-height:100vh}
-.wrap{max-width:860px;margin:0 auto;padding:24px 20px 80px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#faf8f5;color:#1a1714;min-height:100vh}
 
-/* NAV */
 nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .nav-logo{font-weight:800;font-size:17px;color:#C0392B}
 .nav-logo span{color:#1a1714}
 .nav-back{font-size:13px;font-weight:600;color:#7a7168;text-decoration:none;transition:color 0.18s}
 .nav-back:hover{color:#C0392B}
 
-.page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px;margin-top:24px}
+.wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
+.loading{text-align:center;padding:3rem;color:#b0a89c;font-size:14px}
+
+/* STEPS INDICATOR */
+.steps-bar{display:flex;align-items:center;gap:0;margin-bottom:28px}
+.step-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#b0a89c}
+.step-item.active{color:#C0392B}
+.step-item.done{color:#1a7a4a}
+.step-circle{width:24px;height:24px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.step-item.done .step-circle{background:#1a7a4a;border-color:#1a7a4a;color:#fff}
+.step-item.active .step-circle{background:#C0392B;border-color:#C0392B;color:#fff}
+.step-line{flex:1;height:2px;background:#e8e4dc;margin:0 8px}
+.step-line.done{background:#1a7a4a}
+
+.page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-sub{font-size:13px;color:#7a7168;margin-bottom:24px;font-weight:500}
 
+/* SEGMEN GRID */
+.segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
+.segmen-card{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden}
+.segmen-card:hover:not(.coming-soon){border-color:#C0392B;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.segmen-card.selected{border-color:#C0392B;background:#fff5f5;box-shadow:0 0 0 3px rgba(192,57,43,0.08)}
+.segmen-card.coming-soon{opacity:0.6;cursor:not-allowed;background:#f5f3ef}
+.segmen-icon{font-size:28px;margin-bottom:8px}
+.segmen-name{font-size:14px;font-weight:800;color:#1a1714;margin-bottom:3px}
+.segmen-desc{font-size:11px;color:#7a7168;font-weight:500}
+.coming-soon-badge{position:absolute;top:10px;right:10px;background:#f5f3ef;border:1px solid #e8e4dc;border-radius:50px;padding:3px 8px;font-size:9px;font-weight:800;color:#b0a89c;text-transform:uppercase;letter-spacing:0.5px}
+
 /* TABS */
-.tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content}
-.tab{padding:9px 20px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s}
+.tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content;flex-wrap:wrap}
+.tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 
-/* SECTION LABEL */
 .section-label{font-size:11px;font-weight:800;color:#b0a89c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
 
 /* PAKET GRID */
@@ -42,22 +64,21 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 
 /* MAPEL GRID */
 .mapel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:500px){.mapel-grid{grid-template-columns:repeat(2,1fr)}}
 .mapel{border:1.5px solid #e8e4dc;border-radius:12px;padding:12px;cursor:pointer;text-align:center;background:#fff;transition:all 0.18s}
 .mapel:hover{border-color:#C0392B}
 .mapel.sel{border-color:#C0392B;background:#fff5f5}
-.mapel-icon{font-size:22px;margin-bottom:6px}
-.mapel-name{font-size:12px;font-weight:800;color:#1a1714}
+.mapel-icon{font-size:20px;margin-bottom:5px}
+.mapel-name{font-size:11px;font-weight:800;color:#1a1714}
 
-/* SUB-BAB LIST */
-.subbab-wrap{margin-bottom:20px}
-.subbab-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto}
+/* SUB-BAB */
+.subbab-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:20px}
 .bab{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid #e8e4dc;border-radius:10px;cursor:pointer;background:#fff;font-size:13px;font-weight:600;color:#1a1714;transition:all 0.18s}
 .bab:hover{border-color:#C0392B}
 .bab.sel{border-color:#C0392B;background:#fff5f5}
 .bab.disabled{opacity:0.4;cursor:not-allowed}
 .bab-check{width:20px;height:20px;border-radius:6px;border:1.5px solid #d4cfc5;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;color:#fff;font-weight:800;transition:all 0.18s}
 .bab.sel .bab-check{background:#C0392B;border-color:#C0392B}
-
 .quota-info{font-size:12px;color:#7a7168;margin-bottom:10px;font-weight:700}
 .quota-info span{color:#C0392B;font-weight:800}
 
@@ -102,9 +123,9 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .btn-pay{width:100%;background:#C0392B;color:#fff;border:none;border-radius:50px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.18s;box-shadow:0 4px 16px rgba(192,57,43,0.25)}
 .btn-pay:hover{background:#a93226;transform:translateY(-1px)}
 .btn-pay:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-back{background:none;border:1.5px solid #e8e4dc;border-radius:50px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:#7a7168;margin-bottom:16px;transition:all 0.18s}
+.btn-back:hover{border-color:#C0392B;color:#C0392B}
 .secure-note{text-align:center;font-size:12px;color:#b0a89c;margin-top:10px;font-weight:500}
-
-.loading{text-align:center;padding:3rem;color:#b0a89c;font-size:14px}
 .warn-msg{background:#fff8e6;border:1px solid #f5d06a;border-radius:10px;padding:10px 14px;font-size:12px;color:#8a5e00;font-weight:600;margin-bottom:12px;display:none}
 </style>
 </head>
@@ -119,137 +140,201 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
   <div id="loadingView" class="loading">Memuat halaman…</div>
 
   <div id="mainView" style="display:none">
-    <div class="page-title">Pilih Paket Belajar</div>
-    <div class="page-sub">Punya kode referral? Masukkan untuk diskon 50% pembelian pertama.</div>
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(this,'alacarte')">À la carte</button>
-      <button class="tab" onclick="switchTab(this,'bundling')">Bundling</button>
-      <button class="tab" onclick="switchTab(this,'bulanan')">Bulanan</button>
+    <!-- STEPS BAR -->
+    <div class="steps-bar" id="stepsBar">
+      <div class="step-item active" id="step1"><div class="step-circle">1</div><span>Segmen</span></div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-item" id="step2"><div class="step-circle">2</div><span>Paket</span></div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-item" id="step3"><div class="step-circle">3</div><span>Bayar</span></div>
     </div>
 
-    <!-- ── À LA CARTE ── -->
-    <div id="alacarte">
-      <div class="section-label">Pilih sub-bab (Rp 7.900 / sub-bab)</div>
+    <!-- ══ STEP 1: PILIH SEGMEN ══ -->
+    <div id="viewSegmen">
+      <div class="page-title">Pilih Segmen</div>
+      <div class="page-sub">Pilih jenjang atau jenis tes yang ingin kamu pelajari.</div>
 
-      <div class="section-label" style="margin-top:4px;margin-bottom:8px;color:#1a1714;text-transform:none;letter-spacing:0;font-size:13px;font-weight:600">Pilih mata pelajaran:</div>
-      <div class="mapel-grid">
-        <div class="mapel sel" onclick="selMapel('alacarte',this,'Matematika')"><div class="mapel-icon">📐</div><div class="mapel-name">Matematika</div></div>
-        <div class="mapel" onclick="selMapel('alacarte',this,'IPAS')"><div class="mapel-icon">🔬</div><div class="mapel-name">IPAS</div></div>
-        <div class="mapel" onclick="selMapel('alacarte',this,'B.Inggris')"><div class="mapel-icon">🔤</div><div class="mapel-name">B.Inggris</div></div>
-      </div>
-
-      <div class="subbab-wrap">
-        <div class="bab-list" id="babListAlacarte"></div>
-      </div>
-
-      <!-- Sub-bab terpilih (dari semua mapel) -->
-      <div class="selected-preview" id="previewAlacarte">
-        <div class="selected-preview-title">Sub-bab dipilih (<span id="countAlacarte">0</span>)</div>
-        <div class="selected-tags" id="tagsAlacarte"></div>
-      </div>
-    </div>
-
-    <!-- ── BUNDLING ── -->
-    <div id="bundling" style="display:none">
-      <div class="section-label">Pilih paket bundling</div>
-      <div class="pkg-grid" id="bundlingPkgs">
-        <div class="pkg selected" onclick="selBundlingPkg(this,3,21900)">
-          <div class="pkg-name">Bundling 3</div>
-          <div class="pkg-price">Rp 21.900</div>
-          <div class="pkg-desc">3 sub-bab pilihan</div>
-          <div class="pkg-save">Hemat Rp 1.800 vs satuan</div>
+      <div class="segmen-grid">
+        <!-- AKTIF -->
+        <div class="segmen-card" onclick="selectSegmen('SD Kelas 6')">
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SD Kelas 6</div>
+          <div class="segmen-desc">Matematika, IPAS, B.Inggris</div>
         </div>
-        <div class="pkg" onclick="selBundlingPkg(this,5,34900)">
-          <div class="pkg-badge">Populer</div>
-          <div class="pkg-name">Bundling 5</div>
-          <div class="pkg-price">Rp 34.900</div>
-          <div class="pkg-desc">5 sub-bab pilihan</div>
-          <div class="pkg-save">Hemat Rp 4.600 vs satuan</div>
+        <!-- COMING SOON -->
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMP Kelas 7</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
         </div>
-        <div class="pkg" onclick="selBundlingPkg(this,10,64900)">
-          <div class="pkg-badge">Terbaik</div>
-          <div class="pkg-name">Bundling 10</div>
-          <div class="pkg-price">Rp 64.900</div>
-          <div class="pkg-desc">10 sub-bab pilihan</div>
-          <div class="pkg-save">Hemat Rp 14.100 vs satuan</div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMP Kelas 8</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
         </div>
-      </div>
-
-      <div class="quota-info">Dipilih: <span id="quotaCount">0</span> / <span id="quotaMax">3</span> sub-bab</div>
-
-      <div class="mapel-grid">
-        <div class="mapel sel" onclick="selMapel('bundling',this,'Matematika')"><div class="mapel-icon">📐</div><div class="mapel-name">Matematika</div></div>
-        <div class="mapel" onclick="selMapel('bundling',this,'IPAS')"><div class="mapel-icon">🔬</div><div class="mapel-name">IPAS</div></div>
-        <div class="mapel" onclick="selMapel('bundling',this,'B.Inggris')"><div class="mapel-icon">🔤</div><div class="mapel-name">B.Inggris</div></div>
-      </div>
-
-      <div class="subbab-wrap">
-        <div class="bab-list" id="babListBundling"></div>
-      </div>
-
-      <div class="selected-preview" id="previewBundling">
-        <div class="selected-preview-title">Sub-bab dipilih (<span id="countBundling">0</span>)</div>
-        <div class="selected-tags" id="tagsBundling"></div>
-      </div>
-    </div>
-
-    <!-- ── BULANAN ── -->
-    <div id="bulanan" style="display:none">
-      <div class="premium-box">
-        <h3>⭐ Premium Bulanan</h3>
-        <p>Akses semua sub-bab Matematika, IPAS & B.Inggris tanpa batas selama 1 bulan. Tidak perlu pilih sub-bab — semua langsung terbuka!</p>
-      </div>
-      <div class="pkg-grid">
-        <div class="pkg selected" onclick="selPkg(this,99900,'Premium Bulanan')">
-          <div class="pkg-badge">Akses penuh</div>
-          <div class="pkg-name">1 Bulan</div>
-          <div class="pkg-price">Rp 99.900</div>
-          <div class="pkg-desc">Semua mapel & sub-bab tanpa batas</div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMP Kelas 9</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMA Kelas 10</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMA Kelas 11</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📚</div>
+          <div class="segmen-name">SMA Kelas 12</div>
+          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">📝</div>
+          <div class="segmen-name">Try Out</div>
+          <div class="segmen-desc">Persiapan UTS/UAS Kelas 6-12</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">🎯</div>
+          <div class="segmen-name">SNBT PTN</div>
+          <div class="segmen-desc">195 menit · 160 soal</div>
+        </div>
+        <div class="segmen-card coming-soon">
+          <div class="coming-soon-badge">🚧 Coming Soon</div>
+          <div class="segmen-icon">🏛️</div>
+          <div class="segmen-name">CBT CPNS</div>
+          <div class="segmen-desc">130 menit · 110 soal</div>
         </div>
       </div>
     </div>
 
-    <!-- REFERRAL -->
-    <div class="section-label">Kode referral / promo</div>
-    <div class="ref-box locked" id="refBox">
-      <div class="ref-top">
-        <span>🏷️</span>
-        <span class="ref-top-label">Punya kode diskon?</span>
-        <span class="ref-status no" id="refStatus">Belum dipakai</span>
-      </div>
-      <div class="ref-input-row" id="refInputRow">
-        <input type="text" id="refCode" placeholder="Masukkan kode referral kamu"/>
-        <button class="btn-apply" id="btnApply" onclick="applyRef()">Pakai</button>
-      </div>
-      <p class="ref-hint" id="refHint">Kode didapat dari teman atau admin CerdasBersama.</p>
-    </div>
+    <!-- ══ STEP 2: PILIH PAKET ══ -->
+    <div id="viewPaket" style="display:none">
+      <button class="btn-back" onclick="goStep(1)">← Ganti Segmen</button>
+      <div class="page-title" id="paketTitle">Pilih Paket</div>
+      <div class="page-sub" id="paketSub">Pilih cara akses yang sesuai.</div>
 
-    <!-- RINGKASAN -->
-    <div class="warn-msg" id="warnMsg"></div>
-    <div class="order-box">
-      <div class="section-label">Ringkasan pesanan</div>
-      <div class="order-row">
-        <div>
-          <div class="label" id="orderName">—</div>
-          <div class="order-subbab" id="orderSubbab"></div>
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(this,'alacarte')">À la carte</button>
+        <button class="tab" onclick="switchTab(this,'bundling')">Bundling</button>
+        <button class="tab" onclick="switchTab(this,'bulanan')">Bulanan</button>
+      </div>
+
+      <!-- À LA CARTE -->
+      <div id="alacarte">
+        <div class="section-label">Pilih sub-bab (Rp 7.900 / sub-bab)</div>
+        <div class="mapel-grid" id="mapelGridAlacarte"></div>
+        <div class="subbab-list" id="babListAlacarte"></div>
+        <div class="selected-preview" id="previewAlacarte">
+          <div class="selected-preview-title">Sub-bab dipilih (<span id="countAlacarte">0</span>)</div>
+          <div class="selected-tags" id="tagsAlacarte"></div>
         </div>
-        <span id="orderBase">—</span>
       </div>
-      <div class="order-row disc" id="discRow" style="display:none">
-        <span class="label">Diskon 50% (pembelian pertama)</span>
-        <span id="discAmt">—</span>
+
+      <!-- BUNDLING -->
+      <div id="bundling" style="display:none">
+        <div class="section-label">Pilih paket bundling</div>
+        <div class="pkg-grid" id="bundlingPkgs">
+          <div class="pkg selected" onclick="selBundlingPkg(this,3,21900)">
+            <div class="pkg-name">Bundling 3</div>
+            <div class="pkg-price">Rp 21.900</div>
+            <div class="pkg-desc">3 sub-bab pilihan</div>
+            <div class="pkg-save">Hemat Rp 1.800 vs satuan</div>
+          </div>
+          <div class="pkg" onclick="selBundlingPkg(this,5,34900)">
+            <div class="pkg-badge">Populer</div>
+            <div class="pkg-name">Bundling 5</div>
+            <div class="pkg-price">Rp 34.900</div>
+            <div class="pkg-desc">5 sub-bab pilihan</div>
+            <div class="pkg-save">Hemat Rp 4.600 vs satuan</div>
+          </div>
+          <div class="pkg" onclick="selBundlingPkg(this,10,64900)">
+            <div class="pkg-badge">Terbaik</div>
+            <div class="pkg-name">Bundling 10</div>
+            <div class="pkg-price">Rp 64.900</div>
+            <div class="pkg-desc">10 sub-bab pilihan</div>
+            <div class="pkg-save">Hemat Rp 14.100 vs satuan</div>
+          </div>
+        </div>
+        <div class="quota-info">Dipilih: <span id="quotaCount">0</span> / <span id="quotaMax">3</span> sub-bab</div>
+        <div class="mapel-grid" id="mapelGridBundling"></div>
+        <div class="subbab-list" id="babListBundling"></div>
+        <div class="selected-preview" id="previewBundling">
+          <div class="selected-preview-title">Sub-bab dipilih (<span id="countBundling">0</span>)</div>
+          <div class="selected-tags" id="tagsBundling"></div>
+        </div>
       </div>
-      <div class="order-row total">
-        <span>Total bayar</span>
-        <span id="totalAmt" style="color:#C0392B">—</span>
+
+      <!-- BULANAN -->
+      <div id="bulanan" style="display:none">
+        <div class="premium-box">
+          <h3>⭐ Premium Bulanan</h3>
+          <p>Akses semua sub-bab di segmen yang dipilih tanpa batas selama 1 bulan!</p>
+        </div>
+        <div class="pkg-grid">
+          <div class="pkg selected" onclick="selPkg(this,99900,'Premium Bulanan')">
+            <div class="pkg-badge">Akses penuh</div>
+            <div class="pkg-name">1 Bulan</div>
+            <div class="pkg-price">Rp 99.900</div>
+            <div class="pkg-desc">Semua mapel & sub-bab tanpa batas</div>
+          </div>
+        </div>
       </div>
+
+      <!-- REFERRAL -->
+      <div class="section-label">Kode referral / promo</div>
+      <div class="ref-box locked" id="refBox">
+        <div class="ref-top">
+          <span>🏷️</span>
+          <span class="ref-top-label">Punya kode diskon?</span>
+          <span class="ref-status no" id="refStatus">Belum dipakai</span>
+        </div>
+        <div class="ref-input-row" id="refInputRow">
+          <input type="text" id="refCode" placeholder="Masukkan kode referral kamu"/>
+          <button class="btn-apply" id="btnApply" onclick="applyRef()">Pakai</button>
+        </div>
+        <p class="ref-hint" id="refHint">Kode didapat dari teman atau admin CerdasBersama.</p>
+      </div>
+
+      <!-- RINGKASAN -->
+      <div class="warn-msg" id="warnMsg"></div>
+      <div class="order-box">
+        <div class="section-label">Ringkasan pesanan</div>
+        <div class="order-row">
+          <div>
+            <div class="label" id="orderName">—</div>
+            <div class="order-subbab" id="orderSubbab"></div>
+          </div>
+          <span id="orderBase">—</span>
+        </div>
+        <div class="order-row disc" id="discRow" style="display:none">
+          <span class="label">Diskon 50% (pembelian pertama)</span>
+          <span id="discAmt">—</span>
+        </div>
+        <div class="order-row total">
+          <span>Total bayar</span>
+          <span id="totalAmt" style="color:#C0392B">—</span>
+        </div>
+      </div>
+
+      <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
+      <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
     </div>
 
-    <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
-    <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
-  </div>
+  </div><!-- /mainView -->
 
   <!-- SUCCESS -->
   <div id="successView" style="display:none;text-align:center;padding:3rem 0">
@@ -268,320 +353,283 @@ import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const HARGA = { alacarte: 7900, bundling: {3:21900,5:34900,10:64900}, bulanan: 99900 };
+const HARGA = { alacarte:7900, bundling:{3:21900,5:34900,10:64900}, bulanan:99900 };
 const KOMISI_RATE = 0.15;
 
-// Sub-bab per mapel — harus sama persis dengan yang di Firestore
-const SUBBAB = {
-  Matematika: ['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'],
-  IPAS:       ['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'],
+const MAPEL_BY_SEGMEN = {
+  'SD Kelas 6': ['Matematika','IPAS','B.Inggris'],
+  'SMP Kelas 7': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
+  'SMP Kelas 8': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
+  'SMP Kelas 9': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
+  'SMA Kelas 10': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
+  'SMA Kelas 11': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
+  'SMA Kelas 12': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
+};
+
+const MAPEL_ICON = {'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'};
+
+const SUBBAB_SD = {
+  Matematika:['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'],
+  IPAS:['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'],
   'B.Inggris':['Greetings','Tenses Dasar','Reading Comprehension','Vocabulary','Writing Simple Sentences','Listening Skills','Speaking Practice','Grammar Dasar'],
 };
 
-let curMapelAlacarte = 'Matematika';
-let curMapelBundling = 'Matematika';
-let selAlacarte = [];   // [{mapel, subbab}]
-let selBundling = [];   // [{mapel, subbab}]
-let bundlingMax = 3, bundlingPrice = 21900;
-let curTab = 'alacarte';
-let curPkg = { name:'À la carte', price:7900, type:'alacarte' };
-let discApplied = false, validRefCode = '';
-let currentUser = null, currentUserData = null;
+let selectedSegmen = '';
+let curMapelAlacarte = '', curMapelBundling = '';
+let selAlacarte = [], selBundling = [];
+let bundlingMax=3, bundlingPrice=21900;
+let curPkg={name:'À la carte',price:7900,type:'alacarte'};
+let discApplied=false, validRefCode='';
+let currentUser=null, currentUserData=null;
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href='/register.html'; return; }
   currentUser = user;
   const snap = await getDoc(doc(db,'users',user.uid));
-
-  // Kalau user auth ada tapi doc Firestore tidak ada → paksa daftar ulang
-  if (!snap.exists()) {
-    window.location.href = '/register.html';
-    return;
-  }
-
+  if (!snap.exists()) { window.location.href='/register.html'; return; }
   currentUserData = snap.data();
-  // Auto-apply referral kalau ada
   if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
-    validRefCode = currentUserData.referredBy;
-    discApplied = true;
-    $('refCode').value = validRefCode;
-    applyRefUI();
+    validRefCode=currentUserData.referredBy; discApplied=true;
   }
-  const savedRef = sessionStorage.getItem('refCode');
-  if (savedRef && !discApplied) $('refCode').value = savedRef;
-
-  $('loadingView').style.display = 'none';
-  $('mainView').style.display = 'block';
-  renderBabs('alacarte');
-  renderBabs('bundling');
+  $('loadingView').style.display='none';
+  $('mainView').style.display='block';
   updateOrder();
 });
 
+// ── STEP NAVIGATION ──
+function updateSteps(step) {
+  for (let i=1;i<=3;i++) {
+    const el=$(`step${i}`);
+    const line=$(`line${i}`);
+    el.className='step-item'+(i<step?' done':i===step?' active':'');
+    if(line) line.className='step-line'+(i<step?' done':'');
+  }
+}
+
+function goStep(step) {
+  $('viewSegmen').style.display = step===1?'block':'none';
+  $('viewPaket').style.display  = step===2?'block':'none';
+  updateSteps(step);
+  window.scrollTo(0,0);
+}
+
+window.goStep = goStep;
+
+// ── STEP 1: PILIH SEGMEN ──
+window.selectSegmen = function(segmen) {
+  selectedSegmen = segmen;
+  $('paketTitle').textContent = `Paket untuk ${segmen}`;
+  $('paketSub').textContent = `Pilih cara akses yang sesuai untuk ${segmen}.`;
+
+  // Reset pilihan
+  selAlacarte=[]; selBundling=[];
+  curMapelAlacarte = (MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
+  curMapelBundling = (MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
+
+  renderMapelGrid('alacarte');
+  renderMapelGrid('bundling');
+  renderBabs('alacarte');
+  renderBabs('bundling');
+  updateOrder();
+  goStep(2);
+};
+
+function getMapels() {
+  return MAPEL_BY_SEGMEN[selectedSegmen] || ['Matematika','IPAS','B.Inggris'];
+}
+
+function getSubbabs(mapel) {
+  // SD → pakai hardcode, lainnya → dari Firestore nanti (untuk sekarang kosong)
+  if (selectedSegmen === 'SD Kelas 6') return SUBBAB_SD[mapel] || [];
+  return []; // Coming soon untuk segmen lain
+}
+
+// ── RENDER MAPEL GRID ──
+function renderMapelGrid(tab) {
+  const gridId = tab==='alacarte'?'mapelGridAlacarte':'mapelGridBundling';
+  const grid=$(gridId);
+  const mapels = getMapels();
+  const curMapel = tab==='alacarte'?curMapelAlacarte:curMapelBundling;
+  grid.innerHTML = mapels.map(m=>`
+    <div class="mapel ${m===curMapel?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
+      <div class="mapel-icon">${MAPEL_ICON[m]||'📚'}</div>
+      <div class="mapel-name">${m}</div>
+    </div>`).join('');
+}
+
 // ── RENDER SUB-BAB ──
 function renderBabs(tab) {
-  const mapel = tab==='alacarte' ? curMapelAlacarte : curMapelBundling;
-  const sel   = tab==='alacarte' ? selAlacarte : selBundling;
-  const listId = tab==='alacarte' ? 'babListAlacarte' : 'babListBundling';
-  const list = $(listId);
+  const mapel = tab==='alacarte'?curMapelAlacarte:curMapelBundling;
+  const sel   = tab==='alacarte'?selAlacarte:selBundling;
+  const list  = $(tab==='alacarte'?'babListAlacarte':'babListBundling');
+  const subbabs = getSubbabs(mapel);
   list.innerHTML = '';
 
-  SUBBAB[mapel].forEach(sb => {
-    const isSel = sel.some(s => s.mapel===mapel && s.subbab===sb);
-    const isDisabled = tab==='bundling' && !isSel && sel.length >= bundlingMax;
-    const div = document.createElement('div');
-    div.className = 'bab'+(isSel?' sel':'')+(isDisabled?' disabled':'');
-    div.innerHTML = `<div class="bab-check">${isSel?'✓':''}</div><span>${sb}</span>`;
-    if (!isDisabled) div.onclick = () => toggleBab(tab, mapel, sb);
+  if (!subbabs.length) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia untuk segmen ini.</div>';
+    return;
+  }
+
+  subbabs.forEach(sb => {
+    const isSel = sel.some(s=>s.mapel===mapel&&s.subbab===sb);
+    const isDisabled = tab==='bundling'&&!isSel&&sel.length>=bundlingMax;
+    const div=document.createElement('div');
+    div.className='bab'+(isSel?' sel':'')+(isDisabled?' disabled':'');
+    div.innerHTML=`<div class="bab-check">${isSel?'✓':''}</div><span>${sb}</span>`;
+    if(!isDisabled) div.onclick=()=>toggleBab(tab,mapel,sb);
     list.appendChild(div);
   });
-  if (tab==='bundling') updateQuota();
+  if(tab==='bundling') updateQuota();
   updateSelectedPreview(tab);
 }
 
-function toggleBab(tab, mapel, sb) {
-  const sel = tab==='alacarte' ? selAlacarte : selBundling;
-  const idx = sel.findIndex(s => s.mapel===mapel && s.subbab===sb);
-  if (idx > -1) sel.splice(idx, 1);
+function toggleBab(tab,mapel,sb) {
+  const sel=tab==='alacarte'?selAlacarte:selBundling;
+  const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
+  if(idx>-1) sel.splice(idx,1);
   else {
-    if (tab==='bundling' && sel.length>=bundlingMax) return;
-    sel.push({mapel, subbab:sb});
+    if(tab==='bundling'&&sel.length>=bundlingMax) return;
+    sel.push({mapel,subbab:sb});
   }
-  if (tab==='alacarte') {
-    const n = selAlacarte.length || 1;
-    curPkg = { name:`À la carte (${n} sub-bab)`, price: n*HARGA.alacarte, type:'alacarte' };
-  }
-  renderBabs(tab);
-  updateOrder();
+  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
+  renderBabs(tab); updateOrder();
 }
 
 function updateSelectedPreview(tab) {
-  const sel = tab==='alacarte' ? selAlacarte : selBundling;
-  const preview = tab==='alacarte' ? $('previewAlacarte') : $('previewBundling');
-  const count   = tab==='alacarte' ? $('countAlacarte') : $('countBundling');
-  const tags    = tab==='alacarte' ? $('tagsAlacarte') : $('tagsBundling');
-
-  if (!sel.length) { preview.style.display='none'; return; }
-  preview.style.display = 'block';
-  count.textContent = sel.length;
-  tags.innerHTML = sel.map(s =>
-    `<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">
-      ${s.mapel==='Matematika'?'📐':s.mapel==='IPAS'?'🔬':'🔤'} ${s.subbab} ✕
-    </div>`
-  ).join('');
+  const sel=tab==='alacarte'?selAlacarte:selBundling;
+  const preview=tab==='alacarte'?$('previewAlacarte'):$('previewBundling');
+  const count=tab==='alacarte'?$('countAlacarte'):$('countBundling');
+  const tags=tab==='alacarte'?$('tagsAlacarte'):$('tagsBundling');
+  if(!sel.length){preview.style.display='none';return;}
+  preview.style.display='block';
+  count.textContent=sel.length;
+  tags.innerHTML=sel.map(s=>`<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">${MAPEL_ICON[s.mapel]||'📚'} ${s.subbab} ✕</div>`).join('');
 }
 
-window.removeSelBab = function(tab, mapel, sb) {
-  const sel = tab==='alacarte' ? selAlacarte : selBundling;
-  const idx = sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
-  if (idx>-1) sel.splice(idx,1);
-  if (tab==='alacarte') {
-    const n = selAlacarte.length||1;
-    curPkg = {name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};
-  }
-  renderBabs(tab);
-  updateOrder();
+window.removeSelBab=function(tab,mapel,sb){
+  const sel=tab==='alacarte'?selAlacarte:selBundling;
+  const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
+  if(idx>-1) sel.splice(idx,1);
+  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
+  renderBabs(tab); updateOrder();
 };
 
-function updateQuota() {
-  $('quotaCount').textContent = selBundling.length;
-  $('quotaMax').textContent = bundlingMax;
-}
+function updateQuota(){$('quotaCount').textContent=selBundling.length;$('quotaMax').textContent=bundlingMax;}
 
-// ── MAPEL SELECT ──
-window.selMapel = function(tab, el, mapel) {
-  el.closest('.mapel-grid').querySelectorAll('.mapel').forEach(m=>m.classList.remove('sel'));
-  el.classList.add('sel');
-  if (tab==='alacarte') curMapelAlacarte = mapel;
-  else curMapelBundling = mapel;
-  renderBabs(tab);
+window.selMapel=function(tab,el,mapel){
+  if(tab==='alacarte') curMapelAlacarte=mapel;
+  else curMapelBundling=mapel;
+  renderMapelGrid(tab); renderBabs(tab);
 };
 
-// ── BUNDLING PKG ──
-window.selBundlingPkg = function(el, max, price) {
+window.selBundlingPkg=function(el,max,price){
   document.querySelectorAll('#bundlingPkgs .pkg').forEach(p=>p.className='pkg');
   el.className='pkg selected';
   bundlingMax=max; bundlingPrice=price;
-  if (selBundling.length>max) selBundling=selBundling.slice(0,max);
+  if(selBundling.length>max) selBundling=selBundling.slice(0,max);
   curPkg={name:`Bundling ${max} sub-bab`,price,type:'bundling'};
-  renderBabs('bundling');
-  updateOrder();
+  renderBabs('bundling'); updateOrder();
 };
 
-// ── BULANAN ──
-window.selPkg = function(el, price, name) {
+window.selPkg=function(el,price,name){
   document.querySelectorAll('.pkg').forEach(p=>p.className='pkg');
   el.className='pkg selected';
-  curPkg={name,price,type:'bulanan'};
-  updateOrder();
+  curPkg={name,price,type:'bulanan'}; updateOrder();
 };
 
-// ── TAB SWITCH ──
-window.switchTab = function(el, tab) {
+window.switchTab=function(el,tab){
   document.querySelectorAll('.tab').forEach(t=>t.className='tab');
   el.className='tab active';
   ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
   $(tab).style.display='block';
-  curTab = tab;
-  if (tab==='alacarte') { const n=selAlacarte.length||1; curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'}; }
-  else if (tab==='bundling') { curPkg={name:`Bundling ${bundlingMax} sub-bab`,price:bundlingPrice,type:'bundling'}; }
-  else { curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'}; }
+  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
+  else if(tab==='bundling'){curPkg={name:`Bundling ${bundlingMax} sub-bab`,price:bundlingPrice,type:'bundling'};}
+  else{curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};}
   updateOrder();
 };
 
 // ── REFERRAL ──
-function applyRefUI() {
+function applyRefUI(){
   $('refBox').className='ref-box unlocked';
   $('refStatus').className='ref-status ok';
   $('refStatus').textContent='Diskon aktif ✓';
   $('refInputRow').style.display='none';
-  const hint=$('refHint');
-  hint.className='ref-ok-msg';
-  hint.textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
+  $('refHint').className='ref-ok-msg';
+  $('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
   updateOrder();
 }
 
-window.applyRef = async function() {
-  if (currentUserData?.hasUsedReferral) {
-    $('refHint').style.color='#C0392B';
-    $('refHint').textContent='Kamu sudah pernah pakai kode referral.';
-    setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin CerdasBersama.';},3000);
-    return;
-  }
+window.applyRef=async function(){
+  if(currentUserData?.hasUsedReferral){$('refHint').style.color='#C0392B';$('refHint').textContent='Kamu sudah pernah pakai kode referral.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';},3000);return;}
   const code=$('refCode').value.trim().toUpperCase();
-  const btn=$('btnApply');
-  if (!code) return;
-  btn.disabled=true; btn.textContent='...';
-  try {
+  if(!code) return;
+  $('btnApply').disabled=true; $('btnApply').textContent='...';
+  try{
     const snap=await getDocs(query(collection(db,'users'),where('referralCode','==',code)));
-    if (!snap.empty) { discApplied=true; validRefCode=code; applyRefUI(); }
-    else {
-      $('refHint').style.color='#C0392B'; $('refHint').textContent='Kode tidak ditemukan.';
-      setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin CerdasBersama.';$('refStatus').textContent='Belum dipakai';btn.disabled=false;btn.textContent='Pakai';},2500);
-    }
-  } catch(e) { $('refHint').style.color='#C0392B'; $('refHint').textContent='Gagal verifikasi.'; btn.disabled=false; btn.textContent='Pakai'; }
+    if(!snap.empty){discApplied=true;validRefCode=code;applyRefUI();}
+    else{$('refHint').style.color='#C0392B';$('refHint').textContent='Kode tidak ditemukan.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';$('refStatus').textContent='Belum dipakai';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';},2500);}
+  }catch(e){$('refHint').style.color='#C0392B';$('refHint').textContent='Gagal verifikasi.';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';}
 };
 
+// Auto apply referral dari sessionStorage
+if(discApplied && validRefCode) setTimeout(applyRefUI, 500);
+
 // ── UPDATE ORDER ──
-function updateOrder() {
+function updateOrder(){
   const base=curPkg.price;
   const disc=discApplied?Math.round(base*0.5):0;
   const total=base-disc;
-
-  // Sub-bab label
-  let subbabLabel = '';
-  if (curPkg.type==='alacarte' && selAlacarte.length) {
-    subbabLabel = selAlacarte.map(s=>`${s.subbab}`).join(', ');
-  } else if (curPkg.type==='bundling' && selBundling.length) {
-    subbabLabel = selBundling.map(s=>`${s.subbab}`).join(', ');
-  } else if (curPkg.type==='bulanan') {
-    subbabLabel = 'Semua sub-bab';
-  }
-
-  $('orderName').textContent = curPkg.name;
-  $('orderSubbab').textContent = subbabLabel;
-  $('orderBase').textContent = 'Rp '+base.toLocaleString('id');
-  $('discRow').style.display = disc>0?'flex':'none';
-  $('discAmt').textContent = '-Rp '+disc.toLocaleString('id');
-  $('totalAmt').textContent = 'Rp '+total.toLocaleString('id');
+  let subbabLabel='';
+  if(curPkg.type==='alacarte'&&selAlacarte.length) subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
+  else if(curPkg.type==='bundling'&&selBundling.length) subbabLabel=selBundling.map(s=>s.subbab).join(', ');
+  else if(curPkg.type==='bulanan') subbabLabel='Semua sub-bab';
+  $('orderName').textContent=curPkg.name;
+  $('orderSubbab').textContent=subbabLabel;
+  $('orderBase').textContent='Rp '+base.toLocaleString('id');
+  $('discRow').style.display=disc>0?'flex':'none';
+  $('discAmt').textContent='-Rp '+disc.toLocaleString('id');
+  $('totalAmt').textContent='Rp '+total.toLocaleString('id');
 }
 
 // ── BAYAR ──
-window.doPay = async function() {
+window.doPay=async function(){
   const btn=$('btnPay');
   $('warnMsg').style.display='none';
+  if(curPkg.type==='alacarte'&&selAlacarte.length===0){$('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab.';$('warnMsg').style.display='block';return;}
+  if(curPkg.type==='bundling'&&selBundling.length===0){$('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling.';$('warnMsg').style.display='block';return;}
 
-  // Validasi sub-bab dipilih
-  if (curPkg.type==='alacarte' && selAlacarte.length===0) {
-    $('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab terlebih dahulu.';
-    $('warnMsg').style.display='block'; return;
-  }
-  if (curPkg.type==='bundling' && selBundling.length===0) {
-    $('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling kamu.';
-    $('warnMsg').style.display='block'; return;
-  }
-
-  const base=curPkg.price;
-  const disc=discApplied?Math.round(base*0.5):0;
-  const total=base-disc;
+  const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
   const komisi=Math.round(total*KOMISI_RATE);
   const referredBy=validRefCode||currentUserData?.referredBy||null;
   const orderId='CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
 
-  // Kumpulkan sub-bab yang dibeli
-  let subBabDibeli = [];
-  if (curPkg.type==='alacarte') subBabDibeli = selAlacarte.map(s=>s.subbab);
-  else if (curPkg.type==='bundling') subBabDibeli = selBundling.map(s=>s.subbab);
-  else subBabDibeli = ['__premium__']; // marker untuk akses penuh
+  let subBabDibeli=[];
+  if(curPkg.type==='alacarte') subBabDibeli=selAlacarte.map(s=>s.subbab);
+  else if(curPkg.type==='bundling') subBabDibeli=selBundling.map(s=>s.subbab);
+  else subBabDibeli=['__premium__'];
 
   btn.disabled=true; btn.textContent='Memproses...';
-
-  try {
-    // 1. Simpan order ke Firestore
-    await addDoc(collection(db,'orders'), {
-      uid: currentUser.uid,
-      email: currentUser.email,
-      paket: curPkg.name,
-      tipe: curPkg.type,
-      subBabDibeli,
-      hargaBase: base,
-      diskon: disc,
-      total,
-      refCode: referredBy,
-      komisi,
-      midtransOrderId: orderId,
-      status: 'pending',
-      createdAt: serverTimestamp()
-    });
-
-    // 2. Catat referral first purchase
-    if (referredBy && discApplied && !currentUserData?.hasUsedReferral) {
-      await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});
-      if (currentUserData) currentUserData.hasUsedReferral=true;
-    }
-
-    // 3. Minta token Midtrans
-    const res=await fetch('/api/create-transaction',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:curPkg.name})
-    });
+  try{
+    await addDoc(collection(db,'orders'),{uid:currentUser.uid,email:currentUser.email,segmen:selectedSegmen,paket:curPkg.name,tipe:curPkg.type,subBabDibeli,hargaBase:base,diskon:disc,total,refCode:referredBy,komisi,midtransOrderId:orderId,status:'pending',createdAt:serverTimestamp()});
+    if(referredBy&&discApplied&&!currentUserData?.hasUsedReferral){await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});if(currentUserData)currentUserData.hasUsedReferral=true;}
+    const res=await fetch('/api/create-transaction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:`${selectedSegmen} - ${curPkg.name}`})});
     const data=await res.json();
-    if (!data.token) throw new Error(JSON.stringify(data.error));
-
-    // 4. Buka Midtrans Snap
-    window.snap.pay(data.token, {
-      onSuccess: async function() {
-        // Update akses user langsung dari client (backup — webhook juga akan handle ini)
-        if (curPkg.type==='bulanan') {
-          const exp=new Date(); exp.setMonth(exp.getMonth()+1);
-          await updateDoc(doc(db,'users',currentUser.uid),{
-            plan:'premium', expiredAt:exp, subBabAkses:['__premium__']
-          });
-        } else {
-          await updateDoc(doc(db,'users',currentUser.uid),{
-            plan:'alacarte', subBabAkses: arrayUnion(...subBabDibeli)
-          });
-        }
-        // Update komisi referrer
-        if (referredBy) {
-          const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));
-          if (!rs.empty) await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});
-        }
-        $('successSubbab').textContent = curPkg.type==='bulanan' ? 'Semua sub-bab sudah terbuka!' : `Sub-bab aktif: ${subBabDibeli.join(', ')}`;
-        $('mainView').style.display='none';
-        $('successView').style.display='block';
+    if(!data.token) throw new Error(JSON.stringify(data.error));
+    window.snap.pay(data.token,{
+      onSuccess:async function(){
+        if(curPkg.type==='bulanan'){const exp=new Date();exp.setMonth(exp.getMonth()+1);await updateDoc(doc(db,'users',currentUser.uid),{plan:'premium',expiredAt:exp,subBabAkses:['__premium__']});}
+        else{await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});}
+        if(referredBy){const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});}
+        $('successSubbab').textContent=curPkg.type==='bulanan'?'Semua sub-bab sudah terbuka!':`Sub-bab aktif: ${subBabDibeli.join(', ')}`;
+        $('mainView').style.display='none';$('successView').style.display='block';
       },
-      onPending: function() {
-        $('mainView').style.display='none';
-        $('successView').style.display='block';
-      },
-      onError: function() { btn.disabled=false; btn.textContent='Bayar Sekarang'; alert('Pembayaran gagal.'); },
-      onClose: function() { btn.disabled=false; btn.textContent='Bayar Sekarang'; }
+      onPending:function(){$('mainView').style.display='none';$('successView').style.display='block';},
+      onError:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Pembayaran gagal.');},
+      onClose:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';}
     });
-
-  } catch(e) { btn.disabled=false; btn.textContent='Bayar Sekarang'; alert('Error: '+e.message); }
+  }catch(e){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Error: '+e.message);}
 };
 </script>
 </body>
