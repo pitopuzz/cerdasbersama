@@ -612,7 +612,7 @@ async function syncSubBab(rows) {
         logBulk(`📚 SubBab baru: ${segmen} — ${mapel}`, 'ok');
       } else {
         await updateDoc(snap.docs[0].ref, { list: [...subs] });
-        logBulk(`📚 SubBab diupdate: ${mapel} (${merged.length} total)`, 'ok');
+logBulk(`📚 SubBab diupdate: ${mapel} (${subs.size} total)`, 'ok');
       }
     } catch(e) { logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err'); }
   }
