@@ -175,7 +175,7 @@ tr:last-child td{border-bottom:none}
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc, Timestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, updateDoc, Timestamp, query, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const ADMIN_EMAILS = ['bersamacerdas1@gmail.com'];
 let allUsers = [], allOrders = [];
@@ -191,15 +191,12 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById('mainView').style.display = 'block';
 });
 
-// ── Load users ─────────────────────────────────────────
 async function loadUsers() {
   const snap = await getDocs(collection(db, 'users'));
   allUsers = snap.docs.map(d => ({...d.data(), docId: d.id}));
-
   document.getElementById('statTotal').textContent = allUsers.length;
   document.getElementById('statPremium').textContent = allUsers.filter(u => u.plan === 'premium').length;
-  document.getElementById('statFree').textContent = allUsers.filter(u => u.plan === 'free').length;
-
+  document.getElementById('statFree').textContent = allUsers.filter(u => u.plan !== 'premium').length;
   renderUsers(allUsers);
 }
 
@@ -209,28 +206,21 @@ function renderUsers(users) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>';
     return;
   }
-
-  // Default expired date = 30 hari dari sekarang
   const def30 = new Date();
   def30.setDate(def30.getDate() + 30);
   const defVal = def30.toISOString().split('T')[0];
-
   tbody.innerHTML = users.map(u => {
     const expiredAt = u.expiredAt ? new Date(u.expiredAt.seconds * 1000) : null;
     const expStr = expiredAt ? expiredAt.toLocaleDateString('id-ID') : '–';
     const isExpired = expiredAt && expiredAt < new Date();
     const expInputVal = expiredAt ? expiredAt.toISOString().split('T')[0] : defVal;
-
     return `
     <tr>
       <td><strong>${u.nama||'–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa||'–'}</span></td>
       <td style="font-size:12px">${u.email||'–'}</td>
       <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode||'–'}</td>
       <td><span class="badge ${u.plan==='premium'?'premium':'free'}">${u.plan==='premium'?'Premium':'Free'}</span></td>
-      <td style="font-size:12px">
-        ${expStr}
-        ${isExpired ? '<div class="expired-warn">⚠️ Expired</div>' : ''}
-      </td>
+      <td style="font-size:12px">${expStr}${isExpired?'<div class="expired-warn">⚠️ Expired</div>':''}</td>
       <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal||0).toLocaleString('id-ID')}</td>
       <td>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
@@ -261,11 +251,13 @@ window.setPlan = async function(uid, plan, btn) {
       const expDate = dateInput ? new Date(dateInput.value) : new Date();
       if (isNaN(expDate)) { showToast('Tanggal expired tidak valid.'); btn.disabled = false; btn.textContent = '→ Premium'; return; }
       update.expiredAt = Timestamp.fromDate(expDate);
+      update.subBabAkses = ['__premium__'];
     } else {
       update.expiredAt = null;
+      update.subBabAkses = [];
     }
     await updateDoc(doc(db, 'users', uid), update);
-    showToast(`✅ User diupdate ke ${plan}${plan==='premium'?' dengan expired baru':''}`);
+    showToast(`✅ User diupdate ke ${plan}`);
     await loadUsers();
   } catch(e) {
     showToast('Gagal: ' + e.message);
@@ -273,13 +265,11 @@ window.setPlan = async function(uid, plan, btn) {
   }
 }
 
-// ── Load orders ────────────────────────────────────────
 window.loadOrders = async function() {
   document.getElementById('ordersBody').innerHTML = '<tr><td colspan="8" class="loading">Memuat...</td></tr>';
   try {
     const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
     allOrders = snap.docs.map(d => ({...d.data(), docId: d.id}));
-
     document.getElementById('statPending').textContent = allOrders.filter(o => o.status === 'pending').length;
     renderOrders(allOrders);
   } catch(e) {
@@ -315,13 +305,43 @@ function renderOrders(orders) {
   }).join('');
 }
 
-// ── Konfirmasi bayar — hanya update status order ───────
+// ── Konfirmasi bayar — update order + subBabAkses user ──
 window.confirmPaid = async function(orderId, btn) {
   if (!confirm('Konfirmasi pembayaran ini sudah diterima?')) return;
   btn.disabled = true; btn.textContent = '...';
   try {
+    // 1. Ambil data order
+    const orderSnap = await getDoc(doc(db, 'orders', orderId));
+    if (!orderSnap.exists()) { showToast('Order tidak ditemukan.'); return; }
+    const orderData = orderSnap.data();
+
+    // 2. Update status order → paid
     await updateDoc(doc(db, 'orders', orderId), { status: 'paid' });
-    showToast('✅ Pembayaran dikonfirmasi! Jangan lupa update plan user di tab Users.');
+
+    // 3. Update subBabAkses user
+    const uid = orderData.uid;
+    const tipe = orderData.tipe || 'alacarte';
+    const subBabDibeli = orderData.subBabDibeli || [];
+
+    if (uid) {
+      const userRef = doc(db, 'users', uid);
+      if (tipe === 'bulanan') {
+        const exp = new Date();
+        exp.setMonth(exp.getMonth() + 1);
+        await updateDoc(userRef, {
+          plan: 'premium',
+          subBabAkses: ['__premium__'],
+          expiredAt: Timestamp.fromDate(exp)
+        });
+      } else if (subBabDibeli.length > 0) {
+        await updateDoc(userRef, {
+          plan: 'alacarte',
+          subBabAkses: arrayUnion(...subBabDibeli)
+        });
+      }
+    }
+
+    showToast('✅ Pembayaran dikonfirmasi & akses user diupdate!');
     await loadOrders();
   } catch(e) {
     showToast('Gagal: ' + e.message);
@@ -329,7 +349,6 @@ window.confirmPaid = async function(orderId, btn) {
   }
 }
 
-// ── Helpers ────────────────────────────────────────────
 window.doLogout = async function() {
   await signOut(auth);
   window.location.href = 'register.html';
