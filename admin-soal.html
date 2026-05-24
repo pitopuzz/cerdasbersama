@@ -15,38 +15,30 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .nav-links{display:flex;gap:16px}
 .nav-links a{font-size:13px;font-weight:600;color:#7a7168;text-decoration:none;transition:color 0.18s}
 .nav-links a:hover{color:#C0392B}
-
 main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-sub{font-size:13px;color:#7a7168;margin-bottom:28px;font-weight:500}
-
 .tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;flex-wrap:wrap}
 .tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-
 .card{background:#fff;border:1px solid #e8e4dc;border-radius:20px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-bottom:16px}
 .card-title{font-size:16px;font-weight:800;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-
 .field{margin-bottom:16px}
 .field label{display:block;font-size:11px;font-weight:800;color:#7a7168;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px}
 .field input,.field select,.field textarea{width:100%;border:1.5px solid #e8e4dc;border-radius:10px;padding:11px 14px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:#1a1714;background:#fafaf8;outline:none;transition:border-color 0.18s}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#C0392B;background:#fff}
 .field textarea{resize:vertical;min-height:80px;line-height:1.5}
-
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:560px){.field-row{grid-template-columns:1fr}}
-
 .opsi-grid{display:flex;flex-direction:column;gap:10px}
 .opsi-row{display:flex;align-items:center;gap:10px}
 .opsi-key{width:36px;height:36px;border-radius:50%;background:#f5f3ef;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#7a7168;flex-shrink:0;transition:all 0.18s}
 .opsi-row input{flex:1}
 .opsi-row.jawaban .opsi-key{background:#C0392B;color:#fff}
-
 .jawaban-select{display:flex;gap:8px;flex-wrap:wrap}
 .jaw-btn{width:40px;height:40px;border-radius:50%;border:2px solid #e8e4dc;background:#fff;font-size:13px;font-weight:800;color:#7a7168;cursor:pointer;transition:all 0.18s}
 .jaw-btn:hover{border-color:#C0392B}
 .jaw-btn.active{border-color:#C0392B;background:#C0392B;color:#fff}
-
 .btn{padding:12px 24px;border-radius:50px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.18s}
 .btn.primary{background:#C0392B;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.2)}
 .btn.primary:hover{background:#a93226;transform:translateY(-1px)}
@@ -54,29 +46,18 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 .btn.secondary:hover{background:#e8e4dc}
 .btn.orange{background:#e8970a;color:#fff}
 .btn.orange:hover{background:#c97d06}
-.btn.green{background:#1a7a4a;color:#fff}
-.btn.green:hover{background:#145a38}
 .btn.full{width:100%;margin-top:8px}
 .btn:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
-
 .alert{border-radius:12px;padding:12px 16px;font-size:13px;font-weight:600;margin-bottom:16px;display:none;line-height:1.5}
 .alert.ok{background:#edfaf3;border:1px solid #b8e6d0;color:#1a7a4a}
 .alert.err{background:#fef2f2;border:1px solid #fdd;color:#C0392B}
 .alert.info{background:#fff8e6;border:1px solid #f5d06a;color:#8a5e00}
-
-/* BULK UPLOAD */
-.upload-zone{
-  border:2px dashed #e8e4dc;border-radius:16px;
-  padding:36px;text-align:center;cursor:pointer;
-  transition:all 0.2s;background:#fafaf8;
-  margin-bottom:16px;
-}
+.upload-zone{border:2px dashed #e8e4dc;border-radius:16px;padding:36px;text-align:center;cursor:pointer;transition:all 0.2s;background:#fafaf8;margin-bottom:16px}
 .upload-zone:hover,.upload-zone.drag{border-color:#C0392B;background:#fff5f5}
 .upload-zone input{display:none}
 .upload-icon{font-size:40px;margin-bottom:10px}
 .upload-title{font-size:15px;font-weight:800;margin-bottom:4px}
 .upload-sub{font-size:13px;color:#7a7168;font-weight:500}
-
 .preview-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:16px}
 .preview-table th{background:#f5f3ef;padding:8px 12px;text-align:left;font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:#7a7168;border-bottom:1px solid #e8e4dc}
 .preview-table td{padding:8px 12px;border-bottom:1px solid #f5f3ef;vertical-align:top;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -85,17 +66,12 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 .badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px}
 .badge.ok{background:#edfaf3;color:#1a7a4a}
 .badge.err{background:#fef2f2;color:#C0392B}
-
 .step-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #f5f3ef}
 .step-row:last-child{border-bottom:none}
 .step-num{width:28px;height:28px;border-radius:50%;background:#C0392B;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex-shrink:0}
 .step-text h4{font-size:13px;font-weight:800;margin-bottom:2px}
 .step-text p{font-size:12px;color:#7a7168;line-height:1.6}
-
 .warning-box{background:#fff8e6;border:1.5px solid #f5d06a;border-radius:12px;padding:14px 16px;font-size:13px;color:#8a5e00;font-weight:600;margin-bottom:16px;line-height:1.6}
-.danger-box{background:#fef2f2;border:1.5px solid #fdd;border-radius:12px;padding:14px 16px;font-size:13px;color:#C0392B;font-weight:600;margin-bottom:16px;line-height:1.6}
-
-/* DAFTAR SOAL */
 .soal-list{display:flex;flex-direction:column;gap:10px}
 .soal-item{background:#fff;border:1px solid #e8e4dc;border-radius:14px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px}
 .soal-item-left{flex:1;min-width:0}
@@ -110,12 +86,10 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 .soal-jawaban{font-size:11px;font-weight:700;color:#1a7a4a;margin-top:4px}
 .btn-hapus{flex-shrink:0;padding:6px 12px;border-radius:50px;border:1.5px solid #fdd;background:#fff;color:#C0392B;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif}
 .btn-hapus:hover{background:#fef2f2}
-
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .filter-btn{padding:7px 14px;border-radius:50px;border:1.5px solid #e8e4dc;background:#fff;font-size:12px;font-weight:700;cursor:pointer;color:#7a7168;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif}
 .filter-btn:hover,.filter-btn.active{border-color:#C0392B;color:#C0392B;background:#fff5f5}
 .count-badge{background:#f5f3ef;color:#7a7168;font-size:11px;font-weight:700;padding:2px 8px;border-radius:50px;margin-left:4px}
-
 .empty{text-align:center;padding:40px;color:#b0a89c;font-size:14px;font-weight:500}
 .log{background:#1a1714;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#eef0f5;max-height:260px;overflow-y:auto;display:none;margin-top:14px}
 .log-line{padding:2px 0}
@@ -126,7 +100,6 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">· Admin Soal</span></div>
   <div class="nav-links">
@@ -134,14 +107,11 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
     <a href="/dashboard.html">Dashboard</a>
   </div>
 </nav>
-
 <main>
   <div id="loadingView">Memuat halaman admin…</div>
-
   <div id="mainView" style="display:none">
     <div class="page-title">Kelola Soal</div>
     <div class="page-sub">Tambah soal satu per satu, bulk upload dari Excel, atau hapus soal.</div>
-
     <div class="tabs">
       <button class="tab active" id="t1" onclick="switchTab('tambah',this)">➕ Tambah Manual</button>
       <button class="tab" id="t2" onclick="switchTab('bulk',this)">📊 Bulk Excel</button>
@@ -150,12 +120,11 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       <button class="tab" id="t5" onclick="switchTab('tutorial',this)">📖 Tutorial</button>
     </div>
 
-    <!-- ═══ TAB 1: TAMBAH MANUAL ═══ -->
+    <!-- TAB 1: TAMBAH MANUAL -->
     <div id="tabTambah">
       <div class="card">
         <div class="card-title">➕ Tambah Soal Baru</div>
         <div class="alert" id="alertManual"></div>
-
         <div class="field">
           <label>Segmen</label>
           <select id="fSegmen" onchange="updateKategoriOptions()">
@@ -166,34 +135,24 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
             <option value="SMA Kelas 10">📚 SMA Kelas 10</option>
             <option value="SMA Kelas 11">📚 SMA Kelas 11</option>
             <option value="SMA Kelas 12">📚 SMA Kelas 12</option>
-            <option value="Try Out Kelas 6">📝 Try Out Kelas 6</option>
-            <option value="Try Out Kelas 7-9">📝 Try Out Kelas 7-9</option>
-            <option value="Try Out Kelas 10-12">📝 Try Out Kelas 10-12</option>
             <option value="SNBT PTN">🎯 SNBT PTN</option>
             <option value="CBT CPNS">🏛️ CBT CPNS</option>
           </select>
         </div>
-
         <div class="field-row">
           <div class="field">
             <label>Mata Pelajaran</label>
-            <select id="fKategori">
-              <option>Matematika</option>
-              <option>IPAS</option>
-              <option>B.Inggris</option>
-            </select>
+            <select id="fKategori"><option>Matematika</option><option>IPAS</option><option>B.Inggris</option></select>
           </div>
           <div class="field">
             <label>Sub-Bab / Topik</label>
-            <input type="text" id="fSub" placeholder="cth: Bilangan Bulat"/>
+            <input type="text" id="fSub" placeholder="cth: Bilangan Bulat 1"/>
           </div>
         </div>
-
         <div class="field">
           <label>Soal / Pertanyaan</label>
           <textarea id="fSoal" placeholder="Tulis soal di sini…"></textarea>
         </div>
-
         <div class="field">
           <label>Pilihan Jawaban</label>
           <div class="opsi-grid">
@@ -204,7 +163,6 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
             <div class="opsi-row" id="rowE"><div class="opsi-key">E</div><input id="fE" placeholder="Pilihan E"/></div>
           </div>
         </div>
-
         <div class="field">
           <label>Kunci Jawaban</label>
           <div class="jawaban-select">
@@ -215,12 +173,10 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
             <button class="jaw-btn" onclick="setJawaban('E')">E</button>
           </div>
         </div>
-
         <div class="field">
           <label>Pembahasan</label>
           <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar…"></textarea>
         </div>
-
         <div class="field-row">
           <div class="field">
             <label>Tingkat</label>
@@ -231,43 +187,30 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
             <select id="fAkses"><option value="gratis">Gratis</option><option value="premium">Premium only</option></select>
           </div>
         </div>
-
         <button class="btn primary full" id="btnSimpan" onclick="simpanManual()">💾 Simpan Soal</button>
       </div>
     </div>
 
-    <!-- ═══ TAB 2: BULK EXCEL ═══ -->
+    <!-- TAB 2: BULK EXCEL -->
     <div id="tabBulk" style="display:none">
-
-      <!-- Download Template -->
       <div class="card">
         <div class="card-title">📥 Download Template Excel</div>
-        <p style="font-size:13px;color:#7a7168;margin-bottom:16px;font-weight:500;line-height:1.6">
-          Download template lalu isi soal-soal kamu. Setiap baris = 1 soal. Wajib ikuti format kolom yang sudah ditentukan.
-        </p>
+        <p style="font-size:13px;color:#7a7168;margin-bottom:16px;font-weight:500;line-height:1.6">Download template lalu isi soal-soal kamu. Setiap baris = 1 soal.</p>
         <button class="btn secondary" onclick="downloadTemplate()">📥 Download Template Excel</button>
         <div style="margin-top:12px;font-size:12px;color:#7a7168;font-weight:500">
-          Kolom yang diperlukan: <strong>kategori, subKategori, pertanyaan, opsiA, opsiB, opsiC, opsiD, opsiE, jawaban, pembahasan, tingkat, akses</strong>
+          Kolom: <strong>segmen, kategori, subKategori, pertanyaan, opsiA, opsiB, opsiC, opsiD, opsiE, jawaban, pembahasan, tingkat, akses</strong>
         </div>
       </div>
-
-      <!-- Upload File -->
       <div class="card">
         <div class="card-title">📤 Upload File Excel</div>
         <div class="alert" id="alertBulk"></div>
-
-        <div class="warning-box">
-          ⚠️ Opsi: kamu bisa hapus semua soal lama sebelum upload, atau langsung tambah ke soal yang sudah ada.
-        </div>
-
+        <div class="warning-box">⚠️ <strong>Hapus Soal Lama + Upload Baru</strong> = reset total soal + reset subBab sesuai Excel baru. <strong>Tambah ke Soal yang Ada</strong> = soal ditambah, subBab tetap di-reset sesuai Excel.</div>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
           <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this)"/>
           <div class="upload-icon">📊</div>
           <div class="upload-title">Klik atau drag & drop file Excel</div>
           <div class="upload-sub">Format: .xlsx, .xls, atau .csv</div>
         </div>
-
-        <!-- Preview -->
         <div id="previewWrap" style="display:none">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
             <div style="font-size:14px;font-weight:800" id="previewTitle">Preview (0 soal)</div>
@@ -279,22 +222,17 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
           <div class="preview-wrap">
             <table class="preview-table" id="previewTable">
               <thead>
-                <tr>
-                  <th>#</th><th>Kategori</th><th>Sub-Bab</th><th>Pertanyaan</th>
-                  <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
-                  <th>Jawaban</th><th>Tingkat</th><th>Akses</th><th>Status</th>
-                </tr>
+                <tr><th>#</th><th>Kategori</th><th>Sub-Bab</th><th>Pertanyaan</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>Jawaban</th><th>Tingkat</th><th>Akses</th><th>Status</th></tr>
               </thead>
               <tbody id="previewBody"></tbody>
             </table>
           </div>
         </div>
-
         <div class="log" id="bulkLog"></div>
       </div>
     </div>
 
-    <!-- ═══ TAB 3: DAFTAR SOAL ═══ -->
+    <!-- TAB 3: DAFTAR SOAL -->
     <div id="tabDaftar" style="display:none">
       <div class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
@@ -311,13 +249,11 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       </div>
     </div>
 
-    <!-- ═══ TAB 4: FIX AKSES ═══ -->
+    <!-- TAB 4: FIX AKSES -->
     <div id="tabFixakses" style="display:none">
       <div class="card">
         <div class="card-title">🔧 Sync Akses User dari Order</div>
-        <p style="font-size:13px;color:#7a7168;margin-bottom:16px;font-weight:500;line-height:1.6">
-          Tool ini membaca semua order berstatus <strong>paid</strong> lalu mengupdate field <code>subBabAkses</code> di setiap user sesuai sub-bab yang dibeli. Gunakan ini untuk memperbaiki user yang sudah bayar tapi belum bisa akses latihan.
-        </p>
+        <p style="font-size:13px;color:#7a7168;margin-bottom:16px;font-weight:500;line-height:1.6">Tool ini membaca semua order berstatus <strong>paid</strong> lalu mengupdate field <code>subBabAkses</code> di setiap user sesuai sub-bab yang dibeli.</p>
         <div class="warning-box">⚠️ Proses ini aman — hanya menambah akses, tidak menghapus akses yang sudah ada.</div>
         <div class="alert" id="alertFix"></div>
         <button class="btn primary full" id="btnFixAkses" onclick="fixAksesUser()">🔧 Sync Semua Order Paid → subBabAkses</button>
@@ -325,29 +261,17 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       </div>
     </div>
 
-    <!-- ═══ TAB 5: TUTORIAL ═══ -->
+    <!-- TAB 5: TUTORIAL -->
     <div id="tabTutorial" style="display:none">
       <div class="card">
         <div class="card-title">📖 Cara Tambah & Update Soal</div>
-
-        <div style="font-size:14px;font-weight:800;margin-bottom:12px;color:#C0392B">Cara 1 — Tambah Manual (1 soal)</div>
-        <div class="step-row"><div class="step-num">1</div><div class="step-text"><h4>Isi form di tab "Tambah Manual"</h4><p>Pilih mapel, tulis sub-bab, soal, 5 pilihan jawaban, dan pembahasan.</p></div></div>
-        <div class="step-row"><div class="step-num">2</div><div class="step-text"><h4>Pilih kunci jawaban</h4><p>Klik tombol A/B/C/D/E — tombol akan jadi merah saat dipilih.</p></div></div>
-        <div class="step-row"><div class="step-num">3</div><div class="step-text"><h4>Klik Simpan</h4><p>Soal langsung masuk Firestore dan bisa dimainkan di halaman latihan.</p></div></div>
-
-        <div style="font-size:14px;font-weight:800;margin:20px 0 12px;color:#C0392B">Cara 2 — Bulk Upload Excel (banyak soal)</div>
-        <div class="step-row"><div class="step-num">1</div><div class="step-text"><h4>Download template Excel</h4><p>Di tab "Bulk Excel" → klik Download Template. Buka di Excel/Google Sheets.</p></div></div>
-        <div class="step-row"><div class="step-num">2</div><div class="step-text"><h4>Isi soal di Excel</h4><p>Setiap baris = 1 soal. Isi semua kolom: kategori, subKategori, pertanyaan, opsiA–E, jawaban (tulis A/B/C/D/E), pembahasan, tingkat (mudah/sedang/sulit), akses (gratis/premium).</p></div></div>
-        <div class="step-row"><div class="step-num">3</div><div class="step-text"><h4>Simpan sebagai .xlsx</h4><p>File → Save As → pilih format Excel Workbook (.xlsx).</p></div></div>
-        <div class="step-row"><div class="step-num">4</div><div class="step-text"><h4>Upload & preview</h4><p>Di tab "Bulk Excel" → upload file → cek preview tabel → pastikan semua soal valid (tidak ada kolom kosong).</p></div></div>
-        <div class="step-row"><div class="step-num">5</div><div class="step-text"><h4>Pilih mode upload</h4><p><strong>Hapus Soal Lama + Upload Baru</strong> = reset semua soal lama dulu, cocok untuk update total.<br/><strong>Tambah ke Soal yang Ada</strong> = soal baru ditambahkan, soal lama tetap.</p></div></div>
-
-        <div class="warning-box" style="margin-top:16px">
-          💡 <strong>Tips:</strong> Nama sub-bab harus konsisten — "Bilangan Bulat" ≠ "bilangan bulat". Pastikan kolom jawaban diisi A/B/C/D/E (huruf kapital).
-        </div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:12px;color:#C0392B">Bulk Upload Excel</div>
+        <div class="step-row"><div class="step-num">1</div><div class="step-text"><h4>Download template Excel</h4><p>Di tab "Bulk Excel" → klik Download Template.</p></div></div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text"><h4>Isi soal di Excel</h4><p>Setiap baris = 1 soal. Kolom segmen wajib diisi (contoh: SD Kelas 6).</p></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text"><h4>Upload & pilih mode</h4><p><strong>Hapus + Upload Baru</strong> = reset total. <strong>Tambah</strong> = soal ditambah, subBab tetap di-reset dari Excel.</p></div></div>
+        <div class="warning-box" style="margin-top:16px">💡 <strong>Tips:</strong> Nama sub-bab harus konsisten. Kolom jawaban diisi A/B/C/D/E (huruf kapital).</div>
       </div>
     </div>
-
   </div>
 </main>
 
@@ -363,7 +287,6 @@ let allSoal = [];
 let filterKat = 'semua';
 let parsedRows = [];
 
-// ── AUTH ──
 onAuthStateChanged(auth, async user => {
   if (!user || !ADMIN_EMAILS.includes(user.email)) {
     document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;text-align:center"><div><div style="font-size:48px;margin-bottom:16px">🔒</div><h2 style="color:#C0392B">Akses Ditolak</h2><p style="color:#888;margin-top:8px">Halaman ini hanya untuk admin.</p><a href="/" style="color:#C0392B;font-weight:700;margin-top:16px;display:block">← Kembali</a></div></div>`;
@@ -374,7 +297,6 @@ onAuthStateChanged(auth, async user => {
   await loadSoal();
 });
 
-// ── TABS ──
 window.switchTab = function(tab, el) {
   ['tabTambah','tabBulk','tabDaftar','tabFixakses','tabTutorial'].forEach(t => $(t).style.display='none');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -383,103 +305,57 @@ window.switchTab = function(tab, el) {
   if (tab==='daftar') renderSoalList();
 };
 
-// ── UPDATE KATEGORI OPTIONS BASED ON SEGMEN ──
 window.updateKategoriOptions = function() {
   const segmen = $('fSegmen').value;
   const kat = $('fKategori');
-  const isCPNS = segmen === 'CBT CPNS';
-  const isSNBT = segmen === 'SNBT PTN';
-  const isTryOut = segmen.startsWith('Try Out');
-
-  if (isCPNS) {
-    kat.innerHTML = `
-      <option>TWK — Wawasan Kebangsaan</option>
-      <option>TIU — Intelejensi Umum</option>
-      <option>TKP — Karakteristik Pribadi</option>
-      <option>SKB — Kompetensi Bidang</option>`;
-  } else if (isSNBT) {
-    kat.innerHTML = `
-      <option>Penalaran Umum</option>
-      <option>Pengetahuan & Pemahaman Umum</option>
-      <option>Pemahaman Bacaan & Menulis</option>
-      <option>Pengetahuan Kuantitatif</option>
-      <option>Literasi Bahasa Indonesia</option>
-      <option>Literasi Bahasa Inggris</option>
-      <option>Penalaran Matematika</option>`;
+  if (segmen === 'CBT CPNS') {
+    kat.innerHTML = `<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option><option>SKB — Kompetensi Bidang</option>`;
+  } else if (segmen === 'SNBT PTN') {
+    kat.innerHTML = `<option>Penalaran Umum</option><option>Pengetahuan & Pemahaman Umum</option><option>Pemahaman Bacaan & Menulis</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>`;
   } else if (segmen.includes('SMA')) {
-    kat.innerHTML = `
-      <option>Matematika</option>
-      <option>Bahasa Indonesia</option>
-      <option>Bahasa Inggris</option>
-      <option>Fisika</option>
-      <option>Kimia</option>
-      <option>Biologi</option>
-      <option>Ekonomi</option>
-      <option>Sejarah</option>
-      <option>Geografi</option>`;
+    kat.innerHTML = `<option>Matematika</option><option>Bahasa Indonesia</option><option>Bahasa Inggris</option><option>Fisika</option><option>Kimia</option><option>Biologi</option><option>Ekonomi</option><option>Sejarah</option><option>Geografi</option>`;
   } else if (segmen.includes('SMP')) {
-    kat.innerHTML = `
-      <option>Matematika</option>
-      <option>Bahasa Indonesia</option>
-      <option>Bahasa Inggris</option>
-      <option>IPA</option>
-      <option>IPS</option>
-      <option>PKn</option>`;
+    kat.innerHTML = `<option>Matematika</option><option>Bahasa Indonesia</option><option>Bahasa Inggris</option><option>IPA</option><option>IPS</option><option>PKn</option>`;
   } else {
-    // SD atau Try Out SD
-    kat.innerHTML = `
-      <option>Matematika</option>
-      <option>IPAS</option>
-      <option>B.Inggris</option>`;
+    kat.innerHTML = `<option>Matematika</option><option>IPAS</option><option>B.Inggris</option>`;
   }
 };
 
-// ── MANUAL ──
 window.setJawaban = function(key) {
   selectedJawaban = key;
-  document.querySelectorAll('.jaw-btn').forEach(b => { b.classList.toggle('active', b.textContent===key); });
+  document.querySelectorAll('.jaw-btn').forEach(b => b.classList.toggle('active', b.textContent===key));
   ['A','B','C','D','E'].forEach(k => $(`row${k}`).classList.toggle('jawaban', k===key));
 };
 
 window.simpanManual = async function() {
-  const segmen=$('fSegmen').value;
-  const kat=$('fKategori').value, sub=$('fSub').value.trim();
+  const segmen=$('fSegmen').value, kat=$('fKategori').value, sub=$('fSub').value.trim();
   const soal=$('fSoal').value.trim();
   const a=$('fA').value.trim(), b=$('fB').value.trim(), c=$('fC').value.trim(), d=$('fD').value.trim(), e=$('fE').value.trim();
   const pem=$('fPembahasan').value.trim();
   const tingkat=$('fTingkat').value, akses=$('fAkses').value;
-
-  if(!sub||!soal||!a||!b||!c||!d||!e||!pem) { showAlert('alertManual','err','Semua field wajib diisi!'); return; }
-  if(!selectedJawaban) { showAlert('alertManual','err','Pilih kunci jawaban terlebih dahulu!'); return; }
-
+  if(!sub||!soal||!a||!b||!c||!d||!e||!pem){showAlert('alertManual','err','Semua field wajib diisi!');return;}
+  if(!selectedJawaban){showAlert('alertManual','err','Pilih kunci jawaban!');return;}
   const btn=$('btnSimpan');
   btn.disabled=true; btn.textContent='⏳ Menyimpan...';
   try {
-    const isPremium = akses==='premium';
-    const data = buildSoalObj({segmen,kategori:kat,subKategori:sub,pertanyaan:soal,opsiA:a,opsiB:b,opsiC:c,opsiD:d,opsiE:e,jawaban:selectedJawaban,pembahasan:pem,tingkat,isPremium});
+    const data = buildSoalObj({segmen,kategori:kat,subKategori:sub,pertanyaan:soal,opsiA:a,opsiB:b,opsiC:c,opsiD:d,opsiE:e,jawaban:selectedJawaban,pembahasan:pem,tingkat,isPremium:akses==='premium'});
     const ref = await addDoc(collection(db,'soal'), {...data, createdAt:serverTimestamp()});
     allSoal.push({id:ref.id,...data});
     $('totalCount').textContent = allSoal.length;
     showAlert('alertManual','ok','✅ Soal berhasil disimpan!');
-    resetManual();
-  } catch(err) { showAlert('alertManual','err','❌ '+err.message); }
+    ['fSub','fSoal','fA','fB','fC','fD','fE','fPembahasan'].forEach(id=>$(id).value='');
+    selectedJawaban='';
+    document.querySelectorAll('.jaw-btn').forEach(b=>b.classList.remove('active'));
+    ['A','B','C','D','E'].forEach(k=>$(`row${k}`).classList.remove('jawaban'));
+  } catch(err){showAlert('alertManual','err','❌ '+err.message);}
   btn.disabled=false; btn.textContent='💾 Simpan Soal';
 };
 
-function resetManual() {
-  ['fSub','fSoal','fA','fB','fC','fD','fE','fPembahasan'].forEach(id => $(id).value='');
-  selectedJawaban='';
-  document.querySelectorAll('.jaw-btn').forEach(b=>b.classList.remove('active'));
-  ['A','B','C','D','E'].forEach(k=>$(`row${k}`).classList.remove('jawaban'));
-}
-
-// ── BULK EXCEL ──
 window.downloadTemplate = function() {
   const ws = XLSX.utils.aoa_to_sheet([
     ['segmen','kategori','subKategori','pertanyaan','opsiA','opsiB','opsiC','opsiD','opsiE','jawaban','pembahasan','tingkat','akses'],
-    ['SD Kelas 6','Matematika','Bilangan Bulat','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
-    ['SD Kelas 6','IPAS','Ekosistem','Proses pembuatan makanan tumbuhan disebut...','Respirasi','Transpirasi','Fotosintesis','Reproduksi','Evaporasi','C','Fotosintesis adalah proses tumbuhan membuat makanan dengan bantuan sinar matahari.','mudah','gratis'],
-    ['SMP Kelas 7','Matematika','Bilangan Bulat','Hasil dari -5 + 3 adalah...','2','-2','8','-8','0','B','-5 + 3 = -2','mudah','gratis'],
+    ['SD Kelas 6','Matematika','Bilangan Bulat 1','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
+    ['SD Kelas 6','IPAS','Ekosistem 1','Proses pembuatan makanan tumbuhan disebut...','Respirasi','Transpirasi','Fotosintesis','Reproduksi','Evaporasi','C','Fotosintesis adalah proses tumbuhan membuat makanan.','mudah','gratis'],
   ]);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Soal');
@@ -494,12 +370,9 @@ window.handleFile = function(input) {
     try {
       const wb = XLSX.read(e.target.result, {type:'binary'});
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, {defval:''});
-      parsedRows = rows;
-      renderPreview(rows);
-    } catch(err) {
-      showAlert('alertBulk','err','Gagal baca file: '+err.message);
-    }
+      parsedRows = XLSX.utils.sheet_to_json(ws, {defval:''});
+      renderPreview(parsedRows);
+    } catch(err) { showAlert('alertBulk','err','Gagal baca file: '+err.message); }
   };
   reader.readAsBinaryString(file);
 };
@@ -513,44 +386,25 @@ function renderPreview(rows) {
   rows.forEach((r, i) => {
     const valid = required.every(k => String(r[k]||'').trim());
     const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${i+1}</td>
-      <td>${r.kategori||''}</td>
-      <td>${r.subKategori||''}</td>
-      <td style="max-width:180px">${String(r.pertanyaan||'').substring(0,60)}…</td>
-      <td>${r.opsiA||''}</td>
-      <td>${r.opsiB||''}</td>
-      <td>${r.opsiC||''}</td>
-      <td>${r.opsiD||''}</td>
-      <td>${r.opsiE||''}</td>
-      <td><strong>${r.jawaban||''}</strong></td>
-      <td>${r.tingkat||'mudah'}</td>
-      <td>${r.akses||'gratis'}</td>
-      <td><span class="badge ${valid?'ok':'err'}">${valid?'✓ Valid':'✗ Error'}</span></td>`;
+    tr.innerHTML = `<td>${i+1}</td><td>${r.kategori||''}</td><td>${r.subKategori||''}</td><td>${String(r.pertanyaan||'').substring(0,60)}…</td><td>${r.opsiA||''}</td><td>${r.opsiB||''}</td><td>${r.opsiC||''}</td><td>${r.opsiD||''}</td><td>${r.opsiE||''}</td><td><strong>${r.jawaban||''}</strong></td><td>${r.tingkat||'mudah'}</td><td>${r.akses||'gratis'}</td><td><span class="badge ${valid?'ok':'err'}">${valid?'✓ Valid':'✗ Error'}</span></td>`;
     tbody.appendChild(tr);
   });
 }
 
 window.hapusLaluUpload = async function() {
-  if (!confirm(`Hapus semua ${allSoal.length} soal lama lalu upload ${parsedRows.length} soal baru? Tindakan ini tidak bisa dibatalkan.`)) return;
-  showBulkLog();
-  setLoadingBulk(true);
-  // Hapus lama
+  if (!confirm(`Hapus semua ${allSoal.length} soal lama lalu upload ${parsedRows.length} soal baru?`)) return;
+  showBulkLog(); setLoadingBulk(true);
   logBulk(`🗑️ Menghapus ${allSoal.length} soal lama...`, 'info');
-  for (const s of allSoal) {
-    await deleteDoc(doc(db,'soal',s.id));
-  }
+  for (const s of allSoal) await deleteDoc(doc(db,'soal',s.id));
   allSoal = [];
   logBulk('✅ Soal lama dihapus.', 'ok');
-  // Upload baru
   await uploadRows(parsedRows);
   setLoadingBulk(false);
 };
 
 window.uploadSaja = async function() {
   if (!confirm(`Tambah ${parsedRows.length} soal baru ke soal yang sudah ada?`)) return;
-  showBulkLog();
-  setLoadingBulk(true);
+  showBulkLog(); setLoadingBulk(true);
   await uploadRows(parsedRows);
   setLoadingBulk(false);
 };
@@ -561,38 +415,37 @@ async function uploadRows(rows) {
   for (let i=0; i<rows.length; i++) {
     const r = rows[i];
     try {
-      const isPremium = String(r.akses||'').toLowerCase()==='premium';
       const data = buildSoalObj({
         segmen: String(r.segmen||'SD Kelas 6').trim(),
         kategori: String(r.kategori||'').trim(),
         subKategori: String(r.subKategori||'').trim(),
         pertanyaan: String(r.pertanyaan||'').trim(),
-        opsiA: String(r.opsiA||'').trim(),
-        opsiB: String(r.opsiB||'').trim(),
-        opsiC: String(r.opsiC||'').trim(),
-        opsiD: String(r.opsiD||'').trim(),
+        opsiA: String(r.opsiA||'').trim(), opsiB: String(r.opsiB||'').trim(),
+        opsiC: String(r.opsiC||'').trim(), opsiD: String(r.opsiD||'').trim(),
         opsiE: String(r.opsiE||'').trim(),
         jawaban: String(r.jawaban||'').trim().toUpperCase(),
         pembahasan: String(r.pembahasan||'').trim(),
         tingkat: String(r.tingkat||'mudah').trim(),
-        isPremium,
+        isPremium: String(r.akses||'').toLowerCase()==='premium',
         urutan: i+1,
       });
       const ref = await addDoc(collection(db,'soal'), {...data, createdAt:serverTimestamp()});
       allSoal.push({id:ref.id,...data});
       sukses++;
       logBulk(`✅ [${data.kategori}] ${data.pertanyaan.substring(0,50)}...`, 'ok');
-    } catch(err) {
-      gagal++;
-      logBulk(`❌ Soal ${i+1}: ${err.message}`, 'err');
-    }
+    } catch(err) { gagal++; logBulk(`❌ Soal ${i+1}: ${err.message}`, 'err'); }
   }
   $('totalCount').textContent = allSoal.length;
+
+  // ── SYNC SUBBAB: hapus semua dulu, buat ulang dari Excel ──
   await syncSubBab(rows);
+
   logBulk(`\n✨ Selesai! ${sukses} berhasil, ${gagal} gagal.`, sukses===rows.length?'ok':'info');
   showAlert('alertBulk', sukses===rows.length?'ok':'info', `✅ ${sukses}/${rows.length} soal berhasil diupload!`);
 }
+
 async function syncSubBab(rows) {
+  // 1. Kelompokkan sub-bab dari Excel
   const map = {};
   rows.forEach(r => {
     const segmen = String(r.segmen||'SD Kelas 6').trim();
@@ -604,28 +457,36 @@ async function syncSubBab(rows) {
     map[key].subs.add(sub);
   });
 
-  // Hapus SEMUA dokumen subBab dulu
-  const allSnap = await getDocs(collection(db,'subBab'));
-  for (const d of allSnap.docs) {
-    await deleteDoc(d.ref);
+  logBulk('🔄 Sync subBab...', 'info');
+
+  // 2. Hapus SEMUA dokumen subBab yang ada
+  try {
+    const allSnap = await getDocs(collection(db,'subBab'));
+    logBulk(`🗑️ Hapus ${allSnap.size} dokumen subBab lama...`, 'info');
+    const deletePromises = allSnap.docs.map(d => deleteDoc(d.ref));
+    await Promise.all(deletePromises);
+    logBulk('✅ subBab lama terhapus.', 'ok');
+  } catch(e) {
+    logBulk(`⚠️ Gagal hapus subBab lama: ${e.message}`, 'err');
+    return;
   }
 
-  // Buat ulang dari Excel
+  // 3. Buat ulang dari Excel
   for (const { segmen, mapel, subs } of Object.values(map)) {
     try {
       await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
-      logBulk(`📚 SubBab: ${segmen} — ${mapel} (${subs.size} sub-bab)`, 'ok');
+      logBulk(`📚 SubBab dibuat: ${segmen} — ${mapel} (${subs.size} sub-bab)`, 'ok');
     } catch(e) {
-      logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err');
+      logBulk(`⚠️ Gagal buat subBab ${mapel}: ${e.message}`, 'err');
     }
   }
 }
+
 function buildSoalObj({segmen='SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
   const paket = isPremium ? ['value','pro','ultimate','premium'] : ['gratis','starter','value','pro','ultimate','premium'];
   return {segmen,kategori,subKategori,pertanyaan,opsi:{A:opsiA,B:opsiB,C:opsiC,D:opsiD,E:opsiE},jawaban,pembahasan,tingkat,isPremium,paket,urutan};
 }
 
-// ── DAFTAR ──
 window.loadSoal = async function() {
   const snap = await getDocs(query(collection(db,'soal'), orderBy('kategori')));
   allSoal = snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -670,106 +531,59 @@ window.hapusSoal = async function(id) {
   renderSoalList();
 };
 
-// ── HELPERS ──
 function showAlert(id, type, msg) {
-  const el=$(id);
-  el.textContent=msg; el.className='alert '+type; el.style.display='block';
+  const el=$(id); el.textContent=msg; el.className='alert '+type; el.style.display='block';
   setTimeout(()=>el.style.display='none', 5000);
 }
-
-function showBulkLog() {
-  const log=$('bulkLog');
-  log.style.display='block'; log.innerHTML='';
-}
-
+function showBulkLog() { const log=$('bulkLog'); log.style.display='block'; log.innerHTML=''; }
 function logBulk(msg, type='') {
-  const log=$('bulkLog');
-  const line=document.createElement('div');
+  const log=$('bulkLog'); const line=document.createElement('div');
   line.className='log-line '+type; line.textContent=msg;
   log.appendChild(line); log.scrollTop=log.scrollHeight;
 }
-
 function setLoadingBulk(loading) {
   $('btnHapusLalu').disabled=loading; $('btnUploadSaja').disabled=loading;
-  if(loading){$('btnHapusLalu').textContent='⏳ Memproses...'; $('btnUploadSaja').textContent='⏳ Memproses...';}
-  else{$('btnHapusLalu').textContent='🗑️ Hapus Soal Lama + Upload Baru'; $('btnUploadSaja').textContent='➕ Tambah ke Soal yang Ada';}
+  if(loading){$('btnHapusLalu').textContent='⏳ Memproses...';$('btnUploadSaja').textContent='⏳ Memproses...';}
+  else{$('btnHapusLalu').textContent='🗑️ Hapus Soal Lama + Upload Baru';$('btnUploadSaja').textContent='➕ Tambah ke Soal yang Ada';}
 }
 
-// ── FIX AKSES ──
 window.fixAksesUser = async function() {
-  const btn = $('btnFixAkses');
-  const log = $('fixLog');
-  log.style.display = 'block'; log.innerHTML = '';
-  btn.disabled = true; btn.textContent = '⏳ Memproses...';
-
-  function logFix(msg, type='') {
-    const line = document.createElement('div');
-    line.className = 'log-line '+type; line.textContent = msg;
-    log.appendChild(line); log.scrollTop = log.scrollHeight;
-  }
-
+  const btn=$('btnFixAkses'), log=$('fixLog');
+  log.style.display='block'; log.innerHTML='';
+  btn.disabled=true; btn.textContent='⏳ Memproses...';
+  function logFix(msg,type=''){const line=document.createElement('div');line.className='log-line '+type;line.textContent=msg;log.appendChild(line);log.scrollTop=log.scrollHeight;}
   try {
-    logFix('📋 Membaca semua order paid...', 'info');
-    const ordersSnap = await getDocs(query(collection(db,'orders'), where('status','==','paid')));
-    logFix(`✅ Ditemukan ${ordersSnap.size} order paid.`, 'ok');
-
-    // Kelompokkan per uid
-    const userMap = {}; // uid → { subBabs: Set, isPremium: bool, expiredAt: Date }
-    ordersSnap.docs.forEach(d => {
-      const o = d.data();
-      if (!o.uid) return;
-      if (!userMap[o.uid]) userMap[o.uid] = { subBabs: new Set(), isPremium: false, expiredAt: null };
-      if (o.tipe === 'bulanan') {
-        userMap[o.uid].isPremium = true;
-        const exp = new Date(); exp.setMonth(exp.getMonth()+1);
-        userMap[o.uid].expiredAt = exp;
-      } else if (o.subBabDibeli?.length) {
-        o.subBabDibeli.forEach(sb => userMap[o.uid].subBabs.add(sb));
-      }
+    logFix('📋 Membaca semua order paid...','info');
+    const ordersSnap=await getDocs(query(collection(db,'orders'),where('status','==','paid')));
+    logFix(`✅ Ditemukan ${ordersSnap.size} order paid.`,'ok');
+    const userMap={};
+    ordersSnap.docs.forEach(d=>{
+      const o=d.data(); if(!o.uid)return;
+      if(!userMap[o.uid])userMap[o.uid]={subBabs:new Set(),isPremium:false,expiredAt:null};
+      if(o.tipe==='bulanan'){userMap[o.uid].isPremium=true;const exp=new Date();exp.setMonth(exp.getMonth()+1);userMap[o.uid].expiredAt=exp;}
+      else if(o.subBabDibeli?.length)o.subBabDibeli.forEach(sb=>userMap[o.uid].subBabs.add(sb));
     });
-
-    logFix(`👥 ${Object.keys(userMap).length} user perlu diupdate...`, 'info');
-
-    let sukses = 0, gagal = 0;
-    for (const [uid, data] of Object.entries(userMap)) {
-      try {
-        const userRef = doc(db, 'users', uid);
-        if (data.isPremium) {
-          await updateDoc(userRef, {
-            plan: 'premium',
-            subBabAkses: ['__premium__'],
-            expiredAt: data.expiredAt,
-          });
-          logFix(`✅ [Premium] uid: ${uid.slice(0,10)}...`, 'ok');
-        } else {
-          const subBabArray = [...data.subBabs];
-          await updateDoc(userRef, {
-            plan: 'alacarte',
-            subBabAkses: arrayUnion(...subBabArray),
-          });
-          logFix(`✅ [À la carte] uid: ${uid.slice(0,10)}... → ${subBabArray.join(', ')}`, 'ok');
-        }
+    logFix(`👥 ${Object.keys(userMap).length} user perlu diupdate...`,'info');
+    let sukses=0,gagal=0;
+    for(const[uid,data]of Object.entries(userMap)){
+      try{
+        const userRef=doc(db,'users',uid);
+        if(data.isPremium){await updateDoc(userRef,{plan:'premium',subBabAkses:['__premium__'],expiredAt:data.expiredAt});logFix(`✅ [Premium] uid: ${uid.slice(0,10)}...`,'ok');}
+        else{await updateDoc(userRef,{plan:'alacarte',subBabAkses:arrayUnion(...[...data.subBabs])});logFix(`✅ [Alacarte] uid: ${uid.slice(0,10)}...`,'ok');}
         sukses++;
-      } catch(err) {
-        logFix(`❌ Gagal uid ${uid.slice(0,10)}: ${err.message}`, 'err');
-        gagal++;
-      }
+      }catch(err){logFix(`❌ Gagal uid ${uid.slice(0,10)}: ${err.message}`,'err');gagal++;}
     }
-
-    logFix(`\n✨ Selesai! ${sukses} user diupdate, ${gagal} gagal.`, sukses > 0 ? 'ok' : 'err');
-    showAlert('alertFix', sukses > 0 ? 'ok' : 'err', `✅ ${sukses} user berhasil disync!`);
-  } catch(err) {
-    logFix('❌ Error: ' + err.message, 'err');
-    showAlert('alertFix', 'err', '❌ Gagal: ' + err.message);
-  }
-
-  btn.disabled = false; btn.textContent = '🔧 Sync Semua Order Paid → subBabAkses';
+    logFix(`\n✨ Selesai! ${sukses} user diupdate, ${gagal} gagal.`,sukses>0?'ok':'err');
+    showAlert('alertFix',sukses>0?'ok':'err',`✅ ${sukses} user berhasil disync!`);
+  }catch(err){logFix('❌ Error: '+err.message,'err');showAlert('alertFix','err','❌ Gagal: '+err.message);}
+  btn.disabled=false; btn.textContent='🔧 Sync Semua Order Paid → subBabAkses';
 };
-const zone = document.getElementById('uploadZone');
-zone.addEventListener('dragover', e=>{e.preventDefault();zone.classList.add('drag');});
-zone.addEventListener('dragleave', ()=>zone.classList.remove('drag'));
-zone.addEventListener('drop', e=>{
-  e.preventDefault(); zone.classList.remove('drag');
+
+const zone=document.getElementById('uploadZone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag');});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+zone.addEventListener('drop',e=>{
+  e.preventDefault();zone.classList.remove('drag');
   const file=e.dataTransfer.files[0];
   if(file){const input=document.getElementById('fileInput');const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;handleFile(input);}
 });
