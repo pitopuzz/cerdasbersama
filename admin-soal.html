@@ -156,6 +156,24 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
         <div class="card-title">➕ Tambah Soal Baru</div>
         <div class="alert" id="alertManual"></div>
 
+        <div class="field">
+          <label>Segmen</label>
+          <select id="fSegmen" onchange="updateKategoriOptions()">
+            <option value="SD Kelas 6">📚 SD Kelas 6</option>
+            <option value="SMP Kelas 7">📚 SMP Kelas 7</option>
+            <option value="SMP Kelas 8">📚 SMP Kelas 8</option>
+            <option value="SMP Kelas 9">📚 SMP Kelas 9</option>
+            <option value="SMA Kelas 10">📚 SMA Kelas 10</option>
+            <option value="SMA Kelas 11">📚 SMA Kelas 11</option>
+            <option value="SMA Kelas 12">📚 SMA Kelas 12</option>
+            <option value="Try Out Kelas 6">📝 Try Out Kelas 6</option>
+            <option value="Try Out Kelas 7-9">📝 Try Out Kelas 7-9</option>
+            <option value="Try Out Kelas 10-12">📝 Try Out Kelas 10-12</option>
+            <option value="SNBT PTN">🎯 SNBT PTN</option>
+            <option value="CBT CPNS">🏛️ CBT CPNS</option>
+          </select>
+        </div>
+
         <div class="field-row">
           <div class="field">
             <label>Mata Pelajaran</label>
@@ -365,6 +383,57 @@ window.switchTab = function(tab, el) {
   if (tab==='daftar') renderSoalList();
 };
 
+// ── UPDATE KATEGORI OPTIONS BASED ON SEGMEN ──
+window.updateKategoriOptions = function() {
+  const segmen = $('fSegmen').value;
+  const kat = $('fKategori');
+  const isCPNS = segmen === 'CBT CPNS';
+  const isSNBT = segmen === 'SNBT PTN';
+  const isTryOut = segmen.startsWith('Try Out');
+
+  if (isCPNS) {
+    kat.innerHTML = `
+      <option>TWK — Wawasan Kebangsaan</option>
+      <option>TIU — Intelejensi Umum</option>
+      <option>TKP — Karakteristik Pribadi</option>
+      <option>SKB — Kompetensi Bidang</option>`;
+  } else if (isSNBT) {
+    kat.innerHTML = `
+      <option>Penalaran Umum</option>
+      <option>Pengetahuan & Pemahaman Umum</option>
+      <option>Pemahaman Bacaan & Menulis</option>
+      <option>Pengetahuan Kuantitatif</option>
+      <option>Literasi Bahasa Indonesia</option>
+      <option>Literasi Bahasa Inggris</option>
+      <option>Penalaran Matematika</option>`;
+  } else if (segmen.includes('SMA')) {
+    kat.innerHTML = `
+      <option>Matematika</option>
+      <option>Bahasa Indonesia</option>
+      <option>Bahasa Inggris</option>
+      <option>Fisika</option>
+      <option>Kimia</option>
+      <option>Biologi</option>
+      <option>Ekonomi</option>
+      <option>Sejarah</option>
+      <option>Geografi</option>`;
+  } else if (segmen.includes('SMP')) {
+    kat.innerHTML = `
+      <option>Matematika</option>
+      <option>Bahasa Indonesia</option>
+      <option>Bahasa Inggris</option>
+      <option>IPA</option>
+      <option>IPS</option>
+      <option>PKn</option>`;
+  } else {
+    // SD atau Try Out SD
+    kat.innerHTML = `
+      <option>Matematika</option>
+      <option>IPAS</option>
+      <option>B.Inggris</option>`;
+  }
+};
+
 // ── MANUAL ──
 window.setJawaban = function(key) {
   selectedJawaban = key;
@@ -373,6 +442,7 @@ window.setJawaban = function(key) {
 };
 
 window.simpanManual = async function() {
+  const segmen=$('fSegmen').value;
   const kat=$('fKategori').value, sub=$('fSub').value.trim();
   const soal=$('fSoal').value.trim();
   const a=$('fA').value.trim(), b=$('fB').value.trim(), c=$('fC').value.trim(), d=$('fD').value.trim(), e=$('fE').value.trim();
@@ -386,7 +456,7 @@ window.simpanManual = async function() {
   btn.disabled=true; btn.textContent='⏳ Menyimpan...';
   try {
     const isPremium = akses==='premium';
-    const data = buildSoalObj({kategori:kat,subKategori:sub,pertanyaan:soal,opsiA:a,opsiB:b,opsiC:c,opsiD:d,opsiE:e,jawaban:selectedJawaban,pembahasan:pem,tingkat,isPremium});
+    const data = buildSoalObj({segmen,kategori:kat,subKategori:sub,pertanyaan:soal,opsiA:a,opsiB:b,opsiC:c,opsiD:d,opsiE:e,jawaban:selectedJawaban,pembahasan:pem,tingkat,isPremium});
     const ref = await addDoc(collection(db,'soal'), {...data, createdAt:serverTimestamp()});
     allSoal.push({id:ref.id,...data});
     $('totalCount').textContent = allSoal.length;
@@ -406,10 +476,10 @@ function resetManual() {
 // ── BULK EXCEL ──
 window.downloadTemplate = function() {
   const ws = XLSX.utils.aoa_to_sheet([
-    ['kategori','subKategori','pertanyaan','opsiA','opsiB','opsiC','opsiD','opsiE','jawaban','pembahasan','tingkat','akses'],
-    ['Matematika','Bilangan Bulat','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
-    ['IPAS','Ekosistem','Proses pembuatan makanan tumbuhan disebut...','Respirasi','Transpirasi','Fotosintesis','Reproduksi','Evaporasi','C','Fotosintesis adalah proses tumbuhan membuat makanan dengan bantuan sinar matahari.','mudah','gratis'],
-    ['B.Inggris','Greetings','What do you say in the morning?','Good night','Good afternoon','Good evening','Good morning','Hello','D','Good morning diucapkan di pagi hari.','mudah','gratis'],
+    ['segmen','kategori','subKategori','pertanyaan','opsiA','opsiB','opsiC','opsiD','opsiE','jawaban','pembahasan','tingkat','akses'],
+    ['SD Kelas 6','Matematika','Bilangan Bulat','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
+    ['SD Kelas 6','IPAS','Ekosistem','Proses pembuatan makanan tumbuhan disebut...','Respirasi','Transpirasi','Fotosintesis','Reproduksi','Evaporasi','C','Fotosintesis adalah proses tumbuhan membuat makanan dengan bantuan sinar matahari.','mudah','gratis'],
+    ['SMP Kelas 7','Matematika','Bilangan Bulat','Hasil dari -5 + 3 adalah...','2','-2','8','-8','0','B','-5 + 3 = -2','mudah','gratis'],
   ]);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Soal');
@@ -493,6 +563,7 @@ async function uploadRows(rows) {
     try {
       const isPremium = String(r.akses||'').toLowerCase()==='premium';
       const data = buildSoalObj({
+        segmen: String(r.segmen||'SD Kelas 6').trim(),
         kategori: String(r.kategori||'').trim(),
         subKategori: String(r.subKategori||'').trim(),
         pertanyaan: String(r.pertanyaan||'').trim(),
@@ -521,9 +592,9 @@ async function uploadRows(rows) {
   showAlert('alertBulk', sukses===rows.length?'ok':'info', `✅ ${sukses}/${rows.length} soal berhasil diupload!`);
 }
 
-function buildSoalObj({kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
+function buildSoalObj({segmen='SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
   const paket = isPremium ? ['value','pro','ultimate','premium'] : ['gratis','starter','value','pro','ultimate','premium'];
-  return {kategori,subKategori,pertanyaan,opsi:{A:opsiA,B:opsiB,C:opsiC,D:opsiD,E:opsiE},jawaban,pembahasan,tingkat,isPremium,paket,urutan};
+  return {segmen,kategori,subKategori,pertanyaan,opsi:{A:opsiA,B:opsiB,C:opsiC,D:opsiD,E:opsiE},jawaban,pembahasan,tingkat,isPremium,paket,urutan};
 }
 
 // ── DAFTAR ──
@@ -544,6 +615,7 @@ function renderSoalList() {
         <div class="soal-no">Soal ${i+1}</div>
         <div class="soal-q">${s.pertanyaan}</div>
         <div class="soal-tags">
+          <span class="soal-tag sub">${s.segmen||'SD Kelas 6'}</span>
           <span class="soal-tag kat">${s.kategori}</span>
           <span class="soal-tag sub">${s.subKategori}</span>
           <span class="soal-tag ${s.isPremium?'premium':'free'}">${s.isPremium?'🔒 Premium':'✓ Gratis'}</span>
