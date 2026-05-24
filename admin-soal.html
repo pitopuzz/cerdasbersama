@@ -611,9 +611,7 @@ async function syncSubBab(rows) {
         await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
         logBulk(`📚 SubBab baru: ${segmen} — ${mapel}`, 'ok');
       } else {
-        const existing = snap.docs[0].data().list || [];
-        const merged = [...new Set([...existing, ...subs])];
-        await updateDoc(snap.docs[0].ref, { list: merged });
+        await updateDoc(snap.docs[0].ref, { list: [...subs] });
         logBulk(`📚 SubBab diupdate: ${mapel} (${merged.length} total)`, 'ok');
       }
     } catch(e) { logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err'); }
