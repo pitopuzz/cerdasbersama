@@ -533,10 +533,10 @@
       startFlashTimer();
 
       const pakets = [
-        { nama: 'À la carte', soal: 'Per sub-bab pilihan', harga: 7900, popular: false },
-        { nama: 'Bundling 5', soal: '5 sub-bab pilihan', harga: 34900, popular: true },
-        { nama: 'Bundling 10', soal: '10 sub-bab pilihan', harga: 64900, popular: false },
-        { nama: 'Premium Bulanan', soal: 'Semua mapel & sub-bab', harga: 99900, popular: false },
+        { nama: 'À la carte', soal: 'Per sub-bab pilihan', harga: 7900, popular: false, url: '/pricing.html?tab=alacarte' },
+        { nama: 'Bundling 5', soal: '5 sub-bab pilihan', harga: 34900, popular: true, url: '/pricing.html?tab=bundling&pkg=5' },
+        { nama: 'Bundling 10', soal: '10 sub-bab pilihan', harga: 64900, popular: false, url: '/pricing.html?tab=bundling&pkg=10' },
+        { nama: 'Premium Bulanan', soal: 'Semua mapel & sub-bab', harga: 99900, popular: false, url: '/pricing.html?tab=bulanan' },
       ];
 
       ds.innerHTML = `
@@ -564,7 +564,7 @@
             <div class="paket-nama">${p.nama}</div>
             <div class="paket-soal">${p.soal}</div>
             <div class="paket-harga">${fmtRp(p.harga)} <span>${p.nama==='À la carte'?'/ sub-bab':'sekali bayar'}</span></div>
-            <button class="btn-beli" onclick="location.href='/pricing.html'">Beli Sekarang</button>`;
+            <button class="btn-beli" onclick="location.href='${p.url}'">Beli Sekarang</button>`;
           grid.appendChild(div);
         });
       }
