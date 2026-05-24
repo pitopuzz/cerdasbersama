@@ -603,18 +603,21 @@ async function syncSubBab(rows) {
     if (!map[key]) map[key] = { segmen, mapel, subs: new Set() };
     map[key].subs.add(sub);
   });
+
+  // Hapus SEMUA dokumen subBab dulu
+  const allSnap = await getDocs(collection(db,'subBab'));
+  for (const d of allSnap.docs) {
+    await deleteDoc(d.ref);
+  }
+
+  // Buat ulang dari Excel
   for (const { segmen, mapel, subs } of Object.values(map)) {
     try {
-      const q = query(collection(db,'subBab'),where('segmen','==',segmen),where('mapel','==',mapel));
-      const snap = await getDocs(q);
-      if (snap.empty) {
-        await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
-        logBulk(`📚 SubBab baru: ${segmen} — ${mapel}`, 'ok');
-      } else {
-        await updateDoc(snap.docs[0].ref, { list: [...subs] });
-logBulk(`📚 SubBab diupdate: ${mapel} (${subs.size} total)`, 'ok');
-      }
-    } catch(e) { logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err'); }
+      await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
+      logBulk(`📚 SubBab: ${segmen} — ${mapel} (${subs.size} sub-bab)`, 'ok');
+    } catch(e) {
+      logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err');
+    }
   }
 }
 function buildSoalObj({segmen='SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
