@@ -489,8 +489,8 @@
         const grid = document.getElementById('subbabAksesGrid');
         if (!grid) return;
         // Deteksi mapel dari nama sub-bab
-        const MAT = ['Bilangan Bulat','Pecahan & Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala & Jarak'];
-        const IPAS_LIST = ['Makhluk Hidup','Ekosistem','Gaya & Gerak','Energi & Perubahannya','Bumi & Alam Semesta','Cuaca & Iklim','Teknologi Pangan','Kesehatan'];
+        const MAT = ['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'];
+        const IPAS_LIST = ['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'];
 
         subBabAkses.forEach(sb => {
           const icon = MAT.includes(sb) ? '📐' : IPAS_LIST.includes(sb) ? '🔬' : '🔤';
