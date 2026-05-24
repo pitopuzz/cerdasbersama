@@ -7,148 +7,146 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    :root {
-      --bg: #faf8f5; --white: #fff; --surface2: #f5f3ef;
-      --border: #e8e4dc; --text: #1a1714; --muted: #7a7168; --muted2: #b0a89c;
-      --red: #C0392B; --red2: #a93226; --gold: #e8970a;
-      --gold-bg: #fff8e6; --gold-border: #f5d06a;
-      --green: #1a7a4a; --green-bg: #edfaf3;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    :root{--bg:#faf8f5;--white:#fff;--surface2:#f5f3ef;--border:#e8e4dc;--text:#1a1714;--muted:#7a7168;--muted2:#b0a89c;--red:#C0392B;--red2:#a93226;--gold:#e8970a;--gold-bg:#fff8e6;--gold-border:#f5d06a;--green:#1a7a4a;--green-bg:#edfaf3;--shadow-sm:0 1px 3px rgba(0,0,0,0.06);--shadow:0 4px 16px rgba(0,0,0,0.08)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
-    .nav-logo { font-weight: 800; font-size: 17px; color: var(--red); }
-    .nav-logo span { color: var(--text); }
-    .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; transition: color 0.18s; }
-    .nav-back:hover { color: var(--red); }
+    nav{background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+    .nav-logo{font-weight:800;font-size:17px;color:var(--red)}
+    .nav-logo span{color:var(--text)}
+    .nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;transition:color 0.18s}
+    .nav-back:hover{color:var(--red)}
 
-    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 200; transition: opacity 0.3s; }
-    .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
+    #loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;transition:opacity 0.3s}
+    .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #loadingScreen p{font-size:14px;color:var(--muted);font-weight:500}
 
-    main { max-width: 760px; margin: 0 auto; padding: 28px 20px 80px; }
-    .screen { display: none; }
-    .screen.active { display: block; animation: fadeUp 0.35s ease; }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+    main{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+    .screen{display:none}
+    .screen.active{display:block;animation:fadeUp 0.35s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-    /* SCREEN 1: KATEGORI */
-    .page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px; }
-    .page-sub { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
+    .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px}
+    .page-sub{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:24px}
 
-    .kategori-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
-    @media(max-width: 500px) { .kategori-grid { grid-template-columns: 1fr; } }
+    .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;margin-bottom:20px;background:none;border:none;transition:color 0.18s;padding:0}
+    .back-btn:hover{color:var(--red)}
 
-    .kat-card { background: var(--white); border: 2px solid var(--border); border-radius: 18px; padding: 22px 18px; text-align: center; cursor: pointer; transition: all 0.2s; }
-    .kat-card:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .kat-icon { font-size: 36px; margin-bottom: 10px; display: block; }
-    .kat-name { font-size: 15px; font-weight: 800; color: var(--text); }
-    .kat-count { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 600; }
+    /* SEGMEN GRID */
+    .segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+    .segmen-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:18px 14px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden;text-align:center}
+    .segmen-card:hover:not(.coming-soon){border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shadow)}
+    .segmen-card.coming-soon{opacity:0.55;cursor:not-allowed;background:var(--surface2)}
+    .segmen-icon{font-size:28px;margin-bottom:8px}
+    .segmen-name{font-size:13px;font-weight:800;color:var(--text);margin-bottom:3px}
+    .segmen-desc{font-size:11px;color:var(--muted);font-weight:500}
+    .cs-badge{position:absolute;top:8px;right:8px;background:var(--surface2);border:1px solid var(--border);border-radius:50px;padding:2px 7px;font-size:9px;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:0.4px}
 
-    /* SCREEN 2: SUB-BAB */
-    .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; margin-bottom: 20px; background: none; border: none; transition: color 0.18s; }
-    .back-btn:hover { color: var(--red); }
+    /* KATEGORI GRID */
+    .kategori-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+    @media(max-width:500px){.kategori-grid{grid-template-columns:1fr}}
+    .kat-card{background:var(--white);border:2px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center;cursor:pointer;transition:all 0.2s}
+    .kat-card:hover{border-color:var(--red);transform:translateY(-3px);box-shadow:var(--shadow)}
+    .kat-icon{font-size:36px;margin-bottom:10px;display:block}
+    .kat-name{font-size:15px;font-weight:800;color:var(--text)}
+    .kat-count{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600}
 
-    .subbab-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-    .subbab-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.18s; }
-    .subbab-item:hover:not(.locked) { border-color: var(--red); }
-    .subbab-item.locked { opacity: 0.6; cursor: not-allowed; background: var(--surface2); }
+    /* SUB-BAB */
+    .subbab-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+    .subbab-item{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.18s}
+    .subbab-item:hover:not(.locked){border-color:var(--red)}
+    .subbab-item.locked{opacity:0.6;cursor:not-allowed;background:var(--surface2)}
+    .subbab-left{display:flex;align-items:center;gap:12px}
+    .subbab-num{width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--muted);flex-shrink:0}
+    .subbab-name{font-size:14px;font-weight:700;color:var(--text)}
+    .subbab-soal{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
+    .access-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:50px;white-space:nowrap}
+    .access-badge.ok{background:var(--green-bg);color:var(--green)}
+    .access-badge.lock{background:var(--gold-bg);color:#8a5e00;border:1px solid var(--gold-border)}
+    .access-badge.premium-ok{background:var(--gold-bg);color:#8a5e00}
 
-    .subbab-left { display: flex; align-items: center; gap: 12px; }
-    .subbab-num { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); flex-shrink: 0; }
-    .subbab-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .subbab-soal { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
+    .upgrade-wall{background:linear-gradient(135deg,#fffbf0,#fff8e0);border:2px solid var(--gold-border);border-radius:20px;padding:28px 24px;text-align:center;margin-top:8px}
+    .upgrade-wall h3{font-size:17px;font-weight:900;margin-bottom:8px}
+    .upgrade-wall p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;font-weight:500}
+    .btn-upgrade-wall{display:inline-block;padding:13px 28px;border-radius:50px;background:var(--red);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 4px 14px rgba(192,57,43,0.25);transition:all 0.18s}
+    .btn-upgrade-wall:hover{background:var(--red2);transform:translateY(-1px)}
 
-    .access-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 50px; white-space: nowrap; }
-    .access-badge.ok { background: var(--green-bg); color: var(--green); }
-    .access-badge.lock { background: var(--gold-bg); color: #8a5e00; border: 1px solid var(--gold-border); }
-    .access-badge.premium-ok { background: var(--gold-bg); color: #8a5e00; }
+    /* SOAL */
+    .soal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+    .soal-progress-wrap{flex:1}
+    .soal-progress-label{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}
+    .soal-progress-bar{height:6px;background:var(--border);border-radius:50px;overflow:hidden}
+    .soal-progress-fill{height:100%;background:var(--red);border-radius:50px;transition:width 0.4s ease}
+    .soal-counter{font-size:13px;font-weight:800;color:var(--red);background:#fff5f5;border:1.5px solid #fdd;padding:6px 14px;border-radius:50px;white-space:nowrap}
 
-    .upgrade-wall { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 2px solid var(--gold-border); border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 8px; }
-    .upgrade-wall h3 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
-    .upgrade-wall p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
-    .btn-upgrade-wall { display: inline-block; padding: 13px 28px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; text-decoration: none; box-shadow: 0 4px 14px rgba(192,57,43,0.25); transition: all 0.18s; }
-    .btn-upgrade-wall:hover { background: var(--red2); transform: translateY(-1px); }
+    .soal-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+    .soal-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--red);background:#fff5f5;border:1px solid #fdd;padding:4px 12px;border-radius:50px;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
+    .soal-text{font-size:16px;font-weight:700;line-height:1.6;color:var(--text);margin-bottom:20px}
 
-    /* SCREEN 3: SOAL */
-    .soal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-    .soal-progress-wrap { flex: 1; }
-    .soal-progress-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
-    .soal-progress-bar { height: 6px; background: var(--border); border-radius: 50px; overflow: hidden; }
-    .soal-progress-fill { height: 100%; background: var(--red); border-radius: 50px; transition: width 0.4s ease; }
-    .soal-counter { font-size: 13px; font-weight: 800; color: var(--red); background: #fff5f5; border: 1.5px solid #fdd; padding: 6px 14px; border-radius: 50px; white-space: nowrap; }
+    .opsi-list{display:flex;flex-direction:column;gap:10px}
+    .opsi-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.18s;background:var(--white)}
+    .opsi-item:hover:not(.answered){border-color:var(--red);background:#fff8f8}
+    .opsi-item.correct{border-color:var(--green);background:var(--green-bg)}
+    .opsi-item.wrong{border-color:var(--red);background:#fef2f2}
+    .opsi-item.show-correct{border-color:var(--green);background:var(--green-bg)}
+    .opsi-key{width:32px;height:32px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--muted);flex-shrink:0;transition:all 0.18s}
+    .opsi-item.correct .opsi-key{background:var(--green);color:#fff}
+    .opsi-item.wrong .opsi-key{background:var(--red);color:#fff}
+    .opsi-item.show-correct .opsi-key{background:var(--green);color:#fff}
+    .opsi-text{font-size:14px;font-weight:500;color:var(--text);line-height:1.5}
 
-    .soal-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-    .soal-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--red); background: #fff5f5; border: 1px solid #fdd; padding: 4px 12px; border-radius: 50px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .soal-text { font-size: 16px; font-weight: 700; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
+    .pembahasan-box{background:var(--green-bg);border:1.5px solid #b8e6d0;border-radius:14px;padding:16px 18px;margin-top:14px;display:none;animation:fadeUp 0.3s ease}
+    .pembahasan-box.wrong-box{background:#fef2f2;border-color:#fdd}
+    .pembahasan-title{font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+    .pembahasan-box.wrong-box .pembahasan-title{color:var(--red)}
+    .pembahasan-text{font-size:13px;color:var(--text);line-height:1.6;font-weight:500}
 
-    .opsi-list { display: flex; flex-direction: column; gap: 10px; }
-    .opsi-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.18s; background: var(--white); }
-    .opsi-item:hover:not(.answered) { border-color: var(--red); background: #fff8f8; }
-    .opsi-item.correct { border-color: var(--green); background: var(--green-bg); }
-    .opsi-item.wrong { border-color: var(--red); background: #fef2f2; }
-    .opsi-item.show-correct { border-color: var(--green); background: var(--green-bg); }
-    .opsi-key { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); flex-shrink: 0; transition: all 0.18s; }
-    .opsi-item.correct .opsi-key { background: var(--green); color: #fff; }
-    .opsi-item.wrong .opsi-key { background: var(--red); color: #fff; }
-    .opsi-item.show-correct .opsi-key { background: var(--green); color: #fff; }
-    .opsi-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
+    .soal-nav{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
+    .btn-soal{padding:12px 28px;border-radius:50px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.18s}
+    .btn-soal.primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.25)}
+    .btn-soal.primary:hover{background:var(--red2);transform:translateY(-1px)}
+    .btn-soal.secondary{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+    .btn-soal.secondary:hover{background:var(--border)}
+    .btn-soal:disabled{opacity:0.4;cursor:not-allowed;transform:none}
 
-    .pembahasan-box { background: var(--green-bg); border: 1.5px solid #b8e6d0; border-radius: 14px; padding: 16px 18px; margin-top: 14px; display: none; animation: fadeUp 0.3s ease; }
-    .pembahasan-box.wrong-box { background: #fef2f2; border-color: #fdd; }
-    .pembahasan-title { font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-    .pembahasan-box.wrong-box .pembahasan-title { color: var(--red); }
-    .pembahasan-text { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 500; }
+    /* HASIL */
+    .hasil-card{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:36px 28px;text-align:center;box-shadow:var(--shadow);margin-bottom:20px}
+    .hasil-emoji{font-size:56px;margin-bottom:16px;display:block}
+    .hasil-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:8px}
+    .hasil-sub{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:24px}
+    .skor-display{font-size:64px;font-weight:900;letter-spacing:-3px;color:var(--red);line-height:1;margin-bottom:6px}
+    .skor-label{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:28px}
+    .hasil-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+    .hasil-stat{background:var(--surface2);border-radius:14px;padding:16px 12px}
+    .hasil-stat .val{font-size:24px;font-weight:900;letter-spacing:-1px}
+    .hasil-stat .lbl{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:3px}
+    .hasil-stat.green .val{color:var(--green)}
+    .hasil-stat.red .val{color:var(--red)}
 
-    .soal-nav { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
-    .btn-soal { padding: 12px 28px; border-radius: 50px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; }
-    .btn-soal.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
-    .btn-soal.primary:hover { background: var(--red2); transform: translateY(-1px); }
-    .btn-soal.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
-    .btn-soal.secondary:hover { background: var(--border); }
-    .btn-soal:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-hasil{display:block;width:100%;padding:14px;border-radius:50px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;margin-bottom:10px;transition:all 0.18s}
+    .btn-hasil.primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.25)}
+    .btn-hasil.primary:hover{background:var(--red2)}
+    .btn-hasil.secondary{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+    .btn-hasil.secondary:hover{background:var(--border)}
+    .btn-hasil.pdf{background:var(--green-bg);color:var(--green);border:1.5px solid #b8e6d0}
+    .btn-hasil.pdf:hover{background:#d4f5e6}
 
-    /* SCREEN 4: HASIL */
-    .hasil-card { background: var(--white); border: 1px solid var(--border); border-radius: 24px; padding: 36px 28px; text-align: center; box-shadow: var(--shadow); margin-bottom: 20px; }
-    .hasil-emoji { font-size: 56px; margin-bottom: 16px; display: block; }
-    .hasil-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
-    .hasil-sub { font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
-    .skor-display { font-size: 64px; font-weight: 900; letter-spacing: -3px; color: var(--red); line-height: 1; margin-bottom: 6px; }
-    .skor-label { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 28px; }
-    .hasil-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 28px; }
-    .hasil-stat { background: var(--surface2); border-radius: 14px; padding: 16px 12px; }
-    .hasil-stat .val { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
-    .hasil-stat .lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
-    .hasil-stat.green .val { color: var(--green); }
-    .hasil-stat.red .val { color: var(--red); }
+    .review-list{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+    .review-item{background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm)}
+    .review-item.benar{border-color:#b8e6d0}
+    .review-item.salah{border-color:#fdd}
+    .review-no{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+    .review-q{font-size:14px;font-weight:700;margin-bottom:10px;line-height:1.5}
+    .review-ans{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .review-pill{font-size:12px;font-weight:700;padding:4px 12px;border-radius:50px}
+    .review-pill.user-benar{background:var(--green-bg);color:var(--green)}
+    .review-pill.user-salah{background:#fef2f2;color:var(--red)}
+    .review-pill.correct{background:var(--green-bg);color:var(--green)}
+    .review-pembahasan{font-size:12px;color:var(--muted);line-height:1.6;font-weight:500;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
 
-    .btn-hasil { display: block; width: 100%; padding: 14px; border-radius: 50px; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 800; margin-bottom: 10px; transition: all 0.18s; }
-    .btn-hasil.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
-    .btn-hasil.primary:hover { background: var(--red2); }
-    .btn-hasil.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
-    .btn-hasil.secondary:hover { background: var(--border); }
-    .btn-hasil.pdf { background: var(--green-bg); color: var(--green); border: 1.5px solid #b8e6d0; }
-    .btn-hasil.pdf:hover { background: #d4f5e6; }
-
-    /* REVIEW */
-    .review-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
-    .review-item { background: var(--white); border-radius: 16px; padding: 20px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
-    .review-item.benar { border-color: #b8e6d0; }
-    .review-item.salah { border-color: #fdd; }
-    .review-no { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-    .review-q { font-size: 14px; font-weight: 700; margin-bottom: 10px; line-height: 1.5; }
-    .review-ans { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-    .review-pill { font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 50px; }
-    .review-pill.user-benar { background: var(--green-bg); color: var(--green); }
-    .review-pill.user-salah { background: #fef2f2; color: var(--red); }
-    .review-pill.correct { background: var(--green-bg); color: var(--green); }
-    .review-pembahasan { font-size: 12px; color: var(--muted); line-height: 1.6; font-weight: 500; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
-
-    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 22px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:#fff;border-radius:50px;padding:10px 22px;font-size:13px;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:var(--shadow)}
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
@@ -164,34 +162,39 @@
 </nav>
 
 <main>
-  <!-- SCREEN 1: PILIH KATEGORI -->
-  <div class="screen active" id="screenKategori">
-    <div class="page-title">Pilih Mata Pelajaran</div>
-    <div class="page-sub">Pilih pelajaran yang ingin kamu latih hari ini.</div>
+  <!-- SCREEN 1: PILIH SEGMEN -->
+  <div class="screen active" id="screenSegmen">
+    <div class="page-title">Pilih Segmen</div>
+    <div class="page-sub">Pilih jenjang yang ingin kamu latih.</div>
+    <div class="segmen-grid" id="segmenGrid"></div>
+  </div>
+
+  <!-- SCREEN 2: PILIH KATEGORI -->
+  <div class="screen" id="screenKategori">
+    <button class="back-btn" onclick="goToScreen('screenSegmen')">← Ganti Segmen</button>
+    <div class="page-title" id="kategoriTitle">Pilih Mata Pelajaran</div>
+    <div class="page-sub">Pilih pelajaran yang ingin kamu latih.</div>
     <div class="kategori-grid" id="kategoriGrid"></div>
   </div>
 
-  <!-- SCREEN 2: PILIH SUB-BAB -->
+  <!-- SCREEN 3: PILIH SUB-BAB -->
   <div class="screen" id="screenSubbab">
     <button class="back-btn" onclick="goToScreen('screenKategori')">← Ganti Pelajaran</button>
     <div class="page-title" id="subbabTitle">Pilih Sub-Bab</div>
-    <div class="page-sub" id="subbabSub">Pilih topik yang ingin kamu pelajari.</div>
+    <div class="page-sub">Pilih topik yang ingin kamu pelajari.</div>
     <div class="subbab-list" id="subbabList"></div>
   </div>
 
-  <!-- SCREEN 3: SOAL -->
+  <!-- SCREEN 4: SOAL -->
   <div class="screen" id="screenSoal">
     <div class="soal-header">
       <div class="soal-progress-wrap">
         <div class="soal-progress-label" id="progressLabel">Soal 1 dari 5</div>
-        <div class="soal-progress-bar">
-          <div class="soal-progress-fill" id="progressFill" style="width:0%"></div>
-        </div>
+        <div class="soal-progress-bar"><div class="soal-progress-fill" id="progressFill" style="width:0%"></div></div>
       </div>
       <div class="soal-counter" id="soalCounter">1 / 5</div>
     </div>
-
-    <div class="soal-card" id="soalCard">
+    <div class="soal-card">
       <div class="soal-tag" id="soalTag">Matematika</div>
       <div class="soal-text" id="soalText">—</div>
       <div class="opsi-list" id="opsiList"></div>
@@ -200,14 +203,13 @@
         <div class="pembahasan-text" id="pembahasanText">—</div>
       </div>
     </div>
-
     <div class="soal-nav">
       <button class="btn-soal secondary" id="btnSkip" onclick="nextSoal()">Lewati</button>
       <button class="btn-soal primary" id="btnNext" onclick="nextSoal()" disabled>Lanjut →</button>
     </div>
   </div>
 
-  <!-- SCREEN 4: HASIL -->
+  <!-- SCREEN 5: HASIL -->
   <div class="screen" id="screenHasil">
     <div class="hasil-card">
       <span class="hasil-emoji" id="hasilEmoji">🎉</span>
@@ -233,121 +235,141 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   let firebaseConfig;
-  try {
-    const mod = await import('./firebase-config.js');
-    firebaseConfig = mod.firebaseConfig || mod.default;
-  } catch { firebaseConfig = window._fbConfig || {}; }
+  try { const mod=await import('./firebase-config.js'); firebaseConfig=mod.firebaseConfig||mod.default; }
+  catch { firebaseConfig=window._fbConfig||{}; }
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  const app=initializeApp(firebaseConfig);
+  const auth=getAuth(app);
+  const db=getFirestore(app);
+  const $=id=>document.getElementById(id);
 
-  const $ = id => document.getElementById(id);
-  let currentUser = null, userData = null;
-  let subBabAkses = [];   // list sub-bab yang sudah dibeli, atau ['__premium__']
-  let isPremium = false;
-  let allSoal = [];
-  let currentKategori = '';
-  let currentSubbab = '';
-  let soalLatihan = [];
-  let currentIdx = 0;
-  let jawaban = [];
-  let answered = false;
+  let currentUser=null, userData=null;
+  let subBabAkses=[], isPremium=false;
+  let allSoal=[];
+  let currentSegmen='', currentKategori='', currentSubbab='';
+  let soalLatihan=[], currentIdx=0, jawaban=[], answered=false;
 
-  const KATEGORI = [
-    { nama: 'Matematika', icon: '📐' },
-    { nama: 'IPAS',       icon: '🔬' },
-    { nama: 'B.Inggris',  icon: '🔤' },
+  const SEGMEN_CONFIG = [
+    { id:'SD Kelas 6', icon:'📚', desc:'Matematika, IPAS, B.Inggris', aktif:true },
+    { id:'SMP Kelas 7', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
+    { id:'SMP Kelas 8', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
+    { id:'SMP Kelas 9', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
+    { id:'SMA Kelas 10', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
+    { id:'SMA Kelas 11', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
+    { id:'SMA Kelas 12', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
+    { id:'Try Out', icon:'📝', desc:'Persiapan UTS/UAS Kelas 6-12', aktif:false },
+    { id:'SNBT PTN', icon:'🎯', desc:'195 menit · 160 soal', aktif:false },
+    { id:'CBT CPNS', icon:'🏛️', desc:'130 menit · 110 soal', aktif:false },
   ];
 
-  function showToast(msg) {
-    const t = $('toast'); t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+  const MAPEL_ICON={'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'};
 
-  function goToScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+
+  function goToScreen(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     $(id).classList.add('active');
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 
-  function hasAccess(subbab) {
-    if (isPremium) return true;
-    if (subBabAkses.includes('__premium__')) return true;
+  function hasAccess(subbab){
+    if(isPremium||subBabAkses.includes('__premium__')) return true;
     return subBabAkses.includes(subbab);
   }
 
   // ── AUTH ──
   onAuthStateChanged(auth, async user => {
-    if (!user) { window.location.href = '/register.html'; return; }
-    currentUser = user;
+    if(!user){window.location.href='/register.html';return;}
+    currentUser=user;
+    const userSnap=await getDoc(doc(db,'users',user.uid));
+    if(!userSnap.exists()){window.location.href='/register.html';return;}
+    userData=userSnap.data();
+    isPremium=userData.plan==='premium';
+    subBabAkses=userData.subBabAkses||[];
 
-    const userSnap = await getDoc(doc(db, 'users', user.uid));
+    const snap=await getDocs(collection(db,'soal'));
+    allSoal=snap.docs.map(d=>({id:d.id,...d.data()}));
 
-    // Kalau doc Firestore tidak ada → paksa daftar ulang
-    if (!userSnap.exists()) {
-      window.location.href = '/register.html';
-      return;
-    }
-
-    userData = userSnap.data();
-    isPremium = userData.plan === 'premium';
-    subBabAkses = userData.subBabAkses || [];
-
-    const snap = await getDocs(collection(db, 'soal'));
-    allSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-    $('loadingScreen').style.opacity = '0';
-    setTimeout(() => $('loadingScreen').style.display = 'none', 300);
-    renderKategori();
+    $('loadingScreen').style.opacity='0';
+    setTimeout(()=>$('loadingScreen').style.display='none',300);
+    renderSegmen();
   });
 
-  // ── SCREEN 1: KATEGORI ──
-  function renderKategori() {
-    const grid = $('kategoriGrid');
-    grid.innerHTML = '';
-    KATEGORI.forEach(k => {
-      const total = allSoal.filter(s => s.kategori === k.nama).length;
-      const div = document.createElement('div');
-      div.className = 'kat-card';
-      div.innerHTML = `<span class="kat-icon">${k.icon}</span><div class="kat-name">${k.nama}</div><div class="kat-count">${total} soal tersedia</div>`;
-      div.onclick = () => selectKategori(k.nama);
+  // ── SCREEN 1: SEGMEN ──
+  function renderSegmen(){
+    const grid=$('segmenGrid');
+    grid.innerHTML='';
+    SEGMEN_CONFIG.forEach(s=>{
+      const div=document.createElement('div');
+      div.className='segmen-card'+(s.aktif?'':' coming-soon');
+      div.innerHTML=`
+        ${!s.aktif?'<div class="cs-badge">🚧 Coming Soon</div>':''}
+        <div class="segmen-icon">${s.icon}</div>
+        <div class="segmen-name">${s.id}</div>
+        <div class="segmen-desc">${s.desc}</div>`;
+      if(s.aktif) div.onclick=()=>selectSegmen(s.id);
+      else div.onclick=()=>showToast('Segmen ini akan segera hadir! 🚧');
       grid.appendChild(div);
     });
   }
 
-  function selectKategori(kat) {
-    currentKategori = kat;
-    const katInfo = KATEGORI.find(k => k.nama === kat);
-    $('subbabTitle').textContent = `${katInfo?.icon || ''} ${kat}`;
-    renderSubbab(kat);
+  function selectSegmen(segmen){
+    currentSegmen=segmen;
+    $('kategoriTitle').textContent=`Pilih Mata Pelajaran — ${segmen}`;
+    renderKategori(segmen);
+    goToScreen('screenKategori');
+  }
+
+  // ── SCREEN 2: KATEGORI ──
+  function renderKategori(segmen){
+    const soalSegmen=allSoal.filter(s=>s.segmen===segmen);
+    // Fallback: kalau belum ada field segmen, tampilkan semua (untuk soal lama SD)
+    const soalFiltered = soalSegmen.length ? soalSegmen : allSoal;
+    const kats=[...new Set(soalFiltered.map(s=>s.kategori))];
+    const grid=$('kategoriGrid');
+    grid.innerHTML='';
+    kats.forEach(k=>{
+      const count=soalFiltered.filter(s=>s.kategori===k).length;
+      const div=document.createElement('div');
+      div.className='kat-card';
+      div.innerHTML=`<span class="kat-icon">${MAPEL_ICON[k]||'📚'}</span><div class="kat-name">${k}</div><div class="kat-count">${count} soal tersedia</div>`;
+      div.onclick=()=>selectKategori(k,soalFiltered);
+      grid.appendChild(div);
+    });
+  }
+
+  function selectKategori(kat, soalFiltered){
+    currentKategori=kat;
+    const icon=MAPEL_ICON[kat]||'📚';
+    $('subbabTitle').textContent=`${icon} ${kat}`;
+    renderSubbab(kat, soalFiltered);
     goToScreen('screenSubbab');
   }
 
-  // ── SCREEN 2: SUB-BAB ──
-  function renderSubbab(kat) {
-    const soalKat = allSoal.filter(s => s.kategori === kat);
-    const subBabs = [...new Set(soalKat.map(s => s.subKategori))].sort((a,b) => {
-      const minA = Math.min(...soalKat.filter(s=>s.subKategori===a).map(s=>s.urutan||99));
-      const minB = Math.min(...soalKat.filter(s=>s.subKategori===b).map(s=>s.urutan||99));
-      return minA - minB;
+  // ── SCREEN 3: SUB-BAB ──
+  function renderSubbab(kat, soalAll){
+    const soalKat=soalAll.filter(s=>s.kategori===kat);
+    const subBabs=[...new Set(soalKat.map(s=>s.subKategori))].sort((a,b)=>{
+      const minA=Math.min(...soalKat.filter(s=>s.subKategori===a).map(s=>s.urutan||99));
+      const minB=Math.min(...soalKat.filter(s=>s.subKategori===b).map(s=>s.urutan||99));
+      return minA-minB;
     });
 
-    const list = $('subbabList');
-    list.innerHTML = '';
-    let hasLocked = false;
+    const list=$('subbabList');
+    list.innerHTML='';
+    let hasLocked=false;
 
-    subBabs.forEach((sb, i) => {
-      const soalSb = soalKat.filter(s => s.subKategori === sb);
-      const canAccess = hasAccess(sb);
-      if (!canAccess) hasLocked = true;
+    subBabs.forEach((sb,i)=>{
+      const soalSb=soalKat.filter(s=>s.subKategori===sb);
+      const canAccess=hasAccess(sb);
+      if(!canAccess) hasLocked=true;
 
-      const div = document.createElement('div');
-      div.className = 'subbab-item' + (canAccess ? '' : ' locked');
-      div.innerHTML = `
+      const div=document.createElement('div');
+      div.className='subbab-item'+(canAccess?'':' locked');
+      div.innerHTML=`
         <div class="subbab-left">
           <div class="subbab-num">${i+1}</div>
           <div>
@@ -355,139 +377,114 @@
             <div class="subbab-soal">${soalSb.length} soal</div>
           </div>
         </div>
-        <span class="access-badge ${canAccess ? (isPremium||subBabAkses.includes('__premium__')?'premium-ok':'ok') : 'lock'}">
-          ${canAccess ? (isPremium||subBabAkses.includes('__premium__')?'⭐ Premium':'✓ Aktif') : '🔒 Beli'}
+        <span class="access-badge ${canAccess?(isPremium||subBabAkses.includes('__premium__')?'premium-ok':'ok'):'lock'}">
+          ${canAccess?(isPremium||subBabAkses.includes('__premium__')?'⭐ Premium':'✓ Aktif'):'🔒 Beli'}
         </span>`;
 
-      if (canAccess) {
-        div.onclick = () => startLatihan(sb, soalSb);
-      } else {
-        div.onclick = () => showToast('Sub-bab ini belum dibeli. Klik Beli untuk akses!');
-      }
+      if(canAccess) div.onclick=()=>startLatihan(sb,soalSb);
+      else div.onclick=()=>showToast('Sub-bab ini belum dibeli. Klik Beli untuk akses!');
       list.appendChild(div);
     });
 
-    // Upgrade wall kalau ada yang terkunci
-    if (hasLocked) {
-      const wall = document.createElement('div');
-      wall.className = 'upgrade-wall';
-      wall.innerHTML = `
-        <h3>🔒 Buka Sub-Bab Ini</h3>
-        <p>Beli à la carte per sub-bab (Rp 7.900) atau bundling untuk harga lebih hemat. Premium bulanan buka semua!</p>
-        <a href="/pricing.html" class="btn-upgrade-wall">Lihat Paket →</a>`;
+    if(hasLocked){
+      const wall=document.createElement('div');
+      wall.className='upgrade-wall';
+      wall.innerHTML=`<h3>🔒 Buka Sub-Bab Ini</h3><p>Beli à la carte per sub-bab (Rp 7.900) atau bundling untuk harga lebih hemat. Premium bulanan buka semua!</p><a href="/pricing.html" class="btn-upgrade-wall">Lihat Paket →</a>`;
       list.appendChild(wall);
     }
   }
 
-  // ── SCREEN 3: SOAL ──
-  function startLatihan(subbab, soalList) {
-    currentSubbab = subbab;
-    soalLatihan = [...soalList].sort((a,b) => (a.urutan||99)-(b.urutan||99));
-    currentIdx = 0; jawaban = []; answered = false;
+  // ── SCREEN 4: SOAL ──
+  function startLatihan(subbab,soalList){
+    currentSubbab=subbab;
+    soalLatihan=[...soalList].sort((a,b)=>(a.urutan||99)-(b.urutan||99));
+    currentIdx=0; jawaban=[]; answered=false;
     goToScreen('screenSoal');
     renderSoal();
   }
 
-  function renderSoal() {
-    const soal = soalLatihan[currentIdx];
-    const total = soalLatihan.length;
-    const pct = (currentIdx / total) * 100;
+  function renderSoal(){
+    const soal=soalLatihan[currentIdx];
+    const total=soalLatihan.length;
+    $('progressLabel').textContent=`Soal ${currentIdx+1} dari ${total}`;
+    $('progressFill').style.width=((currentIdx/total)*100)+'%';
+    $('soalCounter').textContent=`${currentIdx+1} / ${total}`;
+    $('soalTag').textContent=`${soal.kategori} · ${soal.subKategori}`;
+    $('soalText').textContent=soal.pertanyaan;
+    $('pembahasanBox').style.display='none';
+    $('pembahasanBox').className='pembahasan-box';
+    answered=false;
+    $('btnNext').disabled=true; $('btnNext').textContent='Lanjut →';
+    $('btnSkip').style.display='inline-block';
 
-    $('progressLabel').textContent = `Soal ${currentIdx+1} dari ${total}`;
-    $('progressFill').style.width = pct + '%';
-    $('soalCounter').textContent = `${currentIdx+1} / ${total}`;
-    $('soalTag').textContent = `${soal.kategori} · ${soal.subKategori}`;
-    $('soalText').textContent = soal.pertanyaan;
-    $('pembahasanBox').style.display = 'none';
-    $('pembahasanBox').className = 'pembahasan-box';
-
-    answered = false;
-    $('btnNext').disabled = true;
-    $('btnNext').textContent = 'Lanjut →';
-    $('btnSkip').style.display = 'inline-block';
-
-    const opsiList = $('opsiList');
-    opsiList.innerHTML = '';
-    ['A','B','C','D','E'].filter(k => soal.opsi[k] !== undefined).forEach(key => {
-      const val = soal.opsi[key];
-      const div = document.createElement('div');
-      div.className = 'opsi-item';
-      div.dataset.key = key;
-      div.innerHTML = `<div class="opsi-key">${key}</div><div class="opsi-text">${val}</div>`;
-      div.onclick = () => pilihJawaban(key, soal);
+    const opsiList=$('opsiList');
+    opsiList.innerHTML='';
+    ['A','B','C','D','E'].filter(k=>soal.opsi[k]!==undefined).forEach(key=>{
+      const val=soal.opsi[key];
+      const div=document.createElement('div');
+      div.className='opsi-item'; div.dataset.key=key;
+      div.innerHTML=`<div class="opsi-key">${key}</div><div class="opsi-text">${val}</div>`;
+      div.onclick=()=>pilihJawaban(key,soal);
       opsiList.appendChild(div);
     });
   }
 
-  function pilihJawaban(key, soal) {
-    if (answered) return;
-    answered = true;
-    $('btnNext').disabled = false;
-    $('btnSkip').style.display = 'none';
-
-    const isBenar = key === soal.jawaban;
-    jawaban.push({ soal, pilihan: key, benar: isBenar });
-
-    document.querySelectorAll('.opsi-item').forEach(item => {
-      item.classList.add('answered');
-      item.style.cursor = 'default';
-      const k = item.dataset.key;
-      if (k === soal.jawaban) item.classList.add('show-correct');
-      else if (k === key) item.classList.add('wrong');
+  function pilihJawaban(key,soal){
+    if(answered) return;
+    answered=true;
+    $('btnNext').disabled=false; $('btnSkip').style.display='none';
+    const isBenar=key===soal.jawaban;
+    jawaban.push({soal,pilihan:key,benar:isBenar});
+    document.querySelectorAll('.opsi-item').forEach(item=>{
+      item.classList.add('answered'); item.style.cursor='default';
+      const k=item.dataset.key;
+      if(k===soal.jawaban) item.classList.add('show-correct');
+      else if(k===key) item.classList.add('wrong');
     });
-
-    const box = $('pembahasanBox');
-    box.style.display = 'block';
-    if (isBenar) {
-      box.className = 'pembahasan-box';
-      $('pembahasanTitle').textContent = '✓ Jawaban Benar!';
-    } else {
-      box.className = 'pembahasan-box wrong-box';
-      $('pembahasanTitle').textContent = `✗ Salah — Kunci: ${soal.jawaban}`;
-    }
-    $('pembahasanText').textContent = soal.pembahasan;
-    $('btnNext').textContent = currentIdx+1 >= soalLatihan.length ? 'Lihat Hasil →' : 'Lanjut →';
+    const box=$('pembahasanBox');
+    box.style.display='block';
+    if(isBenar){box.className='pembahasan-box';$('pembahasanTitle').textContent='✓ Jawaban Benar!';}
+    else{box.className='pembahasan-box wrong-box';$('pembahasanTitle').textContent=`✗ Salah — Kunci: ${soal.jawaban}`;}
+    $('pembahasanText').textContent=soal.pembahasan;
+    $('btnNext').textContent=currentIdx+1>=soalLatihan.length?'Lihat Hasil →':'Lanjut →';
   }
 
-  window.nextSoal = function() {
-    if (!answered) jawaban.push({ soal: soalLatihan[currentIdx], pilihan: null, benar: false });
+  window.nextSoal=function(){
+    if(!answered) jawaban.push({soal:soalLatihan[currentIdx],pilihan:null,benar:false});
     currentIdx++;
-    if (currentIdx >= soalLatihan.length) showHasil();
+    if(currentIdx>=soalLatihan.length) showHasil();
     else renderSoal();
   };
 
-  // ── SCREEN 4: HASIL ──
-  function showHasil() {
-    const total = jawaban.length;
-    const benar = jawaban.filter(j => j.benar).length;
-    const salah = total - benar;
-    const skor = Math.round((benar / total) * 100);
+  // ── SCREEN 5: HASIL ──
+  function showHasil(){
+    const total=jawaban.length;
+    const benar=jawaban.filter(j=>j.benar).length;
+    const salah=total-benar;
+    const skor=Math.round((benar/total)*100);
+    let emoji='😢',title='Terus Semangat!';
+    if(skor>=80){emoji='🎉';title='Luar Biasa!';}
+    else if(skor>=60){emoji='👍';title='Bagus!';}
+    else if(skor>=40){emoji='💪';title='Terus Berlatih!';}
+    $('hasilEmoji').textContent=emoji;
+    $('hasilTitle').textContent=title;
+    $('hasilSub').textContent=`${currentSegmen} · ${currentKategori} · ${currentSubbab} · ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}`;
+    $('skorDisplay').textContent=skor;
+    $('statBenar').textContent=benar;
+    $('statSalah').textContent=salah;
+    $('statTotal').textContent=total;
 
-    let emoji = '😢', title = 'Terus Semangat!';
-    if (skor >= 80) { emoji = '🎉'; title = 'Luar Biasa!'; }
-    else if (skor >= 60) { emoji = '👍'; title = 'Bagus!'; }
-    else if (skor >= 40) { emoji = '💪'; title = 'Terus Berlatih!'; }
-
-    $('hasilEmoji').textContent = emoji;
-    $('hasilTitle').textContent = title;
-    $('hasilSub').textContent = `Latihan ${currentSubbab} · ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}`;
-    $('skorDisplay').textContent = skor;
-    $('statBenar').textContent = benar;
-    $('statSalah').textContent = salah;
-    $('statTotal').textContent = total;
-
-    // Review
-    const review = $('reviewSection');
-    review.innerHTML = '<div style="font-size:15px;font-weight:800;margin-bottom:12px">📋 Review Jawaban</div>';
-    const reviewList = document.createElement('div');
-    reviewList.className = 'review-list';
-    jawaban.forEach((j, i) => {
-      const item = document.createElement('div');
-      item.className = 'review-item ' + (j.benar ? 'benar' : 'salah');
-      const userAns = j.pilihan ? `${j.pilihan}: ${j.soal.opsi[j.pilihan]}` : 'Dilewati';
-      const correctAns = `${j.soal.jawaban}: ${j.soal.opsi[j.soal.jawaban]}`;
-      item.innerHTML = `
-        <div class="review-no">Soal ${i+1} · ${j.benar ? '✓ Benar' : '✗ Salah'}</div>
+    const review=$('reviewSection');
+    review.innerHTML='<div style="font-size:15px;font-weight:800;margin-bottom:12px">📋 Review Jawaban</div>';
+    const reviewList=document.createElement('div');
+    reviewList.className='review-list';
+    jawaban.forEach((j,i)=>{
+      const item=document.createElement('div');
+      item.className='review-item '+(j.benar?'benar':'salah');
+      const userAns=j.pilihan?`${j.pilihan}: ${j.soal.opsi[j.pilihan]}`:'Dilewati';
+      const correctAns=`${j.soal.jawaban}: ${j.soal.opsi[j.soal.jawaban]}`;
+      item.innerHTML=`
+        <div class="review-no">Soal ${i+1} · ${j.benar?'✓ Benar':'✗ Salah'}</div>
         <div class="review-q">${j.soal.pertanyaan}</div>
         <div class="review-ans">
           <span class="review-pill ${j.benar?'user-benar':'user-salah'}">Jawaban kamu: ${userAns}</span>
@@ -500,217 +497,103 @@
     goToScreen('screenHasil');
   }
 
-  window.ulangiLatihan = function() {
-    const soalList = allSoal.filter(s => s.subKategori === currentSubbab);
-    startLatihan(currentSubbab, soalList);
+  window.ulangiLatihan=function(){
+    const soalList=allSoal.filter(s=>s.subKategori===currentSubbab);
+    startLatihan(currentSubbab,soalList);
   };
 
-  window.goToScreen = goToScreen;
+  window.goToScreen=goToScreen;
 
   // ── DOWNLOAD PDF ──
-  window.downloadPDF = function() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  window.downloadPDF=function(){
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    const pageW=210,pageH=297,margin=16,contentW=pageW-margin*2;
+    let y=margin;
+    const RED=[192,57,43],DARK=[26,23,20],MUTED=[122,113,104],GREEN_BG=[237,250,243],RED_BG=[254,242,242],GREEN_TEXT=[26,122,74];
+    const total=jawaban.length,benar=jawaban.filter(j=>j.benar).length,skor=Math.round((benar/total)*100);
+    const nama=userData?.nama||currentUser?.email||'Siswa';
+    const tanggal=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
 
-    const pageW = 210, pageH = 297;
-    const margin = 16, contentW = pageW - margin * 2;
-    let y = margin;
+    function checkPage(needed=20){if(y+needed>pageH-margin){doc.addPage();y=margin;}}
+    function wrapText(text,maxW,fontSize){doc.setFontSize(fontSize);return doc.splitTextToSize(String(text),maxW);}
 
-    // Warna
-    const RED = [192, 57, 43];
-    const DARK = [26, 23, 20];
-    const MUTED = [122, 113, 104];
-    const GREEN_BG = [237, 250, 243];
-    const RED_BG = [254, 242, 242];
-    const GREEN_TEXT = [26, 122, 74];
-
-    const total = jawaban.length;
-    const benar = jawaban.filter(j => j.benar).length;
-    const skor = Math.round((benar / total) * 100);
-    const nama = userData?.nama || currentUser?.email || 'Siswa';
-    const tanggal = new Date().toLocaleDateString('id-ID', {day:'2-digit',month:'long',year:'numeric'});
-
-    function checkPage(needed = 20) {
-      if (y + needed > pageH - margin) {
-        doc.addPage();
-        y = margin;
-      }
-    }
-
-    function wrapText(text, maxW, fontSize) {
-      doc.setFontSize(fontSize);
-      return doc.splitTextToSize(String(text), maxW);
-    }
-
-    // ── HEADER ──
-    doc.setFillColor(...RED);
-    doc.rect(0, 0, pageW, 38, 'F');
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(18);
-    doc.text('CerdasBersama', margin, 16);
-
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Hasil Latihan Soal', margin, 23);
-
+    // Header
+    doc.setFillColor(...RED); doc.rect(0,0,pageW,40,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(18);
+    doc.text('CerdasBersama',margin,16);
+    doc.setFontSize(10); doc.setFont('helvetica','normal');
+    doc.text('Hasil Latihan Soal',margin,24);
     doc.setFontSize(9);
-    doc.text(`${nama}  ·  ${tanggal}`, margin, 30);
-    doc.text(`Sub-bab: ${currentSubbab}`, margin, 36);
+    doc.text(`${nama}  ·  ${tanggal}`,margin,31);
+    doc.text(`${currentSegmen} · ${currentKategori} · ${currentSubbab}`,margin,37);
+    y=50;
 
-    y = 48;
-
-    // ── SKOR BOX ──
-    doc.setFillColor(255, 245, 245);
-    doc.roundedRect(margin, y, contentW, 32, 4, 4, 'F');
-    doc.setDrawColor(...RED);
-    doc.setLineWidth(0.5);
-    doc.roundedRect(margin, y, contentW, 32, 4, 4, 'S');
-
-    doc.setTextColor(...RED);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(28);
-    doc.text(`${skor}`, margin + contentW/2, y + 17, { align: 'center' });
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text('SKOR', margin + contentW/2, y + 25, { align: 'center' });
-
-    // Stats kecil
-    const colW = contentW / 3;
-    const statsY = y + 5;
-    [
-      { label: 'Benar', val: benar, color: GREEN_TEXT },
-      { label: 'Salah', val: total - benar, color: RED },
-      { label: 'Total Soal', val: total, color: DARK },
-    ].forEach((s, i) => {
-      const x = margin + i * colW + colW - 20;
-      doc.setTextColor(...s.color);
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text(String(s.val), x, statsY + 8);
-      doc.setFontSize(7);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...MUTED);
-      doc.text(s.label, x, statsY + 14);
+    // Skor box
+    doc.setFillColor(255,245,245); doc.roundedRect(margin,y,contentW,32,4,4,'F');
+    doc.setDrawColor(...RED); doc.setLineWidth(0.5); doc.roundedRect(margin,y,contentW,32,4,4,'S');
+    doc.setTextColor(...RED); doc.setFont('helvetica','bold'); doc.setFontSize(28);
+    doc.text(`${skor}`,margin+contentW/2,y+17,{align:'center'});
+    doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.text('SKOR',margin+contentW/2,y+25,{align:'center'});
+    const colW=contentW/3;
+    [{label:'Benar',val:benar,color:GREEN_TEXT},{label:'Salah',val:total-benar,color:RED},{label:'Total Soal',val:total,color:DARK}].forEach((s,i)=>{
+      const x=margin+i*colW+colW-20;
+      doc.setTextColor(...s.color); doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text(String(s.val),x,y+8);
+      doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...MUTED); doc.text(s.label,x,y+14);
     });
+    y+=40;
 
-    y += 40;
+    // Soal & Pembahasan
+    doc.setTextColor(...RED); doc.setFont('helvetica','bold'); doc.setFontSize(11);
+    doc.text('SOAL & PEMBAHASAN',margin,y); y+=6;
+    doc.setDrawColor(...RED); doc.setLineWidth(0.4); doc.line(margin,y,margin+contentW,y); y+=8;
 
-    // ── SOAL & JAWABAN ──
-    doc.setTextColor(...RED);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.text('SOAL & PEMBAHASAN', margin, y);
-    y += 6;
-
-    doc.setDrawColor(...RED);
-    doc.setLineWidth(0.4);
-    doc.line(margin, y, margin + contentW, y);
-    y += 8;
-
-    jawaban.forEach((j, i) => {
-      const isBenar = j.benar;
-      const bgColor = isBenar ? GREEN_BG : RED_BG;
-      const borderColor = isBenar ? GREEN_TEXT : RED;
-
-      // Hitung tinggi yang dibutuhkan
-      const qLines = wrapText(`${i+1}. ${j.soal.pertanyaan}`, contentW - 8, 10);
-      const pemLines = wrapText(j.soal.pembahasan, contentW - 16, 8);
-      const opsiCount = Object.keys(j.soal.opsi).length;
-      const estimatedH = 8 + qLines.length * 5 + opsiCount * 5 + pemLines.length * 4 + 20;
-
+    jawaban.forEach((j,i)=>{
+      const isBenar=j.benar;
+      const bgColor=isBenar?GREEN_BG:RED_BG;
+      const borderColor=isBenar?GREEN_TEXT:RED;
+      const qLines=wrapText(`${i+1}. ${j.soal.pertanyaan}`,contentW-8,10);
+      const pemLines=wrapText(j.soal.pembahasan,contentW-16,8);
+      const opsiCount=Object.keys(j.soal.opsi).length;
+      const estimatedH=8+qLines.length*5+opsiCount*5+pemLines.length*4+20;
       checkPage(estimatedH);
 
-      const boxY = y;
-
-      // Background box
-      doc.setFillColor(...bgColor);
-      doc.roundedRect(margin, y, contentW, estimatedH, 3, 3, 'F');
-      doc.setDrawColor(...borderColor);
-      doc.setLineWidth(0.3);
-      doc.roundedRect(margin, y, contentW, estimatedH, 3, 3, 'S');
-
-      y += 5;
-
-      // Nomor & status
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(...borderColor);
-      doc.text(`SOAL ${i+1}  ${isBenar ? '✓ BENAR' : '✗ SALAH'}`, margin + 4, y);
-      y += 5;
-
-      // Pertanyaan
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.setTextColor(...DARK);
-      const qText = wrapText(j.soal.pertanyaan, contentW - 8, 10);
-      doc.text(qText, margin + 4, y);
-      y += qText.length * 5 + 3;
-
-      // Pilihan jawaban
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
-      ['A','B','C','D','E'].filter(k => j.soal.opsi[k]).forEach(k => {
-        const isKunci = k === j.soal.jawaban;
-        const isPilihan = k === j.pilihan;
-        if (isKunci) {
-          doc.setTextColor(...GREEN_TEXT);
-          doc.setFont('helvetica', 'bold');
-        } else if (isPilihan && !isBenar) {
-          doc.setTextColor(...RED);
-          doc.setFont('helvetica', 'normal');
-        } else {
-          doc.setTextColor(...MUTED);
-          doc.setFont('helvetica', 'normal');
-        }
-        const prefix = isKunci ? `✓ ${k}.` : `   ${k}.`;
-        const opsiLines = wrapText(`${prefix} ${j.soal.opsi[k]}`, contentW - 16, 8);
-        checkPage(opsiLines.length * 4 + 2);
-        doc.text(opsiLines, margin + 8, y);
-        y += opsiLines.length * 4 + 1;
+      doc.setFillColor(...bgColor); doc.roundedRect(margin,y,contentW,estimatedH,3,3,'F');
+      doc.setDrawColor(...borderColor); doc.setLineWidth(0.3); doc.roundedRect(margin,y,contentW,estimatedH,3,3,'S');
+      y+=5;
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...borderColor);
+      doc.text(`SOAL ${i+1}  ${isBenar?'✓ BENAR':'✗ SALAH'}`,margin+4,y); y+=5;
+      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
+      const qText=wrapText(j.soal.pertanyaan,contentW-8,10);
+      doc.text(qText,margin+4,y); y+=qText.length*5+3;
+      doc.setFontSize(8); doc.setFont('helvetica','normal');
+      ['A','B','C','D','E'].filter(k=>j.soal.opsi[k]).forEach(k=>{
+        const isKunci=k===j.soal.jawaban,isPilihan=k===j.pilihan;
+        if(isKunci){doc.setTextColor(...GREEN_TEXT);doc.setFont('helvetica','bold');}
+        else if(isPilihan&&!isBenar){doc.setTextColor(...RED);doc.setFont('helvetica','normal');}
+        else{doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');}
+        const prefix=isKunci?`✓ ${k}.`:`   ${k}.`;
+        const opsiLines=wrapText(`${prefix} ${j.soal.opsi[k]}`,contentW-16,8);
+        checkPage(opsiLines.length*4+2); doc.text(opsiLines,margin+8,y); y+=opsiLines.length*4+1;
       });
-
-      // Jawaban user
-      if (!isBenar && j.pilihan) {
-        y += 2;
-        doc.setTextColor(...RED);
-        doc.setFont('helvetica', 'italic');
-        doc.setFontSize(8);
-        doc.text(`Jawaban kamu: ${j.pilihan}. ${j.soal.opsi[j.pilihan] || '—'}`, margin + 8, y);
-        y += 5;
-      }
-
-      // Pembahasan
-      y += 2;
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(8);
-      doc.setTextColor(...GREEN_TEXT);
-      doc.text('Pembahasan:', margin + 4, y);
-      y += 4;
-
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(...DARK);
-      const pemText = wrapText(j.soal.pembahasan, contentW - 16, 8);
-      checkPage(pemText.length * 4 + 4);
-      doc.text(pemText, margin + 8, y);
-      y += pemText.length * 4 + 8;
+      if(!isBenar&&j.pilihan){y+=2;doc.setTextColor(...RED);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.text(`Jawaban kamu: ${j.pilihan}. ${j.soal.opsi[j.pilihan]||'—'}`,margin+8,y);y+=5;}
+      y+=2; doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...GREEN_TEXT);
+      doc.text('Pembahasan:',margin+4,y); y+=4;
+      doc.setFont('helvetica','normal'); doc.setTextColor(...DARK);
+      const pemText=wrapText(j.soal.pembahasan,contentW-16,8);
+      checkPage(pemText.length*4+4); doc.text(pemText,margin+8,y); y+=pemText.length*4+8;
     });
 
-    // ── FOOTER ──
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
-      doc.setFontSize(8);
-      doc.setTextColor(...MUTED);
-      doc.setFont('helvetica', 'normal');
-      doc.text(`CerdasBersama · ${currentSubbab} · ${tanggal}`, margin, pageH - 8);
-      doc.text(`Halaman ${i} / ${pageCount}`, pageW - margin, pageH - 8, { align: 'right' });
+    // Footer
+    const pageCount=doc.internal.getNumberOfPages();
+    for(let i=1;i<=pageCount;i++){
+      doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...MUTED); doc.setFont('helvetica','normal');
+      doc.text(`CerdasBersama · ${currentSegmen} · ${currentSubbab} · ${tanggal}`,margin,pageH-8);
+      doc.text(`Halaman ${i} / ${pageCount}`,pageW-margin,pageH-8,{align:'right'});
     }
 
-    // Save
-    const fileName = `HasilLatihan-${currentSubbab.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.pdf`;
+    const fileName=`HasilLatihan-${currentSegmen.replace(/\s+/g,'-')}-${currentSubbab.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.pdf`;
     doc.save(fileName);
     showToast('PDF berhasil didownload!');
   };
