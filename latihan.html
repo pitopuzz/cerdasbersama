@@ -5,269 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Latihan Soal — CerdasBersama</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
-      --bg: #faf8f5;
-      --white: #fff;
-      --surface2: #f5f3ef;
-      --border: #e8e4dc;
-      --text: #1a1714;
-      --muted: #7a7168;
-      --muted2: #b0a89c;
-      --red: #C0392B;
-      --red2: #a93226;
-      --gold: #e8970a;
-      --gold-bg: #fff8e6;
-      --gold-border: #f5d06a;
-      --green: #1a7a4a;
-      --green-bg: #edfaf3;
-      --blue: #1a5fb4;
-      --blue-bg: #eef3fc;
+      --bg: #faf8f5; --white: #fff; --surface2: #f5f3ef;
+      --border: #e8e4dc; --text: #1a1714; --muted: #7a7168; --muted2: #b0a89c;
+      --red: #C0392B; --red2: #a93226; --gold: #e8970a;
+      --gold-bg: #fff8e6; --gold-border: #f5d06a;
+      --green: #1a7a4a; --green-bg: #edfaf3;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
       --shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* NAV */
-    nav {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 56px;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: var(--shadow-sm);
-    }
+    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
     .nav-logo { font-weight: 800; font-size: 17px; color: var(--red); }
     .nav-logo span { color: var(--text); }
-    .nav-back {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13px; font-weight: 600; color: var(--muted);
-      text-decoration: none; transition: color 0.18s;
-    }
+    .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; transition: color 0.18s; }
     .nav-back:hover { color: var(--red); }
 
-    /* LOADING */
-    #loadingScreen {
-      position: fixed; inset: 0; background: var(--bg);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 14px; z-index: 200; transition: opacity 0.3s;
-    }
+    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 200; transition: opacity 0.3s; }
     .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
 
-    /* MAIN */
     main { max-width: 760px; margin: 0 auto; padding: 28px 20px 80px; }
-
-    /* PHASE SCREENS */
     .screen { display: none; }
     .screen.active { display: block; animation: fadeUp 0.35s ease; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 
-    /* ── SCREEN 1: PILIH KATEGORI ── */
+    /* SCREEN 1: KATEGORI */
     .page-title { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px; }
     .page-sub { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
 
     .kategori-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
     @media(max-width: 500px) { .kategori-grid { grid-template-columns: 1fr; } }
 
-    .kat-card {
-      background: var(--white);
-      border: 2px solid var(--border);
-      border-radius: 18px;
-      padding: 22px 18px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
+    .kat-card { background: var(--white); border: 2px solid var(--border); border-radius: 18px; padding: 22px 18px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .kat-card:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: var(--shadow); }
-    .kat-card.selected { border-color: var(--red); background: #fff5f5; box-shadow: 0 0 0 3px rgba(192,57,43,0.1); }
     .kat-icon { font-size: 36px; margin-bottom: 10px; display: block; }
     .kat-name { font-size: 15px; font-weight: 800; color: var(--text); }
     .kat-count { font-size: 11px; color: var(--muted); margin-top: 3px; font-weight: 600; }
 
-    /* ── SCREEN 2: PILIH SUB-BAB ── */
-    .back-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 13px; font-weight: 700; color: var(--muted);
-      cursor: pointer; margin-bottom: 20px; background: none; border: none;
-      transition: color 0.18s;
-    }
+    /* SCREEN 2: SUB-BAB */
+    .back-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; margin-bottom: 20px; background: none; border: none; transition: color 0.18s; }
     .back-btn:hover { color: var(--red); }
 
     .subbab-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-
-    .subbab-item {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 16px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .subbab-item:hover { border-color: var(--red); }
-    .subbab-item.locked { opacity: 0.5; cursor: not-allowed; }
-    .subbab-item.locked:hover { border-color: var(--border); }
+    .subbab-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.18s; }
+    .subbab-item:hover:not(.locked) { border-color: var(--red); }
+    .subbab-item.locked { opacity: 0.6; cursor: not-allowed; background: var(--surface2); }
 
     .subbab-left { display: flex; align-items: center; gap: 12px; }
-    .subbab-num {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--surface2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: var(--muted);
-      flex-shrink: 0;
-    }
+    .subbab-num { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); flex-shrink: 0; }
     .subbab-name { font-size: 14px; font-weight: 700; color: var(--text); }
     .subbab-soal { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; }
 
-    .lock-badge {
-      font-size: 11px; font-weight: 700;
-      padding: 4px 10px; border-radius: 50px;
-      background: var(--gold-bg); color: #8a5e00;
-      border: 1px solid var(--gold-border);
-      white-space: nowrap;
-    }
-    .free-badge {
-      font-size: 11px; font-weight: 700;
-      padding: 4px 10px; border-radius: 50px;
-      background: var(--green-bg); color: var(--green);
-      white-space: nowrap;
-    }
-    .arrow-icon { color: var(--muted2); font-size: 16px; }
+    .access-badge { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 50px; white-space: nowrap; }
+    .access-badge.ok { background: var(--green-bg); color: var(--green); }
+    .access-badge.lock { background: var(--gold-bg); color: #8a5e00; border: 1px solid var(--gold-border); }
+    .access-badge.premium-ok { background: var(--gold-bg); color: #8a5e00; }
 
-    /* ── SCREEN 3: SOAL ── */
-    .soal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
-    }
+    .upgrade-wall { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 2px solid var(--gold-border); border-radius: 20px; padding: 28px 24px; text-align: center; margin-top: 8px; }
+    .upgrade-wall h3 { font-size: 17px; font-weight: 900; margin-bottom: 8px; }
+    .upgrade-wall p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
+    .btn-upgrade-wall { display: inline-block; padding: 13px 28px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; text-decoration: none; box-shadow: 0 4px 14px rgba(192,57,43,0.25); transition: all 0.18s; }
+    .btn-upgrade-wall:hover { background: var(--red2); transform: translateY(-1px); }
+
+    /* SCREEN 3: SOAL */
+    .soal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .soal-progress-wrap { flex: 1; }
     .soal-progress-label { font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
     .soal-progress-bar { height: 6px; background: var(--border); border-radius: 50px; overflow: hidden; }
     .soal-progress-fill { height: 100%; background: var(--red); border-radius: 50px; transition: width 0.4s ease; }
+    .soal-counter { font-size: 13px; font-weight: 800; color: var(--red); background: #fff5f5; border: 1.5px solid #fdd; padding: 6px 14px; border-radius: 50px; white-space: nowrap; }
 
-    .soal-counter {
-      font-size: 13px; font-weight: 800; color: var(--red);
-      background: #fff5f5; border: 1.5px solid #fdd;
-      padding: 6px 14px; border-radius: 50px;
-      white-space: nowrap;
-    }
-
-    .soal-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .soal-kategori-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 700; color: var(--red);
-      background: #fff5f5; border: 1px solid #fdd;
-      padding: 4px 12px; border-radius: 50px;
-      margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-
-    .soal-text {
-      font-size: 16px; font-weight: 700; line-height: 1.6;
-      color: var(--text); margin-bottom: 20px;
-    }
+    .soal-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+    .soal-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--red); background: #fff5f5; border: 1px solid #fdd; padding: 4px 12px; border-radius: 50px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .soal-text { font-size: 16px; font-weight: 700; line-height: 1.6; color: var(--text); margin-bottom: 20px; }
 
     .opsi-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .opsi-item {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 18px;
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.18s;
-      background: var(--white);
-    }
+    .opsi-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.18s; background: var(--white); }
     .opsi-item:hover:not(.answered) { border-color: var(--red); background: #fff8f8; }
-    .opsi-item.selected { border-color: var(--red); background: #fff5f5; }
     .opsi-item.correct { border-color: var(--green); background: var(--green-bg); }
     .opsi-item.wrong { border-color: var(--red); background: #fef2f2; }
     .opsi-item.show-correct { border-color: var(--green); background: var(--green-bg); }
-
-    .opsi-key {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--surface2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 800; color: var(--muted);
-      flex-shrink: 0; transition: all 0.18s;
-    }
-    .opsi-item.selected .opsi-key { background: var(--red); color: #fff; }
+    .opsi-key { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); flex-shrink: 0; transition: all 0.18s; }
     .opsi-item.correct .opsi-key { background: var(--green); color: #fff; }
     .opsi-item.wrong .opsi-key { background: var(--red); color: #fff; }
     .opsi-item.show-correct .opsi-key { background: var(--green); color: #fff; }
-
     .opsi-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.5; }
 
-    /* PEMBAHASAN */
-    .pembahasan-box {
-      background: var(--green-bg);
-      border: 1.5px solid #b8e6d0;
-      border-radius: 14px;
-      padding: 16px 18px;
-      margin-top: 14px;
-      display: none;
-      animation: fadeUp 0.3s ease;
-    }
+    .pembahasan-box { background: var(--green-bg); border: 1.5px solid #b8e6d0; border-radius: 14px; padding: 16px 18px; margin-top: 14px; display: none; animation: fadeUp 0.3s ease; }
     .pembahasan-box.wrong-box { background: #fef2f2; border-color: #fdd; }
     .pembahasan-title { font-size: 12px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
     .pembahasan-box.wrong-box .pembahasan-title { color: var(--red); }
     .pembahasan-text { font-size: 13px; color: var(--text); line-height: 1.6; font-weight: 500; }
 
-    /* NAVIGATION BUTTONS */
     .soal-nav { display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px; }
-
-    .btn-soal {
-      padding: 12px 28px; border-radius: 50px; border: none;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px; font-weight: 800; cursor: pointer;
-      transition: all 0.18s;
-    }
+    .btn-soal { padding: 12px 28px; border-radius: 50px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; }
     .btn-soal.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
     .btn-soal.primary:hover { background: var(--red2); transform: translateY(-1px); }
     .btn-soal.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
     .btn-soal.secondary:hover { background: var(--border); }
     .btn-soal:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    /* ── SCREEN 4: HASIL ── */
-    .hasil-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 36px 28px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 20px;
-    }
-
+    /* SCREEN 4: HASIL */
+    .hasil-card { background: var(--white); border: 1px solid var(--border); border-radius: 24px; padding: 36px 28px; text-align: center; box-shadow: var(--shadow); margin-bottom: 20px; }
     .hasil-emoji { font-size: 56px; margin-bottom: 16px; display: block; }
     .hasil-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 8px; }
     .hasil-sub { font-size: 14px; color: var(--muted); font-weight: 500; margin-bottom: 24px; }
-
-    .skor-display {
-      font-size: 64px; font-weight: 900; letter-spacing: -3px;
-      color: var(--red); line-height: 1; margin-bottom: 6px;
-    }
+    .skor-display { font-size: 64px; font-weight: 900; letter-spacing: -3px; color: var(--red); line-height: 1; margin-bottom: 6px; }
     .skor-label { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 28px; }
-
     .hasil-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 28px; }
     .hasil-stat { background: var(--surface2); border-radius: 14px; padding: 16px 12px; }
     .hasil-stat .val { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
@@ -275,24 +125,17 @@
     .hasil-stat.green .val { color: var(--green); }
     .hasil-stat.red .val { color: var(--red); }
 
-    .btn-hasil {
-      display: block; width: 100%; padding: 14px;
-      border-radius: 50px; border: none; cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 15px; font-weight: 800; margin-bottom: 10px;
-      transition: all 0.18s;
-    }
+    .btn-hasil { display: block; width: 100%; padding: 14px; border-radius: 50px; border: none; cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 800; margin-bottom: 10px; transition: all 0.18s; }
     .btn-hasil.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
     .btn-hasil.primary:hover { background: var(--red2); }
     .btn-hasil.secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
     .btn-hasil.secondary:hover { background: var(--border); }
+    .btn-hasil.pdf { background: var(--green-bg); color: var(--green); border: 1.5px solid #b8e6d0; }
+    .btn-hasil.pdf:hover { background: #d4f5e6; }
 
     /* REVIEW */
     .review-list { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
-    .review-item {
-      background: var(--white); border-radius: 16px; padding: 20px;
-      border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
-    }
+    .review-item { background: var(--white); border-radius: 16px; padding: 20px; border: 1.5px solid var(--border); box-shadow: var(--shadow-sm); }
     .review-item.benar { border-color: #b8e6d0; }
     .review-item.salah { border-color: #fdd; }
     .review-no { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
@@ -304,36 +147,7 @@
     .review-pill.correct { background: var(--green-bg); color: var(--green); }
     .review-pembahasan { font-size: 12px; color: var(--muted); line-height: 1.6; font-weight: 500; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
 
-    /* UPGRADE WALL */
-    .upgrade-wall {
-      background: linear-gradient(135deg, #fff9f2, #fff5f5);
-      border: 2px solid var(--gold-border);
-      border-radius: 20px;
-      padding: 32px 24px;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .upgrade-wall h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
-    .upgrade-wall p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; font-weight: 500; }
-    .btn-upgrade-wall {
-      display: inline-block; padding: 13px 32px; border-radius: 50px;
-      background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 14px; font-weight: 800; text-decoration: none;
-      box-shadow: 0 4px 14px rgba(192,57,43,0.25); transition: all 0.18s;
-    }
-    .btn-upgrade-wall:hover { background: var(--red2); transform: translateY(-1px); }
-
-    /* TOAST */
-    #toast {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: var(--text); color: #fff;
-      border-radius: 50px; padding: 10px 22px;
-      font-size: 13px; font-weight: 600;
-      opacity: 0; transition: all 0.25s;
-      pointer-events: none; z-index: 999;
-      white-space: nowrap; box-shadow: var(--shadow);
-    }
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 22px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -350,7 +164,6 @@
 </nav>
 
 <main>
-
   <!-- SCREEN 1: PILIH KATEGORI -->
   <div class="screen active" id="screenKategori">
     <div class="page-title">Pilih Mata Pelajaran</div>
@@ -379,7 +192,7 @@
     </div>
 
     <div class="soal-card" id="soalCard">
-      <div class="soal-kategori-tag" id="soalTag">Matematika</div>
+      <div class="soal-tag" id="soalTag">Matematika</div>
       <div class="soal-text" id="soalText">—</div>
       <div class="opsi-list" id="opsiList"></div>
       <div class="pembahasan-box" id="pembahasanBox">
@@ -401,28 +214,18 @@
       <div class="hasil-title" id="hasilTitle">Latihan Selesai!</div>
       <div class="hasil-sub" id="hasilSub">Berikut hasil latihan kamu</div>
       <div class="skor-display" id="skorDisplay">0</div>
-      <div class="skor-label">Skor kamu</div>
+      <div class="skor-label">Skor kamu (dari 100)</div>
       <div class="hasil-stats">
-        <div class="hasil-stat green">
-          <div class="val" id="statBenar">0</div>
-          <div class="lbl">Benar</div>
-        </div>
-        <div class="hasil-stat red">
-          <div class="val" id="statSalah">0</div>
-          <div class="lbl">Salah</div>
-        </div>
-        <div class="hasil-stat">
-          <div class="val" id="statTotal">0</div>
-          <div class="lbl">Total</div>
-        </div>
+        <div class="hasil-stat green"><div class="val" id="statBenar">0</div><div class="lbl">Benar</div></div>
+        <div class="hasil-stat red"><div class="val" id="statSalah">0</div><div class="lbl">Salah</div></div>
+        <div class="hasil-stat"><div class="val" id="statTotal">0</div><div class="lbl">Total</div></div>
       </div>
+      <button class="btn-hasil pdf" onclick="downloadPDF()">📄 Download PDF Hasil & Pembahasan</button>
       <button class="btn-hasil primary" onclick="ulangiLatihan()">🔄 Ulangi Sub-Bab Ini</button>
       <button class="btn-hasil secondary" onclick="goToScreen('screenSubbab')">← Pilih Sub-Bab Lain</button>
     </div>
-
     <div id="reviewSection"></div>
   </div>
-
 </main>
 
 <div id="toast"></div>
@@ -430,7 +233,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   let firebaseConfig;
   try {
@@ -444,6 +247,7 @@
 
   const $ = id => document.getElementById(id);
   let currentUser = null, userData = null;
+  let subBabAkses = [];   // list sub-bab yang sudah dibeli, atau ['__premium__']
   let isPremium = false;
   let allSoal = [];
   let currentKategori = '';
@@ -454,22 +258,26 @@
   let answered = false;
 
   const KATEGORI = [
-    { nama: 'Matematika', icon: '📐', color: '#fff5f5' },
-    { nama: 'IPAS',       icon: '🔬', color: '#f0f9ff' },
-    { nama: 'B.Inggris',  icon: '🔤', color: '#f5fff8' },
+    { nama: 'Matematika', icon: '📐' },
+    { nama: 'IPAS',       icon: '🔬' },
+    { nama: 'B.Inggris',  icon: '🔤' },
   ];
 
   function showToast(msg) {
-    const t = $('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
+    const t = $('toast'); t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
   }
 
   function goToScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     $(id).classList.add('active');
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
+  }
+
+  function hasAccess(subbab) {
+    if (isPremium) return true;
+    if (subBabAkses.includes('__premium__')) return true;
+    return subBabAkses.includes(subbab);
   }
 
   // ── AUTH ──
@@ -480,14 +288,13 @@
     const userSnap = await getDoc(doc(db, 'users', user.uid));
     userData = userSnap.exists() ? userSnap.data() : {};
     isPremium = userData.plan === 'premium';
+    subBabAkses = userData.subBabAkses || [];
 
-    // Load semua soal
     const snap = await getDocs(collection(db, 'soal'));
     allSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
     $('loadingScreen').style.opacity = '0';
     setTimeout(() => $('loadingScreen').style.display = 'none', 300);
-
     renderKategori();
   });
 
@@ -496,13 +303,10 @@
     const grid = $('kategoriGrid');
     grid.innerHTML = '';
     KATEGORI.forEach(k => {
-      const soalKat = allSoal.filter(s => s.kategori === k.nama);
+      const total = allSoal.filter(s => s.kategori === k.nama).length;
       const div = document.createElement('div');
       div.className = 'kat-card';
-      div.innerHTML = `
-        <span class="kat-icon">${k.icon}</span>
-        <div class="kat-name">${k.nama}</div>
-        <div class="kat-count">${soalKat.length} soal tersedia</div>`;
+      div.innerHTML = `<span class="kat-icon">${k.icon}</span><div class="kat-name">${k.nama}</div><div class="kat-count">${total} soal tersedia</div>`;
       div.onclick = () => selectKategori(k.nama);
       grid.appendChild(div);
     });
@@ -510,17 +314,14 @@
 
   function selectKategori(kat) {
     currentKategori = kat;
-    document.querySelectorAll('.kat-card').forEach(c => c.classList.remove('selected'));
+    const katInfo = KATEGORI.find(k => k.nama === kat);
+    $('subbabTitle').textContent = `${katInfo?.icon || ''} ${kat}`;
     renderSubbab(kat);
     goToScreen('screenSubbab');
   }
 
   // ── SCREEN 2: SUB-BAB ──
   function renderSubbab(kat) {
-    const katInfo = KATEGORI.find(k => k.nama === kat);
-    $('subbabTitle').textContent = `${katInfo?.icon || ''} ${kat}`;
-    $('subbabSub').textContent = 'Pilih topik yang ingin kamu pelajari.';
-
     const soalKat = allSoal.filter(s => s.kategori === kat);
     const subBabs = [...new Set(soalKat.map(s => s.subKategori))].sort((a,b) => {
       const minA = Math.min(...soalKat.filter(s=>s.subKategori===a).map(s=>s.urutan||99));
@@ -530,14 +331,15 @@
 
     const list = $('subbabList');
     list.innerHTML = '';
+    let hasLocked = false;
 
     subBabs.forEach((sb, i) => {
       const soalSb = soalKat.filter(s => s.subKategori === sb);
-      const hasPremium = soalSb.some(s => s.isPremium);
-      const isLocked = hasPremium && !isPremium && soalSb.every(s => s.isPremium);
+      const canAccess = hasAccess(sb);
+      if (!canAccess) hasLocked = true;
 
       const div = document.createElement('div');
-      div.className = 'subbab-item' + (isLocked ? ' locked' : '');
+      div.className = 'subbab-item' + (canAccess ? '' : ' locked');
       div.innerHTML = `
         <div class="subbab-left">
           <div class="subbab-num">${i+1}</div>
@@ -546,32 +348,26 @@
             <div class="subbab-soal">${soalSb.length} soal</div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${isLocked
-            ? '<span class="lock-badge">🔒 Premium</span>'
-            : soalSb.some(s => !s.isPremium) && !isPremium
-              ? '<span class="free-badge">✓ Gratis</span>'
-              : '<span class="free-badge">✓ Akses</span>'
-          }
-          ${!isLocked ? '<span class="arrow-icon">›</span>' : ''}
-        </div>`;
+        <span class="access-badge ${canAccess ? (isPremium||subBabAkses.includes('__premium__')?'premium-ok':'ok') : 'lock'}">
+          ${canAccess ? (isPremium||subBabAkses.includes('__premium__')?'⭐ Premium':'✓ Aktif') : '🔒 Beli'}
+        </span>`;
 
-      if (!isLocked) {
+      if (canAccess) {
         div.onclick = () => startLatihan(sb, soalSb);
       } else {
-        div.onclick = () => showToast('Soal ini membutuhkan akun Premium 🔒');
+        div.onclick = () => showToast('Sub-bab ini belum dibeli. Klik Beli untuk akses!');
       }
       list.appendChild(div);
     });
 
-    // Tampilkan upgrade wall kalau free
-    if (!isPremium) {
+    // Upgrade wall kalau ada yang terkunci
+    if (hasLocked) {
       const wall = document.createElement('div');
       wall.className = 'upgrade-wall';
       wall.innerHTML = `
-        <h3>🔒 Buka Semua Sub-Bab</h3>
-        <p>Upgrade ke Premium untuk akses semua soal ${kat} dan mapel lainnya tanpa batas.</p>
-        <a href="/pricing.html" class="btn-upgrade-wall">Upgrade Premium →</a>`;
+        <h3>🔒 Buka Sub-Bab Ini</h3>
+        <p>Beli à la carte per sub-bab (Rp 7.900) atau bundling untuk harga lebih hemat. Premium bulanan buka semua!</p>
+        <a href="/pricing.html" class="btn-upgrade-wall">Lihat Paket →</a>`;
       list.appendChild(wall);
     }
   }
@@ -579,12 +375,8 @@
   // ── SCREEN 3: SOAL ──
   function startLatihan(subbab, soalList) {
     currentSubbab = subbab;
-    // Filter soal yang bisa diakses
-    soalLatihan = soalList.filter(s => !s.isPremium || isPremium);
-    soalLatihan.sort((a,b) => (a.urutan||99) - (b.urutan||99));
-    currentIdx = 0;
-    jawaban = [];
-    answered = false;
+    soalLatihan = [...soalList].sort((a,b) => (a.urutan||99)-(b.urutan||99));
+    currentIdx = 0; jawaban = []; answered = false;
     goToScreen('screenSoal');
     renderSoal();
   }
@@ -592,7 +384,7 @@
   function renderSoal() {
     const soal = soalLatihan[currentIdx];
     const total = soalLatihan.length;
-    const pct = ((currentIdx) / total) * 100;
+    const pct = (currentIdx / total) * 100;
 
     $('progressLabel').textContent = `Soal ${currentIdx+1} dari ${total}`;
     $('progressFill').style.width = pct + '%';
@@ -604,11 +396,13 @@
 
     answered = false;
     $('btnNext').disabled = true;
+    $('btnNext').textContent = 'Lanjut →';
     $('btnSkip').style.display = 'inline-block';
 
     const opsiList = $('opsiList');
     opsiList.innerHTML = '';
-    ['A','B','C','D','E'].filter(k => soal.opsi[k] !== undefined).forEach(key => { const val = soal.opsi[key];
+    ['A','B','C','D','E'].filter(k => soal.opsi[k] !== undefined).forEach(key => {
+      const val = soal.opsi[key];
       const div = document.createElement('div');
       div.className = 'opsi-item';
       div.dataset.key = key;
@@ -627,22 +421,14 @@
     const isBenar = key === soal.jawaban;
     jawaban.push({ soal, pilihan: key, benar: isBenar });
 
-    // Update kuota soal gratis
-    if (!isPremium && userData?.soalGratis > 0) {
-      updateDoc(doc(db, 'users', currentUser.uid), { soalGratis: increment(-1) }).catch(()=>{});
-      userData.soalGratis = Math.max(0, (userData.soalGratis || 0) - 1);
-    }
-
-    // Warnai opsi
     document.querySelectorAll('.opsi-item').forEach(item => {
       item.classList.add('answered');
+      item.style.cursor = 'default';
       const k = item.dataset.key;
       if (k === soal.jawaban) item.classList.add('show-correct');
       else if (k === key) item.classList.add('wrong');
-      item.style.cursor = 'default';
     });
 
-    // Tampilkan pembahasan
     const box = $('pembahasanBox');
     box.style.display = 'block';
     if (isBenar) {
@@ -650,24 +436,17 @@
       $('pembahasanTitle').textContent = '✓ Jawaban Benar!';
     } else {
       box.className = 'pembahasan-box wrong-box';
-      $('pembahasanTitle').textContent = `✗ Jawaban Salah — Kunci: ${soal.jawaban}`;
+      $('pembahasanTitle').textContent = `✗ Salah — Kunci: ${soal.jawaban}`;
     }
     $('pembahasanText').textContent = soal.pembahasan;
-
-    $('btnNext').textContent = currentIdx + 1 >= soalLatihan.length ? 'Lihat Hasil →' : 'Lanjut →';
+    $('btnNext').textContent = currentIdx+1 >= soalLatihan.length ? 'Lihat Hasil →' : 'Lanjut →';
   }
 
   window.nextSoal = function() {
-    if (!answered) {
-      // Lewati soal
-      jawaban.push({ soal: soalLatihan[currentIdx], pilihan: null, benar: false });
-    }
+    if (!answered) jawaban.push({ soal: soalLatihan[currentIdx], pilihan: null, benar: false });
     currentIdx++;
-    if (currentIdx >= soalLatihan.length) {
-      showHasil();
-    } else {
-      renderSoal();
-    }
+    if (currentIdx >= soalLatihan.length) showHasil();
+    else renderSoal();
   };
 
   // ── SCREEN 4: HASIL ──
@@ -684,7 +463,7 @@
 
     $('hasilEmoji').textContent = emoji;
     $('hasilTitle').textContent = title;
-    $('hasilSub').textContent = `Kamu menyelesaikan latihan ${currentSubbab}`;
+    $('hasilSub').textContent = `Latihan ${currentSubbab} · ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}`;
     $('skorDisplay').textContent = skor;
     $('statBenar').textContent = benar;
     $('statSalah').textContent = salah;
@@ -695,23 +474,21 @@
     review.innerHTML = '<div style="font-size:15px;font-weight:800;margin-bottom:12px">📋 Review Jawaban</div>';
     const reviewList = document.createElement('div');
     reviewList.className = 'review-list';
-
     jawaban.forEach((j, i) => {
       const item = document.createElement('div');
       item.className = 'review-item ' + (j.benar ? 'benar' : 'salah');
       const userAns = j.pilihan ? `${j.pilihan}: ${j.soal.opsi[j.pilihan]}` : 'Dilewati';
       const correctAns = `${j.soal.jawaban}: ${j.soal.opsi[j.soal.jawaban]}`;
       item.innerHTML = `
-        <div class="review-no">Soal ${i+1}</div>
+        <div class="review-no">Soal ${i+1} · ${j.benar ? '✓ Benar' : '✗ Salah'}</div>
         <div class="review-q">${j.soal.pertanyaan}</div>
         <div class="review-ans">
-          <span class="review-pill ${j.benar ? 'user-benar' : 'user-salah'}">Jawaban kamu: ${userAns}</span>
-          ${!j.benar ? `<span class="review-pill correct">Kunci: ${correctAns}</span>` : ''}
+          <span class="review-pill ${j.benar?'user-benar':'user-salah'}">Jawaban kamu: ${userAns}</span>
+          ${!j.benar?`<span class="review-pill correct">Kunci: ${correctAns}</span>`:''}
         </div>
         <div class="review-pembahasan">${j.soal.pembahasan}</div>`;
       reviewList.appendChild(item);
     });
-
     review.appendChild(reviewList);
     goToScreen('screenHasil');
   }
@@ -722,6 +499,214 @@
   };
 
   window.goToScreen = goToScreen;
+
+  // ── DOWNLOAD PDF ──
+  window.downloadPDF = function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    const pageW = 210, pageH = 297;
+    const margin = 16, contentW = pageW - margin * 2;
+    let y = margin;
+
+    // Warna
+    const RED = [192, 57, 43];
+    const DARK = [26, 23, 20];
+    const MUTED = [122, 113, 104];
+    const GREEN_BG = [237, 250, 243];
+    const RED_BG = [254, 242, 242];
+    const GREEN_TEXT = [26, 122, 74];
+
+    const total = jawaban.length;
+    const benar = jawaban.filter(j => j.benar).length;
+    const skor = Math.round((benar / total) * 100);
+    const nama = userData?.nama || currentUser?.email || 'Siswa';
+    const tanggal = new Date().toLocaleDateString('id-ID', {day:'2-digit',month:'long',year:'numeric'});
+
+    function checkPage(needed = 20) {
+      if (y + needed > pageH - margin) {
+        doc.addPage();
+        y = margin;
+      }
+    }
+
+    function wrapText(text, maxW, fontSize) {
+      doc.setFontSize(fontSize);
+      return doc.splitTextToSize(String(text), maxW);
+    }
+
+    // ── HEADER ──
+    doc.setFillColor(...RED);
+    doc.rect(0, 0, pageW, 38, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('CerdasBersama', margin, 16);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Hasil Latihan Soal', margin, 23);
+
+    doc.setFontSize(9);
+    doc.text(`${nama}  ·  ${tanggal}`, margin, 30);
+    doc.text(`Sub-bab: ${currentSubbab}`, margin, 36);
+
+    y = 48;
+
+    // ── SKOR BOX ──
+    doc.setFillColor(255, 245, 245);
+    doc.roundedRect(margin, y, contentW, 32, 4, 4, 'F');
+    doc.setDrawColor(...RED);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(margin, y, contentW, 32, 4, 4, 'S');
+
+    doc.setTextColor(...RED);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(28);
+    doc.text(`${skor}`, margin + contentW/2, y + 17, { align: 'center' });
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('SKOR', margin + contentW/2, y + 25, { align: 'center' });
+
+    // Stats kecil
+    const colW = contentW / 3;
+    const statsY = y + 5;
+    [
+      { label: 'Benar', val: benar, color: GREEN_TEXT },
+      { label: 'Salah', val: total - benar, color: RED },
+      { label: 'Total Soal', val: total, color: DARK },
+    ].forEach((s, i) => {
+      const x = margin + i * colW + colW - 20;
+      doc.setTextColor(...s.color);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text(String(s.val), x, statsY + 8);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...MUTED);
+      doc.text(s.label, x, statsY + 14);
+    });
+
+    y += 40;
+
+    // ── SOAL & JAWABAN ──
+    doc.setTextColor(...RED);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('SOAL & PEMBAHASAN', margin, y);
+    y += 6;
+
+    doc.setDrawColor(...RED);
+    doc.setLineWidth(0.4);
+    doc.line(margin, y, margin + contentW, y);
+    y += 8;
+
+    jawaban.forEach((j, i) => {
+      const isBenar = j.benar;
+      const bgColor = isBenar ? GREEN_BG : RED_BG;
+      const borderColor = isBenar ? GREEN_TEXT : RED;
+
+      // Hitung tinggi yang dibutuhkan
+      const qLines = wrapText(`${i+1}. ${j.soal.pertanyaan}`, contentW - 8, 10);
+      const pemLines = wrapText(j.soal.pembahasan, contentW - 16, 8);
+      const opsiCount = Object.keys(j.soal.opsi).length;
+      const estimatedH = 8 + qLines.length * 5 + opsiCount * 5 + pemLines.length * 4 + 20;
+
+      checkPage(estimatedH);
+
+      const boxY = y;
+
+      // Background box
+      doc.setFillColor(...bgColor);
+      doc.roundedRect(margin, y, contentW, estimatedH, 3, 3, 'F');
+      doc.setDrawColor(...borderColor);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(margin, y, contentW, estimatedH, 3, 3, 'S');
+
+      y += 5;
+
+      // Nomor & status
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...borderColor);
+      doc.text(`SOAL ${i+1}  ${isBenar ? '✓ BENAR' : '✗ SALAH'}`, margin + 4, y);
+      y += 5;
+
+      // Pertanyaan
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(...DARK);
+      const qText = wrapText(j.soal.pertanyaan, contentW - 8, 10);
+      doc.text(qText, margin + 4, y);
+      y += qText.length * 5 + 3;
+
+      // Pilihan jawaban
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      ['A','B','C','D','E'].filter(k => j.soal.opsi[k]).forEach(k => {
+        const isKunci = k === j.soal.jawaban;
+        const isPilihan = k === j.pilihan;
+        if (isKunci) {
+          doc.setTextColor(...GREEN_TEXT);
+          doc.setFont('helvetica', 'bold');
+        } else if (isPilihan && !isBenar) {
+          doc.setTextColor(...RED);
+          doc.setFont('helvetica', 'normal');
+        } else {
+          doc.setTextColor(...MUTED);
+          doc.setFont('helvetica', 'normal');
+        }
+        const prefix = isKunci ? `✓ ${k}.` : `   ${k}.`;
+        const opsiLines = wrapText(`${prefix} ${j.soal.opsi[k]}`, contentW - 16, 8);
+        checkPage(opsiLines.length * 4 + 2);
+        doc.text(opsiLines, margin + 8, y);
+        y += opsiLines.length * 4 + 1;
+      });
+
+      // Jawaban user
+      if (!isBenar && j.pilihan) {
+        y += 2;
+        doc.setTextColor(...RED);
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(8);
+        doc.text(`Jawaban kamu: ${j.pilihan}. ${j.soal.opsi[j.pilihan] || '—'}`, margin + 8, y);
+        y += 5;
+      }
+
+      // Pembahasan
+      y += 2;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8);
+      doc.setTextColor(...GREEN_TEXT);
+      doc.text('Pembahasan:', margin + 4, y);
+      y += 4;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...DARK);
+      const pemText = wrapText(j.soal.pembahasan, contentW - 16, 8);
+      checkPage(pemText.length * 4 + 4);
+      doc.text(pemText, margin + 8, y);
+      y += pemText.length * 4 + 8;
+    });
+
+    // ── FOOTER ──
+    const pageCount = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.setTextColor(...MUTED);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`CerdasBersama · ${currentSubbab} · ${tanggal}`, margin, pageH - 8);
+      doc.text(`Halaman ${i} / ${pageCount}`, pageW - margin, pageH - 8, { align: 'right' });
+    }
+
+    // Save
+    const fileName = `HasilLatihan-${currentSubbab.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.pdf`;
+    doc.save(fileName);
+    showToast('PDF berhasil didownload!');
+  };
 </script>
 </body>
 </html>
