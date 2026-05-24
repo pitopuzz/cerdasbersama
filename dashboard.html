@@ -492,9 +492,18 @@
         const grid = document.getElementById('subbabAksesGrid');
         if (!grid) return;
 
-        const MAT = ['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'];
-        const IPAS_LIST = ['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'];
-
+        // Fetch subBab dari Firestore untuk deteksi icon
+const subBabIconMap = {};
+try {
+  const mapels = ['Matematika','IPAS','B.Inggris'];
+  for (const mapel of mapels) {
+    const q = query(collection(db,'subBab'), where('segmen','==','SD Kelas 6'), where('mapel','==',mapel));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      (snap.docs[0].data().list || []).forEach(sb => subBabIconMap[sb] = MAPEL_ICON[mapel] || '📚');
+    }
+  }
+} catch(e) { console.error('fetchSubBabIcon error:', e) }
         // Group by segmen dari orders
         const segmenMap = {};
         orders.filter(o=>o.status==='paid'&&o.subBabDibeli?.length).forEach(o=>{
@@ -513,7 +522,7 @@
           const tagWrap = document.createElement('div');
           tagWrap.className='subbab-akses-grid';
           sbs.forEach(sb=>{
-            const icon=MAT.includes(sb)?'📐':IPAS_LIST.includes(sb)?'🔬':'🔤';
+            const icon = subBabIconMap[sb] || '📚';
             const div=document.createElement('div');
             div.className='subbab-tag';
             div.innerHTML=`<span class="mapel-icon">${icon}</span>${sb}`;
