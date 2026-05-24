@@ -146,7 +146,8 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       <button class="tab active" id="t1" onclick="switchTab('tambah',this)">➕ Tambah Manual</button>
       <button class="tab" id="t2" onclick="switchTab('bulk',this)">📊 Bulk Excel</button>
       <button class="tab" id="t3" onclick="switchTab('daftar',this)">📋 Daftar Soal</button>
-      <button class="tab" id="t4" onclick="switchTab('tutorial',this)">📖 Tutorial</button>
+      <button class="tab" id="t4" onclick="switchTab('fixakses',this)">🔧 Fix Akses</button>
+      <button class="tab" id="t5" onclick="switchTab('tutorial',this)">📖 Tutorial</button>
     </div>
 
     <!-- ═══ TAB 1: TAMBAH MANUAL ═══ -->
@@ -292,7 +293,21 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       </div>
     </div>
 
-    <!-- ═══ TAB 4: TUTORIAL ═══ -->
+    <!-- ═══ TAB 4: FIX AKSES ═══ -->
+    <div id="tabFixakses" style="display:none">
+      <div class="card">
+        <div class="card-title">🔧 Sync Akses User dari Order</div>
+        <p style="font-size:13px;color:#7a7168;margin-bottom:16px;font-weight:500;line-height:1.6">
+          Tool ini membaca semua order berstatus <strong>paid</strong> lalu mengupdate field <code>subBabAkses</code> di setiap user sesuai sub-bab yang dibeli. Gunakan ini untuk memperbaiki user yang sudah bayar tapi belum bisa akses latihan.
+        </p>
+        <div class="warning-box">⚠️ Proses ini aman — hanya menambah akses, tidak menghapus akses yang sudah ada.</div>
+        <div class="alert" id="alertFix"></div>
+        <button class="btn primary full" id="btnFixAkses" onclick="fixAksesUser()">🔧 Sync Semua Order Paid → subBabAkses</button>
+        <div class="log" id="fixLog" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB 5: TUTORIAL ═══ -->
     <div id="tabTutorial" style="display:none">
       <div class="card">
         <div class="card-title">📖 Cara Tambah & Update Soal</div>
@@ -321,7 +336,7 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, where, arrayUnion, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const ADMIN_EMAILS = ['bersamacerdas1@gmail.com','test2@gmail.com'];
 const $ = id => document.getElementById(id);
@@ -343,7 +358,7 @@ onAuthStateChanged(auth, async user => {
 
 // ── TABS ──
 window.switchTab = function(tab, el) {
-  ['tabTambah','tabBulk','tabDaftar','tabTutorial'].forEach(t => $(t).style.display='none');
+  ['tabTambah','tabBulk','tabDaftar','tabFixakses','tabTutorial'].forEach(t => $(t).style.display='none');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   $(`tab${tab.charAt(0).toUpperCase()+tab.slice(1)}`).style.display = 'block';
   el.classList.add('active');
@@ -580,7 +595,76 @@ function setLoadingBulk(loading) {
   else{$('btnHapusLalu').textContent='🗑️ Hapus Soal Lama + Upload Baru'; $('btnUploadSaja').textContent='➕ Tambah ke Soal yang Ada';}
 }
 
-// Drag & drop
+// ── FIX AKSES ──
+window.fixAksesUser = async function() {
+  const btn = $('btnFixAkses');
+  const log = $('fixLog');
+  log.style.display = 'block'; log.innerHTML = '';
+  btn.disabled = true; btn.textContent = '⏳ Memproses...';
+
+  function logFix(msg, type='') {
+    const line = document.createElement('div');
+    line.className = 'log-line '+type; line.textContent = msg;
+    log.appendChild(line); log.scrollTop = log.scrollHeight;
+  }
+
+  try {
+    logFix('📋 Membaca semua order paid...', 'info');
+    const ordersSnap = await getDocs(query(collection(db,'orders'), where('status','==','paid')));
+    logFix(`✅ Ditemukan ${ordersSnap.size} order paid.`, 'ok');
+
+    // Kelompokkan per uid
+    const userMap = {}; // uid → { subBabs: Set, isPremium: bool, expiredAt: Date }
+    ordersSnap.docs.forEach(d => {
+      const o = d.data();
+      if (!o.uid) return;
+      if (!userMap[o.uid]) userMap[o.uid] = { subBabs: new Set(), isPremium: false, expiredAt: null };
+      if (o.tipe === 'bulanan') {
+        userMap[o.uid].isPremium = true;
+        const exp = new Date(); exp.setMonth(exp.getMonth()+1);
+        userMap[o.uid].expiredAt = exp;
+      } else if (o.subBabDibeli?.length) {
+        o.subBabDibeli.forEach(sb => userMap[o.uid].subBabs.add(sb));
+      }
+    });
+
+    logFix(`👥 ${Object.keys(userMap).length} user perlu diupdate...`, 'info');
+
+    let sukses = 0, gagal = 0;
+    for (const [uid, data] of Object.entries(userMap)) {
+      try {
+        const userRef = doc(db, 'users', uid);
+        if (data.isPremium) {
+          await updateDoc(userRef, {
+            plan: 'premium',
+            subBabAkses: ['__premium__'],
+            expiredAt: data.expiredAt,
+          });
+          logFix(`✅ [Premium] uid: ${uid.slice(0,10)}...`, 'ok');
+        } else {
+          const subBabArray = [...data.subBabs];
+          await updateDoc(userRef, {
+            plan: 'alacarte',
+            subBabAkses: arrayUnion(...subBabArray),
+          });
+          logFix(`✅ [À la carte] uid: ${uid.slice(0,10)}... → ${subBabArray.join(', ')}`, 'ok');
+        }
+        sukses++;
+      } catch(err) {
+        logFix(`❌ Gagal uid ${uid.slice(0,10)}: ${err.message}`, 'err');
+        gagal++;
+      }
+    }
+
+    logFix(`\n✨ Selesai! ${sukses} user diupdate, ${gagal} gagal.`, sukses > 0 ? 'ok' : 'err');
+    showAlert('alertFix', sukses > 0 ? 'ok' : 'err', `✅ ${sukses} user berhasil disync!`);
+  } catch(err) {
+    logFix('❌ Error: ' + err.message, 'err');
+    showAlert('alertFix', 'err', '❌ Gagal: ' + err.message);
+  }
+
+  btn.disabled = false; btn.textContent = '🔧 Sync Semua Order Paid → subBabAkses';
+};
 const zone = document.getElementById('uploadZone');
 zone.addEventListener('dragover', e=>{e.preventDefault();zone.classList.add('drag');});
 zone.addEventListener('dragleave', ()=>zone.classList.remove('drag'));
