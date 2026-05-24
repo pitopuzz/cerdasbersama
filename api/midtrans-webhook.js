@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { credential } from 'firebase-admin';
 import crypto from 'crypto';
 
@@ -19,7 +19,14 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { order_id, status_code, gross_amount, signature_key, transaction_status, fraud_status } = req.body;
+  const {
+    order_id,
+    status_code,
+    gross_amount,
+    signature_key,
+    transaction_status,
+    fraud_status
+  } = req.body;
 
   // Verifikasi signature dari Midtrans
   const serverKey = process.env.MIDTRANS_SERVER_KEY;
@@ -32,20 +39,72 @@ export default async function handler(req, res) {
   }
 
   // Cek status transaksi
-  const isSuccess = transaction_status === 'settlement' ||
+  const isSuccess =
+    transaction_status === 'settlement' ||
     (transaction_status === 'capture' && fraud_status === 'accept');
 
   if (isSuccess) {
     try {
       const db = getFirestore();
-      // Update order di Firestore berdasarkan order_id
+
+      // 1. Ambil order dari Firestore
       const ordersRef = db.collection('orders');
       const snap = await ordersRef.where('midtransOrderId', '==', order_id).get();
 
-      if (!snap.empty) {
-        const orderDoc = snap.docs[0];
-        await orderDoc.ref.update({ status: 'paid' });
+      if (snap.empty) {
+        console.error('Order tidak ditemukan:', order_id);
+        return res.status(200).json({ status: 'ok' });
       }
+
+      const orderDoc = snap.docs[0];
+      const orderData = orderDoc.data();
+
+      // 2. Update status order → paid
+      await orderDoc.ref.update({ status: 'paid' });
+
+      // 3. Update akses user berdasarkan tipe paket
+      const uid = orderData.uid;
+      const tipe = orderData.tipe || 'alacarte';
+      const subBabDibeli = orderData.subBabDibeli || [];
+      const komisi = orderData.komisi || 0;
+      const refCode = orderData.refCode || null;
+
+      const userRef = db.collection('users').doc(uid);
+
+      if (tipe === 'bulanan') {
+        // Premium bulanan → buka semua akses
+        const expiredAt = new Date();
+        expiredAt.setMonth(expiredAt.getMonth() + 1);
+
+        await userRef.update({
+          plan: 'premium',
+          subBabAkses: ['__premium__'],
+          expiredAt,
+        });
+
+      } else {
+        // À la carte atau bundling → tambah sub-bab ke akses yang sudah ada
+        await userRef.update({
+          plan: 'alacarte',
+          subBabAkses: FieldValue.arrayUnion(...subBabDibeli),
+        });
+      }
+
+      // 4. Update komisi referrer (kalau ada kode referral)
+      if (refCode && komisi > 0) {
+        const refSnap = await db.collection('users')
+          .where('referralCode', '==', refCode)
+          .get();
+
+        if (!refSnap.empty) {
+          await refSnap.docs[0].ref.update({
+            komisiTotal: FieldValue.increment(komisi)
+          });
+        }
+      }
+
+      console.log(`✅ Order ${order_id} berhasil diproses. Akses: ${tipe} → ${subBabDibeli.join(', ')}`);
+
     } catch (e) {
       console.error('Firestore error:', e);
     }
