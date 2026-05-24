@@ -420,7 +420,7 @@
       });
     });
     $('btnCopyWA').addEventListener('click', () => {
-      const msg = `Halo! Aku pakai CerdasBersama buat belajar soal SD Kelas 6. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
+      const msg = `Halo! Aku pakai CerdasBersama buat latihan soal persiapan ujian. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
 
@@ -438,18 +438,22 @@
         <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
         <div class="premium-banner" data-s style="transition-delay:.22s">
           <h3>✨ Akses Premium Aktif</h3>
-          <p>Kamu punya akses penuh ke semua soal Matematika, IPAS & B.Inggris tanpa batas.</p>
+          <p>Kamu punya akses penuh ke semua soal & sub-bab tanpa batas.</p>
           <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
           ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:8px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
         </div>
         <div class="two-col" data-s style="transition-delay:.24s">
           <div class="card" style="margin-bottom:0">
-            <div class="card-title">📚 Materi Tersedia</div>
+            <div class="card-title">📚 Segmen Aktif</div>
             <div style="display:flex;flex-direction:column;gap:8px">
-              ${['Matematika','IPAS','B.Inggris'].map(m =>
+              ${[
+                {icon:'📚',label:'SD Kelas 6 — Matematika, IPAS, B.Inggris'},
+                {icon:'🚧',label:'SMP & SMA — Coming Soon'},
+                {icon:'🚧',label:'Try Out, SNBT, CBT CPNS — Coming Soon'},
+              ].map(m =>
                 `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
                   <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
-                  ${MAPEL_ICON[m]} ${m} — Semua Sub-Bab
+                  ${m.icon} ${m.label}
                 </div>`
               ).join('')}
             </div>
@@ -470,7 +474,7 @@
         <div class="section-label" data-s style="transition-delay:.2s">📚 Sub-Bab Aktif Kamu</div>
         <div class="card" data-s style="transition-delay:.22s">
           <div class="card-title">✅ Sub-Bab yang Sudah Dibeli</div>
-          <div class="subbab-akses-grid" id="subbabAksesGrid"></div>
+          <div id="subbabAksesGrid"></div>
           <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
             <div style="font-size:13px;color:var(--muted);font-weight:500">Mau tambah sub-bab lain?</div>
             <a href="/pricing.html" style="padding:9px 20px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">+ Beli Sub-Bab →</a>
@@ -479,25 +483,44 @@
         <div class="upgrade-cta" data-s style="transition-delay:.26s">
           <div>
             <h3>⭐ Upgrade ke Premium Bulanan</h3>
-            <p>Rp 99.900/bln — buka semua sub-bab Matematika, IPAS & B.Inggris tanpa batas!</p>
+            <p>Rp 99.900/bln — buka semua sub-bab tanpa batas!</p>
           </div>
           <button class="btn-upgrade" onclick="location.href='/pricing.html'">Upgrade →</button>
         </div>`;
 
-      // Render sub-bab tags
       setTimeout(() => {
         const grid = document.getElementById('subbabAksesGrid');
         if (!grid) return;
-        // Deteksi mapel dari nama sub-bab
+
         const MAT = ['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'];
         const IPAS_LIST = ['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'];
 
-        subBabAkses.forEach(sb => {
-          const icon = MAT.includes(sb) ? '📐' : IPAS_LIST.includes(sb) ? '🔬' : '🔤';
-          const div = document.createElement('div');
-          div.className = 'subbab-tag';
-          div.innerHTML = `<span class="mapel-icon">${icon}</span>${sb}`;
-          grid.appendChild(div);
+        // Group by segmen dari orders
+        const segmenMap = {};
+        orders.filter(o=>o.status==='paid'&&o.subBabDibeli?.length).forEach(o=>{
+          const seg = o.segmen || 'SD Kelas 6';
+          if(!segmenMap[seg]) segmenMap[seg]=new Set();
+          o.subBabDibeli.forEach(sb=>segmenMap[seg].add(sb));
+        });
+
+        // Fallback: kalau orders tidak ada segmen, grouping dari subBabAkses saja
+        if(!Object.keys(segmenMap).length) segmenMap['SD Kelas 6']=new Set(subBabAkses);
+
+        Object.entries(segmenMap).forEach(([seg, sbs])=>{
+          const segDiv = document.createElement('div');
+          segDiv.style.cssText='margin-bottom:16px';
+          segDiv.innerHTML=`<div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">📚 ${seg}</div>`;
+          const tagWrap = document.createElement('div');
+          tagWrap.className='subbab-akses-grid';
+          sbs.forEach(sb=>{
+            const icon=MAT.includes(sb)?'📐':IPAS_LIST.includes(sb)?'🔬':'🔤';
+            const div=document.createElement('div');
+            div.className='subbab-tag';
+            div.innerHTML=`<span class="mapel-icon">${icon}</span>${sb}`;
+            tagWrap.appendChild(div);
+          });
+          segDiv.appendChild(tagWrap);
+          grid.appendChild(segDiv);
         });
       }, 100);
 
@@ -556,9 +579,10 @@
         const sc = o.status==='paid'?'paid':o.status==='pending'?'pending':'failed';
         const sl = o.status==='paid'?'Lunas':o.status==='pending'?'Menunggu':'Gagal';
         const subBabLabel = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
+        const segmenLabel = o.segmen ? `📚 ${o.segmen}` : '';
         return `<div class="order-item">
           <div class="order-info">
-            <div class="order-paket">${o.paket||'—'}</div>
+            <div class="order-paket">${o.paket||'—'} ${segmenLabel?`<span style="font-size:10px;font-weight:600;color:var(--muted);margin-left:4px">${segmenLabel}</span>`:''}</div>
             ${subBabLabel ? `<div class="order-subbab">${subBabLabel}</div>` : ''}
             <div class="order-date">${fmtDate(o.createdAt)} · ${o.refCode?`Ref: ${o.refCode}`:'Tanpa referral'}</div>
           </div>
