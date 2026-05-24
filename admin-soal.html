@@ -474,7 +474,7 @@ async function syncSubBab(rows) {
   // 3. Buat ulang dari Excel
   for (const { segmen, mapel, subs } of Object.values(map)) {
     try {
-      await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
+      await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs].sort() });
       logBulk(`📚 SubBab dibuat: ${segmen} — ${mapel} (${subs.size} sub-bab)`, 'ok');
     } catch(e) {
       logBulk(`⚠️ Gagal buat subBab ${mapel}: ${e.message}`, 'err');
