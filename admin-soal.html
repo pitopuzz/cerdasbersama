@@ -588,10 +588,37 @@ async function uploadRows(rows) {
     }
   }
   $('totalCount').textContent = allSoal.length;
+  await syncSubBab(rows);
   logBulk(`\n✨ Selesai! ${sukses} berhasil, ${gagal} gagal.`, sukses===rows.length?'ok':'info');
   showAlert('alertBulk', sukses===rows.length?'ok':'info', `✅ ${sukses}/${rows.length} soal berhasil diupload!`);
 }
-
+async function syncSubBab(rows) {
+  const map = {};
+  rows.forEach(r => {
+    const segmen = String(r.segmen||'SD Kelas 6').trim();
+    const mapel  = String(r.kategori||'').trim();
+    const sub    = String(r.subKategori||'').trim();
+    if (!mapel || !sub) return;
+    const key = `${segmen}__${mapel}`;
+    if (!map[key]) map[key] = { segmen, mapel, subs: new Set() };
+    map[key].subs.add(sub);
+  });
+  for (const { segmen, mapel, subs } of Object.values(map)) {
+    try {
+      const q = query(collection(db,'subBab'),where('segmen','==',segmen),where('mapel','==',mapel));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs] });
+        logBulk(`📚 SubBab baru: ${segmen} — ${mapel}`, 'ok');
+      } else {
+        const existing = snap.docs[0].data().list || [];
+        const merged = [...new Set([...existing, ...subs])];
+        await updateDoc(snap.docs[0].ref, { list: merged });
+        logBulk(`📚 SubBab diupdate: ${mapel} (${merged.length} total)`, 'ok');
+      }
+    } catch(e) { logBulk(`⚠️ Gagal sync subBab ${mapel}: ${e.message}`, 'err'); }
+  }
+}
 function buildSoalObj({segmen='SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
   const paket = isPremium ? ['value','pro','ultimate','premium'] : ['gratis','starter','value','pro','ultimate','premium'];
   return {segmen,kategori,subKategori,pertanyaan,opsi:{A:opsiA,B:opsiB,C:opsiC,D:opsiD,E:opsiE},jawaban,pembahasan,tingkat,isPremium,paket,urutan};
