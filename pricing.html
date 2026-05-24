@@ -294,15 +294,20 @@ onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href='/register.html'; return; }
   currentUser = user;
   const snap = await getDoc(doc(db,'users',user.uid));
-  if (snap.exists()) {
-    currentUserData = snap.data();
-    // Auto-apply referral kalau ada
-    if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
-      validRefCode = currentUserData.referredBy;
-      discApplied = true;
-      $('refCode').value = validRefCode;
-      applyRefUI();
-    }
+
+  // Kalau user auth ada tapi doc Firestore tidak ada → paksa daftar ulang
+  if (!snap.exists()) {
+    window.location.href = '/register.html';
+    return;
+  }
+
+  currentUserData = snap.data();
+  // Auto-apply referral kalau ada
+  if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
+    validRefCode = currentUserData.referredBy;
+    discApplied = true;
+    $('refCode').value = validRefCode;
+    applyRefUI();
   }
   const savedRef = sessionStorage.getItem('refCode');
   if (savedRef && !discApplied) $('refCode').value = savedRef;
