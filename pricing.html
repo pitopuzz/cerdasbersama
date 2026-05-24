@@ -19,7 +19,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
 .loading{text-align:center;padding:3rem;color:#b0a89c;font-size:14px}
 
-/* STEPS INDICATOR */
 .steps-bar{display:flex;align-items:center;gap:0;margin-bottom:28px}
 .step-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#b0a89c}
 .step-item.active{color:#C0392B}
@@ -33,7 +32,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-sub{font-size:13px;color:#7a7168;margin-bottom:24px;font-weight:500}
 
-/* SEGMEN GRID */
 .segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
 .segmen-card{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden}
 .segmen-card:hover:not(.coming-soon){border-color:#C0392B;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
@@ -44,14 +42,12 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .segmen-desc{font-size:11px;color:#7a7168;font-weight:500}
 .coming-soon-badge{position:absolute;top:10px;right:10px;background:#f5f3ef;border:1px solid #e8e4dc;border-radius:50px;padding:3px 8px;font-size:9px;font-weight:800;color:#b0a89c;text-transform:uppercase;letter-spacing:0.5px}
 
-/* TABS */
 .tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content;flex-wrap:wrap}
 .tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 
 .section-label{font-size:11px;font-weight:800;color:#b0a89c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
 
-/* PAKET GRID */
 .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
 .pkg{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px;cursor:pointer;transition:all 0.18s}
 .pkg:hover{border-color:#C0392B;transform:translateY(-2px)}
@@ -62,7 +58,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .pkg-desc{font-size:11px;color:#b0a89c}
 .pkg-save{font-size:11px;color:#C0392B;margin-top:6px;font-weight:700}
 
-/* MAPEL GRID */
 .mapel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
 @media(max-width:500px){.mapel-grid{grid-template-columns:repeat(2,1fr)}}
 .mapel{border:1.5px solid #e8e4dc;border-radius:12px;padding:12px;cursor:pointer;text-align:center;background:#fff;transition:all 0.18s}
@@ -71,7 +66,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .mapel-icon{font-size:20px;margin-bottom:5px}
 .mapel-name{font-size:11px;font-weight:800;color:#1a1714}
 
-/* SUB-BAB */
 .subbab-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:20px}
 .bab{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid #e8e4dc;border-radius:10px;cursor:pointer;background:#fff;font-size:13px;font-weight:600;color:#1a1714;transition:all 0.18s}
 .bab:hover{border-color:#C0392B}
@@ -82,19 +76,21 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .quota-info{font-size:12px;color:#7a7168;margin-bottom:10px;font-weight:700}
 .quota-info span{color:#C0392B;font-weight:800}
 
-/* SELECTED PREVIEW */
+/* Loading spinner sub-bab */
+.subbab-loading{text-align:center;padding:20px;color:#b0a89c;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #e8e4dc;border-top-color:#C0392B;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
 .selected-preview{background:#fff5f5;border:1.5px solid #fdd;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:none}
 .selected-preview-title{font-size:12px;font-weight:800;color:#C0392B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .selected-tags{display:flex;gap:6px;flex-wrap:wrap}
 .sel-tag{background:#fff;border:1px solid #fdd;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;color:#C0392B;display:flex;align-items:center;gap:4px;cursor:pointer}
 .sel-tag:hover{background:#fef2f2}
 
-/* PREMIUM BOX */
 .premium-box{background:linear-gradient(135deg,#fffbf0,#fff8e0);border:2px solid #f5d06a;border-radius:16px;padding:24px;margin-bottom:24px;text-align:center}
 .premium-box h3{font-size:20px;font-weight:900;color:#8a5e00;margin-bottom:6px}
 .premium-box p{font-size:13px;color:#9a7020;line-height:1.6;font-weight:500}
 
-/* REFERRAL */
 .ref-box{border-radius:12px;margin-bottom:20px;padding:14px}
 .ref-box.locked{border:1.5px dashed #e8e4dc;background:#f5f3ef}
 .ref-box.unlocked{border:1.5px solid #1a7a4a;background:#edfaf3}
@@ -112,7 +108,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .ref-hint{font-size:12px;color:#b0a89c;margin-top:6px;font-weight:500}
 .ref-ok-msg{font-size:12px;color:#1a7a4a;margin-top:6px;font-weight:700}
 
-/* ORDER BOX */
 .order-box{background:#fff;border:1px solid #e8e4dc;border-radius:16px;padding:20px;margin-bottom:16px}
 .order-row{display:flex;justify-content:space-between;font-size:13px;color:#7a7168;margin-bottom:8px;align-items:flex-start;gap:12px}
 .order-row .label{flex:1}
@@ -141,7 +136,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 
   <div id="mainView" style="display:none">
 
-    <!-- STEPS BAR -->
     <div class="steps-bar" id="stepsBar">
       <div class="step-item active" id="step1"><div class="step-circle">1</div><span>Segmen</span></div>
       <div class="step-line" id="line1"></div>
@@ -150,83 +144,34 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <div class="step-item" id="step3"><div class="step-circle">3</div><span>Bayar</span></div>
     </div>
 
-    <!-- ══ STEP 1: PILIH SEGMEN ══ -->
+    <!-- STEP 1: PILIH SEGMEN -->
     <div id="viewSegmen">
       <div class="page-title">Pilih Segmen</div>
       <div class="page-sub">Pilih jenjang atau jenis tes yang ingin kamu pelajari.</div>
-
       <div class="segmen-grid">
-        <!-- AKTIF -->
         <div class="segmen-card" onclick="selectSegmen('SD Kelas 6')">
           <div class="segmen-icon">📚</div>
           <div class="segmen-name">SD Kelas 6</div>
           <div class="segmen-desc">Matematika, IPAS, B.Inggris</div>
         </div>
-        <!-- COMING SOON -->
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMP Kelas 7</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMP Kelas 8</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMP Kelas 9</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMA Kelas 10</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMA Kelas 11</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SMA Kelas 12</div>
-          <div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">📝</div>
-          <div class="segmen-name">Try Out</div>
-          <div class="segmen-desc">Persiapan UTS/UAS Kelas 6-12</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">🎯</div>
-          <div class="segmen-name">SNBT PTN</div>
-          <div class="segmen-desc">195 menit · 160 soal</div>
-        </div>
-        <div class="segmen-card coming-soon">
-          <div class="coming-soon-badge">🚧 Coming Soon</div>
-          <div class="segmen-icon">🏛️</div>
-          <div class="segmen-name">CBT CPNS</div>
-          <div class="segmen-desc">130 menit · 110 soal</div>
-        </div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 7</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 8</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 9</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 10</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 11</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 12</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📝</div><div class="segmen-name">Try Out</div><div class="segmen-desc">Persiapan UTS/UAS Kelas 6-12</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">🎯</div><div class="segmen-name">SNBT PTN</div><div class="segmen-desc">195 menit · 160 soal</div></div>
+        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">🏛️</div><div class="segmen-name">CBT CPNS</div><div class="segmen-desc">130 menit · 110 soal</div></div>
       </div>
     </div>
 
-    <!-- ══ STEP 2: PILIH PAKET ══ -->
+    <!-- STEP 2: PILIH PAKET -->
     <div id="viewPaket" style="display:none">
       <button class="btn-back" onclick="goStep(1)">← Ganti Segmen</button>
       <div class="page-title" id="paketTitle">Pilih Paket</div>
       <div class="page-sub" id="paketSub">Pilih cara akses yang sesuai.</div>
 
-      <!-- TABS -->
       <div class="tabs">
         <button class="tab active" onclick="switchTab(this,'alacarte')">À la carte</button>
         <button class="tab" onclick="switchTab(this,'bundling')">Bundling</button>
@@ -366,13 +311,38 @@ const MAPEL_BY_SEGMEN = {
   'SMA Kelas 12': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
 };
 
-const MAPEL_ICON = {'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'};
-
-const SUBBAB_SD = {
-  Matematika:['Bilangan Bulat','Pecahan dan Desimal','FPB dan KPK','Bangun Datar','Bangun Ruang','Statistika Dasar','Perbandingan','Skala dan Jarak'],
-  IPAS:['Makhluk Hidup','Ekosistem','Gaya dan Gerak','Energi dan Perubahannya','Bumi dan Alam Semesta','Cuaca dan Iklim','Teknologi Pangan','Kesehatan'],
-  'B.Inggris':['Greetings','Tenses Dasar','Reading Comprehension','Vocabulary','Writing Simple Sentences','Listening Skills','Speaking Practice','Grammar Dasar'],
+const MAPEL_ICON = {
+  'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤',
+  'Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬',
+  'IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪',
+  'Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'
 };
+
+// ─────────────────────────────────────────────────────────
+// CACHE sub-bab: key = "Segmen__Mapel", value = string[]
+// Sekali fetch per sesi, tidak fetch ulang jika sudah ada
+// ─────────────────────────────────────────────────────────
+const subbabCache = {};
+
+async function fetchSubbab(segmen, mapel) {
+  const key = `${segmen}__${mapel}`;
+  if (subbabCache[key] !== undefined) return subbabCache[key];
+
+  try {
+    const q = query(
+      collection(db, 'subBab'),
+      where('segmen', '==', segmen),
+      where('mapel',  '==', mapel)
+    );
+    const snap = await getDocs(q);
+    subbabCache[key] = snap.empty ? [] : (snap.docs[0].data().list || []);
+  } catch(e) {
+    console.error('fetchSubbab error:', e);
+    subbabCache[key] = [];
+  }
+  return subbabCache[key];
+}
+// ─────────────────────────────────────────────────────────
 
 let selectedSegmen = '';
 let curMapelAlacarte = '', curMapelBundling = '';
@@ -398,120 +368,105 @@ onAuthStateChanged(auth, async user => {
   updateOrder();
 });
 
-// ── STEP NAVIGATION ──
+// ── STEPS ──
 function updateSteps(step) {
-  for (let i=1;i<=3;i++) {
-    const el=$(`step${i}`);
-    const line=$(`line${i}`);
-    el.className='step-item'+(i<step?' done':i===step?' active':'');
-    if(line) line.className='step-line'+(i<step?' done':'');
+  for(let i=1;i<=3;i++){
+    $(`step${i}`).className='step-item'+(i<step?' done':i===step?' active':'');
+    const l=$(`line${i}`); if(l) l.className='step-line'+(i<step?' done':'');
   }
 }
-
 function goStep(step) {
-  $('viewSegmen').style.display = step===1?'block':'none';
-  $('viewPaket').style.display  = step===2?'block':'none';
-  updateSteps(step);
-  window.scrollTo(0,0);
+  $('viewSegmen').style.display=step===1?'block':'none';
+  $('viewPaket').style.display=step===2?'block':'none';
+  updateSteps(step); window.scrollTo(0,0);
 }
-
-window.goStep = goStep;
+window.goStep=goStep;
 
 // ── STEP 1: PILIH SEGMEN ──
 const _params = new URLSearchParams(window.location.search);
 const _initTab = _params.get('tab') || 'alacarte';
 const _initPkg = _params.get('pkg') || null;
 
-window.selectSegmen = function(segmen) {
+window.selectSegmen = async function(segmen) {
   selectedSegmen = segmen;
-  $('paketTitle').textContent = `Paket untuk ${segmen}`;
-  $('paketSub').textContent = `Pilih cara akses yang sesuai untuk ${segmen}.`;
+  $('paketTitle').textContent=`Paket untuk ${segmen}`;
+  $('paketSub').textContent=`Pilih cara akses yang sesuai untuk ${segmen}.`;
 
-  // Reset pilihan
   selAlacarte=[]; selBundling=[];
-  curMapelAlacarte = (MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
-  curMapelBundling = (MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
+  curMapelAlacarte=(MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
+  curMapelBundling=(MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
 
+  goStep(2);
   renderMapelGrid('alacarte');
   renderMapelGrid('bundling');
-  renderBabs('alacarte');
-  renderBabs('bundling');
+  await renderBabs('alacarte');
+  await renderBabs('bundling');
 
-  // Pre-select tab & paket dari query parameter
-  if (_initTab === 'bundling') {
+  if (_initTab==='bundling') {
     document.querySelectorAll('.tab').forEach(t=>t.className='tab');
     document.querySelectorAll('.tab')[1].className='tab active';
     ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
     $('bundling').style.display='block';
-    if (_initPkg === '5') {
-      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[1], 5, 34900);
-    } else if (_initPkg === '10') {
-      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[2], 10, 64900);
-    } else {
-      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[0], 3, 21900);
-    }
-  } else if (_initTab === 'bulanan') {
+    if (_initPkg==='5') selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[1],5,34900);
+    else if(_initPkg==='10') selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[2],10,64900);
+    else selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[0],3,21900);
+  } else if (_initTab==='bulanan') {
     document.querySelectorAll('.tab').forEach(t=>t.className='tab');
     document.querySelectorAll('.tab')[2].className='tab active';
     ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
     $('bulanan').style.display='block';
     curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};
   }
-
   updateOrder();
-  goStep(2);
 };
 
-function getMapels() {
-  return MAPEL_BY_SEGMEN[selectedSegmen] || ['Matematika','IPAS','B.Inggris'];
-}
-
-function getSubbabs(mapel) {
-  // SD → pakai hardcode, lainnya → dari Firestore nanti (untuk sekarang kosong)
-  if (selectedSegmen === 'SD Kelas 6') return SUBBAB_SD[mapel] || [];
-  return []; // Coming soon untuk segmen lain
-}
+function getMapels(){ return MAPEL_BY_SEGMEN[selectedSegmen]||['Matematika','IPAS','B.Inggris']; }
 
 // ── RENDER MAPEL GRID ──
 function renderMapelGrid(tab) {
-  const gridId = tab==='alacarte'?'mapelGridAlacarte':'mapelGridBundling';
-  const grid=$(gridId);
-  const mapels = getMapels();
-  const curMapel = tab==='alacarte'?curMapelAlacarte:curMapelBundling;
-  grid.innerHTML = mapels.map(m=>`
-    <div class="mapel ${m===curMapel?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
+  const grid=$(tab==='alacarte'?'mapelGridAlacarte':'mapelGridBundling');
+  const cur=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
+  grid.innerHTML=getMapels().map(m=>`
+    <div class="mapel ${m===cur?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
       <div class="mapel-icon">${MAPEL_ICON[m]||'📚'}</div>
       <div class="mapel-name">${m}</div>
     </div>`).join('');
 }
 
-// ── RENDER SUB-BAB ──
-function renderBabs(tab) {
-  const mapel = tab==='alacarte'?curMapelAlacarte:curMapelBundling;
-  const sel   = tab==='alacarte'?selAlacarte:selBundling;
-  const list  = $(tab==='alacarte'?'babListAlacarte':'babListBundling');
-  const subbabs = getSubbabs(mapel);
-  list.innerHTML = '';
+// ── RENDER SUB-BAB (async — dari Firestore) ──
+async function renderBabs(tab) {
+  const mapel=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
+  const sel=tab==='alacarte'?selAlacarte:selBundling;
+  const listEl=$(tab==='alacarte'?'babListAlacarte':'babListBundling');
+
+  // Tampilkan spinner
+  listEl.innerHTML='<div class="subbab-loading"><span class="spin"></span>Memuat sub-bab…</div>';
+
+  const subbabs = await fetchSubbab(selectedSegmen, mapel);
+
+  listEl.innerHTML='';
 
   if (!subbabs.length) {
-    list.innerHTML = '<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia untuk segmen ini.</div>';
+    listEl.innerHTML='<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia untuk mapel ini.</div>';
+    updateSelectedPreview(tab);
     return;
   }
 
   subbabs.forEach(sb => {
-    const isSel = sel.some(s=>s.mapel===mapel&&s.subbab===sb);
-    const isDisabled = tab==='bundling'&&!isSel&&sel.length>=bundlingMax;
+    const isSel=sel.some(s=>s.mapel===mapel&&s.subbab===sb);
+    const isDisabled=tab==='bundling'&&!isSel&&sel.length>=bundlingMax;
     const div=document.createElement('div');
     div.className='bab'+(isSel?' sel':'')+(isDisabled?' disabled':'');
     div.innerHTML=`<div class="bab-check">${isSel?'✓':''}</div><span>${sb}</span>`;
     if(!isDisabled) div.onclick=()=>toggleBab(tab,mapel,sb);
-    list.appendChild(div);
+    listEl.appendChild(div);
   });
+
   if(tab==='bundling') updateQuota();
   updateSelectedPreview(tab);
 }
 
-function toggleBab(tab,mapel,sb) {
+async function toggleBab(tab,mapel,sb) {
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
   if(idx>-1) sel.splice(idx,1);
@@ -520,7 +475,7 @@ function toggleBab(tab,mapel,sb) {
     sel.push({mapel,subbab:sb});
   }
   if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
-  renderBabs(tab); updateOrder();
+  await renderBabs(tab); updateOrder();
 }
 
 function updateSelectedPreview(tab) {
@@ -529,31 +484,28 @@ function updateSelectedPreview(tab) {
   const count=tab==='alacarte'?$('countAlacarte'):$('countBundling');
   const tags=tab==='alacarte'?$('tagsAlacarte'):$('tagsBundling');
   if(!sel.length){preview.style.display='none';return;}
-  preview.style.display='block';
-  count.textContent=sel.length;
+  preview.style.display='block'; count.textContent=sel.length;
   tags.innerHTML=sel.map(s=>`<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">${MAPEL_ICON[s.mapel]||'📚'} ${s.subbab} ✕</div>`).join('');
 }
 
-window.removeSelBab=function(tab,mapel,sb){
+window.removeSelBab=async function(tab,mapel,sb){
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
   if(idx>-1) sel.splice(idx,1);
   if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
-  renderBabs(tab); updateOrder();
+  await renderBabs(tab); updateOrder();
 };
 
 function updateQuota(){$('quotaCount').textContent=selBundling.length;$('quotaMax').textContent=bundlingMax;}
 
-window.selMapel=function(tab,el,mapel){
-  if(tab==='alacarte') curMapelAlacarte=mapel;
-  else curMapelBundling=mapel;
-  renderMapelGrid(tab); renderBabs(tab);
+window.selMapel=async function(tab,el,mapel){
+  if(tab==='alacarte') curMapelAlacarte=mapel; else curMapelBundling=mapel;
+  renderMapelGrid(tab); await renderBabs(tab);
 };
 
 window.selBundlingPkg=function(el,max,price){
   document.querySelectorAll('#bundlingPkgs .pkg').forEach(p=>p.className='pkg');
-  el.className='pkg selected';
-  bundlingMax=max; bundlingPrice=price;
+  el.className='pkg selected'; bundlingMax=max; bundlingPrice=price;
   if(selBundling.length>max) selBundling=selBundling.slice(0,max);
   curPkg={name:`Bundling ${max} sub-bab`,price,type:'bundling'};
   renderBabs('bundling'); updateOrder();
@@ -561,11 +513,10 @@ window.selBundlingPkg=function(el,max,price){
 
 window.selPkg=function(el,price,name){
   document.querySelectorAll('.pkg').forEach(p=>p.className='pkg');
-  el.className='pkg selected';
-  curPkg={name,price,type:'bulanan'}; updateOrder();
+  el.className='pkg selected'; curPkg={name,price,type:'bulanan'}; updateOrder();
 };
 
-window.switchTab=function(el,tab){
+window.switchTab=async function(el,tab){
   document.querySelectorAll('.tab').forEach(t=>t.className='tab');
   el.className='tab active';
   ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
@@ -579,11 +530,9 @@ window.switchTab=function(el,tab){
 // ── REFERRAL ──
 function applyRefUI(){
   $('refBox').className='ref-box unlocked';
-  $('refStatus').className='ref-status ok';
-  $('refStatus').textContent='Diskon aktif ✓';
+  $('refStatus').className='ref-status ok'; $('refStatus').textContent='Diskon aktif ✓';
   $('refInputRow').style.display='none';
-  $('refHint').className='ref-ok-msg';
-  $('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
+  $('refHint').className='ref-ok-msg'; $('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
   updateOrder();
 }
 
@@ -599,14 +548,11 @@ window.applyRef=async function(){
   }catch(e){$('refHint').style.color='#C0392B';$('refHint').textContent='Gagal verifikasi.';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';}
 };
 
-// Auto apply referral dari sessionStorage
 if(discApplied && validRefCode) setTimeout(applyRefUI, 500);
 
 // ── UPDATE ORDER ──
 function updateOrder(){
-  const base=curPkg.price;
-  const disc=discApplied?Math.round(base*0.5):0;
-  const total=base-disc;
+  const base=curPkg.price, disc=discApplied?Math.round(base*0.5):0, total=base-disc;
   let subbabLabel='';
   if(curPkg.type==='alacarte'&&selAlacarte.length) subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
   else if(curPkg.type==='bundling'&&selBundling.length) subbabLabel=selBundling.map(s=>s.subbab).join(', ');
@@ -621,21 +567,17 @@ function updateOrder(){
 
 // ── BAYAR ──
 window.doPay=async function(){
-  const btn=$('btnPay');
-  $('warnMsg').style.display='none';
+  const btn=$('btnPay'); $('warnMsg').style.display='none';
   if(curPkg.type==='alacarte'&&selAlacarte.length===0){$('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab.';$('warnMsg').style.display='block';return;}
   if(curPkg.type==='bundling'&&selBundling.length===0){$('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling.';$('warnMsg').style.display='block';return;}
-
   const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
   const komisi=Math.round(total*KOMISI_RATE);
   const referredBy=validRefCode||currentUserData?.referredBy||null;
   const orderId='CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
-
   let subBabDibeli=[];
   if(curPkg.type==='alacarte') subBabDibeli=selAlacarte.map(s=>s.subbab);
   else if(curPkg.type==='bundling') subBabDibeli=selBundling.map(s=>s.subbab);
   else subBabDibeli=['__premium__'];
-
   btn.disabled=true; btn.textContent='Memproses...';
   try{
     await addDoc(collection(db,'orders'),{uid:currentUser.uid,email:currentUser.email,segmen:selectedSegmen,paket:curPkg.name,tipe:curPkg.type,subBabDibeli,hargaBase:base,diskon:disc,total,refCode:referredBy,komisi,midtransOrderId:orderId,status:'pending',createdAt:serverTimestamp()});
@@ -649,7 +591,7 @@ window.doPay=async function(){
         else{await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});}
         if(referredBy){const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});}
         $('successSubbab').textContent=curPkg.type==='bulanan'?'Semua sub-bab sudah terbuka!':`Sub-bab aktif: ${subBabDibeli.join(', ')}`;
-        $('mainView').style.display='none';$('successView').style.display='block';
+        $('mainView').style.display='none'; $('successView').style.display='block';
       },
       onPending:function(){$('mainView').style.display='none';$('successView').style.display='block';},
       onError:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Pembayaran gagal.');},
