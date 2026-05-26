@@ -127,6 +127,15 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .testi-quote{font-size:15.5px;line-height:1.5;margin-bottom:6px}
 .testi-name{font-size:12.5px;color:rgba(255,255,255,.65)}
 .testi-name strong{color:var(--cb-yellow)}
+.testi-carousel{overflow:hidden;width:100%}
+.testi-track{display:flex;transition:transform .35s ease}
+.testi-track .testimonial-pill{min-width:100%;flex-shrink:0}
+.testi-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}
+.testi-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cb-line);background:var(--cb-paper);color:var(--cb-ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.testi-btn:hover{background:var(--cb-cream);border-color:var(--cb-ink)}
+.testi-dots{display:flex;gap:6px}
+.testi-dot{width:8px;height:8px;border-radius:50%;background:var(--cb-line);cursor:pointer;transition:background .2s,width .2s}
+.testi-dot.active{background:var(--cb-red);width:20px;border-radius:4px}
 @media(max-width:900px){.why-inner{grid-template-columns:1fr;gap:32px}.trust-grid{grid-template-columns:1fr}.testimonial-pill{grid-column:auto;flex-direction:column}}
 
 /* ── How it works ─────────────────────────────────────────── */
@@ -518,15 +527,51 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
             <p>Anak paham caranya, bukan cuma jawabannya.</p>
           </div>
         </div>
-        <!-- Testimonial -->
-        <div class="testimonial-pill">
-          <div class="testi-avatar">R</div>
-          <div>
-            <p class="testi-quote">"Anak saya jadi lebih percaya diri tiap ulangan. Suka karena pembahasannya jelas, bukan cuma kunci jawaban."</p>
-            <div class="testi-name"><strong>Bu Ratna</strong> · Ibu Nayla, kelas 6 · Bandung</div>
-          </div>
-        </div>
+       <!-- Testimonial Carousel -->
+<div class="testi-carousel" style="grid-column:span 2">
+  <div class="testi-track" id="testiTrack">
+    <div class="testimonial-pill">
+      <div class="testi-avatar">R</div>
+      <div>
+        <p class="testi-quote">"Anak saya jadi lebih percaya diri tiap ulangan. Suka karena pembahasannya jelas, bukan cuma kunci jawaban."</p>
+        <div class="testi-name"><strong>Bu Ratna</strong> · Ibu Nayla · Bandung</div>
       </div>
+    </div>
+    <div class="testimonial-pill">
+      <div class="testi-avatar">R</div>
+      <div>
+        <p class="testi-quote">"Zain sekarang minta latihan soal sendiri tanpa disuruh. CerdasBersama bikin dia ngerasa belajar itu seru, bukan beban."</p>
+        <div class="testi-name"><strong>Bu Rita</strong> · Ibu Zain · SDN Cibubur 11 Pagi · Cibubur, Jakarta Timur</div>
+      </div>
+    </div>
+    <div class="testimonial-pill">
+      <div class="testi-avatar">N</div>
+      <div>
+        <p class="testi-quote">"Alhamdulillah nilai Syafiq naik drastis sejak pakai CerdasBersama. Pembahasannya mudah dipahami anak-anak."</p>
+        <div class="testi-name"><strong>Bu Neneng</strong> · Ibu Syafiq · MI Daruul Ikhwan · Ciracas, Jakarta Timur</div>
+      </div>
+    </div>
+    <div class="testimonial-pill">
+      <div class="testi-avatar">E</div>
+      <div>
+        <p class="testi-quote">"Praktis banget, bisa dipantau dari HP. Media jadi lebih fokus karena soalnya per topik, tidak campur-campur."</p>
+        <div class="testi-name"><strong>Bu Entin</strong> · Ibu Media · SDN Setianegara · Kuningan, Jawa Barat</div>
+      </div>
+    </div>
+    <div class="testimonial-pill">
+      <div class="testi-avatar">S</div>
+      <div>
+        <p class="testi-quote">"Sekar dulunya takut Matematika, sekarang malah semangat. Terima kasih CerdasBersama!"</p>
+        <div class="testi-name"><strong>Bu Santi</strong> · Ibu Sekar · SDN Kajoran · Magelang, Jawa Tengah</div>
+      </div>
+    </div>
+  </div>
+  <div class="testi-nav">
+    <button class="testi-btn" id="testiBtnPrev" onclick="testiPrev()">←</button>
+    <div class="testi-dots" id="testiDots"></div>
+    <button class="testi-btn" id="testiBtnNext" onclick="testiNext()">→</button>
+  </div>
+</div>
     </div>
   </div>
 </section>
@@ -771,6 +816,18 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
     const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60;
     document.getElementById('timer').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
   }, 1000);
+  let testiIdx = 0;
+const testiTotal = 5;
+function testiRender() {
+  document.getElementById('testiTrack').style.transform = `translateX(-${testiIdx * 100}%)`;
+  document.getElementById('testiDots').innerHTML = Array.from({length: testiTotal}, (_,i) =>
+    `<div class="testi-dot${i===testiIdx?' active':''}" onclick="testiGo(${i})"></div>`
+  ).join('');
+}
+function testiNext() { testiIdx = (testiIdx + 1) % testiTotal; testiRender(); }
+function testiPrev() { testiIdx = (testiIdx - 1 + testiTotal) % testiTotal; testiRender(); }
+function testiGo(i) { testiIdx = i; testiRender(); }
+testiRender();
 </script>
 </body>
 </html>
