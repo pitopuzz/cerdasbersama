@@ -270,6 +270,8 @@ window.copyLink = function() {
     setTimeout(()=>document.getElementById('copyBtn').textContent='📋 Salin link referral',2000);
   });
 }
+  const tabParam = new URLSearchParams(window.location.search).get('tab');
+if (tabParam === 'masuk') window.switchTab('masuk');
 </script>
 </body>
 </html>
