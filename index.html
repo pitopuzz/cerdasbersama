@@ -758,7 +758,7 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
       [btnMasuk, btnDaftar, btnHero, btnBanner, btnSticky, btnPriceA, btnPriceB, btnPriceBul].forEach(b => {
         if(b) b.onclick = () => goTo('/register.html');
       });
-      btnMasuk.onclick = () => goTo('/login.html');
+      btnMasuk.onclick = () => goTo('/register.html?tab=masuk');
     }
   });
 
