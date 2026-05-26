@@ -463,21 +463,75 @@ async function syncSubBab(rows) {
   try {
     const allSnap = await getDocs(collection(db,'subBab'));
     logBulk(`🗑️ Hapus ${allSnap.size} dokumen subBab lama...`, 'info');
-    const deletePromises = allSnap.docs.map(d => deleteDoc(d.ref));
-    await Promise.all(deletePromises);
+    await Promise.all(allSnap.docs.map(d => deleteDoc(d.ref)));
     logBulk('✅ subBab lama terhapus.', 'ok');
   } catch(e) {
     logBulk(`⚠️ Gagal hapus subBab lama: ${e.message}`, 'err');
     return;
   }
 
-  // 3. Buat ulang dari Excel
+  // 3. Buat ulang subBab dari Excel
   for (const { segmen, mapel, subs } of Object.values(map)) {
     try {
       await addDoc(collection(db,'subBab'), { segmen, mapel, list: [...subs].sort() });
       logBulk(`📚 SubBab dibuat: ${segmen} — ${mapel} (${subs.size} sub-bab)`, 'ok');
     } catch(e) {
       logBulk(`⚠️ Gagal buat subBab ${mapel}: ${e.message}`, 'err');
+    }
+  }
+
+  // 4. ── SYNC SEGMEN (baru) ──
+  logBulk('🗂️ Sync koleksi segmen...', 'info');
+
+  const SEGMEN_DESC = {
+    'SD Kelas 6':'Matematika, IPAS, B.Inggris',
+    'SMP Kelas 7':'Mat, B.Indo, B.Ing, IPA, IPS',
+    'SMP Kelas 8':'Mat, B.Indo, B.Ing, IPA, IPS',
+    'SMP Kelas 9':'Mat, B.Indo, B.Ing, IPA, IPS',
+    'SMA Kelas 10':'Mat, B.Indo, B.Ing, Fisika, dll',
+    'SMA Kelas 11':'Mat, B.Indo, B.Ing, Fisika, dll',
+    'SMA Kelas 12':'Mat, B.Indo, B.Ing, Fisika, dll',
+    'SNBT PTN':'195 menit · 160 soal',
+    'CBT CPNS':'130 menit · 110 soal',
+  };
+
+  const SEGMEN_ORDER = Object.keys(SEGMEN_DESC);
+
+  // Kumpulkan segmen unik dari Excel beserta mapel-nya
+  const segmenMap = {};
+  rows.forEach(r => {
+    const segmen = String(r.segmen||'SD Kelas 6').trim();
+    const mapel  = String(r.kategori||'').trim();
+    if (!segmen || !mapel) return;
+    if (!segmenMap[segmen]) segmenMap[segmen] = new Set();
+    segmenMap[segmen].add(mapel);
+  });
+
+  for (const [segmen, mapelSet] of Object.entries(segmenMap)) {
+    try {
+      // Cek apakah dokumen segmen sudah ada
+      const q    = query(collection(db,'segmen'), where('id','==',segmen));
+      const snap = await getDocs(q);
+
+      const segData = {
+        id:       segmen,
+        icon:     '📚',
+        desc:     SEGMEN_DESC[segmen] || [...mapelSet].join(', '),
+        mapel:    [...mapelSet],
+        aktif:    true,
+        urutan:   SEGMEN_ORDER.indexOf(segmen) + 1 || 99,
+        updatedAt: serverTimestamp(),
+      };
+
+      if (snap.empty) {
+        await addDoc(collection(db,'segmen'), segData);
+        logBulk(`✅ Segmen baru dibuat: ${segmen}`, 'ok');
+      } else {
+        await updateDoc(snap.docs[0].ref, segData);
+        logBulk(`✅ Segmen diperbarui: ${segmen}`, 'ok');
+      }
+    } catch(e) {
+      logBulk(`⚠️ Gagal sync segmen ${segmen}: ${e.message}`, 'err');
     }
   }
 }
