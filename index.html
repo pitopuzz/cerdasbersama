@@ -53,9 +53,7 @@ button{font-family:inherit;cursor:pointer;border:0}
 /* Nav */
 nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-between;background:var(--cb-cream);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--cb-line)}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-box{width:38px;height:38px;border-radius:10px;background:var(--cb-red);display:grid;place-items:center;box-shadow:0 4px 12px -4px rgba(208,67,56,.4)}
-.logo-text{font-weight:900;font-size:20px;letter-spacing:-0.02em}
-.logo-text .red{color:var(--cb-red)}
+.logo-img{height:48px;width:auto}
 .nav-links{display:flex;align-items:center;gap:28px}
 .nav-links a{font-size:14px;font-weight:600;color:var(--cb-ink-2);transition:color .15s}
 .nav-links a:hover{color:var(--cb-red)}
@@ -218,14 +216,7 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
 
 <nav>
   <div class="logo">
-    <div class="logo-box">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M5 6h10a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H7a4 4 0 0 1-4-4V8a2 2 0 0 1 2-2Z" fill="#fff"/>
-        <path d="M9 11h6M9 14h4" stroke="#D14338" stroke-width="2" stroke-linecap="round"/>
-        <circle cx="17" cy="6" r="3" fill="#F4C542" stroke="#1A1814" stroke-width="1.5"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="red">Cerdas</span>Bersama</div>
+    <img src="logo_cerdas_bersama.png" alt="Cerdas Bersama" class="logo-img">
   </div>
   <div class="nav-links">
     <a href="#materi">Materi</a>
@@ -432,7 +423,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
           <div><h4>Pembahasan guru bersertifikat</h4><p>Anak paham caranya, bukan cuma jawabannya.</p></div>
         </div>
 
-        <!-- Testimonial Carousel -->
         <div class="testi-carousel">
           <div class="testi-track" id="testiTrack">
             <div class="testi-card">
@@ -569,8 +559,7 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   <div class="footer-inner">
     <div>
       <div class="logo">
-        <div class="logo-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 6h10a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H7a4 4 0 0 1-4-4V8a2 2 0 0 1 2-2Z" fill="#fff"/><path d="M9 11h6M9 14h4" stroke="#D14338" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="6" r="3" fill="#F4C542" stroke="#1A1814" stroke-width="1.5"/></svg></div>
-        <div class="logo-text"><span class="red">Cerdas</span>Bersama</div>
+        <img src="logo_cerdas_bersama.png" alt="Cerdas Bersama" class="logo-img">
       </div>
       <p class="footer-desc">UMKM dari Indonesia yang ingin membuat anak Indonesia lebih cerdas — satu sub-bab, satu hari, satu langkah maju.</p>
     </div>
@@ -701,7 +690,6 @@ document.getElementById('testiBtnNext').addEventListener('click', testiNext);
 document.getElementById('testiBtnPrev').addEventListener('click', testiPrev);
 window.addEventListener('resize', () => { testiIdx = 0; testiRender(); });
 
-// Tunggu font/layout selesai baru render
 requestAnimationFrame(() => requestAnimationFrame(testiRender));
 </script>
 </body>
