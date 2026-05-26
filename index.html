@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-/* ── Brand tokens ─────────────────────────────────────────── */
 :root {
   --cb-red: #D14338;
   --cb-red-dark: #A82E25;
@@ -25,35 +24,33 @@
   --cb-mint: #B7E4C7;
   --cb-blue: #5B8FB9;
 }
-
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cb-cream);color:var(--cb-ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.45}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cb-cream);color:var(--cb-ink);-webkit-font-smoothing:antialiased;line-height:1.45}
 h1,h2,h3,h4{letter-spacing:-0.02em;line-height:1.1;margin:0}
 p{margin:0}
 a{text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:0}
-img,svg{display:block}
 
-/* ── Auth overlay ─────────────────────────────────────────── */
+/* Auth overlay */
 #authOverlay{position:fixed;inset:0;background:var(--cb-cream);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s}
 #authOverlay.hide{opacity:0;pointer-events:none}
 .auth-spinner{width:32px;height:32px;border:3px solid var(--cb-line);border-top-color:var(--cb-red);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ── Buttons ──────────────────────────────────────────────── */
-.btn-primary{background:var(--cb-red);color:#fff;font-weight:800;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s ease,box-shadow .15s ease,background .15s ease;box-shadow:0 8px 24px -8px rgba(208,67,56,0.5);padding:16px 26px;font-size:16px}
+/* Buttons */
+.btn-primary{background:var(--cb-red);color:#fff;font-weight:800;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,box-shadow .15s,background .15s;box-shadow:0 8px 24px -8px rgba(208,67,56,0.5);padding:16px 26px;font-size:16px}
 .btn-primary:hover{background:var(--cb-red-dark);transform:translateY(-1px)}
-.btn-secondary{background:var(--cb-yellow);color:var(--cb-ink);font-weight:800;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s ease,background .15s ease;padding:16px 26px;font-size:16px}
+.btn-secondary{background:var(--cb-yellow);color:var(--cb-ink);font-weight:800;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,background .15s;padding:16px 26px;font-size:16px}
 .btn-secondary:hover{background:var(--cb-yellow-dark);transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--cb-ink);font-weight:700;border-radius:999px;border:1.5px solid var(--cb-line);display:inline-flex;align-items:center;gap:8px;transition:border-color .15s,background .15s;padding:10px 18px;font-size:14px}
 .btn-ghost:hover{border-color:var(--cb-ink);background:var(--cb-paper)}
 
-/* ── Promo bar ────────────────────────────────────────────── */
+/* Promo bar */
 #promoBar{background:var(--cb-ink);color:#fff;padding:11px 24px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-size:13px;font-weight:600}
 .promo-timer{font-family:ui-monospace,"SF Mono",monospace;background:rgba(255,255,255,0.1);padding:3px 10px;border-radius:6px;color:var(--cb-yellow);font-weight:800;letter-spacing:.05em}
 
-/* ── Nav ──────────────────────────────────────────────────── */
+/* Nav */
 nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-between;background:var(--cb-cream);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--cb-line)}
 .logo{display:flex;align-items:center;gap:10px}
 .logo-box{width:38px;height:38px;border-radius:10px;background:var(--cb-red);display:grid;place-items:center;box-shadow:0 4px 12px -4px rgba(208,67,56,.4)}
@@ -65,7 +62,7 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .nav-actions{display:flex;align-items:center;gap:10px}
 @media(max-width:768px){.nav-links{display:none}.nav-actions .btn-ghost{display:none}nav{padding:14px 20px}}
 
-/* ── Hero ─────────────────────────────────────────────────── */
+/* Hero */
 #hero{position:relative;padding:48px 40px 72px;background:var(--cb-cream);overflow:hidden}
 #hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(208,67,56,.08) 1px,transparent 1px);background-size:24px 24px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.6),transparent 70%);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.6),transparent 70%);pointer-events:none}
 .hero-inner{position:relative;display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center;max-width:1280px;margin:0 auto}
@@ -86,22 +83,21 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-h1{font-size:38px}.hero-art-wrap{max-width:320px;margin:0 auto}.hero-sub{max-width:100%}#hero{padding:24px 20px 48px}}
 
-/* ── Trust strip ──────────────────────────────────────────── */
+/* Trust strip */
 #trustStrip{border-top:1px solid var(--cb-line);border-bottom:1px solid var(--cb-line);background:var(--cb-paper);padding:18px 40px}
 .trust-inner{display:flex;flex-wrap:wrap;gap:12px 36px;justify-content:space-around;align-items:center;max-width:1280px;margin:0 auto}
 .trust-item{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--cb-ink-2);white-space:nowrap}
 @media(max-width:768px){#trustStrip{padding:14px 16px;overflow-x:auto}.trust-inner{justify-content:flex-start;flex-wrap:nowrap}.trust-item{font-size:12px}}
 
-/* ── Sections shared ──────────────────────────────────────── */
+/* Sections */
 .section{padding:96px 40px}
 .section-inner{max-width:1280px;margin:0 auto}
 .eyebrow{font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--cb-red);text-transform:uppercase;margin-bottom:14px}
-.eyebrow.dark{color:var(--cb-yellow)}
 .section-title{font-size:48px;font-weight:900;margin-bottom:16px}
 .section-sub{font-size:18px;line-height:1.55;color:var(--cb-muted);max-width:580px}
 @media(max-width:768px){.section{padding:56px 20px}.section-title{font-size:32px}.section-sub{font-size:15px}}
 
-/* ── Subjects ─────────────────────────────────────────────── */
+/* Subjects */
 #materi{background:var(--cb-cream)}
 .subjects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
 .subject-card{background:var(--cb-paper);border:1.5px solid var(--cb-line);border-radius:24px;padding:28px;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease}
@@ -115,30 +111,33 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .topic-check{width:16px;height:16px;border-radius:4px;background:var(--cb-yellow-soft);display:grid;place-items:center;color:var(--cb-red);font-weight:900;font-size:11px;flex-shrink:0}
 @media(max-width:768px){.subjects-grid{grid-template-columns:1fr;gap:16px;margin-top:32px}.subject-card{padding:20px}.subject-card h3{font-size:22px}}
 
-/* ── WhyTrust ─────────────────────────────────────────────── */
+/* WhyTrust */
 #kepercayaan{background:var(--cb-paper);border-top:1px solid var(--cb-line)}
 .why-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:flex-start}
 .trust-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 .trust-card{display:flex;gap:16px;align-items:flex-start;padding:18px;border-radius:18px;background:var(--cb-cream);border:1.5px solid var(--cb-line)}
 .trust-card h4{font-size:15px;font-weight:800;margin-bottom:4px}
 .trust-card p{font-size:13.5px;color:var(--cb-muted);line-height:1.5}
-.testimonial-pill{grid-column:span 2;padding:22px;border-radius:18px;background:var(--cb-ink);color:#fff;display:flex;gap:18px;align-items:center}
-.testi-avatar{width:52px;height:52px;border-radius:50%;background:var(--cb-yellow);display:grid;place-items:center;font-size:22px;font-weight:900;color:var(--cb-ink);flex-shrink:0}
-.testi-quote{font-size:15.5px;line-height:1.5;margin-bottom:6px}
-.testi-name{font-size:12.5px;color:rgba(255,255,255,.65)}
-.testi-name strong{color:var(--cb-yellow)}
-.testi-carousel{overflow:hidden;width:100%}
-.testi-track{display:flex;transition:transform .35s ease}
-.testi-track .testimonial-pill{min-width:100%;flex-shrink:0}
-.testi-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:14px}
+@media(max-width:900px){.why-inner{grid-template-columns:1fr;gap:32px}.trust-grid{grid-template-columns:1fr}}
+
+/* Testimonial Carousel */
+.testi-carousel{grid-column:span 2;width:100%;overflow:hidden;margin-top:8px}
+.testi-track{display:flex;gap:16px;transition:transform .35s ease}
+.testi-card{flex:0 0 calc((100% - 32px) / 3);background:var(--cb-ink);color:#fff;border-radius:18px;padding:24px 24px 20px;display:flex;flex-direction:column;gap:14px;min-height:190px}
+.testi-avatar{width:44px;height:44px;border-radius:50%;background:var(--cb-yellow);display:grid;place-items:center;font-size:18px;font-weight:900;color:var(--cb-ink);flex-shrink:0}
+.testi-quote{font-size:14px;line-height:1.65;color:rgba(255,255,255,.9);flex-grow:1}
+.testi-name{display:flex;flex-direction:column;gap:3px;margin-top:auto}
+.testi-name strong{font-size:13px;color:var(--cb-yellow)}
+.testi-name span{font-size:12px;color:rgba(255,255,255,.5)}
+.testi-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}
 .testi-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--cb-line);background:var(--cb-paper);color:var(--cb-ink);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
 .testi-btn:hover{background:var(--cb-cream);border-color:var(--cb-ink)}
-.testi-dots{display:flex;gap:6px}
-.testi-dot{width:8px;height:8px;border-radius:50%;background:var(--cb-line);cursor:pointer;transition:background .2s,width .2s}
+.testi-dots{display:flex;gap:6px;align-items:center}
+.testi-dot{width:8px;height:8px;border-radius:50%;background:var(--cb-line);cursor:pointer;transition:background .2s,width .2s,border-radius .2s}
 .testi-dot.active{background:var(--cb-red);width:20px;border-radius:4px}
-@media(max-width:900px){.why-inner{grid-template-columns:1fr;gap:32px}.trust-grid{grid-template-columns:1fr}.testimonial-pill{grid-column:auto;flex-direction:column}}
+@media(max-width:768px){.testi-card{flex:0 0 calc((100% - 16px) / 2)}.testi-carousel{grid-column:auto}}
 
-/* ── How it works ─────────────────────────────────────────── */
+/* How it works */
 #cara{background:var(--cb-cream)}
 .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px;position:relative}
 .steps-grid::before{content:'';position:absolute;top:32px;left:16%;right:16%;height:2px;border-top:2px dashed var(--cb-line);z-index:0}
@@ -148,7 +147,7 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .step-item p{font-size:15px;color:var(--cb-muted);line-height:1.55}
 @media(max-width:768px){.steps-grid{grid-template-columns:1fr;gap:16px;margin-top:32px}.steps-grid::before{display:none}.step-num{width:48px;height:48px;border-radius:14px;font-size:18px}.step-item h3{font-size:20px}}
 
-/* ── Pricing ──────────────────────────────────────────────── */
+/* Pricing */
 #harga{background:var(--cb-paper);border-top:1px solid var(--cb-line)}
 .pricing-header{text-align:center}
 .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;align-items:stretch}
@@ -176,7 +175,7 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .referral-sub{font-size:13px;color:var(--cb-ink-2);opacity:.75}
 @media(max-width:900px){.pricing-grid{grid-template-columns:1fr;gap:16px;margin-top:32px}.price-card.featured{transform:none}.pricing-header{text-align:left}}
 
-/* ── CTA Banner ───────────────────────────────────────────── */
+/* CTA Banner */
 #ctaBanner{padding:80px 40px;background:var(--cb-red);color:#fff;position:relative;overflow:hidden}
 #ctaBanner::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(255,255,255,.12) 0,transparent 40%),radial-gradient(circle at 80% 80%,rgba(244,197,66,.25) 0,transparent 40%);pointer-events:none}
 .cta-inner{position:relative;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:center}
@@ -187,7 +186,7 @@ nav{padding:18px 40px;display:flex;align-items:center;justify-content:space-betw
 .btn-outline-white:hover{border-color:#fff;background:rgba(255,255,255,.1)}
 @media(max-width:900px){.cta-inner{grid-template-columns:1fr}#ctaBanner{padding:48px 20px}.cta-h2{font-size:30px}}
 
-/* ── Footer ───────────────────────────────────────────────── */
+/* Footer */
 footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32px}
 .footer-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px}
 .footer-desc{font-size:13.5px;line-height:1.6;margin-top:16px;max-width:320px}
@@ -198,20 +197,18 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
 .footer-bottom{margin-top:56px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:rgba(255,255,255,.5)}
 @media(max-width:768px){.footer-inner{grid-template-columns:1fr 1fr;gap:28px}footer{padding:40px 20px 24px}.footer-bottom{margin-top:32px}}
 
-/* ── Mobile sticky CTA ────────────────────────────────────── */
+/* Mobile sticky */
 #mobileSticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--cb-ink);border-top:3px solid var(--cb-yellow);padding:12px 16px;align-items:center;gap:12px}
-#mobileSticky .sticky-text .sticky-title{font-size:13px;font-weight:800;color:#fff}
-#mobileSticky .sticky-text .sticky-sub{font-size:11px;color:rgba(255,255,255,.6)}
+.sticky-title{font-size:13px;font-weight:800;color:#fff}
+.sticky-sub{font-size:11px;color:rgba(255,255,255,.6)}
 .spacer-mobile{display:none}
 @media(max-width:768px){#mobileSticky{display:flex}.spacer-mobile{display:block;height:72px}}
 </style>
 </head>
 <body>
 
-<!-- Auth overlay -->
 <div id="authOverlay"><div class="auth-spinner"></div></div>
 
-<!-- Promo bar -->
 <div id="promoBar">
   <span style="color:var(--cb-yellow)">★</span>
   <span>Diskon <strong style="color:var(--cb-yellow)">50%</strong> pembelian pertama dengan kode referral</span>
@@ -219,7 +216,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   <span class="promo-timer" id="timer">04:59:50</span>
 </div>
 
-<!-- Nav -->
 <nav>
   <div class="logo">
     <div class="logo-box">
@@ -243,7 +239,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   </div>
 </nav>
 
-<!-- Hero -->
 <section id="hero">
   <div class="hero-inner">
     <div>
@@ -251,10 +246,7 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
         <span class="pulse-dot"></span>
         Sudah dipilih <strong style="color:var(--cb-red);margin-left:4px">500+</strong>&nbsp;keluarga Indonesia
       </div>
-      <h1 class="hero-h1">
-        Latihan soal kelas 6<br>
-        yang <span class="cb-highlight">bikin nilai naik</span>
-      </h1>
+      <h1 class="hero-h1">Latihan soal kelas 6<br>yang <span class="cb-highlight">bikin nilai naik</span></h1>
       <div class="hero-tagline">...tanpa les mahal.</div>
       <p class="hero-sub">Matematika, IPAS, dan B. Inggris — terstruktur per sub-bab, lengkap dengan pembahasan. Cocok dipakai bareng orang tua dan guru.</p>
       <div class="hero-ctas">
@@ -268,57 +260,42 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
       </div>
     </div>
     <div class="hero-art-wrap floaty">
-      <!-- Hero illustration SVG inline -->
       <svg viewBox="0 0 560 540" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" aria-hidden="true">
-        <!-- Sun burst -->
         <circle cx="380" cy="200" r="170" fill="#F4C542" opacity="0.22"/>
         <circle cx="380" cy="200" r="120" fill="#F4C542" opacity="0.35"/>
         <g stroke="#D9A516" stroke-width="3" stroke-linecap="round" opacity="0.55">
-          <line x1="380" y1="20" x2="380" y2="48"/>
-          <line x1="540" y1="180" x2="510" y2="190"/>
-          <line x1="220" y1="180" x2="250" y2="190"/>
-          <line x1="490" y1="80" x2="468" y2="100"/>
+          <line x1="380" y1="20" x2="380" y2="48"/><line x1="540" y1="180" x2="510" y2="190"/>
+          <line x1="220" y1="180" x2="250" y2="190"/><line x1="490" y1="80" x2="468" y2="100"/>
           <line x1="270" y1="80" x2="292" y2="100"/>
         </g>
-        <!-- Score card -->
         <g transform="translate(40 70) rotate(-6)">
           <rect x="0" y="0" width="140" height="92" rx="14" fill="#FFFFFF" stroke="#1A1814" stroke-width="2.5"/>
           <rect x="0" y="0" width="140" height="22" rx="14" fill="#D14338"/>
           <rect x="0" y="14" width="140" height="8" fill="#D14338"/>
-          <circle cx="14" cy="11" r="4" fill="#FFFFFF"/>
-          <circle cx="28" cy="11" r="4" fill="#FFFFFF"/>
+          <circle cx="14" cy="11" r="4" fill="#FFFFFF"/><circle cx="28" cy="11" r="4" fill="#FFFFFF"/>
           <text x="70" y="64" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="34" fill="#1A1814">10/10</text>
           <text x="70" y="82" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10" fill="#D14338" letter-spacing="1">SKOR HARI INI</text>
         </g>
-        <!-- Atom -->
         <g transform="translate(440 70) rotate(12)">
           <ellipse cx="0" cy="0" rx="38" ry="14" fill="none" stroke="#5B8FB9" stroke-width="3"/>
           <ellipse cx="0" cy="0" rx="38" ry="14" fill="none" stroke="#5B8FB9" stroke-width="3" transform="rotate(60)"/>
           <ellipse cx="0" cy="0" rx="38" ry="14" fill="none" stroke="#5B8FB9" stroke-width="3" transform="rotate(-60)"/>
           <circle cx="0" cy="0" r="6" fill="#D14338"/>
         </g>
-        <!-- Desk -->
         <rect x="60" y="420" width="440" height="14" rx="3" fill="#1A1814"/>
-        <!-- Chair -->
         <rect x="200" y="280" width="160" height="160" rx="20" fill="#A82E25"/>
-        <!-- Body (sweater) -->
         <path d="M180 440 Q180 320 280 320 Q380 320 380 440 Z" fill="#F4C542"/>
         <path d="M204 380 Q280 360 356 380" fill="none" stroke="#1A1814" stroke-width="3" opacity="0.5"/>
         <path d="M254 322 Q280 340 306 322" fill="#FFFFFF" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
-        <!-- Arms -->
         <path d="M180 440 Q170 410 210 400 L260 396" fill="#F4C542" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
         <path d="M380 440 Q390 410 350 400 L300 396" fill="#F4C542" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
-        <!-- Head -->
         <path d="M226 252 Q220 200 280 196 Q346 200 338 256 Q338 268 326 268 Q310 254 280 254 Q250 254 234 268 Q222 268 226 252Z" fill="#1A1814"/>
         <ellipse cx="280" cy="270" rx="46" ry="50" fill="#F4C9A4"/>
         <ellipse cx="324" cy="278" rx="6" ry="9" fill="#E8B68E"/>
         <path d="M236 254 Q260 232 296 244 Q316 250 320 270 Q304 258 282 260 Q256 262 240 280 Q230 268 236 254Z" fill="#1A1814"/>
-        <circle cx="266" cy="278" r="3.2" fill="#1A1814"/>
-        <circle cx="298" cy="278" r="3.2" fill="#1A1814"/>
-        <circle cx="258" cy="294" r="5" fill="#D14338" opacity="0.4"/>
-        <circle cx="306" cy="294" r="5" fill="#D14338" opacity="0.4"/>
+        <circle cx="266" cy="278" r="3.2" fill="#1A1814"/><circle cx="298" cy="278" r="3.2" fill="#1A1814"/>
+        <circle cx="258" cy="294" r="5" fill="#D14338" opacity="0.4"/><circle cx="306" cy="294" r="5" fill="#D14338" opacity="0.4"/>
         <path d="M270 298 Q282 308 294 298" fill="none" stroke="#1A1814" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Laptop -->
         <rect x="208" y="396" width="144" height="14" rx="3" fill="#1A1814"/>
         <rect x="218" y="350" width="124" height="50" rx="6" fill="#1A1814"/>
         <rect x="222" y="354" width="116" height="42" rx="3" fill="#FFFFFF"/>
@@ -327,13 +304,11 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
         <rect x="228" y="378" width="64" height="4" rx="2" fill="#1A1814" opacity="0.25"/>
         <circle cx="320" cy="380" r="8" fill="#B7E4C7"/>
         <path d="M316 380 l3 3 l5 -6" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <!-- ABC card -->
         <g transform="translate(60 350) rotate(-10)">
           <rect x="0" y="0" width="90" height="72" rx="12" fill="#B7E4C7"/>
           <rect x="0" y="0" width="90" height="72" rx="12" fill="none" stroke="#1A1814" stroke-width="2.5"/>
           <text x="45" y="48" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="30" fill="#1A1814">ABC</text>
         </g>
-        <!-- Bar chart -->
         <g transform="translate(420 360) rotate(8)">
           <rect x="0" y="0" width="84" height="68" rx="10" fill="#FFFFFF" stroke="#1A1814" stroke-width="2.5"/>
           <rect x="14" y="42" width="12" height="18" rx="2" fill="#5B8FB9"/>
@@ -341,7 +316,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
           <rect x="54" y="14" width="12" height="46" rx="2" fill="#D14338"/>
           <path d="M10 60 L74 60" stroke="#1A1814" stroke-width="2" stroke-linecap="round"/>
         </g>
-        <!-- Stars -->
         <path d="M150 200 l3 8 l8 1 l-6 5 l2 8 l-7 -4 l-7 4 l2 -8 l-6 -5 l8 -1z" fill="#D9A516"/>
         <path d="M510 320 l2 5 l5 1 l-4 3 l1 5 l-4 -2 l-4 2 l1 -5 l-4 -3 l5 -1z" fill="#D9A516"/>
       </svg>
@@ -349,47 +323,26 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   </div>
 </section>
 
-<!-- Trust strip -->
 <section id="trustStrip">
   <div class="trust-inner">
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Sesuai Kurikulum Merdeka
-    </div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Akses semua perangkat
-    </div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Dibuat guru bersertifikat
-    </div>
-    <div class="trust-item">
-      <svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Data aman & terenkripsi
-    </div>
+    <div class="trust-item"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Sesuai Kurikulum Merdeka</div>
+    <div class="trust-item"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Akses semua perangkat</div>
+    <div class="trust-item"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Dibuat guru bersertifikat</div>
+    <div class="trust-item"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="9" fill="#B7E4C7"/><path d="M5 9.5 l2.5 2.5 l5.5 -5.5" stroke="#1A1814" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Data aman & terenkripsi</div>
   </div>
 </section>
 
-<!-- Subjects -->
 <section class="section" id="materi">
   <div class="section-inner">
     <div class="eyebrow">Tiga mapel inti</div>
     <h2 class="section-title">Latihan yang dirancang per<br>sub-bab, bukan campur aduk</h2>
     <p class="section-sub">Setiap mapel dibagi jadi topik kecil. Anak fokus satu hal dulu sampai paham, baru lanjut.</p>
     <div class="subjects-grid">
-      <!-- Matematika -->
       <article class="subject-card">
         <div class="subject-art" style="background:#FDECEA">
           <svg viewBox="0 0 160 160" width="60%" aria-hidden="true">
             <rect x="6" y="6" width="148" height="148" rx="24" fill="#FFF8EE"/>
-            <g opacity="0.4" stroke="#D14338" stroke-width="1">
-              <line x1="30" y1="40" x2="130" y2="40"/><line x1="30" y1="60" x2="130" y2="60"/>
-              <line x1="30" y1="80" x2="130" y2="80"/><line x1="30" y1="100" x2="130" y2="100"/>
-              <line x1="30" y1="120" x2="130" y2="120"/><line x1="50" y1="30" x2="50" y2="130"/>
-              <line x1="70" y1="30" x2="70" y2="130"/><line x1="90" y1="30" x2="90" y2="130"/>
-              <line x1="110" y1="30" x2="110" y2="130"/>
-            </g>
+            <g opacity="0.4" stroke="#D14338" stroke-width="1"><line x1="30" y1="40" x2="130" y2="40"/><line x1="30" y1="60" x2="130" y2="60"/><line x1="30" y1="80" x2="130" y2="80"/><line x1="30" y1="100" x2="130" y2="100"/><line x1="30" y1="120" x2="130" y2="120"/><line x1="50" y1="30" x2="50" y2="130"/><line x1="70" y1="30" x2="70" y2="130"/><line x1="90" y1="30" x2="90" y2="130"/><line x1="110" y1="30" x2="110" y2="130"/></g>
             <path d="M40 110 L80 50 L120 110 Z" fill="none" stroke="#D14338" stroke-width="4" stroke-linejoin="round"/>
             <path d="M55 105 a8 8 0 0 1 8 -8" fill="none" stroke="#1A1814" stroke-width="2"/>
             <circle cx="115" cy="42" r="20" fill="#F4C542"/>
@@ -405,19 +358,15 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
           <li><span class="topic-check">✓</span>Bangun ruang</li>
         </ul>
       </article>
-      <!-- IPAS -->
       <article class="subject-card">
         <div class="subject-art" style="background:#EAF6EE">
           <svg viewBox="0 0 160 160" width="60%" aria-hidden="true">
             <rect x="6" y="6" width="148" height="148" rx="24" fill="#FFF8EE"/>
             <path d="M70 38 L70 70 L48 116 Q44 128 56 128 L104 128 Q116 128 112 116 L90 70 L90 38 Z" fill="#B7E4C7" stroke="#1A1814" stroke-width="3" stroke-linejoin="round"/>
             <path d="M58 100 Q80 92 102 100" fill="none" stroke="#1A1814" stroke-width="2" opacity="0.4"/>
-            <circle cx="68" cy="112" r="3" fill="#FFFFFF"/>
-            <circle cx="86" cy="118" r="2.5" fill="#FFFFFF"/>
+            <circle cx="68" cy="112" r="3" fill="#FFFFFF"/><circle cx="86" cy="118" r="2.5" fill="#FFFFFF"/>
             <rect x="64" y="32" width="32" height="10" rx="2" fill="#1A1814"/>
-            <circle cx="108" cy="58" r="6" fill="#F4C542"/>
-            <circle cx="120" cy="44" r="4" fill="#D14338"/>
-            <circle cx="44" cy="50" r="5" fill="#5B8FB9"/>
+            <circle cx="108" cy="58" r="6" fill="#F4C542"/><circle cx="120" cy="44" r="4" fill="#D14338"/><circle cx="44" cy="50" r="5" fill="#5B8FB9"/>
             <path d="M126 116 Q140 100 142 120 Q132 132 116 130 Q120 122 126 116Z" fill="#D9A516"/>
             <path d="M122 126 L138 112" stroke="#1A1814" stroke-width="2" fill="none"/>
           </svg>
@@ -431,20 +380,13 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
           <li><span class="topic-check">✓</span>Indonesia kita</li>
         </ul>
       </article>
-      <!-- English -->
       <article class="subject-card">
         <div class="subject-art" style="background:#E8F1F8">
           <svg viewBox="0 0 160 160" width="60%" aria-hidden="true">
             <rect x="6" y="6" width="148" height="148" rx="24" fill="#FFF8EE"/>
             <path d="M30 50 Q30 36 44 36 L116 36 Q130 36 130 50 L130 92 Q130 106 116 106 L70 106 L52 122 L56 106 L44 106 Q30 106 30 92 Z" fill="#5B8FB9" stroke="#1A1814" stroke-width="3" stroke-linejoin="round"/>
             <text x="80" y="80" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="30" fill="#FFFFFF">Hi!</text>
-            <g transform="translate(118 124)">
-              <circle r="18" fill="#F4C542"/>
-              <circle r="18" fill="none" stroke="#1A1814" stroke-width="2"/>
-              <ellipse rx="18" ry="7" fill="none" stroke="#1A1814" stroke-width="2"/>
-              <line x1="-18" y1="0" x2="18" y2="0" stroke="#1A1814" stroke-width="2"/>
-              <line x1="0" y1="-18" x2="0" y2="18" stroke="#1A1814" stroke-width="2"/>
-            </g>
+            <g transform="translate(118 124)"><circle r="18" fill="#F4C542"/><circle r="18" fill="none" stroke="#1A1814" stroke-width="2"/><ellipse rx="18" ry="7" fill="none" stroke="#1A1814" stroke-width="2"/><line x1="-18" y1="0" x2="18" y2="0" stroke="#1A1814" stroke-width="2"/><line x1="0" y1="-18" x2="0" y2="18" stroke="#1A1814" stroke-width="2"/></g>
           </svg>
         </div>
         <div class="subject-kicker">MAPEL 03</div>
@@ -460,7 +402,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   </div>
 </section>
 
-<!-- Why Trust -->
 <section class="section" id="kepercayaan">
   <div class="section-inner">
     <div class="why-inner">
@@ -471,137 +412,79 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
       </div>
       <div class="trust-grid">
         <div class="trust-card">
-          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0" aria-hidden="true">
-            <path d="M36 60 C20 50 8 40 8 28 C8 18 16 12 24 12 C30 12 33 15 36 19 C39 15 42 12 48 12 C56 12 64 18 64 28 C64 40 52 50 36 60 Z" fill="#D14338" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
-          </svg>
-          <div>
-            <h4>500+ keluarga Indonesia</h4>
-            <p>Sudah belajar bareng kami sejak hari pertama.</p>
-          </div>
+          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0"><path d="M36 60 C20 50 8 40 8 28 C8 18 16 12 24 12 C30 12 33 15 36 19 C39 15 42 12 48 12 C56 12 64 18 64 28 C64 40 52 50 36 60 Z" fill="#D14338" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/></svg>
+          <div><h4>500+ keluarga Indonesia</h4><p>Sudah belajar bareng kami sejak hari pertama.</p></div>
         </div>
         <div class="trust-card">
-          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0" aria-hidden="true">
-            <circle cx="36" cy="28" r="14" fill="#F4C542" stroke="#1A1814" stroke-width="2.5"/>
-            <path d="M22 38 L36 44 L50 38 L50 46 L36 52 L22 46 Z" fill="#1A1814"/>
-            <path d="M14 56 Q14 42 36 42 Q58 42 58 56 Z" fill="#D14338" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
-            <circle cx="56" cy="38" r="3" fill="#D9A516"/>
-            <line x1="56" y1="41" x2="56" y2="48" stroke="#1A1814" stroke-width="2"/>
-          </svg>
-          <div>
-            <h4>Dibuat pendidik berpengalaman</h4>
-            <p>Guru bersertifikat menyusun soal & pembahasan.</p>
-          </div>
+          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0"><circle cx="36" cy="28" r="14" fill="#F4C542" stroke="#1A1814" stroke-width="2.5"/><path d="M22 38 L36 44 L50 38 L50 46 L36 52 L22 46 Z" fill="#1A1814"/><path d="M14 56 Q14 42 36 42 Q58 42 58 56 Z" fill="#D14338" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/></svg>
+          <div><h4>Dibuat pendidik berpengalaman</h4><p>Guru bersertifikat menyusun soal & pembahasan.</p></div>
         </div>
         <div class="trust-card">
-          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0" aria-hidden="true">
-            <path d="M22 32 V24 Q22 12 36 12 Q50 12 50 24 V32" fill="none" stroke="#1A1814" stroke-width="3.5" stroke-linecap="round"/>
-            <rect x="14" y="32" width="44" height="30" rx="5" fill="#5B8FB9" stroke="#1A1814" stroke-width="2.5"/>
-            <circle cx="36" cy="46" r="4" fill="#FFFFFF"/>
-            <rect x="34.5" y="46" width="3" height="8" rx="1" fill="#FFFFFF"/>
-          </svg>
-          <div>
-            <h4>Data siswa aman & terenkripsi</h4>
-            <p>Privasi anak adalah prioritas utama kami.</p>
-          </div>
+          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0"><path d="M22 32 V24 Q22 12 36 12 Q50 12 50 24 V32" fill="none" stroke="#1A1814" stroke-width="3.5" stroke-linecap="round"/><rect x="14" y="32" width="44" height="30" rx="5" fill="#5B8FB9" stroke="#1A1814" stroke-width="2.5"/><circle cx="36" cy="46" r="4" fill="#FFFFFF"/><rect x="34.5" y="46" width="3" height="8" rx="1" fill="#FFFFFF"/></svg>
+          <div><h4>Data siswa aman & terenkripsi</h4><p>Privasi anak adalah prioritas utama kami.</p></div>
         </div>
         <div class="trust-card">
-          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0" aria-hidden="true">
-            <rect x="8" y="14" width="56" height="44" rx="6" fill="#FFFFFF" stroke="#1A1814" stroke-width="2.5"/>
-            <rect x="16" y="38" width="8" height="14" fill="#5B8FB9"/>
-            <rect x="28" y="30" width="8" height="22" fill="#D9A516"/>
-            <rect x="40" y="22" width="8" height="30" fill="#D14338"/>
-            <path d="M14 22 L30 26 L42 18 L58 24" fill="none" stroke="#1A1814" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <div>
-            <h4>Progress tracking real-time</h4>
-            <p>Pantau topik lemah, skor, dan jam belajar.</p>
-          </div>
+          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0"><rect x="8" y="14" width="56" height="44" rx="6" fill="#FFFFFF" stroke="#1A1814" stroke-width="2.5"/><rect x="16" y="38" width="8" height="14" fill="#5B8FB9"/><rect x="28" y="30" width="8" height="22" fill="#D9A516"/><rect x="40" y="22" width="8" height="30" fill="#D14338"/><path d="M14 22 L30 26 L42 18 L58 24" fill="none" stroke="#1A1814" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><h4>Progress tracking real-time</h4><p>Pantau topik lemah, skor, dan jam belajar.</p></div>
         </div>
         <div class="trust-card" style="grid-column:span 2">
-          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0" aria-hidden="true">
-            <path d="M36 8 L60 16 L60 38 Q60 56 36 64 Q12 56 12 38 L12 16 Z" fill="#B7E4C7" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/>
-            <path d="M24 36 l8 8 l16 -18" fill="none" stroke="#1A1814" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <div>
-            <h4>Pembahasan guru bersertifikat</h4>
-            <p>Anak paham caranya, bukan cuma jawabannya.</p>
+          <svg viewBox="0 0 72 72" width="48" height="48" style="flex-shrink:0"><path d="M36 8 L60 16 L60 38 Q60 56 36 64 Q12 56 12 38 L12 16 Z" fill="#B7E4C7" stroke="#1A1814" stroke-width="2.5" stroke-linejoin="round"/><path d="M24 36 l8 8 l16 -18" fill="none" stroke="#1A1814" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><h4>Pembahasan guru bersertifikat</h4><p>Anak paham caranya, bukan cuma jawabannya.</p></div>
+        </div>
+
+        <!-- Testimonial Carousel -->
+        <div class="testi-carousel">
+          <div class="testi-track" id="testiTrack">
+            <div class="testi-card">
+              <div class="testi-avatar">R</div>
+              <p class="testi-quote">"Anak saya jadi lebih percaya diri tiap ulangan. Suka karena pembahasannya jelas, bukan cuma kunci jawaban."</p>
+              <div class="testi-name"><strong>Bu Ratna</strong><span>Ibu Nayla · Bandung</span></div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-avatar">R</div>
+              <p class="testi-quote">"Zain sekarang minta latihan soal sendiri tanpa disuruh. CerdasBersama bikin dia ngerasa belajar itu seru, bukan beban."</p>
+              <div class="testi-name"><strong>Bu Rita</strong><span>Ibu Zain · SDN Cibubur 11 Pagi · Jakarta Timur</span></div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-avatar">N</div>
+              <p class="testi-quote">"Alhamdulillah nilai Syafiq naik drastis sejak pakai CerdasBersama. Pembahasannya mudah dipahami anak-anak."</p>
+              <div class="testi-name"><strong>Bu Neneng</strong><span>Ibu Syafiq · MI Daruul Ikhwan · Ciracas, Jakarta Timur</span></div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-avatar">E</div>
+              <p class="testi-quote">"Praktis banget, bisa dipantau dari HP. Media jadi lebih fokus karena soalnya per topik, tidak campur-campur."</p>
+              <div class="testi-name"><strong>Bu Entin</strong><span>Ibu Media · SDN Setianegara · Kuningan, Jawa Barat</span></div>
+            </div>
+            <div class="testi-card">
+              <div class="testi-avatar">S</div>
+              <p class="testi-quote">"Sekar dulunya takut Matematika, sekarang malah semangat. Terima kasih CerdasBersama!"</p>
+              <div class="testi-name"><strong>Bu Santi</strong><span>Ibu Sekar · SDN Kajoran · Magelang, Jawa Tengah</span></div>
+            </div>
+          </div>
+          <div class="testi-nav">
+            <button class="testi-btn" id="testiBtnPrev">←</button>
+            <div class="testi-dots" id="testiDots"></div>
+            <button class="testi-btn" id="testiBtnNext">→</button>
           </div>
         </div>
-       <!-- Testimonial Carousel -->
-<div class="testi-carousel" style="grid-column:span 2">
-  <div class="testi-track" id="testiTrack">
-    <div class="testimonial-pill">
-      <div class="testi-avatar">R</div>
-      <div>
-        <p class="testi-quote">"Anak saya jadi lebih percaya diri tiap ulangan. Suka karena pembahasannya jelas, bukan cuma kunci jawaban."</p>
-        <div class="testi-name"><strong>Bu Ratna</strong> · Ibu Nayla · Bandung</div>
+
       </div>
-    </div>
-    <div class="testimonial-pill">
-      <div class="testi-avatar">R</div>
-      <div>
-        <p class="testi-quote">"Zain sekarang minta latihan soal sendiri tanpa disuruh. CerdasBersama bikin dia ngerasa belajar itu seru, bukan beban."</p>
-        <div class="testi-name"><strong>Bu Rita</strong> · Ibu Zain · SDN Cibubur 11 Pagi · Cibubur, Jakarta Timur</div>
-      </div>
-    </div>
-    <div class="testimonial-pill">
-      <div class="testi-avatar">N</div>
-      <div>
-        <p class="testi-quote">"Alhamdulillah nilai Syafiq naik drastis sejak pakai CerdasBersama. Pembahasannya mudah dipahami anak-anak."</p>
-        <div class="testi-name"><strong>Bu Neneng</strong> · Ibu Syafiq · MI Daruul Ikhwan · Ciracas, Jakarta Timur</div>
-      </div>
-    </div>
-    <div class="testimonial-pill">
-      <div class="testi-avatar">E</div>
-      <div>
-        <p class="testi-quote">"Praktis banget, bisa dipantau dari HP. Media jadi lebih fokus karena soalnya per topik, tidak campur-campur."</p>
-        <div class="testi-name"><strong>Bu Entin</strong> · Ibu Media · SDN Setianegara · Kuningan, Jawa Barat</div>
-      </div>
-    </div>
-    <div class="testimonial-pill">
-      <div class="testi-avatar">S</div>
-      <div>
-        <p class="testi-quote">"Sekar dulunya takut Matematika, sekarang malah semangat. Terima kasih CerdasBersama!"</p>
-        <div class="testi-name"><strong>Bu Santi</strong> · Ibu Sekar · SDN Kajoran · Magelang, Jawa Tengah</div>
-      </div>
-    </div>
-  </div>
-  <div class="testi-nav">
-    <button class="testi-btn" id="testiBtnPrev" onclick="testiPrev()">←</button>
-    <div class="testi-dots" id="testiDots"></div>
-    <button class="testi-btn" id="testiBtnNext" onclick="testiNext()">→</button>
-  </div>
-</div>
     </div>
   </div>
 </section>
 
-<!-- How it works -->
 <section class="section" id="cara">
   <div class="section-inner">
     <div class="eyebrow">Cara Kerja</div>
     <h2 class="section-title">Tiga langkah, langsung latihan</h2>
     <div class="steps-grid">
-      <div class="step-item">
-        <div class="step-num">01</div>
-        <h3>Daftar & coba gratis</h3>
-        <p>Daftar dengan email dan WA — langsung dapat 30 soal contoh, tanpa kartu kredit.</p>
-      </div>
-      <div class="step-item">
-        <div class="step-num">02</div>
-        <h3>Pakai kode referral</h3>
-        <p>Dapatkan kode dari teman, guru, atau admin. Otomatis hemat 50% untuk pembelian pertama.</p>
-      </div>
-      <div class="step-item">
-        <div class="step-num">03</div>
-        <h3>Anak latihan, nilai naik</h3>
-        <p>Pilih sub-bab, kerjakan soal, baca pembahasan, dan pantau progres lewat dashboard.</p>
-      </div>
+      <div class="step-item"><div class="step-num">01</div><h3>Daftar & coba gratis</h3><p>Daftar dengan email dan WA — langsung dapat 30 soal contoh, tanpa kartu kredit.</p></div>
+      <div class="step-item"><div class="step-num">02</div><h3>Pakai kode referral</h3><p>Dapatkan kode dari teman, guru, atau admin. Otomatis hemat 50% untuk pembelian pertama.</p></div>
+      <div class="step-item"><div class="step-num">03</div><h3>Anak latihan, nilai naik</h3><p>Pilih sub-bab, kerjakan soal, baca pembahasan, dan pantau progres lewat dashboard.</p></div>
     </div>
   </div>
 </section>
 
-<!-- Pricing -->
 <section class="section" id="harga">
   <div class="section-inner">
     <div class="pricing-header">
@@ -610,7 +493,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
       <p class="section-sub" style="margin:0 auto">Pakai kode referral untuk hemat 50% di pembelian pertama. Pembayaran via Midtrans, aman & instan.</p>
     </div>
     <div class="pricing-grid">
-      <!-- A la carte -->
       <article class="price-card">
         <div class="price-plan-name">À la carte</div>
         <div class="price-tagline">Coba dulu, satu sub-bab</div>
@@ -624,7 +506,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
         </ul>
         <button class="btn-primary price-cta" id="btnPriceAlacarte">Pilih sub-bab →</button>
       </article>
-      <!-- Bundling - featured -->
       <article class="price-card featured">
         <div class="popular-badge">★ POPULER</div>
         <div class="price-plan-name">Bundling 5</div>
@@ -640,7 +521,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
         </ul>
         <button class="btn-secondary price-cta" id="btnPriceBundling">Ambil bundling →</button>
       </article>
-      <!-- Bulanan -->
       <article class="price-card">
         <div class="price-plan-name">Bulanan unlimited</div>
         <div class="price-tagline">Untuk yang serius naik kelas</div>
@@ -656,7 +536,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
         <button class="btn-primary price-cta" id="btnPriceBulanan">Mulai bulanan →</button>
       </article>
     </div>
-    <!-- Referral box -->
     <div class="referral-box">
       <div style="display:flex;align-items:center;gap:14px">
         <div class="referral-box-icon">💰</div>
@@ -670,7 +549,6 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   </div>
 </section>
 
-<!-- CTA Banner -->
 <section id="ctaBanner">
   <div class="cta-inner">
     <div>
@@ -687,49 +565,26 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <div class="footer-inner">
     <div>
       <div class="logo">
-        <div class="logo-box">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M5 6h10a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H7a4 4 0 0 1-4-4V8a2 2 0 0 1 2-2Z" fill="#fff"/>
-            <path d="M9 11h6M9 14h4" stroke="#D14338" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="17" cy="6" r="3" fill="#F4C542" stroke="#1A1814" stroke-width="1.5"/>
-          </svg>
-        </div>
+        <div class="logo-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 6h10a4 4 0 0 1 4 4v8a2 2 0 0 1-2 2H7a4 4 0 0 1-4-4V8a2 2 0 0 1 2-2Z" fill="#fff"/><path d="M9 11h6M9 14h4" stroke="#D14338" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="6" r="3" fill="#F4C542" stroke="#1A1814" stroke-width="1.5"/></svg></div>
         <div class="logo-text"><span class="red">Cerdas</span>Bersama</div>
       </div>
       <p class="footer-desc">UMKM dari Indonesia yang ingin membuat anak Indonesia lebih cerdas — satu sub-bab, satu hari, satu langkah maju.</p>
     </div>
     <div>
       <div class="footer-col-title">Produk</div>
-      <ul class="footer-links">
-        <li><a href="#">Matematika</a></li>
-        <li><a href="#">IPAS</a></li>
-        <li><a href="#">B. Inggris</a></li>
-        <li><a href="#">Paket bundling</a></li>
-        <li><a href="#">Bulanan</a></li>
-      </ul>
+      <ul class="footer-links"><li><a href="#">Matematika</a></li><li><a href="#">IPAS</a></li><li><a href="#">B. Inggris</a></li><li><a href="#">Paket bundling</a></li><li><a href="#">Bulanan</a></li></ul>
     </div>
     <div>
       <div class="footer-col-title">Bantuan</div>
-      <ul class="footer-links">
-        <li><a href="#cara">Cara kerja</a></li>
-        <li><a href="#">FAQ</a></li>
-        <li><a href="https://wa.me/628991671717">Kontak admin</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-      </ul>
+      <ul class="footer-links"><li><a href="#cara">Cara kerja</a></li><li><a href="#">FAQ</a></li><li><a href="https://wa.me/628991671717">Kontak admin</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
     </div>
     <div>
       <div class="footer-col-title">Terhubung</div>
-      <ul class="footer-links">
-        <li><a href="https://wa.me/628991671717">💬 WA 0899 1671 717</a></li>
-        <li><a href="#">📷 @CerdasBersamaId</a></li>
-        <li><a href="mailto:hai@cerdasbersama.id">✉ hai@cerdasbersama.id</a></li>
-      </ul>
+      <ul class="footer-links"><li><a href="https://wa.me/628991671717">💬 WA 0899 1671 717</a></li><li><a href="#">📷 @CerdasBersamaId</a></li><li><a href="mailto:hai@cerdasbersama.id">✉ hai@cerdasbersama.id</a></li></ul>
     </div>
   </div>
   <div class="footer-bottom">
@@ -740,94 +595,114 @@ footer{background:var(--cb-ink);color:rgba(255,255,255,.7);padding:64px 40px 32p
 
 <div class="spacer-mobile"></div>
 
-<!-- Mobile sticky CTA -->
 <div id="mobileSticky">
-  <div style="flex:1" class="sticky-text">
+  <div style="flex:1">
     <div class="sticky-title" id="stickyTitle">Diskon 50% berakhir hari ini</div>
     <div class="sticky-sub" id="stickySub">Pakai kode referral · cuma Rp 3.950</div>
   </div>
   <button class="btn-secondary" style="padding:11px 18px;font-size:13px;white-space:nowrap" id="btnSticky">Daftar →</button>
 </div>
 
-<!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  let firebaseConfig;
-  try {
-    const mod = await import('./firebase-config.js');
-    firebaseConfig = mod.firebaseConfig || mod.default;
-  } catch {
-    firebaseConfig = window._fbConfig || {};
+let firebaseConfig;
+try {
+  const mod = await import('./firebase-config.js');
+  firebaseConfig = mod.firebaseConfig || mod.default;
+} catch { firebaseConfig = window._fbConfig || {}; }
+
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const overlay     = document.getElementById('authOverlay');
+const btnMasuk    = document.getElementById('btnMasuk');
+const btnDaftar   = document.getElementById('btnDaftar');
+const btnHero     = document.getElementById('btnHeroPrimary');
+const btnBanner   = document.getElementById('btnCtaBanner');
+const btnSticky   = document.getElementById('btnSticky');
+const stickyTitle = document.getElementById('stickyTitle');
+const stickySub   = document.getElementById('stickySub');
+const btnPriceA   = document.getElementById('btnPriceAlacarte');
+const btnPriceB   = document.getElementById('btnPriceBundling');
+const btnPriceBul = document.getElementById('btnPriceBulanan');
+
+function goTo(url) { location.href = url; }
+
+onAuthStateChanged(auth, user => {
+  overlay.classList.add('hide');
+  setTimeout(() => overlay.style.display = 'none', 300);
+  if (user) {
+    btnMasuk.textContent  = 'Dashboard →';
+    btnMasuk.onclick      = () => goTo('/dashboard.html');
+    btnDaftar.textContent = 'Buka Dashboard →';
+    btnDaftar.onclick     = () => goTo('/dashboard.html');
+    btnHero.textContent   = 'Buka Dashboard →';
+    btnHero.onclick       = () => goTo('/dashboard.html');
+    btnBanner.textContent = 'Buka Dashboard →';
+    btnBanner.onclick     = () => goTo('/dashboard.html');
+    btnSticky.textContent = 'Dashboard →';
+    btnSticky.onclick     = () => goTo('/dashboard.html');
+    stickyTitle.textContent = 'Selamat datang kembali!';
+    stickySub.textContent   = 'Lanjutkan latihan soal kamu';
+    [btnPriceA, btnPriceB, btnPriceBul].forEach(b => { if(b) b.onclick = () => goTo('/dashboard.html'); });
+  } else {
+    btnMasuk.onclick = () => goTo('/register.html?tab=masuk');
+    [btnDaftar, btnHero, btnBanner, btnSticky, btnPriceA, btnPriceB, btnPriceBul].forEach(b => {
+      if(b) b.onclick = () => goTo('/register.html');
+    });
   }
+});
 
-  const app  = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+// Countdown timer
+let total = 4*3600 + 59*60 + 50;
+const pad = n => String(n).padStart(2,'0');
+setInterval(() => {
+  if(total <= 0) return;
+  total--;
+  const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60;
+  document.getElementById('timer').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
+}, 1000);
 
-  const overlay     = document.getElementById('authOverlay');
-  const btnMasuk    = document.getElementById('btnMasuk');
-  const btnDaftar   = document.getElementById('btnDaftar');
-  const btnHero     = document.getElementById('btnHeroPrimary');
-  const btnBanner   = document.getElementById('btnCtaBanner');
-  const btnSticky   = document.getElementById('btnSticky');
-  const stickyTitle = document.getElementById('stickyTitle');
-  const stickySub   = document.getElementById('stickySub');
-  const btnPriceA   = document.getElementById('btnPriceAlacarte');
-  const btnPriceB   = document.getElementById('btnPriceBundling');
-  const btnPriceBul = document.getElementById('btnPriceBulanan');
+// Testimonial carousel
+const TESTI_TOTAL = 5;
+let testiIdx = 0;
 
-  function goTo(url) { location.href = url; }
+function testiVisible() { return window.innerWidth <= 768 ? 2 : 3; }
 
-  onAuthStateChanged(auth, user => {
-    overlay.classList.add('hide');
-    setTimeout(() => overlay.style.display = 'none', 300);
-
-    if (user) {
-      // Sudah login
-      btnMasuk.textContent  = 'Dashboard →';
-      btnMasuk.onclick      = () => goTo('/dashboard.html');
-      btnDaftar.textContent = 'Buka Dashboard →';
-      btnDaftar.onclick     = () => goTo('/dashboard.html');
-      btnHero.textContent   = 'Buka Dashboard →';
-      btnHero.onclick       = () => goTo('/dashboard.html');
-      btnBanner.textContent = 'Buka Dashboard →';
-      btnBanner.onclick     = () => goTo('/dashboard.html');
-      btnSticky.textContent = 'Dashboard →';
-      btnSticky.onclick     = () => goTo('/dashboard.html');
-      stickyTitle.textContent = 'Selamat datang kembali!';
-      stickySub.textContent   = 'Lanjutkan latihan soal kamu';
-      [btnPriceA, btnPriceB, btnPriceBul].forEach(b => b.onclick = () => goTo('/dashboard.html'));
-    } else {
-      // Belum login
-      [btnMasuk, btnDaftar, btnHero, btnBanner, btnSticky, btnPriceA, btnPriceB, btnPriceBul].forEach(b => {
-        if(b) b.onclick = () => goTo('/register.html');
-      });
-      btnMasuk.onclick = () => goTo('/register.html?tab=masuk');
-    }
-  });
-
-  // Countdown timer
-  let total = 4*3600 + 59*60 + 50;
-  const pad = n => String(n).padStart(2,'0');
-  setInterval(() => {
-    if(total <= 0) return;
-    total--;
-    const h=Math.floor(total/3600), m=Math.floor((total%3600)/60), s=total%60;
-    document.getElementById('timer').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`;
-  }, 1000);
-  let testiIdx = 0;
-const testiTotal = 5;
 function testiRender() {
-  document.getElementById('testiTrack').style.transform = `translateX(-${testiIdx * 100}%)`;
-  document.getElementById('testiDots').innerHTML = Array.from({length: testiTotal}, (_,i) =>
-    `<div class="testi-dot${i===testiIdx?' active':''}" onclick="testiGo(${i})"></div>`
+  const cards = document.querySelectorAll('.testi-card');
+  if (!cards.length) return;
+  const gap = 16;
+  const cardW = cards[0].offsetWidth + gap;
+  document.getElementById('testiTrack').style.transform = `translateX(-${testiIdx * cardW}px)`;
+  const maxIdx = TESTI_TOTAL - testiVisible();
+  document.getElementById('testiDots').innerHTML = Array.from({length: maxIdx + 1}, (_,i) =>
+    `<div class="testi-dot${i === testiIdx ? ' active' : ''}" data-i="${i}"></div>`
   ).join('');
+  document.querySelectorAll('.testi-dot').forEach(d => {
+    d.addEventListener('click', () => testiGo(parseInt(d.dataset.i)));
+  });
 }
-function testiNext() { testiIdx = (testiIdx + 1) % testiTotal; testiRender(); }
-function testiPrev() { testiIdx = (testiIdx - 1 + testiTotal) % testiTotal; testiRender(); }
+
+function testiNext() {
+  const max = TESTI_TOTAL - testiVisible();
+  testiIdx = Math.min(testiIdx + 1, max);
+  testiRender();
+}
+function testiPrev() {
+  testiIdx = Math.max(testiIdx - 1, 0);
+  testiRender();
+}
 function testiGo(i) { testiIdx = i; testiRender(); }
-testiRender();
+
+document.getElementById('testiBtnNext').addEventListener('click', testiNext);
+document.getElementById('testiBtnPrev').addEventListener('click', testiPrev);
+window.addEventListener('resize', () => { testiIdx = 0; testiRender(); });
+
+// Tunggu font/layout selesai baru render
+requestAnimationFrame(() => requestAnimationFrame(testiRender));
 </script>
 </body>
 </html>
