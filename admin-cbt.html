@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin CBT — Kelola Soal</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <!-- Library xlsx.js untuk parse file Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -56,7 +55,6 @@
     
     #majemukContainer { background: #fafaf8; padding: 16px; border-radius: 12px; border: 1.5px dashed #e8e4dc; }
     
-    /* Upload Zone */
     .upload-zone { border:2px dashed #e8e4dc; border-radius:16px; padding:36px; text-align:center; cursor:pointer; transition:all 0.2s; background:#fafaf8; margin-bottom:16px; }
     .upload-zone:hover, .upload-zone.drag { border-color:#C0392B; background:#fff5f5; }
     .upload-zone input { display:none; }
@@ -64,7 +62,6 @@
     .upload-title { font-size:15px; font-weight:800; margin-bottom:4px; }
     .upload-sub { font-size:13px; color:#7a7168; font-weight:500; }
     
-    /* Bulk Logs */
     .log { background:#1a1714; border-radius:12px; padding:16px; font-family:monospace; font-size:12px; color:#eef0f5; max-height:260px; overflow-y:auto; display:none; margin-top:14px; }
     .log-line { padding:2px 0; }
     .log-line.ok { color:#3ecf8e; }
@@ -122,7 +119,6 @@
         </div>
       </div>
 
-      <!-- KOLOM WAKTU DAN BLOK BARU UNTUK INPUT MANUAL -->
       <div class="field-row">
         <div class="field">
           <label>Urutan Subtes (Blok Ke-)</label>
@@ -178,13 +174,12 @@
 
 <script type="module">
   import { auth, db } from "./firebase-config.js";
-  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const $ = id => document.getElementById(id);
   let selectedJawabanPG = '';
   let parsedRows = [];
 
-  // ================= TAB NAVIGATION =================
   window.switchTab = function(tabId, elBtn) {
     $('tabTambah').style.display = 'none';
     $('tabBulk').style.display = 'none';
@@ -195,15 +190,14 @@
     elBtn.classList.add('active');
   };
 
-  // ================= 1. MANUAL INPUT LOGIC =================
   window.updateKategoriOptions = function() {
     const segmen = $('fSegmen').value;
     const kat = $('fKategori');
     if (segmen === 'CBT CPNS') {
-      kat.innerHTML = `<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option>`;
+      kat.innerHTML = '<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option>';
       $('fTipeSoal').value = 'pg_biasa'; 
     } else if (segmen === 'SNBT PTN') {
-      kat.innerHTML = `<option>Penalaran Umum</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>`;
+      kat.innerHTML = '<option>Penalaran Umum</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>';
       $('fTipeSoal').value = 'pg_biasa';
     }
     renderUI();
@@ -222,37 +216,30 @@
     selectedJawabanPG = '';
 
     if (tipe === 'pg_biasa') {
-      container.innerHTML = `
-        <div class="field"><label>Pilihan Jawaban</label>
-          \${['A','B','C','D','E'].map(k => `
-            <div class="opsi-row" id="row\${k}"><div class="opsi-key">\${k}</div><input id="pg_\${k}" placeholder="Teks Pilihan \${k}"/></div>
-          `).join('')}
-        </div>
-        <div class="field"><label>Kunci Jawaban Pasti (Benar=5, Salah=0)</label>
-          <div class="jawaban-select">
-            \${['A','B','C','D','E'].map(k => `<button class="jaw-btn" onclick="setJawabanPG('\${k}')">\${k}</button>`).join('')}
-          </div>
-        </div>
-      `;
+      let html = '<div class="field"><label>Pilihan Jawaban</label>';
+      ['A','B','C','D','E'].forEach(k => {
+        html += '<div class="opsi-row" id="row' + k + '"><div class="opsi-key">' + k + '</div><input id="pg_' + k + '" placeholder="Teks Pilihan ' + k + '"/></div>';
+      });
+      html += '</div><div class="field"><label>Kunci Jawaban Pasti (Benar=5, Salah=0)</label><div class="jawaban-select">';
+      ['A','B','C','D','E'].forEach(k => {
+        html += '<button class="jaw-btn" onclick="setJawabanPG('' + k + '')">' + k + '</button>';
+      });
+      html += '</div></div>';
+      container.innerHTML = html;
     } 
     else if (tipe === 'tkp') {
-      container.innerHTML = `
-        <div class="field"><label>Opsi Jawaban & Bobot Nilai (1-5)</label>
-          \${['A','B','C','D','E'].map(k => `
-            <div class="opsi-row">
-              <div class="opsi-key">\${k}</div>
-              <input id="tkp_opsi_\${k}" placeholder="Teks Tindakan \${k}"/>
-              <input type="number" id="tkp_bobot_\${k}" class="bobot-input" min="1" max="5" placeholder="Poin"/>
-            </div>
-          `).join('')}
-        </div>
-      `;
+      let html = '<div class="field"><label>Opsi Jawaban & Bobot Nilai (1-5)</label>';
+      ['A','B','C','D','E'].forEach(k => {
+        html += '<div class="opsi-row"><div class="opsi-key">' + k + '</div><input id="tkp_opsi_' + k + '" placeholder="Teks Tindakan ' + k + '"/><input type="number" id="tkp_bobot_' + k + '" class="bobot-input" min="1" max="5" placeholder="Poin"/></div>';
+      });
+      html += '</div>';
+      container.innerHTML = html;
     }
     else if (tipe === 'isian') {
-      container.innerHTML = `<div class="field"><label>Kunci Jawaban (Isian Singkat)</label><input type="text" id="isian_kunci" placeholder="Ketik jawaban pastinya (contoh: 25 atau -10)"/></div>`;
+      container.innerHTML = '<div class="field"><label>Kunci Jawaban (Isian Singkat)</label><input type="text" id="isian_kunci" placeholder="Ketik jawaban pastinya (contoh: 25 atau -10)"/></div>';
     }
     else if (tipe === 'majemuk') {
-      container.innerHTML = `<div class="field"><label>Pernyataan Benar / Salah</label><div id="majemukContainer"></div><button class="btn secondary" onclick="tambahPernyataan()">+ Tambah Pernyataan</button></div>`;
+      container.innerHTML = '<div class="field"><label>Pernyataan Benar / Salah</label><div id="majemukContainer"></div><button class="btn secondary" onclick="tambahPernyataan()">+ Tambah Pernyataan</button></div>';
       window.majemukCount = 0;
       tambahPernyataan(); tambahPernyataan();
     }
@@ -262,12 +249,8 @@
     window.majemukCount++;
     const id = window.majemukCount;
     const div = document.createElement('div');
-    div.className = 'opsi-row'; div.id = `mjm_row_\${id}`;
-    div.innerHTML = `
-      <input type="text" id="mjm_teks_\${id}" placeholder="Pernyataan \${id}"/>
-      <select id="mjm_kunci_\${id}" style="width:120px;"><option value="Benar">Benar</option><option value="Salah">Salah</option></select>
-      <button class="btn danger" onclick="document.getElementById('mjm_row_\${id}').remove()">✕</button>
-    `;
+    div.className = 'opsi-row'; div.id = 'mjm_row_' + id;
+    div.innerHTML = '<input type="text" id="mjm_teks_' + id + '" placeholder="Pernyataan ' + id + '"/><select id="mjm_kunci_' + id + '" style="width:120px;"><option value="Benar">Benar</option><option value="Salah">Salah</option></select><button class="btn danger" onclick="document.getElementById('mjm_row_' + id + '').remove()">✕</button>';
     $('majemukContainer').appendChild(div);
   };
 
@@ -301,7 +284,7 @@
       data.pernyataanMajemuk = [];
       rows.forEach(row => {
         const id = row.id.split('_')[2];
-        const teks = $(`mjm_teks_\${id}`).value.trim(), kunci = $(`mjm_kunci_\${id}`).value;
+        const teks = $('mjm_teks_' + id).value.trim(), kunci = $('mjm_kunci_' + id).value;
         if (teks) data.pernyataanMajemuk.push({ teks, kunci });
       });
     }
@@ -320,7 +303,6 @@
     setTimeout(() => el.style.display = 'none', 4000);
   }
 
-  // ================= 2. BULK EXCEL LOGIC =================
   window.handleFile = function(input) {
     const file = input.files[0];
     if (!file) return;
@@ -332,14 +314,14 @@
         parsedRows = XLSX.utils.sheet_to_json(ws, {defval:''});
         $('countPreview').textContent = parsedRows.length;
         $('previewWrap').style.display = 'block';
-        showAlert('alertBulk', 'info', `✅ \${parsedRows.length} baris terdeteksi. Silakan klik tombol Upload di bawah.`);
+        showAlert('alertBulk', 'info', '✅ ' + parsedRows.length + ' baris terdeteksi. Silakan klik tombol Upload di bawah.');
       } catch(err) { showAlert('alertBulk','err','Gagal membaca file: '+err.message); }
     };
     reader.readAsBinaryString(file);
   };
 
   window.uploadSemuaExcel = async function() {
-    if (!confirm(`Mulai upload \${parsedRows.length} soal ke database?`)) return;
+    if (!confirm('Mulai upload ' + parsedRows.length + ' soal ke database?')) return;
     showBulkLog(); setLoadingBulk(true);
     let sukses = 0, gagal = 0;
 
@@ -359,7 +341,6 @@
           createdAt: serverTimestamp()
         };
 
-        // Construct Payload Dynamics
         if (tipe === 'pg_biasa') {
           data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
           data.jawaban = String(r.jawaban||'').trim().toUpperCase();
@@ -385,11 +366,11 @@
 
         await addDoc(collection(db, 'soal'), data);
         sukses++;
-        logBulk(`✅ Soal \${i+1} [\${data.tipeSoal}] berhasil diupload.`, 'ok');
-      } catch(err) { gagal++; logBulk(`❌ Soal \${i+1} Gagal: \${err.message}`, 'err'); }
+        logBulk('✅ Soal ' + (i+1) + ' [' + data.tipeSoal + '] berhasil diupload.', 'ok');
+      } catch(err) { gagal++; logBulk('❌ Soal ' + (i+1) + ' Gagal: ' + err.message, 'err'); }
     }
-    logBulk(`
-✨ Selesai! \${sukses} berhasil, \${gagal} gagal.`, sukses === parsedRows.length ? 'ok' : 'info');
+    logBulk('
+✨ Selesai! ' + sukses + ' berhasil, ' + gagal + ' gagal.', sukses === parsedRows.length ? 'ok' : 'info');
     setLoadingBulk(false);
   };
 
@@ -415,7 +396,7 @@
   function setLoadingBulk(loading) {
     $('btnUpload').disabled = loading;
     if(loading) $('btnUpload').textContent = '⏳ Memproses...';
-    else $('btnUpload').textContent = `🚀 Upload \${parsedRows.length} Soal ke Database`;
+    else $('btnUpload').textContent = '🚀 Upload ' + parsedRows.length + ' Soal ke Database';
   }
 
   updateKategoriOptions();
