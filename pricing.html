@@ -9,16 +9,13 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:#faf8f5;color:#1a1714;min-height:100vh}
-
 nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .nav-logo{font-weight:800;font-size:17px;color:#C0392B}
 .nav-logo span{color:#1a1714}
 .nav-back{font-size:13px;font-weight:600;color:#7a7168;text-decoration:none;transition:color 0.18s}
 .nav-back:hover{color:#C0392B}
-
 .wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
 .loading{text-align:center;padding:3rem;color:#b0a89c;font-size:14px}
-
 .steps-bar{display:flex;align-items:center;gap:0;margin-bottom:28px}
 .step-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#b0a89c}
 .step-item.active{color:#C0392B}
@@ -28,10 +25,10 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .step-item.active .step-circle{background:#C0392B;border-color:#C0392B;color:#fff}
 .step-line{flex:1;height:2px;background:#e8e4dc;margin:0 8px}
 .step-line.done{background:#1a7a4a}
-
 .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-sub{font-size:13px;color:#7a7168;margin-bottom:24px;font-weight:500}
 
+/* SEGMEN */
 .segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
 .segmen-card{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden}
 .segmen-card:hover:not(.coming-soon){border-color:#C0392B;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
@@ -42,12 +39,14 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .segmen-desc{font-size:11px;color:#7a7168;font-weight:500}
 .coming-soon-badge{position:absolute;top:10px;right:10px;background:#f5f3ef;border:1px solid #e8e4dc;border-radius:50px;padding:3px 8px;font-size:9px;font-weight:800;color:#b0a89c;text-transform:uppercase;letter-spacing:0.5px}
 
+/* SEGMEN LOADING */
+.segmen-skeleton{background:#f5f3ef;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;height:96px;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
 .tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content;flex-wrap:wrap}
 .tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-
 .section-label{font-size:11px;font-weight:800;color:#b0a89c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
-
 .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
 .pkg{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px;cursor:pointer;transition:all 0.18s}
 .pkg:hover{border-color:#C0392B;transform:translateY(-2px)}
@@ -57,7 +56,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .pkg-price{font-size:22px;font-weight:900;color:#1a1714;letter-spacing:-1px;margin-bottom:2px}
 .pkg-desc{font-size:11px;color:#b0a89c}
 .pkg-save{font-size:11px;color:#C0392B;margin-top:6px;font-weight:700}
-
 .mapel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
 @media(max-width:500px){.mapel-grid{grid-template-columns:repeat(2,1fr)}}
 .mapel{border:1.5px solid #e8e4dc;border-radius:12px;padding:12px;cursor:pointer;text-align:center;background:#fff;transition:all 0.18s}
@@ -65,7 +63,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .mapel.sel{border-color:#C0392B;background:#fff5f5}
 .mapel-icon{font-size:20px;margin-bottom:5px}
 .mapel-name{font-size:11px;font-weight:800;color:#1a1714}
-
 .subbab-list{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:20px}
 .bab{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid #e8e4dc;border-radius:10px;cursor:pointer;background:#fff;font-size:13px;font-weight:600;color:#1a1714;transition:all 0.18s}
 .bab:hover{border-color:#C0392B}
@@ -75,22 +72,17 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .bab.sel .bab-check{background:#C0392B;border-color:#C0392B}
 .quota-info{font-size:12px;color:#7a7168;margin-bottom:10px;font-weight:700}
 .quota-info span{color:#C0392B;font-weight:800}
-
-/* Loading spinner sub-bab */
 .subbab-loading{text-align:center;padding:20px;color:#b0a89c;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid #e8e4dc;border-top-color:#C0392B;border-radius:50%;animation:spin 0.7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .selected-preview{background:#fff5f5;border:1.5px solid #fdd;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:none}
 .selected-preview-title{font-size:12px;font-weight:800;color:#C0392B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .selected-tags{display:flex;gap:6px;flex-wrap:wrap}
 .sel-tag{background:#fff;border:1px solid #fdd;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;color:#C0392B;display:flex;align-items:center;gap:4px;cursor:pointer}
 .sel-tag:hover{background:#fef2f2}
-
 .premium-box{background:linear-gradient(135deg,#fffbf0,#fff8e0);border:2px solid #f5d06a;border-radius:16px;padding:24px;margin-bottom:24px;text-align:center}
 .premium-box h3{font-size:20px;font-weight:900;color:#8a5e00;margin-bottom:6px}
 .premium-box p{font-size:13px;color:#9a7020;line-height:1.6;font-weight:500}
-
 .ref-box{border-radius:12px;margin-bottom:20px;padding:14px}
 .ref-box.locked{border:1.5px dashed #e8e4dc;background:#f5f3ef}
 .ref-box.unlocked{border:1.5px solid #1a7a4a;background:#edfaf3}
@@ -107,14 +99,12 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .btn-apply:disabled{opacity:0.5;cursor:not-allowed}
 .ref-hint{font-size:12px;color:#b0a89c;margin-top:6px;font-weight:500}
 .ref-ok-msg{font-size:12px;color:#1a7a4a;margin-top:6px;font-weight:700}
-
 .order-box{background:#fff;border:1px solid #e8e4dc;border-radius:16px;padding:20px;margin-bottom:16px}
 .order-row{display:flex;justify-content:space-between;font-size:13px;color:#7a7168;margin-bottom:8px;align-items:flex-start;gap:12px}
 .order-row .label{flex:1}
 .order-row.disc{color:#1a7a4a;font-weight:700}
 .order-row.total{font-size:16px;font-weight:900;color:#1a1714;border-top:1px solid #f5f3ef;padding-top:12px;margin-top:4px;margin-bottom:0}
 .order-subbab{font-size:11px;color:#b0a89c;margin-top:2px}
-
 .btn-pay{width:100%;background:#C0392B;color:#fff;border:none;border-radius:50px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.18s;box-shadow:0 4px 16px rgba(192,57,43,0.25)}
 .btn-pay:hover{background:#a93226;transform:translateY(-1px)}
 .btn-pay:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
@@ -125,17 +115,13 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 </style>
 </head>
 <body>
-
 <nav>
   <div class="nav-logo">Cerdas<span>Bersama</span></div>
   <a href="/dashboard.html" class="nav-back">← Dashboard</a>
 </nav>
-
 <div class="wrap">
   <div id="loadingView" class="loading">Memuat halaman…</div>
-
   <div id="mainView" style="display:none">
-
     <div class="steps-bar" id="stepsBar">
       <div class="step-item active" id="step1"><div class="step-circle">1</div><span>Segmen</span></div>
       <div class="step-line" id="line1"></div>
@@ -144,25 +130,15 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <div class="step-item" id="step3"><div class="step-circle">3</div><span>Bayar</span></div>
     </div>
 
-    <!-- STEP 1: PILIH SEGMEN -->
+    <!-- STEP 1: PILIH SEGMEN (dinamis) -->
     <div id="viewSegmen">
       <div class="page-title">Pilih Segmen</div>
       <div class="page-sub">Pilih jenjang atau jenis tes yang ingin kamu pelajari.</div>
-      <div class="segmen-grid">
-        <div class="segmen-card" onclick="selectSegmen('SD Kelas 6')">
-          <div class="segmen-icon">📚</div>
-          <div class="segmen-name">SD Kelas 6</div>
-          <div class="segmen-desc">Matematika, IPAS, B.Inggris</div>
-        </div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 7</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 8</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMP Kelas 9</div><div class="segmen-desc">Mat, B.Indo, B.Ing, IPA, IPS</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 10</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 11</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📚</div><div class="segmen-name">SMA Kelas 12</div><div class="segmen-desc">Mat, B.Indo, B.Ing, Fisika, dll</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">📝</div><div class="segmen-name">Try Out</div><div class="segmen-desc">Persiapan UTS/UAS Kelas 6-12</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">🎯</div><div class="segmen-name">SNBT PTN</div><div class="segmen-desc">195 menit · 160 soal</div></div>
-        <div class="segmen-card coming-soon"><div class="coming-soon-badge">🚧 Coming Soon</div><div class="segmen-icon">🏛️</div><div class="segmen-name">CBT CPNS</div><div class="segmen-desc">130 menit · 110 soal</div></div>
+      <div class="segmen-grid" id="segmenGrid">
+        <!-- Skeleton loading -->
+        <div class="segmen-skeleton"></div>
+        <div class="segmen-skeleton"></div>
+        <div class="segmen-skeleton"></div>
       </div>
     </div>
 
@@ -171,13 +147,11 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <button class="btn-back" onclick="goStep(1)">← Ganti Segmen</button>
       <div class="page-title" id="paketTitle">Pilih Paket</div>
       <div class="page-sub" id="paketSub">Pilih cara akses yang sesuai.</div>
-
       <div class="tabs">
-        <button class="tab active" onclick="switchTab(this,'alacarte')">À la carte</button>
-        <button class="tab" onclick="switchTab(this,'bundling')">Bundling</button>
-        <button class="tab" onclick="switchTab(this,'bulanan')">Bulanan</button>
+        <button class="tab active" id="tabAlacarte" onclick="switchTab(this,'alacarte')">À la carte</button>
+        <button class="tab" id="tabBundling" onclick="switchTab(this,'bundling')">Bundling</button>
+        <button class="tab" id="tabBulanan" onclick="switchTab(this,'bulanan')">Bulanan</button>
       </div>
-
       <!-- À LA CARTE -->
       <div id="alacarte">
         <div class="section-label">Pilih sub-bab (Rp 7.900 / sub-bab)</div>
@@ -188,31 +162,13 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
           <div class="selected-tags" id="tagsAlacarte"></div>
         </div>
       </div>
-
       <!-- BUNDLING -->
       <div id="bundling" style="display:none">
         <div class="section-label">Pilih paket bundling</div>
         <div class="pkg-grid" id="bundlingPkgs">
-          <div class="pkg selected" onclick="selBundlingPkg(this,3,21900)">
-            <div class="pkg-name">Bundling 3</div>
-            <div class="pkg-price">Rp 21.900</div>
-            <div class="pkg-desc">3 sub-bab pilihan</div>
-            <div class="pkg-save">Hemat Rp 1.800 vs satuan</div>
-          </div>
-          <div class="pkg" onclick="selBundlingPkg(this,5,34900)">
-            <div class="pkg-badge">Populer</div>
-            <div class="pkg-name">Bundling 5</div>
-            <div class="pkg-price">Rp 34.900</div>
-            <div class="pkg-desc">5 sub-bab pilihan</div>
-            <div class="pkg-save">Hemat Rp 4.600 vs satuan</div>
-          </div>
-          <div class="pkg" onclick="selBundlingPkg(this,10,64900)">
-            <div class="pkg-badge">Terbaik</div>
-            <div class="pkg-name">Bundling 10</div>
-            <div class="pkg-price">Rp 64.900</div>
-            <div class="pkg-desc">10 sub-bab pilihan</div>
-            <div class="pkg-save">Hemat Rp 14.100 vs satuan</div>
-          </div>
+          <div class="pkg selected" onclick="selBundlingPkg(this,3,21900)"><div class="pkg-name">Bundling 3</div><div class="pkg-price">Rp 21.900</div><div class="pkg-desc">3 sub-bab pilihan</div><div class="pkg-save">Hemat Rp 1.800 vs satuan</div></div>
+          <div class="pkg" onclick="selBundlingPkg(this,5,34900)"><div class="pkg-badge">Populer</div><div class="pkg-name">Bundling 5</div><div class="pkg-price">Rp 34.900</div><div class="pkg-desc">5 sub-bab pilihan</div><div class="pkg-save">Hemat Rp 4.600 vs satuan</div></div>
+          <div class="pkg" onclick="selBundlingPkg(this,10,64900)"><div class="pkg-badge">Terbaik</div><div class="pkg-name">Bundling 10</div><div class="pkg-price">Rp 64.900</div><div class="pkg-desc">10 sub-bab pilihan</div><div class="pkg-save">Hemat Rp 14.100 vs satuan</div></div>
         </div>
         <div class="quota-info">Dipilih: <span id="quotaCount">0</span> / <span id="quotaMax">3</span> sub-bab</div>
         <div class="mapel-grid" id="mapelGridBundling"></div>
@@ -222,7 +178,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
           <div class="selected-tags" id="tagsBundling"></div>
         </div>
       </div>
-
       <!-- BULANAN -->
       <div id="bulanan" style="display:none">
         <div class="premium-box">
@@ -230,15 +185,9 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
           <p>Akses semua sub-bab di segmen yang dipilih tanpa batas selama 1 bulan!</p>
         </div>
         <div class="pkg-grid">
-          <div class="pkg selected" onclick="selPkg(this,99900,'Premium Bulanan')">
-            <div class="pkg-badge">Akses penuh</div>
-            <div class="pkg-name">1 Bulan</div>
-            <div class="pkg-price">Rp 99.900</div>
-            <div class="pkg-desc">Semua mapel & sub-bab tanpa batas</div>
-          </div>
+          <div class="pkg selected" onclick="selPkg(this,99900,'Premium Bulanan')"><div class="pkg-badge">Akses penuh</div><div class="pkg-name">1 Bulan</div><div class="pkg-price">Rp 99.900</div><div class="pkg-desc">Semua mapel & sub-bab tanpa batas</div></div>
         </div>
       </div>
-
       <!-- REFERRAL -->
       <div class="section-label">Kode referral / promo</div>
       <div class="ref-box locked" id="refBox">
@@ -253,34 +202,18 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
         </div>
         <p class="ref-hint" id="refHint">Kode didapat dari teman atau admin CerdasBersama.</p>
       </div>
-
       <!-- RINGKASAN -->
       <div class="warn-msg" id="warnMsg"></div>
       <div class="order-box">
         <div class="section-label">Ringkasan pesanan</div>
-        <div class="order-row">
-          <div>
-            <div class="label" id="orderName">—</div>
-            <div class="order-subbab" id="orderSubbab"></div>
-          </div>
-          <span id="orderBase">—</span>
-        </div>
-        <div class="order-row disc" id="discRow" style="display:none">
-          <span class="label">Diskon 50% (pembelian pertama)</span>
-          <span id="discAmt">—</span>
-        </div>
-        <div class="order-row total">
-          <span>Total bayar</span>
-          <span id="totalAmt" style="color:#C0392B">—</span>
-        </div>
+        <div class="order-row"><div><div class="label" id="orderName">—</div><div class="order-subbab" id="orderSubbab"></div></div><span id="orderBase">—</span></div>
+        <div class="order-row disc" id="discRow" style="display:none"><span class="label">Diskon 50% (pembelian pertama)</span><span id="discAmt">—</span></div>
+        <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#C0392B">—</span></div>
       </div>
-
       <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
       <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
     </div>
-
-  </div><!-- /mainView -->
-
+  </div>
   <!-- SUCCESS -->
   <div id="successView" style="display:none;text-align:center;padding:3rem 0">
     <div style="font-size:56px;margin-bottom:16px">🎉</div>
@@ -296,57 +229,32 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, arrayUnion, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, arrayUnion, increment, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const HARGA = { alacarte:7900, bundling:{3:21900,5:34900,10:64900}, bulanan:99900 };
 const KOMISI_RATE = 0.15;
-
-const MAPEL_BY_SEGMEN = {
-  'SD Kelas 6': ['Matematika','IPAS','B.Inggris'],
-  'SMP Kelas 7': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
-  'SMP Kelas 8': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
-  'SMP Kelas 9': ['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PKn'],
-  'SMA Kelas 10': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
-  'SMA Kelas 11': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
-  'SMA Kelas 12': ['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Ekonomi','Sejarah','Geografi'],
-};
-
 const MAPEL_ICON = {
-  'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤',
-  'Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬',
-  'IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪',
-  'Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'
+  'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖',
+  'Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️',
+  'Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'
 };
 
-// ─────────────────────────────────────────────────────────
-// CACHE sub-bab: key = "Segmen__Mapel", value = string[]
-// Sekali fetch per sesi, tidak fetch ulang jika sudah ada
-// ─────────────────────────────────────────────────────────
+// Cache sub-bab per sesi
 const subbabCache = {};
-
 async function fetchSubbab(segmen, mapel) {
   const key = `${segmen}__${mapel}`;
   if (subbabCache[key] !== undefined) return subbabCache[key];
-
   try {
-    const q = query(
-      collection(db, 'subBab'),
-      where('segmen', '==', segmen),
-      where('mapel',  '==', mapel)
-    );
+    const q    = query(collection(db,'subBab'), where('segmen','==',segmen), where('mapel','==',mapel));
     const snap = await getDocs(q);
     subbabCache[key] = snap.empty ? [] : (snap.docs[0].data().list || []);
-  } catch(e) {
-    console.error('fetchSubbab error:', e);
-    subbabCache[key] = [];
-  }
+  } catch(e) { subbabCache[key] = []; }
   return subbabCache[key];
 }
-// ─────────────────────────────────────────────────────────
 
-let selectedSegmen = '';
-let curMapelAlacarte = '', curMapelBundling = '';
-let selAlacarte = [], selBundling = [];
+let selectedSegmen='', allSegmen=[];
+let curMapelAlacarte='', curMapelBundling='';
+let selAlacarte=[], selBundling=[];
 let bundlingMax=3, bundlingPrice=21900;
 let curPkg={name:'À la carte',price:7900,type:'alacarte'};
 let discApplied=false, validRefCode='';
@@ -355,27 +263,63 @@ let currentUser=null, currentUserData=null;
 const $=id=>document.getElementById(id);
 
 onAuthStateChanged(auth, async user => {
-  if (!user) { window.location.href='/register.html'; return; }
-  currentUser = user;
-  const snap = await getDoc(doc(db,'users',user.uid));
-  if (!snap.exists()) { window.location.href='/register.html'; return; }
-  currentUserData = snap.data();
-  if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
+  if(!user){window.location.href='/register.html';return;}
+  currentUser=user;
+  const [snap, segmenSnap] = await Promise.all([
+    getDoc(doc(db,'users',user.uid)),
+    getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
+  ]);
+  if(!snap.exists()){window.location.href='/register.html';return;}
+  currentUserData=snap.data();
+  allSegmen=segmenSnap.docs.map(d=>d.data());
+
+  if(currentUserData.referredBy && !currentUserData.hasUsedReferral){
     validRefCode=currentUserData.referredBy; discApplied=true;
   }
+
   $('loadingView').style.display='none';
   $('mainView').style.display='block';
+  renderSegmenGrid();
   updateOrder();
+
+  // Auto-handle URL params
+  const params=new URLSearchParams(window.location.search);
+  const initTab=params.get('tab')||'alacarte';
+  const initPkg=params.get('pkg')||null;
+  if(initTab==='bulanan'||initTab==='bundling'||initTab==='alacarte'){
+    _pendingTab=initTab; _pendingPkg=initPkg;
+  }
 });
 
+let _pendingTab=null, _pendingPkg=null;
+
+// ── RENDER SEGMEN GRID (dinamis dari Firestore) ──
+function renderSegmenGrid() {
+  const grid=$('segmenGrid');
+  grid.innerHTML='';
+  allSegmen.forEach(s => {
+    const aktif = s.aktif === true;
+    const div=document.createElement('div');
+    div.className='segmen-card'+(aktif?'':' coming-soon');
+    div.innerHTML=`
+      ${!aktif?'<div class="coming-soon-badge">🚧 Coming Soon</div>':''}
+      <div class="segmen-icon">${s.icon||'📚'}</div>
+      <div class="segmen-name">${s.id}</div>
+      <div class="segmen-desc">${s.desc||''}</div>`;
+    if(aktif) div.onclick=()=>selectSegmen(s.id, s);
+    else div.onclick=()=>{}; // coming soon — tidak bisa klik
+    grid.appendChild(div);
+  });
+}
+
 // ── STEPS ──
-function updateSteps(step) {
+function updateSteps(step){
   for(let i=1;i<=3;i++){
     $(`step${i}`).className='step-item'+(i<step?' done':i===step?' active':'');
     const l=$(`line${i}`); if(l) l.className='step-line'+(i<step?' done':'');
   }
 }
-function goStep(step) {
+function goStep(step){
   $('viewSegmen').style.display=step===1?'block':'none';
   $('viewPaket').style.display=step===2?'block':'none';
   updateSteps(step); window.scrollTo(0,0);
@@ -383,76 +327,69 @@ function goStep(step) {
 window.goStep=goStep;
 
 // ── STEP 1: PILIH SEGMEN ──
-const _params = new URLSearchParams(window.location.search);
-const _initTab = _params.get('tab') || 'alacarte';
-const _initPkg = _params.get('pkg') || null;
-
-window.selectSegmen = async function(segmen) {
-  selectedSegmen = segmen;
+window.selectSegmen = async function(segmen, segData) {
+  selectedSegmen=segmen;
   $('paketTitle').textContent=`Paket untuk ${segmen}`;
   $('paketSub').textContent=`Pilih cara akses yang sesuai untuk ${segmen}.`;
-
   selAlacarte=[]; selBundling=[];
-  curMapelAlacarte=(MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
-  curMapelBundling=(MAPEL_BY_SEGMEN[segmen]||['Matematika'])[0];
+
+  // Mapel dari Firestore (field mapel di dokumen segmen)
+  const mapelList = segData?.mapel || [];
+  curMapelAlacarte = mapelList[0] || '';
+  curMapelBundling = mapelList[0] || '';
 
   goStep(2);
-  renderMapelGrid('alacarte');
-  renderMapelGrid('bundling');
+  renderMapelGrid('alacarte', mapelList);
+  renderMapelGrid('bundling', mapelList);
   await renderBabs('alacarte');
   await renderBabs('bundling');
 
-  if (_initTab==='bundling') {
+  // Handle pending tab dari URL
+  if(_pendingTab){
+    const tabMap={'alacarte':0,'bundling':1,'bulanan':2};
+    const idx=tabMap[_pendingTab]||0;
     document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-    document.querySelectorAll('.tab')[1].className='tab active';
+    document.querySelectorAll('.tab')[idx].className='tab active';
     ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
-    $('bundling').style.display='block';
-    if (_initPkg==='5') selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[1],5,34900);
-    else if(_initPkg==='10') selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[2],10,64900);
-    else selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[0],3,21900);
-  } else if (_initTab==='bulanan') {
-    document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-    document.querySelectorAll('.tab')[2].className='tab active';
-    ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
-    $('bulanan').style.display='block';
-    curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};
+    $(_pendingTab).style.display='block';
+    if(_pendingTab==='bundling'&&_pendingPkg){
+      const pkgMap={'3':0,'5':1,'10':2};
+      const pkgIdx=pkgMap[_pendingPkg]||0;
+      const pkgPrices={0:[3,21900],1:[5,34900],2:[10,64900]};
+      const [max,price]=pkgPrices[pkgIdx];
+      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[pkgIdx],max,price);
+    } else if(_pendingTab==='bulanan'){
+      curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};
+    }
+    _pendingTab=null; _pendingPkg=null;
   }
   updateOrder();
 };
 
-function getMapels(){ return MAPEL_BY_SEGMEN[selectedSegmen]||['Matematika','IPAS','B.Inggris']; }
-
-// ── RENDER MAPEL GRID ──
-function renderMapelGrid(tab) {
+// ── RENDER MAPEL GRID (dari data segmen Firestore) ──
+function renderMapelGrid(tab, mapelList) {
   const grid=$(tab==='alacarte'?'mapelGridAlacarte':'mapelGridBundling');
   const cur=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
-  grid.innerHTML=getMapels().map(m=>`
+  grid.innerHTML=mapelList.map(m=>`
     <div class="mapel ${m===cur?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
       <div class="mapel-icon">${MAPEL_ICON[m]||'📚'}</div>
       <div class="mapel-name">${m}</div>
     </div>`).join('');
 }
 
-// ── RENDER SUB-BAB (async — dari Firestore) ──
+// ── RENDER SUB-BAB (dari Firestore, dinamis) ──
 async function renderBabs(tab) {
   const mapel=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const listEl=$(tab==='alacarte'?'babListAlacarte':'babListBundling');
-
-  // Tampilkan spinner
   listEl.innerHTML='<div class="subbab-loading"><span class="spin"></span>Memuat sub-bab…</div>';
-
-  const subbabs = await fetchSubbab(selectedSegmen, mapel);
-
+  const subbabs=await fetchSubbab(selectedSegmen,mapel);
   listEl.innerHTML='';
-
-  if (!subbabs.length) {
+  if(!subbabs.length){
     listEl.innerHTML='<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia untuk mapel ini.</div>';
-    updateSelectedPreview(tab);
-    return;
+    updateSelectedPreview(tab); return;
   }
-
-  subbabs.forEach(sb => {
+  subbabs.forEach(sb=>{
     const isSel=sel.some(s=>s.mapel===mapel&&s.subbab===sb);
     const isDisabled=tab==='bundling'&&!isSel&&sel.length>=bundlingMax;
     const div=document.createElement('div');
@@ -461,37 +398,33 @@ async function renderBabs(tab) {
     if(!isDisabled) div.onclick=()=>toggleBab(tab,mapel,sb);
     listEl.appendChild(div);
   });
-
   if(tab==='bundling') updateQuota();
   updateSelectedPreview(tab);
 }
 
-async function toggleBab(tab,mapel,sb) {
+async function toggleBab(tab,mapel,sb){
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
   if(idx>-1) sel.splice(idx,1);
-  else {
-    if(tab==='bundling'&&sel.length>=bundlingMax) return;
-    sel.push({mapel,subbab:sb});
-  }
+  else{if(tab==='bundling'&&sel.length>=bundlingMax)return;sel.push({mapel,subbab:sb});}
   if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
   await renderBabs(tab); updateOrder();
 }
 
-function updateSelectedPreview(tab) {
+function updateSelectedPreview(tab){
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const preview=tab==='alacarte'?$('previewAlacarte'):$('previewBundling');
   const count=tab==='alacarte'?$('countAlacarte'):$('countBundling');
   const tags=tab==='alacarte'?$('tagsAlacarte'):$('tagsBundling');
   if(!sel.length){preview.style.display='none';return;}
-  preview.style.display='block'; count.textContent=sel.length;
+  preview.style.display='block';count.textContent=sel.length;
   tags.innerHTML=sel.map(s=>`<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">${MAPEL_ICON[s.mapel]||'📚'} ${s.subbab} ✕</div>`).join('');
 }
 
 window.removeSelBab=async function(tab,mapel,sb){
   const sel=tab==='alacarte'?selAlacarte:selBundling;
   const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
-  if(idx>-1) sel.splice(idx,1);
+  if(idx>-1)sel.splice(idx,1);
   if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
   await renderBabs(tab); updateOrder();
 };
@@ -499,14 +432,16 @@ window.removeSelBab=async function(tab,mapel,sb){
 function updateQuota(){$('quotaCount').textContent=selBundling.length;$('quotaMax').textContent=bundlingMax;}
 
 window.selMapel=async function(tab,el,mapel){
-  if(tab==='alacarte') curMapelAlacarte=mapel; else curMapelBundling=mapel;
-  renderMapelGrid(tab); await renderBabs(tab);
+  const segData=allSegmen.find(s=>s.id===selectedSegmen);
+  const mapelList=segData?.mapel||[];
+  if(tab==='alacarte')curMapelAlacarte=mapel; else curMapelBundling=mapel;
+  renderMapelGrid(tab,mapelList); await renderBabs(tab);
 };
 
 window.selBundlingPkg=function(el,max,price){
   document.querySelectorAll('#bundlingPkgs .pkg').forEach(p=>p.className='pkg');
   el.className='pkg selected'; bundlingMax=max; bundlingPrice=price;
-  if(selBundling.length>max) selBundling=selBundling.slice(0,max);
+  if(selBundling.length>max)selBundling=selBundling.slice(0,max);
   curPkg={name:`Bundling ${max} sub-bab`,price,type:'bundling'};
   renderBabs('bundling'); updateOrder();
 };
@@ -530,33 +465,31 @@ window.switchTab=async function(el,tab){
 // ── REFERRAL ──
 function applyRefUI(){
   $('refBox').className='ref-box unlocked';
-  $('refStatus').className='ref-status ok'; $('refStatus').textContent='Diskon aktif ✓';
+  $('refStatus').className='ref-status ok';$('refStatus').textContent='Diskon aktif ✓';
   $('refInputRow').style.display='none';
-  $('refHint').className='ref-ok-msg'; $('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
+  $('refHint').className='ref-ok-msg';$('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
   updateOrder();
 }
-
 window.applyRef=async function(){
   if(currentUserData?.hasUsedReferral){$('refHint').style.color='#C0392B';$('refHint').textContent='Kamu sudah pernah pakai kode referral.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';},3000);return;}
   const code=$('refCode').value.trim().toUpperCase();
-  if(!code) return;
-  $('btnApply').disabled=true; $('btnApply').textContent='...';
+  if(!code)return;
+  $('btnApply').disabled=true;$('btnApply').textContent='...';
   try{
     const snap=await getDocs(query(collection(db,'users'),where('referralCode','==',code)));
     if(!snap.empty){discApplied=true;validRefCode=code;applyRefUI();}
     else{$('refHint').style.color='#C0392B';$('refHint').textContent='Kode tidak ditemukan.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';$('refStatus').textContent='Belum dipakai';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';},2500);}
   }catch(e){$('refHint').style.color='#C0392B';$('refHint').textContent='Gagal verifikasi.';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';}
 };
-
-if(discApplied && validRefCode) setTimeout(applyRefUI, 500);
+if(discApplied&&validRefCode) setTimeout(applyRefUI,500);
 
 // ── UPDATE ORDER ──
 function updateOrder(){
-  const base=curPkg.price, disc=discApplied?Math.round(base*0.5):0, total=base-disc;
+  const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
   let subbabLabel='';
-  if(curPkg.type==='alacarte'&&selAlacarte.length) subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
-  else if(curPkg.type==='bundling'&&selBundling.length) subbabLabel=selBundling.map(s=>s.subbab).join(', ');
-  else if(curPkg.type==='bulanan') subbabLabel='Semua sub-bab';
+  if(curPkg.type==='alacarte'&&selAlacarte.length)subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
+  else if(curPkg.type==='bundling'&&selBundling.length)subbabLabel=selBundling.map(s=>s.subbab).join(', ');
+  else if(curPkg.type==='bulanan')subbabLabel='Semua sub-bab';
   $('orderName').textContent=curPkg.name;
   $('orderSubbab').textContent=subbabLabel;
   $('orderBase').textContent='Rp '+base.toLocaleString('id');
@@ -567,7 +500,7 @@ function updateOrder(){
 
 // ── BAYAR ──
 window.doPay=async function(){
-  const btn=$('btnPay'); $('warnMsg').style.display='none';
+  const btn=$('btnPay');$('warnMsg').style.display='none';
   if(curPkg.type==='alacarte'&&selAlacarte.length===0){$('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab.';$('warnMsg').style.display='block';return;}
   if(curPkg.type==='bundling'&&selBundling.length===0){$('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling.';$('warnMsg').style.display='block';return;}
   const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
@@ -575,23 +508,23 @@ window.doPay=async function(){
   const referredBy=validRefCode||currentUserData?.referredBy||null;
   const orderId='CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
   let subBabDibeli=[];
-  if(curPkg.type==='alacarte') subBabDibeli=selAlacarte.map(s=>s.subbab);
-  else if(curPkg.type==='bundling') subBabDibeli=selBundling.map(s=>s.subbab);
+  if(curPkg.type==='alacarte')subBabDibeli=selAlacarte.map(s=>s.subbab);
+  else if(curPkg.type==='bundling')subBabDibeli=selBundling.map(s=>s.subbab);
   else subBabDibeli=['__premium__'];
-  btn.disabled=true; btn.textContent='Memproses...';
+  btn.disabled=true;btn.textContent='Memproses...';
   try{
     await addDoc(collection(db,'orders'),{uid:currentUser.uid,email:currentUser.email,segmen:selectedSegmen,paket:curPkg.name,tipe:curPkg.type,subBabDibeli,hargaBase:base,diskon:disc,total,refCode:referredBy,komisi,midtransOrderId:orderId,status:'pending',createdAt:serverTimestamp()});
     if(referredBy&&discApplied&&!currentUserData?.hasUsedReferral){await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});if(currentUserData)currentUserData.hasUsedReferral=true;}
     const res=await fetch('/api/create-transaction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:`${selectedSegmen} - ${curPkg.name}`})});
     const data=await res.json();
-    if(!data.token) throw new Error(JSON.stringify(data.error));
+    if(!data.token)throw new Error(JSON.stringify(data.error));
     window.snap.pay(data.token,{
       onSuccess:async function(){
         if(curPkg.type==='bulanan'){const exp=new Date();exp.setMonth(exp.getMonth()+1);await updateDoc(doc(db,'users',currentUser.uid),{plan:'premium',expiredAt:exp,subBabAkses:['__premium__']});}
         else{await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});}
         if(referredBy){const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});}
         $('successSubbab').textContent=curPkg.type==='bulanan'?'Semua sub-bab sudah terbuka!':`Sub-bab aktif: ${subBabDibeli.join(', ')}`;
-        $('mainView').style.display='none'; $('successView').style.display='block';
+        $('mainView').style.display='none';$('successView').style.display='block';
       },
       onPending:function(){$('mainView').style.display='none';$('successView').style.display='block';},
       onError:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Pembayaran gagal.');},
