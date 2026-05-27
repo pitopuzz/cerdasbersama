@@ -109,6 +109,7 @@ tr:last-child td{border-bottom:none}
     <button class="tab" onclick="switchTab(this,'users')">👥 Users</button>
     <button class="tab" onclick="switchTab(this,'tambahUser')">➕ Tambah User</button>
     <button class="tab" onclick="switchTab(this,'pencairan')">💸 Pencairan</button>
+    <button class="tab" id="tabKodePromo" onclick="switchTab(this,'kodePromo')">🏷️ Kode Promo</button>
   </div>
 
   <!-- TRANSAKSI -->
@@ -203,6 +204,34 @@ tr:last-child td{border-bottom:none}
       </table>
     </div>
   </div>
+
+  <!-- KODE PROMO -->
+  <div id="kodePromo" style="display:none">
+    <div class="card">
+      <div class="card-title">
+        <span>🏷️ Kode Promo Campaign</span>
+        <button class="btn-sm green" onclick="loadKodePromo()">↻ Refresh</button>
+      </div>
+      <div style="background:#F5F3EE;border-radius:12px;padding:1rem;margin-bottom:1rem">
+        <div style="font-size:13px;font-weight:800;margin-bottom:12px">➕ Buat Kode Promo Baru</div>
+        <div id="alertKodePromo" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:12px"></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+          <div class="field" style="margin-bottom:0"><label>Kode</label><input type="text" id="kpCode" placeholder="CB-KOCAK01" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"/></div>
+          <div class="field" style="margin-bottom:0"><label>Email Owner (dapat komisi)</label><input type="email" id="kpOwnerEmail" placeholder="kocak@gmail.com"/></div>
+          <div class="field" style="margin-bottom:0"><label>Diskon %</label><input type="number" id="kpDiscount" placeholder="30" min="1" max="100"/></div>
+          <div class="field" style="margin-bottom:0"><label>Komisi %</label><input type="number" id="kpKomisi" placeholder="25" min="0" max="100"/></div>
+          <div class="field" style="margin-bottom:0"><label>Kuota (kosong=unlimited)</label><input type="number" id="kpKuota" placeholder="100" min="1"/></div>
+        </div>
+        <button class="btn-main" id="btnBuatKode" onclick="buatKodePromo()" style="margin-top:12px">🏷️ Buat Kode</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Kode</th><th>Owner</th><th>Diskon</th><th>Komisi</th><th>Kuota</th><th>Terpakai</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="kodePromoBody"><tr><td colspan="8" class="loading">Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL EDIT USER -->
@@ -240,7 +269,7 @@ tr:last-child td{border-bottom:none}
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
   Timestamp, query, orderBy, where, arrayUnion, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -532,7 +561,7 @@ window.hapusOrder = async function(orderId) {
 window.switchTab = function(el, tab) {
   document.querySelectorAll('.tab').forEach(t=>t.className='tab');
   el.className='tab active';
-  ['transaksi','users','tambahUser','pencairan'].forEach(t=>$(t).style.display='none');
+  ['transaksi','users','tambahUser','pencairan','kodePromo'].forEach(t=>$(t).style.display='none');
   $(tab).style.display='block';
 };
 
@@ -548,6 +577,115 @@ function showToast(msg, isErr=false) {
   t.style.display = 'block';
   setTimeout(() => t.style.display='none', 3500);
 }
+
+// ── KODE PROMO ──
+let allKodePromo = [];
+
+window.loadKodePromo = async function() {
+  if (!isSuperAdmin) return;
+  $('kodePromoBody').innerHTML = '<tr><td colspan="8" class="loading">Memuat...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db,'promoCodes'), orderBy('createdAt','desc')));
+    allKodePromo = snap.docs.map(d => ({...d.data(), docId:d.id}));
+    renderKodePromo();
+  } catch(e) {
+    $('kodePromoBody').innerHTML = `<tr><td colspan="8" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`;
+  }
+};
+
+function renderKodePromo() {
+  const tbody = $('kodePromoBody');
+  if (!allKodePromo.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:2rem">Belum ada kode promo.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = allKodePromo.map(k => {
+    const kuotaStr = k.kuota ? `${k.usedCount||0} / ${k.kuota}` : `${k.usedCount||0} / ∞`;
+    const kuotaHabis = k.kuota && (k.usedCount||0) >= k.kuota;
+    return `<tr>
+      <td style="font-family:monospace;font-weight:800;color:#1a6b4a">${k.code}</td>
+      <td style="font-size:12px">${k.ownerEmail||'–'}</td>
+      <td style="font-weight:700;color:#E24B4A">${k.discount}%</td>
+      <td style="font-weight:700;color:#1a6b4a">${k.komisi}%</td>
+      <td style="font-size:12px">${k.kuota ? k.kuota+' pakai' : 'Unlimited'}</td>
+      <td style="font-size:12px">${kuotaStr}${kuotaHabis?'<div style="font-size:10px;color:#E24B4A;font-weight:700">⚠️ Habis</div>':''}</td>
+      <td><span class="badge ${k.aktif&&!kuotaHabis?'paid':'pending'}">${k.aktif&&!kuotaHabis?'Aktif':'Nonaktif'}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-sm ${k.aktif?'red':'green'}" onclick="toggleKodePromo('${k.docId}',${k.aktif})">${k.aktif?'Nonaktifkan':'Aktifkan'}</button>
+          <button class="btn-sm red" onclick="hapusKodePromo('${k.docId}','${k.code}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.buatKodePromo = async function() {
+  if (!isSuperAdmin) { showToast('Hanya super admin!', true); return; }
+  const code       = $('kpCode').value.trim().toUpperCase();
+  const ownerEmail = $('kpOwnerEmail').value.trim();
+  const discount   = parseInt($('kpDiscount').value);
+  const komisi     = parseInt($('kpKomisi').value);
+  const kuotaVal   = $('kpKuota').value.trim();
+  const kuota      = kuotaVal ? parseInt(kuotaVal) : null;
+
+  if (!code || !discount || isNaN(komisi)) {
+    showAlertKP('Kode, diskon, dan komisi wajib diisi!', true); return;
+  }
+
+  // Cek duplikat kode
+  const existing = await getDocs(query(collection(db,'promoCodes'), where('code','==',code)));
+  if (!existing.empty) { showAlertKP('Kode sudah ada!', true); return; }
+
+  // Cari ownerUid dari email
+  let ownerUid = null;
+  if (ownerEmail) {
+    const userSnap = await getDocs(query(collection(db,'users'), where('email','==',ownerEmail)));
+    if (!userSnap.empty) ownerUid = userSnap.docs[0].data().uid;
+  }
+
+  const btn = $('btnBuatKode');
+  btn.disabled = true; btn.textContent = '⏳...';
+  try {
+    await addDoc(collection(db,'promoCodes'), {
+      code, ownerEmail: ownerEmail||null, ownerUid,
+      discount, komisi, kuota, usedCount: 0,
+      aktif: true, createdAt: serverTimestamp(),
+    });
+    showAlertKP(`✅ Kode ${code} berhasil dibuat!`, false);
+    ['kpCode','kpOwnerEmail','kpDiscount','kpKomisi','kpKuota'].forEach(id => $(id).value='');
+    await loadKodePromo();
+  } catch(e) { showAlertKP('Gagal: '+e.message, true); }
+  btn.disabled=false; btn.textContent='🏷️ Buat Kode';
+};
+
+window.toggleKodePromo = async function(docId, isAktif) {
+  try {
+    await updateDoc(doc(db,'promoCodes',docId), { aktif: !isAktif });
+    showToast(`✅ Kode ${isAktif?'dinonaktifkan':'diaktifkan'}!`);
+    await loadKodePromo();
+  } catch(e) { showToast('Gagal: '+e.message, true); }
+};
+
+window.hapusKodePromo = async function(docId, code) {
+  if (!confirm(`Hapus kode ${code} secara permanen?`)) return;
+  try {
+    await deleteDoc(doc(db,'promoCodes',docId));
+    showToast('✅ Kode berhasil dihapus!');
+    await loadKodePromo();
+  } catch(e) { showToast('Gagal: '+e.message, true); }
+};
+
+function showAlertKP(msg, isErr) {
+  const el = $('alertKodePromo');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = isErr ? '#FCEBEB' : '#E8F5EE';
+  el.style.color = isErr ? '#A32D2D' : '#085041';
+  el.style.border = `1px solid ${isErr?'#fdd':'#b8e6d0'}`;
+  setTimeout(() => el.style.display='none', 4000);
+}
+
 </script>
 </body>
 </html>
