@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin SNBT PTN — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Plus Jakarta Sans',sans-serif; background:#faf8f5; color:#1a1714; min-height:100vh; }
+    nav { background:#fff; border-bottom:1px solid #e8e4dc; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .nav-logo { font-weight:800; font-size:17px; color:#C0392B; }
+    .nav-logo span { color:#1a1714; }
+    main { max-width:900px; margin:0 auto; padding:28px 20px 80px; }
+    .page-title { font-size:22px; font-weight:900; letter-spacing:-0.5px; margin-bottom:4px; }
+    .page-sub { font-size:13px; color:#7a7168; margin-bottom:28px; font-weight:500; }
+    .tabs { display:flex; gap:4px; background:#f5f3ef; padding:4px; border-radius:12px; margin-bottom:24px; flex-wrap:wrap; }
+    .tab { padding:9px 18px; border-radius:9px; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; background:none; color:#7a7168; transition:all 0.18s; white-space:nowrap; }
+    .tab.active { background:#fff; color:#C0392B; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    .card { background:#fff; border:1px solid #e8e4dc; border-radius:20px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:16px; }
+    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom:2px solid #fff5f5; padding-bottom:10px; }
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:11px; font-weight:800; color:#7a7168; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+    .field input, .field select, .field textarea { width:100%; border:1.5px solid #e8e4dc; border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:#1a1714; background:#fafaf8; outline:none; transition:border-color 0.18s; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color:#C0392B; background:#fff; }
+    .field textarea { resize:vertical; min-height:80px; line-height:1.5; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+    /* Info box subtes */
+    .subtes-info { background:#fff8e6; border:1px solid #f5d06a; border-radius:12px; padding:14px 16px; margin-bottom:16px; display:none; }
+    .subtes-info.show { display:flex; gap:16px; flex-wrap:wrap; }
+    .subtes-info-item { display:flex; flex-direction:column; gap:2px; }
+    .subtes-info-item .val { font-size:16px; font-weight:800; color:#8a5e00; }
+    .subtes-info-item .lbl { font-size:11px; font-weight:700; color:#b07d00; text-transform:uppercase; }
+
+    .opsi-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .opsi-key { width:36px; height:36px; border-radius:50%; background:#f5f3ef; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:#7a7168; flex-shrink:0; }
+    .opsi-row input { flex:1; }
+    .opsi-row.jawaban .opsi-key { background:#C0392B; color:#fff; }
+    .jawaban-select { display:flex; gap:8px; flex-wrap:wrap; }
+    .jaw-btn { width:40px; height:40px; border-radius:50%; border:2px solid #e8e4dc; background:#fff; font-size:13px; font-weight:800; color:#7a7168; cursor:pointer; transition:all 0.18s; }
+    .jaw-btn:hover, .jaw-btn.active { border-color:#C0392B; background:#C0392B; color:#fff; }
+    .btn { padding:12px 24px; border-radius:50px; border:none; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; transition:all 0.18s; }
+    .btn.primary { background:#C0392B; color:#fff; }
+    .btn.primary.full { width:100%; margin-top:10px; }
+    .btn.primary:hover { background:#a93226; transform:translateY(-1px); }
+    .btn.secondary { background:#f5f3ef; color:#1a1714; border:1.5px solid #e8e4dc; font-size:13px; padding:10px 18px; }
+    .btn.secondary:hover { background:#e8e4dc; }
+    .btn.danger { background:#fef2f2; color:#C0392B; border:1.5px solid #fdd; padding:10px 14px; }
+    .alert { border-radius:12px; padding:12px 16px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
+    .alert.ok { background:#edfaf3; border:1px solid #b8e6d0; color:#1a7a4a; }
+    .alert.err { background:#fef2f2; border:1px solid #fdd; color:#C0392B; }
+    .alert.info { background:#fff8e6; border:1px solid #f5d06a; color:#8a5e00; }
+    #majemukContainer { background:#fafaf8; padding:16px; border-radius:12px; border:1.5px dashed #e8e4dc; }
+    .upload-zone { border:2px dashed #e8e4dc; border-radius:16px; padding:36px; text-align:center; cursor:pointer; transition:all 0.2s; background:#fafaf8; margin-bottom:16px; }
+    .upload-zone:hover, .upload-zone.drag { border-color:#C0392B; background:#fff5f5; }
+    .upload-zone input { display:none; }
+    .upload-icon { font-size:40px; margin-bottom:10px; }
+    .upload-title { font-size:15px; font-weight:800; margin-bottom:4px; }
+    .upload-sub { font-size:13px; color:#7a7168; font-weight:500; }
+    .log { background:#1a1714; border-radius:12px; padding:16px; font-family:monospace; font-size:12px; color:#eef0f5; max-height:260px; overflow-y:auto; display:none; margin-top:14px; }
+    .log-line { padding:2px 0; }
+    .log-line.ok { color:#3ecf8e; }
+    .log-line.err { color:#f76060; }
+    .log-line.info { color:#f5c842; }
+
+    /* Template download badge */
+    .template-hint { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#1a7a4a; background:#edfaf3; border:1px solid #b8e6d0; border-radius:8px; padding:6px 12px; margin-bottom:14px; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">· Admin SNBT PTN</span></div>
+</nav>
+
+<main>
+  <div class="page-title">Input Soal SNBT PTN</div>
+  <div class="page-sub">Kelola bank soal untuk 7 subtes SNBT PTN dengan durasi per blok yang sudah terstandar.</div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabTambahBtn" onclick="switchTab('tabTambah', this)">➕ Tambah Manual</button>
+    <button class="tab" id="tabBulkBtn" onclick="switchTab('tabBulk', this)">📊 Bulk Excel</button>
+  </div>
+
+  <!-- VIEW 1: MANUAL -->
+  <div id="tabTambah">
+    <div class="card">
+      <div class="card-title">⚙️ Subtes & Tipe Soal</div>
+      <div class="alert" id="alertManual"></div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Subtes SNBT</label>
+          <select id="fSubtes" onchange="updateSubtesInfo()">
+            <option value="Penalaran Umum">Penalaran Umum</option>
+            <option value="Pengetahuan & Pemahaman Umum">Pengetahuan & Pemahaman Umum</option>
+            <option value="Pemahaman Bacaan & Menulis">Pemahaman Bacaan & Menulis</option>
+            <option value="Pengetahuan Kuantitatif">Pengetahuan Kuantitatif</option>
+            <option value="Literasi Bahasa Indonesia">Literasi Bahasa Indonesia</option>
+            <option value="Literasi Bahasa Inggris">Literasi Bahasa Inggris</option>
+            <option value="Penalaran Matematika">Penalaran Matematika</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tipe Soal</label>
+          <select id="fTipeSoal" onchange="renderUI()">
+            <option value="pg_biasa">Pilihan Ganda Biasa (A-E, 1 Kunci)</option>
+            <option value="majemuk">Pilihan Ganda Majemuk (Benar/Salah)</option>
+            <option value="isian">Isian Singkat (Teks/Angka)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Info otomatis subtes -->
+      <div class="subtes-info show" id="subtesInfo">
+        <div class="subtes-info-item"><div class="val" id="infoUrutan">1</div><div class="lbl">Urutan Blok</div></div>
+        <div class="subtes-info-item"><div class="val" id="infoDurasi">30 menit</div><div class="lbl">Durasi</div></div>
+        <div class="subtes-info-item"><div class="val" id="infoTarget">30 soal</div><div class="lbl">Target Soal</div></div>
+        <div class="subtes-info-item"><div class="val" id="infoGroup">Tes Potensi Skolastik</div><div class="lbl">Kelompok Tes</div></div>
+      </div>
+
+      <div class="field">
+        <label>Sub-Bab / Topik</label>
+        <input type="text" id="fSub" placeholder="cth: Silogisme, Analogi Verbal, Deret Angka, dll"/>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Detail Pertanyaan</div>
+      <div class="field">
+        <label>Soal / Pertanyaan</label>
+        <textarea id="fSoal" placeholder="Tulis soal di sini..."></textarea>
+      </div>
+      <div id="dynamicUI"></div>
+      <div class="field" style="margin-top:20px;">
+        <label>Pembahasan</label>
+        <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar..."></textarea>
+      </div>
+      <button class="btn primary full" id="btnSimpan" onclick="simpanSoal()">💾 Simpan Soal SNBT</button>
+    </div>
+  </div>
+
+  <!-- VIEW 2: BULK EXCEL -->
+  <div id="tabBulk" style="display:none">
+    <div class="card">
+      <div class="card-title">📤 Upload File Excel</div>
+      <div class="alert" id="alertBulk"></div>
+
+      <div class="template-hint">
+        ✅ Kolom wajib: subtes | tipeSoal | subKategori | pertanyaan | opsiA-E | jawaban | pembahasan
+      </div>
+      <p style="font-size:13px; color:#7a7168; margin-bottom:8px;">
+        Kolom <strong>subtes</strong> harus diisi persis nama subtes SNBT (contoh: <em>Penalaran Umum</em>).
+        Sistem otomatis mengisi <strong>urutanSubtes</strong> dan <strong>durasiMenit</strong> sesuai subtes.
+        Tidak perlu mengisi kedua kolom tersebut di Excel.
+      </p>
+      <p style="font-size:12px; color:#b0a89c; margin-bottom:16px;">
+        Untuk soal majemuk, isi kolom <strong>pernyataanMajemuk</strong> dengan format:<br/>
+        <code style="background:#f5f3ef; padding:2px 6px; border-radius:4px;">Teks pernyataan 1=Benar||Teks pernyataan 2=Salah</code>
+      </p>
+
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv"/>
+        <div class="upload-icon">📊</div>
+        <div class="upload-title">Klik atau drag & drop file Excel</div>
+        <div class="upload-sub">Format: .xlsx, .xls, atau .csv</div>
+      </div>
+
+      <div id="previewWrap" style="display:none; text-align:right;">
+        <button class="btn primary" id="btnUpload">🚀 Upload <span id="countPreview">0</span> Soal ke Database</button>
+      </div>
+      <div class="log" id="bulkLog"></div>
+    </div>
+  </div>
+</main>
+
+<!-- Script 1: switchTab standalone -->
+<script>
+  function switchTab(tabId, elBtn) {
+    document.getElementById('tabTambah').style.display = 'none';
+    document.getElementById('tabBulk').style.display = 'none';
+    document.getElementById('tabTambahBtn').classList.remove('active');
+    document.getElementById('tabBulkBtn').classList.remove('active');
+    document.getElementById(tabId).style.display = 'block';
+    elBtn.classList.add('active');
+  }
+</script>
+
+<!-- Script 2: Module Firebase -->
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+  let selectedJawabanPG = '';
+  let parsedRows = [];
+
+  // Data fix subtes SNBT — urutan, durasi, target, kelompok
+  const SUBTES_CONFIG = {
+    'Penalaran Umum':                 { urutan: 1, durasi: 30, target: 30, grup: 'Tes Potensi Skolastik' },
+    'Pengetahuan & Pemahaman Umum':   { urutan: 2, durasi: 15, target: 20, grup: 'Tes Potensi Skolastik' },
+    'Pemahaman Bacaan & Menulis':      { urutan: 3, durasi: 25, target: 20, grup: 'Tes Potensi Skolastik' },
+    'Pengetahuan Kuantitatif':         { urutan: 4, durasi: 20, target: 20, grup: 'Tes Potensi Skolastik' },
+    'Literasi Bahasa Indonesia':       { urutan: 5, durasi: 42, target: 30, grup: 'Tes Literasi & Penalaran Matematika' },
+    'Literasi Bahasa Inggris':         { urutan: 6, durasi: 20, target: 20, grup: 'Tes Literasi & Penalaran Matematika' },
+    'Penalaran Matematika':            { urutan: 7, durasi: 42, target: 20, grup: 'Tes Literasi & Penalaran Matematika' },
+  };
+
+  // EVENT LISTENERS
+  document.getElementById('fileInput').addEventListener('change', function() { handleFile(this); });
+  document.getElementById('btnUpload').addEventListener('click', uploadSemuaExcel);
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('click', () => document.getElementById('fileInput').click());
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const input = document.getElementById('fileInput');
+      const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+      handleFile(input);
+    }
+  });
+
+  // Update info box saat subtes dipilih
+  window.updateSubtesInfo = function() {
+    const subtes = $('fSubtes').value;
+    const cfg = SUBTES_CONFIG[subtes];
+    if (!cfg) return;
+    $('infoUrutan').textContent = cfg.urutan;
+    $('infoDurasi').textContent = cfg.durasi + ' menit';
+    $('infoTarget').textContent = cfg.target + ' soal';
+    $('infoGroup').textContent = cfg.grup;
+    $('subtesInfo').classList.add('show');
+  };
+
+  window.setJawabanPG = function(key) {
+    selectedJawabanPG = key;
+    document.querySelectorAll('.jaw-btn').forEach(b => b.classList.toggle('active', b.textContent === key));
+    ['A','B','C','D','E'].forEach(k => {
+      const row = $('row' + k);
+      if (row) row.classList.toggle('jawaban', k === key);
+    });
+  };
+
+  window.renderUI = function() {
+    const tipe = $('fTipeSoal').value;
+    const container = $('dynamicUI');
+    container.innerHTML = '';
+    selectedJawabanPG = '';
+
+    if (tipe === 'pg_biasa') {
+      let html = '<div class="field"><label>Pilihan Jawaban</label>';
+      ['A','B','C','D','E'].forEach(k => {
+        html += '<div class="opsi-row" id="row' + k + '"><div class="opsi-key">' + k + '</div><input id="pg_' + k + '" placeholder="Teks Pilihan ' + k + '"/></div>';
+      });
+      html += '</div><div class="field"><label>Kunci Jawaban</label><div class="jawaban-select">';
+      ['A','B','C','D','E'].forEach(k => {
+        html += '<button class="jaw-btn" onclick="setJawabanPG(\'' + k + '\')">' + k + '</button>';
+      });
+      html += '</div></div>';
+      container.innerHTML = html;
+    }
+    else if (tipe === 'isian') {
+      container.innerHTML = '<div class="field"><label>Kunci Jawaban (Isian Singkat)</label><input type="text" id="isian_kunci" placeholder="Ketik jawaban pastinya..."/></div>';
+    }
+    else if (tipe === 'majemuk') {
+      container.innerHTML = '<div class="field"><label>Pernyataan Benar / Salah</label><div id="majemukContainer"></div><button class="btn secondary" onclick="tambahPernyataan()">+ Tambah Pernyataan</button></div>';
+      window.majemukCount = 0;
+      tambahPernyataan(); tambahPernyataan();
+    }
+  };
+
+  window.tambahPernyataan = function() {
+    window.majemukCount++;
+    const id = window.majemukCount;
+    const div = document.createElement('div');
+    div.className = 'opsi-row';
+    div.id = 'mjm_row_' + id;
+    div.innerHTML = `
+      <input type="text" id="mjm_teks_${id}" placeholder="Pernyataan ${id}"/>
+      <select id="mjm_kunci_${id}" style="width:120px;">
+        <option value="Benar">Benar</option>
+        <option value="Salah">Salah</option>
+      </select>
+    `;
+    const btnHapus = document.createElement('button');
+    btnHapus.className = 'btn danger';
+    btnHapus.textContent = '✕';
+    btnHapus.addEventListener('click', () => div.remove());
+    div.appendChild(btnHapus);
+    $('majemukContainer').appendChild(div);
+  };
+
+  window.simpanSoal = async function() {
+    const subtes = $('fSubtes').value;
+    const tipe = $('fTipeSoal').value;
+    const cfg = SUBTES_CONFIG[subtes];
+
+    const data = {
+      segmen: 'SNBT PTN',
+      kategori: subtes,
+      subKategori: $('fSub').value.trim(),
+      urutanSubtes: cfg.urutan,
+      durasiMenit: cfg.durasi,
+      tipeSoal: tipe,
+      pertanyaan: $('fSoal').value.trim(),
+      pembahasan: $('fPembahasan').value.trim(),
+      createdAt: serverTimestamp()
+    };
+
+    if (!data.subKategori || !data.pertanyaan || !data.pembahasan) { showAlert('alertManual','err','Form wajib diisi lengkap!'); return; }
+
+    if (tipe === 'pg_biasa') {
+      if (!selectedJawabanPG) { showAlert('alertManual','err','Pilih kunci jawaban!'); return; }
+      data.opsi = { A: $('pg_A').value, B: $('pg_B').value, C: $('pg_C').value, D: $('pg_D').value, E: $('pg_E').value };
+      data.jawaban = selectedJawabanPG;
+    } else if (tipe === 'isian') {
+      if (!$('isian_kunci').value.trim()) { showAlert('alertManual','err','Jawaban isian kosong!'); return; }
+      data.jawabanIsian = $('isian_kunci').value.trim();
+    } else if (tipe === 'majemuk') {
+      const rows = document.querySelectorAll('#majemukContainer .opsi-row');
+      data.pernyataanMajemuk = [];
+      rows.forEach(row => {
+        const id = row.id.split('_')[2];
+        const teks = $('mjm_teks_' + id).value.trim();
+        const kunci = $('mjm_kunci_' + id).value;
+        if (teks) data.pernyataanMajemuk.push({ teks, kunci });
+      });
+    }
+
+    const btn = $('btnSimpan'); btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+    try {
+      await addDoc(collection(db, 'soal'), data);
+      showAlert('alertManual','ok','✅ Soal SNBT berhasil disimpan! (Blok ' + cfg.urutan + ' — ' + subtes + ')');
+      $('fSoal').value = ''; $('fPembahasan').value = ''; $('fSub').value = '';
+      renderUI();
+    } catch(err) { showAlert('alertManual','err','❌ Gagal: ' + err.message); }
+    btn.disabled = false; btn.textContent = '💾 Simpan Soal SNBT';
+  };
+
+  function showAlert(id, type, msg) {
+    const el = $(id); el.textContent = msg; el.className = 'alert ' + type; el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 5000);
+  }
+
+  function handleFile(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'binary' });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        parsedRows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+        // Validasi kolom subtes
+        const invalid = parsedRows.filter(r => !SUBTES_CONFIG[String(r.subtes || '').trim()]);
+        if (invalid.length > 0) {
+          showAlert('alertBulk','err', `⚠️ ${invalid.length} baris punya nilai "subtes" tidak dikenal. Cek kembali nama subtesnya.`);
+        }
+
+        $('countPreview').textContent = parsedRows.length;
+        $('previewWrap').style.display = 'block';
+        showAlert('alertBulk','info','✅ ' + parsedRows.length + ' baris terdeteksi. Klik Upload untuk melanjutkan.');
+      } catch(err) { showAlert('alertBulk','err','Gagal membaca file: ' + err.message); }
+    };
+    reader.readAsBinaryString(file);
+  }
+
+  async function uploadSemuaExcel() {
+    if (!confirm('Mulai upload ' + parsedRows.length + ' soal SNBT ke database?')) return;
+    showBulkLog(); setLoadingBulk(true);
+    let sukses = 0, gagal = 0;
+
+    for (let i = 0; i < parsedRows.length; i++) {
+      const r = parsedRows[i];
+      try {
+        const subtes = String(r.subtes || '').trim();
+        const cfg = SUBTES_CONFIG[subtes];
+        if (!cfg) throw new Error('Nama subtes tidak dikenal: "' + subtes + '"');
+
+        const tipe = String(r.tipeSoal || 'pg_biasa').trim().toLowerCase();
+        const data = {
+          segmen: 'SNBT PTN',
+          kategori: subtes,
+          subKategori: String(r.subKategori || '').trim(),
+          // Otomatis dari SUBTES_CONFIG — tidak perlu diisi di Excel
+          urutanSubtes: cfg.urutan,
+          durasiMenit: cfg.durasi,
+          tipeSoal: tipe,
+          pertanyaan: String(r.pertanyaan || '').trim(),
+          pembahasan: String(r.pembahasan || '').trim(),
+          createdAt: serverTimestamp()
+        };
+
+        if (tipe === 'pg_biasa') {
+          data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
+          data.jawaban = String(r.jawaban||'').trim().toUpperCase();
+        } else if (tipe === 'isian') {
+          data.jawabanIsian = String(r.jawabanIsian||'').trim();
+        } else if (tipe === 'majemuk') {
+          data.pernyataanMajemuk = [];
+          if (r.pernyataanMajemuk) {
+            String(r.pernyataanMajemuk).split('||').forEach(p => {
+              const parts = p.split('=');
+              if (parts.length === 2) data.pernyataanMajemuk.push({ teks: parts[0].trim(), kunci: parts[1].trim() });
+            });
+          }
+        }
+
+        await addDoc(collection(db, 'soal'), data);
+        sukses++;
+        logBulk('✅ Soal ' + (i+1) + ' [' + subtes + ' — ' + tipe + '] berhasil.', 'ok');
+      } catch(err) { gagal++; logBulk('❌ Soal ' + (i+1) + ' Gagal: ' + err.message, 'err'); }
+    }
+
+    logBulk('\n✨ Selesai! ' + sukses + ' berhasil, ' + gagal + ' gagal.', sukses === parsedRows.length ? 'ok' : 'info');
+    setLoadingBulk(false);
+  }
+
+  function showBulkLog() { const log = $('bulkLog'); log.style.display='block'; log.innerHTML=''; }
+  function logBulk(msg, type='') {
+    const log = $('bulkLog'); const line = document.createElement('div');
+    line.className = 'log-line ' + type; line.textContent = msg;
+    log.appendChild(line); log.scrollTop = log.scrollHeight;
+  }
+  function setLoadingBulk(loading) {
+    $('btnUpload').disabled = loading;
+    $('btnUpload').innerHTML = loading ? '⏳ Memproses...' : '🚀 Upload <span id="countPreview">' + parsedRows.length + '</span> Soal ke Database';
+  }
+
+  // Init
+  updateSubtesInfo();
+  renderUI();
+</script>
+</body>
+</html>
