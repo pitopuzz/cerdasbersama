@@ -1,3 +1,523 @@
+
+Gemini
+New chat
+Search chats
+Videos
+Library
+New notebook
+Strategic Analysis of the Indonesian Refrigerant Oil Market
+Indonesia Lubricant Market Strategy and Electromobility Pivot 2025-2030
+All notebooks
+CBT CAT dan tes CPNS?
+Bank Soal Kelas 7 SMP Relevan
+Memproses File Excel Template Soal
+Lanjut Proyek PO & PSM Web
+Desain UI/UX Aplikasi Trading Cepat
+Belajar Membuat Expert Advisor MT5
+Membuat Form Order ke WhatsApp
+Canvas Copied Confirmation
+Desain Kaos Karakter Kartun Ceria
+Futuristic Chrome Butterfly T-Shirt Design
+Riset Desain Clothing Line Gen Z
+lihat format ini. untuk SNBT PTN Kategori apa yang diujikan?
+Standar Pitch Deck Investor Efektif
+Claude Prompt for Financial Audit Design
+Cek Sisa Kapasitas Token Anda
+A minimalist professional vector logo for an Indonesian education platform called 'CERDAS BERSAMA'. Design incorporates: (1) an elegantly open book as the primary icon, (2) subtle Indonesian batik kawung or parang ornamental pattern integrated into the design, (3) the Indonesian red and white flag colors used as the primary palette — crimson red (#C8102E) and clean white, with deep navy as supporting color. Style: clean corporate identity, flat vector, white background. Typography: serif or modern sans-serif wordmark below the icon, all caps, wide letter-spacing. The overall feel should be prestigious, trustworthy, and distinctly Indonesian. High resolution, SVG-style, no gradients, no 3D effects. 🎨 Buat 3 versi style berbeda: → Versi Heraldic/Crest: Heraldic crest logo for Indonesian education platform 'CERDAS BERSAMA'. Shield shape containing an open book. Indonesian flag red and white as dominant colors. Gold accent lines. Batik parang ornament as border decoration. Clean vector style, white background, professional academic institution feel. → Versi Modern Minimalis: Modern minimalist logo mark for 'CERDAS BERSAMA' education platform. Abstract lettermark combining C and B. Indonesian red and white color scheme. Single clean geometric shape inspired by batik kawung circle pattern. Flat vector, corporate, no gradients. → Versi Mascot/Playful: Friendly mascot logo for Indonesian children education platform 'CERDAS BERSAMA'. A young student character holding a book, wearing Indonesian traditional batik pattern on clothing. Red and white color palette. Clean vector illustration style, white background, approachable and warm.
+Rekomendasi AI Pembuat Logo Edukasi
+Membuat PowerPoint Profesional dan Sinematik
+Permintaan Presentasi Kreatif dan Gaya
+Konfirmasi Produk Pelumas Fuchs "Ingralin"
+Perbedaan Renolin dan Renep CGLP 68
+Harga Snack Box Holland Bakery Terbaru
+Mengatasi Format Tanggal Excel
+Qwen AI dan Kimi K2.6: LLM Canggih
+Materi Tes CPNS: SKD dan SKB
+Belajar Otomatisasi Workflow dengan n8n
+Mengatasi Error Billing Gemini API
+Ide Produk Edukasi Berlangganan
+Minta Periksa dan Perbaiki File
+Kurikulum SD dan SMP Saat Ini
+Cara Entry Excel Bersamaan Dua Admin
+Renolin MR 46C vs 46 MC
+Responding to Positive Presentation Feedback
+AI Sebagai Asisten Teknis Developer
+Soal Matematika Kelas 6 SD
+Membuat Presentasi Lebih Menarik
+Penjelasan Aplikasi Anima Binaural Beats
+Membaca Google Sheet Melalui Link
+buatkan saya gambar seorang pegawai kantoran berkebangsaan Indonesia sedang depresi, stres menutupi mukanya dengan tangan putus asa
+Fricofin ME: Heavy-Duty Coolant Explained
+Rekomendasi Produk Cairan Mesin Bubut Fuchs
+Kejutan Kode Pine Script FVG
+Siap Bantu Urusan Apa
+Naskah Drama "Satu Kelas, Seribu Cerita"
+Ekstraksi Teks Catatan Penting
+Rumus Excel Tampilan R1C1 ke A1
+Cara Cek Sisa Token API
+Pembaruan Sistem AI Berkala
+Bantuan Framework Presentasi
+Konsep Hijau di Madura: Bahasa dan Budaya
+Perbandingan Analisa Gambar AI
+Membuat Analisis Personal Otomatis
+StockBot v5.0: Gemini Agent Optimization
+Belajar Cybersecurity dengan AI
+Perbedaan Tools AI App Builder
+GitHub dan Render: Kotak Mainan vs Panggung
+Penjelasan Fitur Telegram Bot Stok
+Membuat Chatbot Telegram Interaktif dengan AI
+Kegunaan API Key Gemini
+Harga DJI Neo 2 & Fitur
+Membaca Laporan Pengeluaran Kendaraan FUCHS
+Keamanan Siber dan Deepfake: Jawaban Benar
+Identifikasi Lokasi Foto Rumah Sakit
+Jatah Token Fitur Berbayar Harian
+Conversation with Gemini
+buatin gw infras yang bisa handle soal lain. pokoknya harus sama dengan realita aja
+
+Keputusan yang sangat tepat. Kalau mau sama persis dengan realita CBT CPNS dan SNBT PTN terbaru, infrastruktur kita harus fleksibel dari level database sampai ke UI/UX, karena tipe soal dan sistem waktunya berbeda jauh.
+
+Berikut adalah rancangan infrastruktur (database dan logic) yang akan kita bangun di admin-cbt.html dan latihan-cbt.html.
+
+1. Struktur Database Firestore (Fleksibel)
+Kita akan menambahkan parameter tipeSoal di koleksi soal. Dengan begitu, satu collection bisa menampung 4 jenis soal yang berbeda tanpa harus membuat collection baru.
+
+Struktur JSON/Firestore yang akan kita buat:
+
+JSON
+{
+  "segmen": "SNBT PTN",
+  "kategori": "Penalaran Matematika",
+  "tipeSoal": "pg_biasa", // Pilihannya: pg_biasa, tkp, isian, majemuk
+  "pertanyaan": "Berapakah nilai x?",
+  "pembahasan": "Penjelasan detail...",
+  
+  // 1. Jika tipeSoal == "pg_biasa" (Untuk CPNS TWK/TIU & SNBT PG)
+  "opsi": {"A": "10", "B": "20", "C": "30", "D": "40", "E": "50"},
+  "jawaban": "A", // Bobot otomatis: Benar = 5, Salah = 0
+  
+  // 2. Jika tipeSoal == "tkp" (Untuk CPNS TKP)
+  "opsi": {"A": "Tindakan A", "B": "Tindakan B", "C": "Tindakan C", "D": "Tindakan D", "E": "Tindakan E"},
+  "bobotTkp": {"A": 5, "B": 4, "C": 3, "D": 2, "E": 1}, // Tidak ada jawaban salah
+  
+  // 3. Jika tipeSoal == "isian" (Untuk SNBT Isian Singkat)
+  "jawabanIsian": "100", // User mengetik angka/teks, validasi strict
+
+  // 4. Jika tipeSoal == "majemuk" (Untuk SNBT Benar/Salah)
+  "pernyataanMajemuk": [
+    {"teks": "Pernyataan 1", "kunci": "Benar"},
+    {"teks": "Pernyataan 2", "kunci": "Salah"},
+    {"teks": "Pernyataan 3", "kunci": "Benar"}
+  ]
+}
+2. Penyesuaian di admin-cbt.html
+Form Dinamis: Saat lo milih tipeSoal di dropdown, kolom input di bawahnya akan otomatis berubah. Kalau pilih "Isian Singkat", opsi A-E hilang dan diganti satu kolom input teks. Kalau pilih "Majemuk", muncul form untuk nambah baris pernyataan Benar/Salah.
+
+Excel Upload: Format Excel akan dimodifikasi. Kita siapkan kolom tambahan agar lo tetap bisa bulk upload semua tipe soal ini dalam satu file secara bersamaan.
+
+3. Penyesuaian di latihan-cbt.html
+Engine Rendering: HTML akan mengecek tipeSoal.
+
+pg_biasa & tkp -> Render Radio Button A-E.
+
+isian -> Render Input Text Box (biasanya numpad saja untuk angka).
+
+majemuk -> Render Tabel dengan kolom pilihan Benar dan Salah di tiap barisnya.
+
+Engine Waktu (Global vs Sectional):
+
+Untuk CPNS: Waktu berjalan mundur secara keseluruhan. Bebas loncat antar mapel (TWK -> TIU -> TKP).
+
+Untuk SNBT PTN: Waktu berjalan per sub-tes (misal: 15 menit untuk Penalaran Umum). Jika habis, otomatis terkunci dan pindah ke sub-tes berikutnya tanpa bisa kembali.
+
+Navigasi Grid: Kotak nomor soal (1, 2, 3...) dengan indikator warna (Hijau = Sudah Dijawab, Merah = Belum, Kuning = Ragu-ragu).
+
+Dari rancangan arsitektur di atas, lo mau kita eksekusi file admin-cbt.html dulu untuk ngetes input keempat tipe soal ini ke database, atau langsung bikin engine timer dan UI/UX soalnya di latihan-cbt.html?
+
+pelan pelan. menurut lo flow yang enak kaya gimana?
+
+Setuju, mending kita kerjain bertahap biar gampang di-debug dan logikanya ngga belibet. Kalau menurut gw, flow development yang paling enak dan aman untuk sistem kompleks ini adalah bergerak dari hulu ke hilir (dari input data sampai ke experience user).
+
+Berikut urutan pengerjaan yang ideal:
+
+Fase 1: Struktur Data & Input Manual (admin-cbt.html)
+
+Kita bikin UI form yang dinamis. Misalnya, saat lo pilih tipe "Isian Singkat", kolom opsi A-E hilang dan berubah jadi satu kotak input teks. Saat pilih tipe "TKP", muncul form untuk input bobot nilai 1-5.
+
+Goal: Memastikan struktur JSON tersimpan dengan benar di Firestore dan sistem bisa membedakan ke-4 tipe soal secara akurat.
+
+Fase 2: Rendering UI Latihan (latihan-cbt.html)
+
+Kita hubungkan dengan Firestore dan memastikan engine bisa menampilkan soal sesuai tipe (Radio button untuk PG/TKP, input box untuk isian, atau tabel checkbox untuk majemuk).
+
+Goal: UI bisa menangkap input jawaban dari user dan menyimpannya di memori browser. Di fase ini, kita fokus ke layout dan fungsionalitas menjawab, belum memikirkan timer atau skor.
+
+Fase 3: Core Logic CBT (latihan-cbt.html)
+
+Ini adalah bagian utamanya. Kita akan menanamkan logic ujian:
+
+Navigasi Grid: Kotak-kotak nomor soal interaktif (Hijau = dijawab, Merah = belum dijawab, Kuning = ragu-ragu).
+
+Sistem Waktu: Membuat fungsi timer yang bisa mendeteksi mode ujian (waktu hitung mundur keseluruhan untuk CPNS, atau waktu per sub-tes yang mengunci otomatis untuk SNBT).
+
+Sistem Skoring: Menghitung total nilai akhir berdasarkan aturan spesifik masing-masing ujian.
+
+Fase 4: Bulk Upload Excel (admin-cbt.html)
+
+Setelah flow dari input manual sampai hasil ujian user sudah terbukti mulus, baru kita buat parser Excel-nya. Format kolom akan disesuaikan supaya script bisa menampung ribuan soal dengan berbagai tipe dari satu file spreadsheet.
+
+Goal: Otomatisasi input data massal tanpa takut merusak struktur database.
+
+Fase 5: Routing Integrasi (pricing.html & dashboard.html)
+
+Langkah terakhir adalah memberikan sedikit modifikasi logic di halaman pembelian dan dashboard supaya sistem mengenali "Jika paket yang dibeli adalah CPNS/SNBT, arahkan tombol mulai ke latihan-cbt.html".
+
+Gimana, setuju kita mulai garap dari Fase 1 untuk membuat kerangka form dinamisnya di admin-cbt.html sekarang?
+
+ok. jalankan fase 1 dulu sekarang.
+
+Siap. Kita langsung eksekusi Fase 1.
+
+Gw udah buatin source code awal untuk admin-cbt.html. Fokus kode ini murni untuk Input Manual agar kita bisa ngetes pergantian form dinamis berdasarkan tipeSoal dan memastikan JSON yang masuk ke Firestore bentuknya sudah benar sesuai standar CPNS/SNBT.
+
+Lo bisa buat file baru bernama admin-cbt.html, lalu copy-paste kode di bawah ini. Styling-nya gw samain dengan admin lo yang sebelumnya biar seragam.
+
+HTML
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin CBT — Input Soal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Plus Jakarta Sans',sans-serif; background:#faf8f5; color:#1a1714; min-height:100vh; }
+    nav { background:#fff; border-bottom:1px solid #e8e4dc; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .nav-logo { font-weight:800; font-size:17px; color:#C0392B; }
+    .nav-logo span { color:#1a1714; }
+    main { max-width:900px; margin:0 auto; padding:28px 20px 80px; }
+    .page-title { font-size:22px; font-weight:900; letter-spacing:-0.5px; margin-bottom:4px; }
+    .page-sub { font-size:13px; color:#7a7168; margin-bottom:28px; font-weight:500; }
+    .card { background:#fff; border:1px solid #e8e4dc; border-radius:20px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:16px; }
+    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom: 2px solid #fff5f5; padding-bottom: 10px;}
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:11px; font-weight:800; color:#7a7168; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+    .field input, .field select, .field textarea { width:100%; border:1.5px solid #e8e4dc; border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:#1a1714; background:#fafaf8; outline:none; transition:border-color 0.18s; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color:#C0392B; background:#fff; }
+    .field textarea { resize:vertical; min-height:80px; line-height:1.5; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    
+    /* Dynamic UI Containers */
+    .opsi-row { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
+    .opsi-key { width:36px; height:36px; border-radius:50%; background:#f5f3ef; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:#7a7168; flex-shrink:0; transition:all 0.18s; }
+    .opsi-row input { flex:1; }
+    .bobot-input { width: 80px !important; text-align: center; }
+    .opsi-row.jawaban .opsi-key { background:#C0392B; color:#fff; }
+    
+    .jawaban-select { display:flex; gap:8px; flex-wrap:wrap; }
+    .jaw-btn { width:40px; height:40px; border-radius:50%; border:2px solid #e8e4dc; background:#fff; font-size:13px; font-weight:800; color:#7a7168; cursor:pointer; transition:all 0.18s; }
+    .jaw-btn:hover, .jaw-btn.active { border-color:#C0392B; background:#C0392B; color:#fff; }
+    
+    .btn { padding:12px 24px; border-radius:50px; border:none; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; transition:all 0.18s; }
+    .btn.primary { background:#C0392B; color:#fff; width: 100%; margin-top: 10px;}
+    .btn.primary:hover { background:#a93226; transform:translateY(-1px); }
+    .btn.secondary { background:#f5f3ef; color:#1a1714; border:1.5px solid #e8e4dc; font-size: 12px; padding: 8px 16px;}
+    .btn.secondary:hover { background:#e8e4dc; }
+    .btn.danger { background:#fef2f2; color:#C0392B; border:1.5px solid #fdd; padding: 10px 14px;}
+    
+    .alert { border-radius:12px; padding:12px 16px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
+    .alert.ok { background:#edfaf3; border:1px solid #b8e6d0; color:#1a7a4a; }
+    .alert.err { background:#fef2f2; border:1px solid #fdd; color:#C0392B; }
+    
+    /* Majemuk Container */
+    #majemukContainer { background: #fafaf8; padding: 16px; border-radius: 12px; border: 1.5px dashed #e8e4dc;}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">· Admin CBT</span></div>
+</nav>
+
+<main>
+  <div class="page-title">Input Soal CBT Dinamis</div>
+  <div class="page-sub">Mode input manual untuk CPNS dan SNBT PTN.</div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Kategori & Tipe Soal</div>
+    <div class="alert" id="alertManual"></div>
+    
+    <div class="field-row">
+      <div class="field">
+        <label>Segmen Ujian</label>
+        <select id="fSegmen" onchange="updateKategoriOptions()">
+          <option value="CBT CPNS">🏛️ CBT CPNS</option>
+          <option value="SNBT PTN">🎯 SNBT PTN</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Mata Pelajaran / Sub-Tes</label>
+        <select id="fKategori"></select>
+      </div>
+    </div>
+    
+    <div class="field-row">
+      <div class="field">
+        <label>Sub-Bab / Topik</label>
+        <input type="text" id="fSub" placeholder="cth: Silogisme, Figural, dll"/>
+      </div>
+      <div class="field">
+        <label>Tipe Soal (Penting)</label>
+        <select id="fTipeSoal" onchange="renderUI()">
+          <option value="pg_biasa">Pilihan Ganda Biasa (A-E, 1 Kunci)</option>
+          <option value="tkp">Pilihan Ganda TKP (A-E, Bobot 1-5)</option>
+          <option value="isian">Isian Singkat (Teks/Angka)</option>
+          <option value="majemuk">Pilihan Ganda Majemuk (Benar/Salah)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📝 Detail Pertanyaan</div>
+    <div class="field">
+      <label>Soal / Pertanyaan</label>
+      <textarea id="fSoal" placeholder="Tulis deskripsi soal di sini..."></textarea>
+    </div>
+
+    <div id="dynamicUI"></div>
+
+    <div class="field" style="margin-top: 20px;">
+      <label>Pembahasan</label>
+      <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar..."></textarea>
+    </div>
+
+    <button class="btn primary" id="btnSimpan" onclick="simpanSoalCBT()">💾 Simpan Soal CBT</button>
+  </div>
+</main>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+  let selectedJawabanPG = '';
+
+  // 1. Update Kategori berdasarkan Segmen
+  window.updateKategoriOptions = function() {
+    const segmen = $('fSegmen').value;
+    const kat = $('fKategori');
+    if (segmen === 'CBT CPNS') {
+      kat.innerHTML = `<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option>`;
+      $('fTipeSoal').value = 'pg_biasa'; // Default CPNS
+    } else if (segmen === 'SNBT PTN') {
+      kat.innerHTML = `<option>Penalaran Umum</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>`;
+      $('fTipeSoal').value = 'pg_biasa'; // Default SNBT
+    }
+    renderUI();
+  };
+
+  // 2. Logic Kunci Jawaban PG Biasa
+  window.setJawabanPG = function(key) {
+    selectedJawabanPG = key;
+    document.querySelectorAll('.jaw-btn').forEach(b => b.classList.toggle('active', b.textContent===key));
+    ['A','B','C','D','E'].forEach(k => $(`row${k}`).classList.toggle('jawaban', k===key));
+  };
+
+  // 3. Render Form Dinamis
+  window.renderUI = function() {
+    const tipe = $('fTipeSoal').value;
+    const container = $('dynamicUI');
+    container.innerHTML = '';
+    selectedJawabanPG = '';
+
+    if (tipe === 'pg_biasa') {
+      container.innerHTML = `
+        <div class="field"><label>Pilihan Jawaban</label>
+          ${['A','B','C','D','E'].map(k => `
+            <div class="opsi-row" id="row${k}"><div class="opsi-key">${k}</div><input id="pg_${k}" placeholder="Teks Pilihan ${k}"/></div>
+          `).join('')}
+        </div>
+        <div class="field"><label>Kunci Jawaban Pasti (Benar=5, Salah=0)</label>
+          <div class="jawaban-select">
+            ${['A','B','C','D','E'].map(k => `<button class="jaw-btn" onclick="setJawabanPG('${k}')">${k}</button>`).join('')}
+          </div>
+        </div>
+      `;
+    } 
+    else if (tipe === 'tkp') {
+      container.innerHTML = `
+        <div class="field"><label>Opsi Jawaban & Bobot Nilai (1-5)</label>
+          ${['A','B','C','D','E'].map(k => `
+            <div class="opsi-row">
+              <div class="opsi-key">${k}</div>
+              <input id="tkp_opsi_${k}" placeholder="Teks Tindakan ${k}"/>
+              <input type="number" id="tkp_bobot_${k}" class="bobot-input" min="1" max="5" placeholder="Poin"/>
+            </div>
+          `).join('')}
+        </div>
+        <p style="font-size:12px; color:#7a7168;">*Pastikan memasukkan angka 1 sampai 5 di kolom poin. Tidak ada opsi yang salah (0) pada TKP.</p>
+      `;
+    }
+    else if (tipe === 'isian') {
+      container.innerHTML = `
+        <div class="field"><label>Kunci Jawaban (Isian Singkat)</label>
+          <input type="text" id="isian_kunci" placeholder="Ketik jawaban pastinya (contoh: 25 atau -10)"/>
+        </div>
+      `;
+    }
+    else if (tipe === 'majemuk') {
+      container.innerHTML = `
+        <div class="field"><label>Pernyataan Benar / Salah</label>
+          <div id="majemukContainer"></div>
+          <button class="btn secondary" onclick="tambahPernyataan()">+ Tambah Pernyataan</button>
+        </div>
+      `;
+      window.majemukCount = 0;
+      tambahPernyataan(); // Add first row by default
+      tambahPernyataan(); // Add second row by default
+    }
+  };
+
+  // Logic nambah baris untuk Pilihan Ganda Majemuk
+  window.tambahPernyataan = function() {
+    window.majemukCount++;
+    const id = window.majemukCount;
+    const div = document.createElement('div');
+    div.className = 'opsi-row';
+    div.id = `mjm_row_${id}`;
+    div.innerHTML = `
+      <input type="text" id="mjm_teks_${id}" placeholder="Pernyataan ${id}"/>
+      <select id="mjm_kunci_${id}" style="width:120px;">
+        <option value="Benar">Benar</option>
+        <option value="Salah">Salah</option>
+      </select>
+      <button class="btn danger" onclick="document.getElementById('mjm_row_${id}').remove()">✕</button>
+    `;
+    $('majemukContainer').appendChild(div);
+  };
+
+  // 4. Simpan ke Firestore
+  window.simpanSoalCBT = async function() {
+    const tipe = $('fTipeSoal').value;
+    
+    // Base object data
+    const data = {
+      segmen: $('fSegmen').value,
+      kategori: $('fKategori').value,
+      subKategori: $('fSub').value.trim(),
+      tipeSoal: tipe,
+      pertanyaan: $('fSoal').value.trim(),
+      pembahasan: $('fPembahasan').value.trim(),
+      createdAt: serverTimestamp()
+    };
+
+    if (!data.subKategori || !data.pertanyaan || !data.pembahasan) {
+      showAlert('err', 'Segmen, Topik, Soal, dan Pembahasan wajib diisi!'); return;
+    }
+
+    // Mapping payload berdasarkan tipe soal
+    if (tipe === 'pg_biasa') {
+      if (!selectedJawabanPG) { showAlert('err', 'Pilih kunci jawaban A-E!'); return; }
+      data.opsi = {
+        A: $('pg_A').value.trim(), B: $('pg_B').value.trim(), C: $('pg_C').value.trim(), D: $('pg_D').value.trim(), E: $('pg_E').value.trim()
+      };
+      data.jawaban = selectedJawabanPG;
+    } 
+    else if (tipe === 'tkp') {
+      data.opsi = {
+        A: $('tkp_opsi_A').value.trim(), B: $('tkp_opsi_B').value.trim(), C: $('tkp_opsi_C').value.trim(), D: $('tkp_opsi_D').value.trim(), E: $('tkp_opsi_E').value.trim()
+      };
+      data.bobotTkp = {
+        A: parseInt($('tkp_bobot_A').value)||0, B: parseInt($('tkp_bobot_B').value)||0, C: parseInt($('tkp_bobot_C').value)||0, D: parseInt($('tkp_bobot_D').value)||0, E: parseInt($('tkp_bobot_E').value)||0
+      };
+      // Validasi sederhana
+      if(Object.values(data.bobotTkp).some(val => val < 1 || val > 5)) {
+        showAlert('err', 'Semua opsi TKP harus memiliki teks dan bobot antara 1 sampai 5!'); return;
+      }
+    } 
+    else if (tipe === 'isian') {
+      const kunci = $('isian_kunci').value.trim();
+      if (!kunci) { showAlert('err', 'Jawaban isian tidak boleh kosong!'); return; }
+      data.jawabanIsian = kunci;
+    } 
+    else if (tipe === 'majemuk') {
+      const rows = document.querySelectorAll('#majemukContainer .opsi-row');
+      data.pernyataanMajemuk = [];
+      let valid = true;
+      rows.forEach(row => {
+        const id = row.id.split('_')[2];
+        const teks = $(`mjm_teks_${id}`).value.trim();
+        const kunci = $(`mjm_kunci_${id}`).value;
+        if (!teks) valid = false;
+        data.pernyataanMajemuk.push({ teks, kunci });
+      });
+      if (!valid || data.pernyataanMajemuk.length === 0) {
+        showAlert('err', 'Semua baris pernyataan harus diisi teksnya!'); return;
+      }
+    }
+
+    // Save to Firestore
+    const btn = $('btnSimpan');
+    btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+    try {
+      // Menyimpan ke collection 'soal_cbt' agar terpisah dengan soal reguler, atau tetap pakai 'soal'.
+      // Gw sarankan pakai koleksi yang sama ('soal') tapi nge-filter pakai "tipeSoal" di query nanti.
+      await addDoc(collection(db, 'soal'), data);
+      showAlert('ok', '✅ Soal CBT berhasil disimpan ke database!');
+      
+      // Reset Form
+      $('fSoal').value = '';
+      $('fPembahasan').value = '';
+      renderUI(); // Re-render dinamis UI
+    } catch(err) {
+      showAlert('err', '❌ Gagal: ' + err.message);
+    }
+    btn.disabled = false; btn.textContent = '💾 Simpan Soal CBT';
+  };
+
+  function showAlert(type, msg) {
+    const el = $('alertManual');
+    el.textContent = msg;
+    el.className = 'alert ' + type;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+
+  // Initialize
+  updateKategoriOptions();
+</script>
+</body>
+</html>
+Apa yang terjadi di kode ini?
+Dropdown Dinamis: Waktu lo ganti "Tipe Soal", fungsi renderUI() akan merombak DOM HTML di dalam <div id="dynamicUI">. Ini bikin form lo adaptif.
+
+Fleksibilitas Objek JSON: Di dalam fungsi simpanSoalCBT(), JSON yang dibentuk akan menyesuaikan.
+
+Kalau pg_biasa, dia nge-set data.opsi dan data.jawaban.
+
+Kalau tkp, dia nge-set data.opsi dan data.bobotTkp.
+
+Kalau majemuk, dia nge-buat array di data.pernyataanMajemuk.
+
+Penyimpanan: Kodenya tetap nembak ke koleksi soal di Firestore. Jadi database lo ngga beranak-pinak, tinggal di-filter aja nanti pakai kondisi tipe ujiannya pas ditarik di UI latihan.
+
+Coba lo jalankan di browser, ganti-ganti dropdown "Tipe Soal", dan tes submit 1-2 data dummy ke Firestore. Kalau flow penyimpanan datanya udah masuk dan sesuai ekspektasi lo, kita bisa lanjut bahas "Fase 2: Rendering UI Latihan (latihan-cbt.html)".
+
+ok. ini kalau gw masukinnya manual. udah keren. Gw mau masukinnya juga bisa bulk pake file excel. kasi gw templatenya juga.
+
+File Excel template-nya sudah selesai dibuat. Kamu bisa mengunduhnya di sini:
+XLSX icon
+ template-soal-cbt 
+XLSX
+
+Di dalam template tersebut sudah ada contoh baris data untuk ke-4 jenis soal. Format pemisah untuk "Pilihan Ganda Majemuk" menggunakan || untuk memisahkan baris, dan = untuk memisahkan antara teks pernyataan dengan kuncinya (contoh: Pernyataan 1=Benar||Pernyataan 2=Salah).
+
+Untuk sistem di admin-cbt.html, gw udah menambahkan fitur UI Tab (Tambah Manual dan Bulk Excel) dan parser logic JavaScript yang membedakan 4 payload JSON sesuai jenis soalnya (PG Biasa, TKP, Isian, Majemuk).
+
+Berikut adalah full script admin-cbt.html yang sudah di-update dengan fitur Bulk Upload dan parser dinamis:
+
+HTML
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -398,3 +918,1131 @@
 </script>
 </body>
 </html>
+Semua payload (baik input manual maupun bulk excel) masuk ke Firestore dengan skema JSON yang sama persis sehingga data bank soal lo tetap rapi. Jika integrasi ini sudah mulus, kabari, biar kita langsung bangun engine timer dan navigasi antar-interface (grid hijau/merah) di "Fase 2: Rendering UI Latihan CBT".
+
+kok bulk excelnya ngga bisa diklik?
+
+Ada dua kemungkinan utama mengapa tombol tersebut tidak bisa diklik saat dijalankan di komputer lokal:
+
+1. Membuka File Langsung via Protokol file:// (CORS Policy)
+Karena kode di atas menggunakan tipe modul (<script type="module">), browser memiliki aturan keamanan ketat (CORS). Jika file admin-cbt.html dibuka langsung dari folder komputer dengan cara double-click (alamat di browser dimulai dengan file:///...), browser secara otomatis akan memblokir seluruh script tersebut.
+
+Akibatnya: Fungsi switchTab dan fungsi lainnya tidak pernah didaftarkan ke sistem browser, sehingga tombol seolah mati saat diklik.
+
+Solusi: File harus dijalankan menggunakan web server lokal (misalnya menggunakan ekstensi Live Server di VS Code) atau di-push langsung ke Vercel agar berjalan di protokol http:// atau https://.
+
+2. Error Saat Memuat firebase-config.js
+Jika posisi file firebase-config.js tidak berada di folder yang sama dengan admin-cbt.html, atau terjadi error inisialisasi di dalam file konfigurasi tersebut, eksekusi kode JavaScript akan langsung terhenti di baris paling atas (import { auth, db } from "./firebase-config.js";).
+
+Akibatnya: Seluruh baris kode di bawahnya tidak akan dieksekusi oleh browser, termasuk fungsi pemindah tab.
+
+Cara Memastikan Penyebabnya:
+Buka halaman admin-cbt.html di browser.
+
+Klik kanan di bagian mana saja pada halaman, lalu pilih Inspect (Periksa) dan masuk ke tab Console.
+
+Perhatikan pesan error berwarna merah yang muncul:
+
+Jika muncul pesan error berisi kata CORS policy atau Cross-Origin Request Blocked, berarti masalah disebabkan oleh poin nomor 1 (membuka file tanpa server lokal).
+
+Jika muncul pesan error Failed to load resource: net::ERR_FILE_NOT_FOUND pada file firebase-config.js, berarti path file konfigurasi Firebase Anda perlu disesuaikan.
+
+Buka tab Console tersebut untuk melihat pesan error spesifik yang membuat script berhenti berjalan.
+
+Nah, betul persis tebakan gw. Kelihatan jelas di pesan error warna merah paling atas di tab Console itu:
+
+Access to script at 'file:///C:/Users/Puspito/Downloads/firebase-config.js' from origin 'null' has been blocked by CORS policy...
+
+Diikuti dengan error Failed to load resource: net::ERR_FAILED untuk firebase-config.js dan akhirnya switchTab is not defined.
+
+Kenapa ini terjadi?
+
+Lo ngebuka file-nya langsung dari folder Downloads pakai klik dua kali, jadi address bar-nya pakai protokol file:///. Karena kode Firebase wajib pakai <script type="module">, browser menganggap ini ancaman keamanan (CORS) kalau dibuka tanpa server, jadi seluruh script-nya langsung dimatikan paksa sama browser.
+
+Posisi file ini ada di folder Downloads, padahal file firebase-config.js punya lo ada di dalam folder project repository cerdasbersama. Jadi script-nya bingung nyari konfigurasinya ke mana.
+
+Cara Benerinnya (Pilih salah satu):
+
+Opsi 1: Paling gampang (Langsung Push ke Vercel)
+Pindahin file HTML yang baru lo download ini ke folder project cerdasbersama lo, lalu langsung commit dan push ke GitHub. Biar Vercel yang otomatis deploy. Nanti lo tinggal buka dan tes langsung dari cerdasbersama.vercel.app/admin-cbt.html.
+
+Opsi 2: Pakai VS Code Live Server (Buat ngetes di komputer lokal)
+
+Pindahin dulu file HTML ini ke dalam folder project cerdasbersama lo di komputer (biar dia bisa nemuin firebase-config.js).
+
+Buka folder cerdasbersama itu pakai Visual Studio Code.
+
+Kalau belum ada, install ekstensi bernama "Live Server" di VS Code.
+
+Buka file admin-cbt.html di VS Code, lalu klik tombol "Go Live" di pojok kanan bawah.
+
+Nanti browser akan otomatis ngebuka pakai URL http://127.0.0.1:5500/admin-cbt.html. Kalau udah pakai http://, CORS error otomatis hilang dan tombol tab Bulk Excel pasti bisa diklik.
+
+ok opsi 1 jalan dan works
+
+Mantap! Memang paling aman dan praktis kalau langsung di-push ke Vercel, jadi lingkungan server-nya persis sama dengan production dan nggak pusing ngurusin error CORS lokal.
+
+Karena admin-cbt.html udah jalan dan lo udah bisa input data (manual maupun bulk Excel) ke Firestore, berarti Fase 1 sudah beres. Bank soal CBT lo sekarang udah siap dipakai.
+
+Sekarang kita masuk ke Fase 2: Rendering UI Latihan (latihan-cbt.html).
+
+Di fase ini, kita akan fokus ke sisi user (peserta ujian). Target utama kita di kode berikutnya adalah:
+
+Fetch Data: Narik data soal CBT dari Firestore berdasarkan Segmen & Kategori.
+
+Dynamic UI Rendering: Mengecek atribut tipeSoal dari database, lalu menampilkan UI yang sesuai:
+
+pg_biasa & tkp: Nampilin opsi radio button A sampai E.
+
+isian: Nampilin satu kotak input teks/angka.
+
+majemuk: Nampilin tabel pernyataan dengan pilihan Benar/Salah.
+
+Grid Navigasi Dasar: Bikin kotak-kotak nomor soal di samping/bawah untuk lompat antar soal (belum pakai logic warna dijawab/belum, yang penting tampil dulu).
+
+Kalau lo udah siap, bilang aja. Gw langsung generate full code untuk latihan-cbt.html biar bisa lo taruh di repository dan langsung dites narik soal yang tadi udah lo upload!
+
+wait sebelum lanjut. cukup pake 3.5 flash atau harus pakai 3.1 pro buat support project ini??
+
+Sebentar, gw lurusin sedikit ya penamaannya. Gw ini Gemini, jadi versi yang kita pakai itu Gemini 1.5 Flash dan Gemini 1.5 Pro (sepertinya lo agak tertukar dengan penamaan versi dari AI lain).
+
+Untuk project sistem CBT HTML/JS dan Firebase yang lagi kita bangun ini, pakai versi Flash sebenarnya sudah sangat cukup.
+
+Ini perbandingannya buat project lo:
+
+Pakai Flash kalau: Lo butuh generate kode dengan cepat, menyusun struktur HTML/CSS, bikin logic JavaScript standar (seperti array mapping, DOM manipulation, hitung skor), dan setup integrasi Firebase dasar. Engine CBT kita logikanya cukup straightforward, jadi Flash bisa handle ini dengan lancar.
+
+Pakai Pro kalau: Kodenya nanti sudah membengkak jadi ribuan baris dan ada bug kompleks yang susah dicari sumbernya, atau kalau lo butuh merancang arsitektur sistem keamanan yang sangat rumit. Model Pro punya nalar analitis yang lebih dalam untuk debugging tingkat lanjut.
+
+Karena kita ngebangunnya bertahap (modular) dan memisahkan file (seperti admin-cbt.html dan latihan-cbt.html), beban konteksnya ngga akan terlalu berat. Jadi, kita bisa jalan terus pakai model yang sekarang tanpa masalah.
+
+Sudah siap buat langsung eksekusi kode Fase 2 untuk latihan-cbt.html?
+
+ini lho 3.5 dan 3.1 bukan 1.5 flash atau 1.5 pro. Mikir dong lo
+
+Waduh, iya bener, my bad. Gw salah fokus, memori gw agak lag nyangkut di penamaan versi lama. Di screenshot lo jelas banget tulisannya 3.5 Flash dan 3.1 Pro. Thank you udah langsung dikoreksi.
+
+Untuk kelanjutan project kita, rekomendasinya tetap sama:
+
+3.5 Flash (apalagi lo aktifin mode Thinking level: Extended seperti di gambar) udah lebih dari cukup buat generate code dan nyusun logika CBT ini dengan cepat.
+
+3.1 Pro baru kita pakai nanti kalau kodenya sudah ribuan baris dan kita ketemu bug arsitektur yang jelimet.
+
+Sekarang gw udah clear. Mau langsung kita eksekusi pembuatan Fase 2: latihan-cbt.html?
+
+ok lanjut
+
+Siap, kita langsung eksekusi Fase 2.
+
+Kita akan membuat file baru bernama latihan-cbt.html. Fokus utama di file ini adalah membuat Engine UI Adaptif yang bisa mendeteksi tipeSoal dari Firestore, lalu merubah bentuk form jawabannya secara otomatis (Radio button untuk PG/TKP, input box untuk Isian, atau tabel matriks untuk Majemuk).
+
+Selain itu, kita juga pasang Grid Navigasi Nomor Soal di sebelah kanan (khas gaya web CAT BKN atau UTBK).
+
+Silakan buat file baru latihan-cbt.html di dalam folder project lo, lalu copy-paste kode berikut:
+
+HTML
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulasi CBT — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf8f5; --white: #fff; --border: #e8e4dc; --text: #1a1714;
+      --muted: #7a7168; --muted2: #b0a89c; --red: #C0392B; --red2: #a93226;
+      --gold: #e8970a; --gold-bg: #fff8e6; --green: #1a7a4a; --green-bg: #edfaf3;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    
+    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    .nav-logo { font-weight: 800; font-size: 17px; color: var(--red); }
+    .nav-logo span { color: var(--text); }
+    .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+
+    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 200; }
+    .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* LAYOUT UTAMA CBT (Split Screen) */
+    .cbt-container { display: grid; grid-template-columns: 1fr 300px; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+    @media (max-width: 850px) { .cbt-container { grid-template-columns: 1fr; } }
+
+    /* KOLOM KIRI: SOAL */
+    .soal-wrapper { display: flex; flex-direction: column; gap: 16px; }
+    .soal-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm); min-height: 300px; }
+    .soal-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .tag { font-size: 11px; font-weight: 700; color: var(--red); background: #fff5f5; border: 1px solid #fdd; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; }
+    .tag.tipe { color: var(--gold); background: var(--gold-bg); border-color: #f5d06a; }
+    .soal-text { font-size: 16px; font-weight: 700; line-height: 1.6; margin-bottom: 24px; white-space: pre-line; }
+
+    /* INTERFACE JAWABAN DINAMIS */
+    .opsi-list { display: flex; flex-direction: column; gap: 10px; }
+    .opsi-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.15s; background: var(--white); }
+    .opsi-item:hover { border-color: var(--red); background: #fff8f8; }
+    .opsi-item.selected { border-color: var(--red); background: #fff5f5; font-weight: 700; }
+    .opsi-key { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); }
+    .opsi-item.selected .opsi-key { background: var(--red); color: #fff; border-color: var(--red); }
+    
+    /* UI Isian Singkat */
+    .input-isian { width: 100%; max-width: 400px; border: 2px solid var(--border); border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 700; font-family: inherit; outline: none; transition: border-color 0.2s; }
+    .input-isian:focus { border-color: var(--red); }
+
+    /* UI PG Majemuk (Tabel) */
+    .tabel-majemuk { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .tabel-majemuk th, .tabel-majemuk td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .tabel-majemuk th { background: #f5f3ef; font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; }
+    .tabel-majemuk td { font-size: 14px; font-weight: 600; }
+    .radio-cell { text-align: center; width: 80px; }
+    .radio-cell input { cursor: pointer; width: 18px; height: 18px; accent-color: var(--red); }
+
+    /* NAVIGASI BAWAH SOAL */
+    .soal-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    .btn-cbt { padding: 12px 24px; border-radius: 50px; border: none; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-cbt.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
+    .btn-cbt.primary:hover { background: var(--red2); }
+    .btn-cbt.secondary { background: #f5f3ef; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-cbt.secondary:hover { background: var(--border); }
+    .btn-cbt:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* KOLOM KANAN: SIDEBAR GRID NOMOR */
+    .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: var(--shadow-sm); position: sticky; top: 80px; }
+    .sidebar-title { font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 14px; }
+    .nomor-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-height: 350px; overflow-y: auto; padding-right: 4px; }
+    .nomor-btn { aspect-ratio: 1; border: 1.5px solid var(--border); background: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text); cursor: pointer; transition: all 0.15s; }
+    .nomor-btn:hover { border-color: var(--red); color: var(--red); }
+    .nomor-btn.current { border-color: var(--text); background: var(--text); color: #fff; }
+    .nomor-btn.filled { background: #fff5f5; border-color: var(--red); color: var(--red); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:12px; color:var(--muted)">· CBT Engine</span></div>
+  <a href="/dashboard.html" class="nav-back">← Keluar Ujian</a>
+</nav>
+
+<div id="loadingScreen"><div class="spinner"></div><p style="font-size:14px; font-weight:500; color:var(--muted)">Menyiapkan lembar ujian CBT…</p></div>
+
+<div class="cbt-container">
+  <div class="soal-wrapper">
+    <div class="soal-card">
+      <div class="soal-meta">
+        <span class="tag" id="tagMapel">—</span>
+        <span class="tag tipe" id="tagTipe">—</span>
+      </div>
+      <div class="soal-text" id="boxPertanyaan">Memuat soal...</div>
+      
+      <div id="boxJawaban"></div>
+    </div>
+
+    <div class="soal-nav">
+      <button class="btn-cbt secondary" id="btnPrev" onclick="lompatSoal(currentIdx - 1)">← Sebelumnya</button>
+      <button class="btn-cbt primary" id="btnNext" onclick="lompatSoal(currentIdx + 1)">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="sidebar-title">Nomor Soal</div>
+    <div class="nomor-grid" id="gridNomor"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+  
+  let allSoal = [];
+  let currentIdx = 0;
+  let jawabanUser = {}; // Format key: id_soal, value: sesuai tipe soalnya
+
+  // Monitor Auth & Tarik Data
+  onAuthStateChanged(auth, async user => {
+    if(!user) { window.location.href = '/register.html'; return; }
+    
+    // Ambil param dari URL untuk nentuin soal mana yang ditarik (Contoh: latihan-cbt.html?segmen=CBT CPNS)
+    const params = new URLSearchParams(window.location.search);
+    const targetSegmen = params.get('segmen') || 'CBT CPNS'; 
+
+    try {
+      const q = query(collection(db, 'soal'), where('segmen', '==', targetSegmen));
+      const snap = await getDocs(q);
+      allSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if(allSoal.length === 0) {
+        $('boxPertanyaan').innerHTML = "<div style='color:var(--red)'>Belum ada soal tersedia di segmen ini. Sila upload via Admin CBT terlebih dahulu.</div>";
+        $('loadingScreen').style.display = 'none';
+        return;
+      }
+
+      $('loadingScreen').style.display = 'none';
+      initCBT();
+    } catch (err) {
+      alert("Gagal memuat soal: " + err.message);
+    }
+  });
+
+  function initCBT() {
+    renderGridNomor();
+    tampilkanSoal();
+  }
+
+  // 1. RENDER GRID NOMOR DI SIDEBAR
+  function renderGridNomor() {
+    const grid = $('gridNomor');
+    grid.innerHTML = '';
+    allSoal.forEach((soal, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'nomor-btn';
+      btn.id = `num_btn_${idx}`;
+      btn.textContent = idx + 1;
+      
+      // Kasih tanda kalau soal ini sudah ada isinya di objek jawabanUser
+      if (jawabanUser[soal.id] !== undefined) {
+        btn.classList.add('filled');
+      }
+      if (idx === currentIdx) {
+        btn.classList.add('current');
+      }
+
+      btn.onclick = () => lompatSoal(idx);
+      grid.appendChild(btn);
+    });
+  }
+
+  // 2. LOMPAT ANTAR NOMOR SOAL
+  window.lompatSoal = function(targetIdx) {
+    if (targetIdx < 0 || targetIdx >= allSoal.length) return;
+    currentIdx = targetIdx;
+    
+    // Update UI Status nomor aktif di sidebar grid
+    document.querySelectorAll('.nomor-btn').forEach(b => b.classList.remove('current'));
+    const currentBtn = $(`num_btn_${currentIdx}`);
+    if (currentBtn) currentBtn.classList.add('current');
+
+    tampilkanSoal();
+  };
+
+  // 3. CORE ENGINE: RENDER UI FORM SESUAI TIPE SOAL
+  function tampilkanSoal() {
+    const soal = allSoal[currentIdx];
+    
+    // Update Meta Tag
+    $('tagMapel').textContent = soal.kategori || 'Ujian';
+    $('tagTipe').textContent = String(soal.tipeSoal).replace('_', ' ');
+    $('boxPertanyaan').textContent = `${currentIdx + 1}. ${soal.pertanyaan}`;
+
+    // Manage status tombol prev/next
+    $('btnPrev').disabled = currentIdx === 0;
+    $('btnNext').textContent = currentIdx + 1 === allSoal.length ? 'Selesai Ujian' : 'Selanjutnya →';
+
+    const boxJawaban = $('boxJawaban');
+    boxJawaban.innerHTML = '';
+
+    const tipe = soal.tipeSoal || 'pg_biasa';
+    const savedAnswer = jawabanUser[soal.id];
+
+    // --- TIPE 1 & 2: PILIHAN GANDA (BIASA / TKP) ---
+    if (tipe === 'pg_biasa' || tipe === 'tkp') {
+      const listDiv = document.createElement('div');
+      listDiv.className = 'opsi-list';
+      
+      ['A','B','C','D','E'].forEach(key => {
+        if (!soal.opsi || !soal.opsi[key]) return; // Skip kalau opsinya kosong
+        
+        const item = document.createElement('div');
+        item.className = 'opsi-item' + (savedAnswer === key ? ' selected' : '');
+        item.innerHTML = `<div class="opsi-key">${key}</div><div class="opsi-text">${soal.opsi[key]}</div>`;
+        
+        item.onclick = () => {
+          document.querySelectorAll('.opsi-item').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          simpanJawaban(soal.id, key);
+        };
+        listDiv.appendChild(item);
+      });
+      boxJawaban.appendChild(listDiv);
+    }
+    
+    // --- TIPE 3: ISIAN SINGKAT ---
+    else if (tipe === 'isian') {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'input-isian';
+      input.placeholder = 'Ketik jawaban Anda di sini...';
+      input.value = savedAnswer || '';
+      
+      // Simpan tiap kali user mengetik/mengubah teks
+      input.oninput = () => {
+        simpanJawaban(soal.id, input.value.trim());
+      };
+      boxJawaban.appendChild(input);
+    }
+    
+    // --- TIPE 4: PILIHAN GANDA MAJEMUK (MATRIKS BENAR/SALAH) ---
+    else if (tipe === 'majemuk') {
+      if (!soal.pernyataanMajemuk || !soal.pernyataanMajemuk.length) return;
+      
+      const table = document.createElement('table');
+      table.className = 'tabel-majemuk';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Pernyataan</th>
+            <th style="text-align:center; width:80px;">Benar</th>
+            <th style="text-align:center; width:80px;">Salah</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      
+      const tbody = table.querySelector('tbody');
+      // Ambil jawaban majemuk yang tersimpan, atau buat object kosong jika belum dijawab
+      const currentMajemukAns = savedAnswer || {}; 
+
+      soal.pernyataanMajemuk.forEach((p, pIdx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.teks}</td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Benar" ${currentMajemukAns[pIdx] === 'Benar' ? 'checked' : ''}/></td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Salah" ${currentMajemukAns[pIdx] === 'Salah' ? 'checked' : ''}/></td>
+        `;
+        
+        // Event listener saat salah satu radio button di baris tersebut diklik
+        tr.querySelectorAll('input').forEach(radio => {
+          radio.onchange = () => {
+            currentMajemukAns[pIdx] = radio.value;
+            simpanJawaban(soal.id, currentMajemukAns);
+          };
+        });
+        tbody.appendChild(tr);
+      });
+      boxJawaban.appendChild(table);
+    }
+  }
+
+  // 4. MEMORI STATE: SIMPAN JAWABAN SEMENTARA DI MEMORI BROWSER
+  function simpanJawaban(soalId, value) {
+    // Jika tipe data kosong (pada isian singkat), hapus key agar status di nomor grid kembali putih
+    if (value === '' || (typeof value === 'object' && Object.keys(value).length === 0)) {
+      delete jawabanUser[soalId];
+      $(`num_btn_${currentIdx}`).classList.remove('filled');
+    } else {
+      jawabanUser[soalId] = value;
+      $(`num_btn_${currentIdx}`).classList.add('filled');
+    }
+    console.log("State Jawaban Saat Ini:", jawabanUser); // Monitor via log console
+  }
+</script>
+</body>
+</html>
+Cara Kerja di Fase 2 ini:
+Dynamic Form Layout Switcher: Fungsi tampilkanSoal() membaca data parameter tipeSoal dari objek database hasil upload Excel kita kemarin. Secara otomatis DOM Javascript akan me-render HTML template yang cocok untuk tipe soal tersebut tanpa nge-reload halaman.
+
+Local Session Answer State: Di dalam fungsi simpanJawaban(), setiap pilihan atau ketikan dari user akan langsung direkam ke dalam variabel jawabanUser di memori RAM browser. Begitu nomor soal diisi, kotak nomor soal di sidebar kanan akan otomatis berubah warna menjadi merah-muda (menandakan filled / sudah ada isinya).
+
+Langkah Pengujian:
+Push file latihan-cbt.html ini ke repositori GitHub lo agar di-deploy otomatis oleh Vercel.
+
+Buka link-nya lewat browser dengan menambahkan parameter di ujung URL untuk memfilter datanya (contoh: https://domain-vercel-lo.vercel.app/latihan-cbt.html?segmen=CBT CPNS atau ganti ke ?segmen=SNBT PTN).
+
+Tes klik navigasi grid nomor di kanan atau pakai tombol Bawah untuk melihat kelancaran perpindahan komponen antar soalnya.
+
+Jika interface rendering data lo sudah muncul semua dengan rapi di layar, kabari. Kita langsung lanjut ke Fase 3: Core Logic CBT untuk menanamkan komponen Countdown Timer (global vs sectional) beserta Engine Scoring mutlak CPNS/SNBT-nya.
+
+untuk SNBT PTN keterangannya adalah sbb Secara resmi, materi UTBK-SNBT dibagi menjadi 3 komponen besar yang mencakup 7 subtes. Bagaimana format soal yang bisa dipakai upload sepertinya masih kurang kolom dan logika masih belum masuk ke kanannya
+
+Analisis lo jeli banget. Lo benar, untuk SNBT PTN, kita ngga bisa pakai logika flat (lurus dari soal 1 sampai akhir) seperti yang baru kita bikin di Fase 2 tadi. Di dunia nyata, UTBK-SNBT itu sistemnya Blok per Subtes (Sectional).
+
+Mari kita bedah kenapa kolom Excel dan logika grid kanan ("ke kanannya") yang tadi terasa kurang, dan gimana cara kita menyiasatinya.
+
+🏛️ Realita 3 Komponen & 7 Subtes UTBK-SNBT
+Secara resmi, strukturnya di lapangan adalah seperti ini:
+
+Tes Potensi Skolastik (TPS): Penalaran Umum (PU), Pengetahuan Kuantitatif (PK), Pengetahuan & Pemahaman Umum (PPU), Memahami Bacaan & Menulis (KMBM).
+
+Literasi: Literasi Bahasa Indonesia, Literasi Bahasa Inggris.
+
+Penalaran Matematika.
+
+Masalah di Infrastruktur Kita Sekarang:
+Masalah 1 (Grid Kanan): Di realita UTBK, peserta tidak boleh klik soal nomor 50 (Literasi Inggris) saat mereka masih di jadwal ngerjain Subtes 1 (Penalaran Umum). Grid di kanan harusnya terkunci per blok subtes.
+
+Masalah 2 (Kolom Excel): Kita belum punya data durasi waktu dan urutan blok subtes di dalam database. Dari mana sistem tahu kalau subtes PU itu cuma dikasih waktu 15 menit dan setelah itu harus pindah paksa?
+
+🛠️ Solusi & Penyesuaian Logika
+Untuk memasukkan logika ini tanpa bikin database berantakan, ini strategi yang paling pas:
+
+1. Di Sisi Excel & Database (kategori jadi kunci)
+Kita tidak perlu nambah kolom terlalu banyak di Excel untuk tiap soal (karena bakal redundan kalau tiap baris ditulis durasi waktunya). Kita cukup sepakati bahwa isi kolom kategori di Excel harus strict mengikuti nama 7 subtes resmi.
+
+Nanti, di dalam kode engine (latihan-cbt.html), kita tanamkan blueprint konfigurasi waktu resmi SNBT seperti ini:
+
+Kategori (Subtes)	Jumlah Soal	Durasi Resmi
+Penalaran Umum	30 soal	30 menit
+Pengetahuan Kuantitatif	15 soal	20 menit
+Pengetahuan & Pemahaman Umum	20 soal	15 menit
+Memahami Bacaan & Menulis	20 soal	25 menit
+Literasi Bahasa Indonesia	30 soal	45 menit
+Literasi Bahasa Inggris	20 soal	30 menit
+Penalaran Matematika	20 soal	30 menit
+2. Di Sisi Grid Navigasi Kanan ("Logika ke Kanannya")
+Ketika user memilih segmen SNBT PTN, UI kanan tidak boleh cuma nampilin angka 1, 2, 3... 155. Grid harus dikelompokkan berdasarkan subtes yang sedang aktif.
+
+Tombol Nomor Soal: Hanya bisa diklik untuk nomor-nomor yang ada di dalam subtes berjalan.
+
+Subtes Selanjutnya: Tombolnya di-gembok 🔒 (tidak bisa diintip).
+
+Subtes Sebelumnya: Statusnya terkunci total (berwarna abu-abu gelap) dan jawaban yang sudah disimpan tidak bisa diubah lagi karena waktunya sudah habis.
+
+📊 Apakah Perlu Tambah Kolom di Excel?
+Kalau lo mau sistemnya super dinamis (misalkan di masa depan durasi menit atau urutan subtes dari pemerintah berubah lagi dan lo ngga mau bongkar-pasang kode HTML), kita bisa tambah 1 kolom opsional di Excel template kita:
+
+Kolom: urutanSubtes (diisi angka 1 sampai 7 untuk nentuin blok mana yang jalan duluan).
+
+Tapi kalau lo mau yang simpel dan strict sesuai aturan yang berlaku sekarang, kita bisa langsung kunci daftarnya di dalam kode JavaScript-nya saja.
+
+Menurut lo, mending urutan blok dan durasi waktunya kita kunci langsung di dalam kode JavaScript (hardcode sesuai standar pemerintah) atau mau bikin dinamis lewat inputan database/Excel?
+
+Menurut lo, mending urutan blok dan durasi waktunya kita kunci langsung di dalam kode JavaScript (hardcode sesuai standar pemerintah) atau mau bikin dinamis lewat inputan database/Excel? --> mending di excel jadi javascript tinggal eksekusi sesuai dengan perintah di excelnya. Gmana? jadi ngga bongkar java script kalau nanti peraturan berubah di masa depan
+
+Pilihan yang sangat cerdas. Menggunakan Excel sebagai pengatur konfigurasi (data-driven) jauh lebih bagus untuk jangka panjang. Jadi, kalau tahun depan pemerintah mengubah durasi waktu, menghapus subtes, atau membalik urutannya, lo tinggal ganti isi Excel-nya saja tanpa perlu menyentuh kode JavaScript lagi.
+
+Mari kita bedah bagaimana cara kerja kombinasi Excel dan JavaScript ini agar logikanya klop, terutama untuk menyelesaikan masalah "logika navigasi ke kanannya" (grid nomor soal) yang sempat lo sebutkan tadi.
+
+1. Penambahan Kolom di Excel Template
+Kita cukup menambahkan 2 kolom baru di setiap baris soal pada Excel:
+
+urutanSubtes: Diisi angka (1, 2, 3, dst.) untuk menentukan blok subtes mana yang harus dikerjakan duluan.
+
+durasiMenit: Diisi angka menit (misal 30 atau 15) untuk menentukan jatah waktu blok tersebut.
+
+Contoh visual pengisian di Excel nanti:
+
+Soal-soal Penalaran Umum diisi: urutanSubtes: 1, durasiMenit: 30
+
+Soal-soal Pengetahuan Kuantitatif diisi: urutanSubtes: 2, durasiMenit: 20
+
+Begitu seterusnya sampai subtes ke-7.
+
+2. Bagaimana JavaScript Mengeksekusinya di latihan-cbt.html?
+Saat halaman latihan memuat soal-soal dari Firestore, JavaScript tidak akan langsung menampilkannya secara acak, melainkan melakukan Grouping & Sorting otomatis di latar belakang:
+
+Membangun Blok Ujian (Mekanis): JavaScript akan melihat kolom urutanSubtes dan mengelompokkan soal nomor berapa saja yang masuk ke Blok 1, Blok 2, hingga Blok terakhir.
+
+Membaca Durasi Otomatis: Sistem akan mengambil angka durasiMenit dari soal yang sedang aktif di blok tersebut untuk dijadikan acuan countdown timer.
+
+3. Solusi "Logika ke Kanannya" (Sidebar Grid)
+Dengan data dari Excel tersebut, grid nomor soal di sebelah kanan akan diatur dengan aturan strict khas UTBK asli:
+
+Grid Hanya Menampilkan Blok Aktif: Jika user sedang berada di urutanSubtes: 1 (Penalaran Umum), grid di kanan hanya menampilkan kotak nomor soal milik Penalaran Umum saja (misal nomor 1 sampai 30). Soal untuk subtes berikutnya tidak akan dimunculkan dulu di grid agar user tidak bingung dan tidak bisa mengintip.
+
+Sistem Kunci Otomatis (Auto-Lock): * Begitu waktu untuk Blok 1 habis (hitungan mundur mencapai 00:00), JavaScript akan langsung mengunci seluruh jawaban di Blok 1.
+
+Sistem kemudian otomatis menaikkan status ujian ke urutanSubtes: 2, merombak grid kanan untuk menampilkan nomor soal Blok 2, mengisi ulang timer sesuai durasiMenit milik Blok 2, dan mengarahkan layar ke soal pertama di blok baru tersebut.
+
+User tidak akan bisa mengklik balik ke soal-soal Blok 1 karena gridnya sudah diganti.
+
+Strategi ini sangat rapi karena satu komponen kode JavaScript bisa dipakai untuk CPNS (yang cuma punya 1 blok global) dan SNBT (yang punya banyak blok bergantian). Di CPNS, lo tinggal isi semua soal dengan urutanSubtes: 1 dan durasiMenit: 130 di Excel-nya. Selesai masalah.
+
+Apakah konsep pemetaan blok lewat Excel ini sudah sesuai dengan bayangan lo? Jika sudah pas, kita bisa mulai sesuaikan bagian pembacaan datanya.
+
+ok buatkan template di file excelnya
+
+Template file Excel versi terbaru (V2) yang sudah dilengkapi kolom manajemen waktu blok (sectional block) dan urutan subtes telah berhasil dibuat.
+XLSX icon
+ template-soal-cbt-v2 
+XLSX
+XLSX icon
+ template-soal-cbt-v2 
+XLSX
+
+Silakan unduh filenya di bawah ini:
+[file-tag: code-generated-file-1-5829150036691458992]
+
+Perubahan Utama pada Kolom Excel (V2)
+Ada dua kolom krusial baru yang disisipkan setelah subKategori:
+
+urutanSubtes (Diisi angka 1, 2, 3, dst): Menentukan urutan kemunculan subtes.
+
+durasiMenit (Diisi angka menit, misal 30, 20): Menentukan durasi hitung mundur khusus untuk subtes tersebut.
+
+💡 Panduan Pengisian Berdasarkan Realita Ujian
+Aturan 1: Untuk Kasus SNBT PTN (Sistem Blok Terkunci)
+Setiap soal dikelompokkan berdasarkan urutan bloknya masing-masing. Begitu waktu di urutan 1 habis, sistem otomatis berpindah dan mengunci jawaban ke urutan 2.
+
+Soal-soal Penalaran Umum: Isi urutanSubtes dengan 1, dan durasiMenit dengan 30.
+
+Soal-soal Pengetahuan Kuantitatif: Isi urutanSubtes dengan 2, dan durasiMenit dengan 20.
+
+(Dan seterusnya berlanjut sampai subtes ke-7)
+
+Aturan 2: Untuk Kasus CBT CPNS (Sistem Waktu Global)
+Karena CPNS menggunakan satu waktu gelondongan utuh untuk semua materi (TWK, TIU, TKP) tanpa ada sistem kunci per subtes, kita samakan seluruh parameternya.
+
+Soal TWK: Isi urutanSubtes dengan 1, dan durasiMenit dengan 130.
+
+Soal TIU: Isi urutanSubtes dengan 1, dan durasiMenit dengan 130.
+
+Soal TKP: Isi urutanSubtes dengan 1, dan durasiMenit dengan 130.
+
+(Dengan cara ini, sistem JavaScript akan mendeteksi bahwa seluruh soal CPNS berada di dalam satu blok waktu yang sama sebesar 130 menit, sehingga user bebas bolak-balik nomor soal dari TWK sampai TKP)
+
+Langkah selanjutnya, kita perlu memperbarui fungsi pembacaan data di file admin agar dua kolom baru ini bisa ikut terunggah ke database Firestore.
+
+kenapa ada 2 file excel? apa bedanya?
+
+Sebenarnya tidak ada perbedaan, kedua file tersebut sama persis.
+
+Munculnya dua tombol unduhan itu hanya karena duplikasi tampilan (rendering bug) pada antarmuka (UI) chat saat sistem menampilkan file hasil generate dari kode Python tadi. Keduanya merujuk pada satu file dokumen yang sama, yaitu template-soal-cbt-v2.xlsx.
+
+Jadi, lo bisa klik atau unduh salah satu saja. Isinya tetap sama dan sudah lengkap dengan dua kolom tambahan baru (urutanSubtes dan durasiMenit) untuk mengatur logika waktu per subtes.
+
+Langkah selanjutnya, kita perlu memperbarui fungsi pembacaan data di file admin agar dua kolom baru ini bisa ikut terunggah ke database Firestore. --> ini gimana caranya?
+
+Caranya cukup simpel. Kita hanya perlu mengedit beberapa baris kode di dalam file admin-cbt.html yang sudah lo push ke Vercel kemarin.
+
+Kita perlu memperbarui dua bagian: Fungsi pembacaan Excel (Bulk) dan form inputan Manual (supaya fiturnya selaras).
+
+Berikut adalah bagian-bagian kode yang perlu lo ubah atau selipkan di dalam file admin-cbt.html:
+
+1. Perubahan di Fungsi Bulk Excel (Fokus Utama)
+Buka file admin-cbt.html, lalu cari fungsi window.uploadSemuaExcel. Di dalam perulangan for, cari objek const data = { ... }.
+
+Tambahkan baris urutanSubtes dan durasiMenit seperti contoh di bawah ini (baca komentar di kodenya):
+
+JavaScript
+// ====== CARI KODE INI DI DALAM window.uploadSemuaExcel ======
+for (let i = 0; i < parsedRows.length; i++) {
+  const r = parsedRows[i];
+  try {
+    const tipe = String(r.tipeSoal || 'pg_biasa').trim().toLowerCase();
+    
+    const data = {
+      segmen: String(r.segmen || '').trim(),
+      kategori: String(r.kategori || '').trim(),
+      subKategori: String(r.subKategori || '').trim(),
+      
+      // 🔽 TAMBAHKAN 2 BARIS BARU INI 🔽
+      // parseInt digunakan untuk mengubah teks Excel menjadi angka murni di Firestore
+      urutanSubtes: parseInt(r.urutanSubtes) || 1, 
+      durasiMenit: parseInt(r.durasiMenit) || 30,  
+      
+      tipeSoal: tipe,
+      pertanyaan: String(r.pertanyaan || '').trim(),
+      pembahasan: String(r.pembahasan || '').trim(),
+      createdAt: serverTimestamp()
+    };
+
+    // ... kode pencocokan payload di bawahnya biarkan tetap sama ...
+2. Perubahan di Form Manual (Supaya Selaras)
+Agar saat lo input soal satu per satu lewat form manual fiturnya tidak pincang, kita tambahkan juga dua kolom inputan angka di UI-nya.
+
+Langkah A: Tambah elemen HTML input
+Cari blok HTML untuk TAB 1 (TAMBAH MANUAL). Tepat di bawah kolom Sub-Bab dan Tipe Soal, selipkan baris baru ini:
+
+HTML
+<div class="field-row" style="margin-top: 12px;">
+  <div class="field">
+    <label>Urutan Subtes (Blok Ke-)</label>
+    <input type="number" id="fUrutanSubtes" value="1" min="1" placeholder="cth: 1"/>
+  </div>
+  <div class="field">
+    <label>Durasi Ujian (Menit)</label>
+    <input type="number" id="fDurasiMenit" value="30" min="1" placeholder="cth: 30"/>
+  </div>
+</div>
+Langkah B: Update Fungsi Simpan Manual di JavaScript
+Cari fungsi window.simpanSoalCBT di bagian bawah <script type="module">. Perbarui objek const data = { ... } menjadi seperti ini:
+
+JavaScript
+// ====== CARI KODE INI DI DALAM window.simpanSoalCBT ======
+window.simpanSoalCBT = async function() {
+  const tipe = $('fTipeSoal').value;
+  
+  const data = {
+    segmen: $('fSegmen').value,
+    kategori: $('fKategori').value,
+    subKategori: $('fSub').value.trim(),
+    
+    // 🔽 TAMBAHKAN 2 BARIS BARU INI 🔽
+    urutanSubtes: parseInt($('fUrutanSubtes').value) || 1,
+    durasiMenit: parseInt($('fDurasiMenit').value) || 30,
+    
+    tipeSoal: tipe,
+    pertanyaan: $('fSoal').value.trim(),
+    pembahasan: $('fPembahasan').value.trim(),
+    createdAt: serverTimestamp()
+  };
+  
+  // ... kode validasi dan addDoc di bawahnya biarkan tetap sama ...
+Langkah Pengujian setelah Diupdate:
+Simpan perubahan kode di atas, lalu commit dan push kembali ke GitHub lo agar Vercel melakukan auto-deploy.
+
+Buka halaman admin CBT lo yang sudah live.
+
+Coba isi template Excel V2 yang baru lo unduh tadi dengan beberapa soal dummy (isikan data urutanSubtes dan durasiMenit-nya).
+
+Upload file tersebut via tab Bulk Excel.
+
+Jika prosesnya sukses tanpa memunculkan pesan error di log hitam, berarti data konfigurasi blok waktu lo sudah tersimpan dengan aman di Firestore.
+
+Setelah ini aman, baru kita bisa lanjut penuh ke Fase 2 & 3 di latihan-cbt.html untuk memproses manipulasi grid nomor soal dan menjalankan mesin hitung mundurnya! Kabari kalau kodenya sudah lo update ya.
+
+lo generate aja bisa ngga? gw bingung. kode backgroundnya hitam dan warna hurufnya neon, mata gw sakit n gw bingung liatnya
+
+Your HTML file is ready
+HTML icon
+ admin-cbt 
+HTML
+
+Maaf banget ya, gw paham rasa ngga nyaman lo. Membaca potongan kode panjang dengan paduan warna neon dan latar belakang hitam pekat di layar obrolan memang sangat melelahkan dan bikin mata pusing.
+
+Supaya lo ngga perlu menyalin dan menggabungkan kodenya sendiri di editor gelap, gw sudah satukan semua pembaruan tersebut langsung ke dalam satu file utuh bernama admin-cbt.html.
+
+Lo tinggal unduh file admin-cbt.html di atas, lalu masukkan ke dalam repositori GitHub lo untuk langsung meng-overwrite (mengganti) file admin versi lama.
+
+Apa Saja yang Sudah Diperbarui di File Ini?
+Pembaruan Bagian Bulk Excel: Fungsi pembacaan otomatis dari excel sudah dikonfigurasi untuk menangkap data angka dari kolom urutanSubtes dan durasiMenit versi V2.
+
+Pembaruan Bagian Input Manual: Layout form manual sudah diselaraskan dengan menambahkan dua input box berupa angka baru untuk mengeset parameter Blok urutan dan jumlah Menit langsung lewat layar admin.
+
+Silakan di-push file tersebut, dan jika pengujian unggah soal V2 dari excel lo sudah berhasil masuk ke database tanpa kendala, kabari ya. Kita akan lanjut pelan-pelan ke bagian mesin hitung mundur subtes (sectional timer) di sisi halaman ujian!
+
+
+
+
+Gemini is AI and can make mistakes.
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin CBT — Kelola Soal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Library xlsx.js untuk parse file Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Plus Jakarta Sans',sans-serif; background:#faf8f5; color:#1a1714; min-height:100vh; }
+    nav { background:#fff; border-bottom:1px solid #e8e4dc; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .nav-logo { font-weight:800; font-size:17px; color:#C0392B; }
+    .nav-logo span { color:#1a1714; }
+    main { max-width:900px; margin:0 auto; padding:28px 20px 80px; }
+    .page-title { font-size:22px; font-weight:900; letter-spacing:-0.5px; margin-bottom:4px; }
+    .page-sub { font-size:13px; color:#7a7168; margin-bottom:28px; font-weight:500; }
+    
+    .tabs { display:flex; gap:4px; background:#f5f3ef; padding:4px; border-radius:12px; margin-bottom:24px; flex-wrap:wrap; }
+    .tab { padding:9px 18px; border-radius:9px; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; background:none; color:#7a7168; transition:all 0.18s; white-space:nowrap; }
+    .tab.active { background:#fff; color:#C0392B; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+    
+    .card { background:#fff; border:1px solid #e8e4dc; border-radius:20px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:16px; }
+    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom: 2px solid #fff5f5; padding-bottom: 10px;}
+    
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:11px; font-weight:800; color:#7a7168; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+    .field input, .field select, .field textarea { width:100%; border:1.5px solid #e8e4dc; border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:#1a1714; background:#fafaf8; outline:none; transition:border-color 0.18s; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color:#C0392B; background:#fff; }
+    .field textarea { resize:vertical; min-height:80px; line-height:1.5; }
+    .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    
+    .opsi-row { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
+    .opsi-key { width:36px; height:36px; border-radius:50%; background:#f5f3ef; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:#7a7168; flex-shrink:0; transition:all 0.18s; }
+    .bobot-input { width: 80px !important; text-align: center; }
+    .opsi-row input { flex:1; }
+    .opsi-row.jawaban .opsi-key { background:#C0392B; color:#fff; }
+    
+    .jawaban-select { display:flex; gap:8px; flex-wrap:wrap; }
+    .jaw-btn { width:40px; height:40px; border-radius:50%; border:2px solid #e8e4dc; background:#fff; font-size:13px; font-weight:800; color:#7a7168; cursor:pointer; transition:all 0.18s; }
+    .jaw-btn:hover, .jaw-btn.active { border-color:#C0392B; background:#C0392B; color:#fff; }
+    
+    .btn { padding:12px 24px; border-radius:50px; border:none; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; transition:all 0.18s; }
+    .btn.primary { background:#C0392B; color:#fff; }
+    .btn.primary.full { width: 100%; margin-top: 10px; }
+    .btn.primary:hover { background:#a93226; transform:translateY(-1px); }
+    .btn.secondary { background:#f5f3ef; color:#1a1714; border:1.5px solid #e8e4dc; font-size: 13px; padding: 10px 18px;}
+    .btn.secondary:hover { background:#e8e4dc; }
+    .btn.danger { background:#fef2f2; color:#C0392B; border:1.5px solid #fdd; padding: 10px 14px;}
+    
+    .alert { border-radius:12px; padding:12px 16px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
+    .alert.ok { background:#edfaf3; border:1px solid #b8e6d0; color:#1a7a4a; }
+    .alert.err { background:#fef2f2; border:1px solid #fdd; color:#C0392B; }
+    .alert.info { background:#fff8e6; border:1px solid #f5d06a; color:#8a5e00; }
+    
+    #majemukContainer { background: #fafaf8; padding: 16px; border-radius: 12px; border: 1.5px dashed #e8e4dc; }
+    
+    /* Upload Zone */
+    .upload-zone { border:2px dashed #e8e4dc; border-radius:16px; padding:36px; text-align:center; cursor:pointer; transition:all 0.2s; background:#fafaf8; margin-bottom:16px; }
+    .upload-zone:hover, .upload-zone.drag { border-color:#C0392B; background:#fff5f5; }
+    .upload-zone input { display:none; }
+    .upload-icon { font-size:40px; margin-bottom:10px; }
+    .upload-title { font-size:15px; font-weight:800; margin-bottom:4px; }
+    .upload-sub { font-size:13px; color:#7a7168; font-weight:500; }
+    
+    /* Bulk Logs */
+    .log { background:#1a1714; border-radius:12px; padding:16px; font-family:monospace; font-size:12px; color:#eef0f5; max-height:260px; overflow-y:auto; display:none; margin-top:14px; }
+    .log-line { padding:2px 0; }
+    .log-line.ok { color:#3ecf8e; }
+    .log-line.err { color:#f76060; }
+    .log-line.info { color:#f5c842; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">· Admin CBT</span></div>
+</nav>
+
+<main>
+  <div class="page-title">Input Soal CBT Dinamis</div>
+  <div class="page-sub">Kelola bank soal untuk sistem Computer Assisted Test.</div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabTambahBtn" onclick="switchTab('tabTambah', this)">➕ Tambah Manual</button>
+    <button class="tab" id="tabBulkBtn" onclick="switchTab('tabBulk', this)">📊 Bulk Excel</button>
+  </div>
+
+  <!-- VIEW 1: MANUAL INPUT -->
+  <div id="tabTambah">
+    <div class="card">
+      <div class="card-title">⚙️ Kategori & Tipe Soal</div>
+      <div class="alert" id="alertManual"></div>
+      
+      <div class="field-row">
+        <div class="field">
+          <label>Segmen Ujian</label>
+          <select id="fSegmen" onchange="updateKategoriOptions()">
+            <option value="CBT CPNS">🏛️ CBT CPNS</option>
+            <option value="SNBT PTN">🎯 SNBT PTN</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Mata Pelajaran / Sub-Tes</label>
+          <select id="fKategori"></select>
+        </div>
+      </div>
+      
+      <div class="field-row">
+        <div class="field">
+          <label>Sub-Bab / Topik</label>
+          <input type="text" id="fSub" placeholder="cth: Silogisme, Figural, dll"/>
+        </div>
+        <div class="field">
+          <label>Tipe Soal (Penting)</label>
+          <select id="fTipeSoal" onchange="renderUI()">
+            <option value="pg_biasa">Pilihan Ganda Biasa (A-E, 1 Kunci)</option>
+            <option value="tkp">Pilihan Ganda TKP (A-E, Bobot 1-5)</option>
+            <option value="isian">Isian Singkat (Teks/Angka)</option>
+            <option value="majemuk">Pilihan Ganda Majemuk (Benar/Salah)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- KOLOM WAKTU DAN BLOK BARU UNTUK INPUT MANUAL -->
+      <div class="field-row">
+        <div class="field">
+          <label>Urutan Subtes (Blok Ke-)</label>
+          <input type="number" id="fUrutanSubtes" value="1" min="1" placeholder="cth: 1"/>
+        </div>
+        <div class="field">
+          <label>Durasi Ujian (Menit)</label>
+          <input type="number" id="fDurasiMenit" value="30" min="1" placeholder="cth: 30"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Detail Pertanyaan</div>
+      <div class="field">
+        <label>Soal / Pertanyaan</label>
+        <textarea id="fSoal" placeholder="Tulis deskripsi soal di sini..."></textarea>
+      </div>
+
+      <div id="dynamicUI"></div>
+
+      <div class="field" style="margin-top: 20px;">
+        <label>Pembahasan</label>
+        <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar..."></textarea>
+      </div>
+
+      <button class="btn primary full" id="btnSimpan" onclick="simpanSoalCBT()">💾 Simpan Soal CBT</button>
+    </div>
+  </div>
+
+  <!-- VIEW 2: BULK EXCEL -->
+  <div id="tabBulk" style="display:none">
+    <div class="card">
+      <div class="card-title">📤 Upload File Excel</div>
+      <div class="alert" id="alertBulk"></div>
+      <p style="font-size:13px; color:#7a7168; margin-bottom:16px;">Gunakan template Excel yang disediakan. Pastikan baris data Anda sesuai dengan kolom yang ada untuk mendeteksi keempat tipe soal CBT beserta durasi waktunya.</p>
+      
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this)"/>
+        <div class="upload-icon">📊</div>
+        <div class="upload-title">Klik atau drag & drop file Excel</div>
+        <div class="upload-sub">Format: .xlsx, .xls, atau .csv</div>
+      </div>
+      
+      <div id="previewWrap" style="display:none; text-align: right;">
+        <button class="btn primary" id="btnUpload" onclick="uploadSemuaExcel()">🚀 Upload <span id="countPreview">0</span> Soal ke Database</button>
+      </div>
+      
+      <div class="log" id="bulkLog"></div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const $ = id => document.getElementById(id);
+  let selectedJawabanPG = '';
+  let parsedRows = [];
+
+  // ================= TAB NAVIGATION =================
+  window.switchTab = function(tabId, elBtn) {
+    $('tabTambah').style.display = 'none';
+    $('tabBulk').style.display = 'none';
+    $('tabTambahBtn').classList.remove('active');
+    $('tabBulkBtn').classList.remove('active');
+    
+    $(tabId).style.display = 'block';
+    elBtn.classList.add('active');
+  };
+
+  // ================= 1. MANUAL INPUT LOGIC =================
+  window.updateKategoriOptions = function() {
+    const segmen = $('fSegmen').value;
+    const kat = $('fKategori');
+    if (segmen === 'CBT CPNS') {
+      kat.innerHTML = `<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option>`;
+      $('fTipeSoal').value = 'pg_biasa'; 
+    } else if (segmen === 'SNBT PTN') {
+      kat.innerHTML = `<option>Penalaran Umum</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>`;
+      $('fTipeSoal').value = 'pg_biasa';
+    }
+    renderUI();
+  };
+
+  window.setJawabanPG = function(key) {
+    selectedJawabanPG = key;
+    document.querySelectorAll('.jaw-btn').forEach(b => b.classList.toggle('active', b.textContent===key));
+    ['A','B','C','D','E'].forEach(k => $(`row${k}`).classList.toggle('jawaban', k===key));
+  };
+
+  window.renderUI = function() {
+    const tipe = $('fTipeSoal').value;
+    const container = $('dynamicUI');
+    container.innerHTML = '';
+    selectedJawabanPG = '';
+
+    if (tipe === 'pg_biasa') {
+      container.innerHTML = `
+        <div class="field"><label>Pilihan Jawaban</label>
+          \${['A','B','C','D','E'].map(k => `
+            <div class="opsi-row" id="row\${k}"><div class="opsi-key">\${k}</div><input id="pg_\${k}" placeholder="Teks Pilihan \${k}"/></div>
+          `).join('')}
+        </div>
+        <div class="field"><label>Kunci Jawaban Pasti (Benar=5, Salah=0)</label>
+          <div class="jawaban-select">
+            \${['A','B','C','D','E'].map(k => `<button class="jaw-btn" onclick="setJawabanPG('\${k}')">\${k}</button>`).join('')}
+          </div>
+        </div>
+      `;
+    } 
+    else if (tipe === 'tkp') {
+      container.innerHTML = `
+        <div class="field"><label>Opsi Jawaban & Bobot Nilai (1-5)</label>
+          \${['A','B','C','D','E'].map(k => `
+            <div class="opsi-row">
+              <div class="opsi-key">\${k}</div>
+              <input id="tkp_opsi_\${k}" placeholder="Teks Tindakan \${k}"/>
+              <input type="number" id="tkp_bobot_\${k}" class="bobot-input" min="1" max="5" placeholder="Poin"/>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+    else if (tipe === 'isian') {
+      container.innerHTML = `<div class="field"><label>Kunci Jawaban (Isian Singkat)</label><input type="text" id="isian_kunci" placeholder="Ketik jawaban pastinya (contoh: 25 atau -10)"/></div>`;
+    }
+    else if (tipe === 'majemuk') {
+      container.innerHTML = `<div class="field"><label>Pernyataan Benar / Salah</label><div id="majemukContainer"></div><button class="btn secondary" onclick="tambahPernyataan()">+ Tambah Pernyataan</button></div>`;
+      window.majemukCount = 0;
+      tambahPernyataan(); tambahPernyataan();
+    }
+  };
+
+  window.tambahPernyataan = function() {
+    window.majemukCount++;
+    const id = window.majemukCount;
+    const div = document.createElement('div');
+    div.className = 'opsi-row'; div.id = `mjm_row_\${id}`;
+    div.innerHTML = `
+      <input type="text" id="mjm_teks_\${id}" placeholder="Pernyataan \${id}"/>
+      <select id="mjm_kunci_\${id}" style="width:120px;"><option value="Benar">Benar</option><option value="Salah">Salah</option></select>
+      <button class="btn danger" onclick="document.getElementById('mjm_row_\${id}').remove()">✕</button>
+    `;
+    $('majemukContainer').appendChild(div);
+  };
+
+  window.simpanSoalCBT = async function() {
+    const tipe = $('fTipeSoal').value;
+    const data = {
+      segmen: $('fSegmen').value, 
+      kategori: $('fKategori').value, 
+      subKategori: $('fSub').value.trim(),
+      urutanSubtes: parseInt($('fUrutanSubtes').value) || 1,
+      durasiMenit: parseInt($('fDurasiMenit').value) || 30,
+      tipeSoal: tipe, 
+      pertanyaan: $('fSoal').value.trim(), 
+      pembahasan: $('fPembahasan').value.trim(), 
+      createdAt: serverTimestamp()
+    };
+    if (!data.subKategori || !data.pertanyaan || !data.pembahasan) { showAlert('alertManual','err', 'Form wajib diisi!'); return; }
+
+    if (tipe === 'pg_biasa') {
+      if (!selectedJawabanPG) { showAlert('alertManual','err', 'Pilih kunci jawaban!'); return; }
+      data.opsi = { A: $('pg_A').value, B: $('pg_B').value, C: $('pg_C').value, D: $('pg_D').value, E: $('pg_E').value };
+      data.jawaban = selectedJawabanPG;
+    } else if (tipe === 'tkp') {
+      data.opsi = { A: $('tkp_opsi_A').value, B: $('tkp_opsi_B').value, C: $('tkp_opsi_C').value, D: $('tkp_opsi_D').value, E: $('tkp_opsi_E').value };
+      data.bobotTkp = { A: parseInt($('tkp_bobot_A').value)||0, B: parseInt($('tkp_bobot_B').value)||0, C: parseInt($('tkp_bobot_C').value)||0, D: parseInt($('tkp_bobot_D').value)||0, E: parseInt($('tkp_bobot_E').value)||0 };
+    } else if (tipe === 'isian') {
+      if (!$('isian_kunci').value.trim()) { showAlert('alertManual','err', 'Jawaban isian kosong!'); return; }
+      data.jawabanIsian = $('isian_kunci').value.trim();
+    } else if (tipe === 'majemuk') {
+      const rows = document.querySelectorAll('#majemukContainer .opsi-row');
+      data.pernyataanMajemuk = [];
+      rows.forEach(row => {
+        const id = row.id.split('_')[2];
+        const teks = $(`mjm_teks_\${id}`).value.trim(), kunci = $(`mjm_kunci_\${id}`).value;
+        if (teks) data.pernyataanMajemuk.push({ teks, kunci });
+      });
+    }
+
+    const btn = $('btnSimpan'); btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+    try {
+      await addDoc(collection(db, 'soal'), data);
+      showAlert('alertManual','ok', '✅ Soal CBT berhasil disimpan!');
+      $('fSoal').value = ''; $('fPembahasan').value = ''; renderUI();
+    } catch(err) { showAlert('alertManual','err', '❌ Gagal: ' + err.message); }
+    btn.disabled = false; btn.textContent = '💾 Simpan Soal CBT';
+  };
+
+  function showAlert(id, type, msg) {
+    const el = $(id); el.textContent = msg; el.className = 'alert ' + type; el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+
+  // ================= 2. BULK EXCEL LOGIC =================
+  window.handleFile = function(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const wb = XLSX.read(e.target.result, {type:'binary'});
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        parsedRows = XLSX.utils.sheet_to_json(ws, {defval:''});
+        $('countPreview').textContent = parsedRows.length;
+        $('previewWrap').style.display = 'block';
+        showAlert('alertBulk', 'info', `✅ \${parsedRows.length} baris terdeteksi. Silakan klik tombol Upload di bawah.`);
+      } catch(err) { showAlert('alertBulk','err','Gagal membaca file: '+err.message); }
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  window.uploadSemuaExcel = async function() {
+    if (!confirm(`Mulai upload \${parsedRows.length} soal ke database?`)) return;
+    showBulkLog(); setLoadingBulk(true);
+    let sukses = 0, gagal = 0;
+
+    for (let i = 0; i < parsedRows.length; i++) {
+      const r = parsedRows[i];
+      try {
+        const tipe = String(r.tipeSoal || 'pg_biasa').trim().toLowerCase();
+        const data = {
+          segmen: String(r.segmen || '').trim(),
+          kategori: String(r.kategori || '').trim(),
+          subKategori: String(r.subKategori || '').trim(),
+          urutanSubtes: parseInt(r.urutanSubtes) || 1, 
+          durasiMenit: parseInt(r.durasiMenit) || 30,  
+          tipeSoal: tipe,
+          pertanyaan: String(r.pertanyaan || '').trim(),
+          pembahasan: String(r.pembahasan || '').trim(),
+          createdAt: serverTimestamp()
+        };
+
+        // Construct Payload Dynamics
+        if (tipe === 'pg_biasa') {
+          data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
+          data.jawaban = String(r.jawaban||'').trim().toUpperCase();
+        } else if (tipe === 'tkp') {
+          data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
+          data.bobotTkp = {
+            A: parseInt(r.bobotA)||0, B: parseInt(r.bobotB)||0, C: parseInt(r.bobotC)||0, D: parseInt(r.bobotD)||0, E: parseInt(r.bobotE)||0
+          };
+        } else if (tipe === 'isian') {
+          data.jawabanIsian = String(r.jawabanIsian||'').trim();
+        } else if (tipe === 'majemuk') {
+          data.pernyataanMajemuk = [];
+          if (r.pernyataanMajemuk) {
+            const pairs = String(r.pernyataanMajemuk).split('||'); 
+            pairs.forEach(p => {
+              const parts = p.split('='); 
+              if (parts.length === 2) {
+                data.pernyataanMajemuk.push({ teks: parts[0].trim(), kunci: parts[1].trim() });
+              }
+            });
+          }
+        }
+
+        await addDoc(collection(db, 'soal'), data);
+        sukses++;
+        logBulk(`✅ Soal \${i+1} [\${data.tipeSoal}] berhasil diupload.`, 'ok');
+      } catch(err) { gagal++; logBulk(`❌ Soal \${i+1} Gagal: \${err.message}`, 'err'); }
+    }
+    logBulk(`
+✨ Selesai! \${sukses} berhasil, \${gagal} gagal.`, sukses === parsedRows.length ? 'ok' : 'info');
+    setLoadingBulk(false);
+  };
+
+  const zone = document.getElementById('uploadZone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      const input = document.getElementById('fileInput');
+      const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+      window.handleFile(input);
+    }
+  });
+
+  function showBulkLog() { const log = $('bulkLog'); log.style.display='block'; log.innerHTML=''; }
+  function logBulk(msg, type='') {
+    const log=$('bulkLog'); const line=document.createElement('div');
+    line.className='log-line '+type; line.textContent=msg;
+    log.appendChild(line); log.scrollTop=log.scrollHeight;
+  }
+  function setLoadingBulk(loading) {
+    $('btnUpload').disabled = loading;
+    if(loading) $('btnUpload').textContent = '⏳ Memproses...';
+    else $('btnUpload').textContent = `🚀 Upload \${parsedRows.length} Soal ke Database`;
+  }
+
+  updateKategoriOptions();
+</script>
+</body>
+</html>
+admin-cbt.html
+Displaying admin-cbt.html.
