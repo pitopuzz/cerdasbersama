@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P&L Report — CerdasBersama</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-light: #EAF3DE;
+    --green-text: #3B6D11;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --red-text: #A32D2D;
+    --blue: #378ADD;
+    --amber-light: #FAEEDA;
+    --amber-text: #854F0B;
+    --bg: #F8F9FA;
+    --surface: #FFFFFF;
+    --surface2: #F1F3F5;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --text: #1a1a1a;
+    --text2: #6B7280;
+    --text3: #9CA3AF;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111318;
+      --surface: #1C1F26;
+      --surface2: #252830;
+      --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.15);
+      --text: #F0F1F3;
+      --text2: #9CA3AF;
+      --text3: #6B7280;
+      --green-light: #0a2e1e;
+      --green-text: #6FCFA3;
+      --red-light: #2d1010;
+      --red-text: #F09595;
+      --amber-light: #2a1f0a;
+      --amber-text: #FAC775;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+  input,select,button{font-family:inherit;font-size:14px}
+  input{background:var(--surface);color:var(--text);border:0.5px solid var(--border2);border-radius:var(--radius-sm);padding:8px 12px;outline:none;transition:border 0.15s}
+  input:focus{border-color:var(--green)}
+  select{background:var(--surface);color:var(--text);border:0.5px solid var(--border2);border-radius:var(--radius-sm);padding:8px 12px;outline:none;cursor:pointer}
+
+  .page{max-width:860px;margin:0 auto;padding:24px 16px}
+
+  /* Header */
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand-icon{width:36px;height:36px;border-radius:10px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+  .brand-name{font-size:16px;font-weight:600;color:var(--text)}
+  .brand-sub{font-size:12px;color:var(--text2)}
+  .header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:20px;font-weight:500}
+  .badge-demo{background:var(--amber-light);color:var(--amber-text)}
+  .badge-ok{background:var(--green-light);color:var(--green-text)}
+
+  .btn{border:none;padding:8px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all 0.15s}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:hover{background:var(--green-dark)}
+  .btn-ghost{background:var(--surface2);color:var(--text);border:0.5px solid var(--border)}
+  .btn-ghost:hover{background:var(--border)}
+  .btn-danger{background:var(--red-light);color:var(--red-text);border:0.5px solid rgba(226,75,74,0.3)}
+  .btn-danger:hover{background:rgba(226,75,74,0.15)}
+  .btn-full{width:100%;justify-content:center}
+
+  /* Cards */
+  .card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  .card-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:16px}
+
+  /* Setup & Login */
+  .setup-wrap{max-width:480px;margin:0 auto;padding-top:20px}
+  .setup-step{font-size:12px;color:var(--text3);margin-bottom:6px}
+  .setup-title{font-size:18px;font-weight:600;margin-bottom:6px}
+  .setup-desc{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .form-group{display:flex;flex-direction:column;gap:4px}
+  .form-label{font-size:11px;color:var(--text2);font-weight:500}
+  .form-group input{width:100%}
+  .form-actions{display:flex;gap:8px}
+  .err{font-size:12px;color:var(--red-text);margin-top:8px;display:none;padding:8px 12px;background:var(--red-light);border-radius:var(--radius-sm)}
+
+  /* Controls bar */
+  .controls-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .controls-bar input[type=month]{padding:7px 10px;font-size:13px}
+
+  /* Metrics */
+  .metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+  .metric{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 16px}
+  .metric-label{font-size:11px;color:var(--text2);margin-bottom:6px;font-weight:500}
+  .metric-val{font-size:20px;font-weight:600;color:var(--text)}
+  .metric-val.green{color:var(--green)}
+  .metric-val.red{color:var(--red)}
+  .metric-sub{font-size:11px;color:var(--text3);margin-top:3px}
+
+  /* Tabs */
+  .tab-bar{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--border)}
+  .tab{padding:9px 16px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{color:var(--green);border-bottom-color:var(--green)}
+
+  /* Chart */
+  .chart-legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px;font-size:12px;color:var(--text2)}
+  .chart-legend span{display:flex;align-items:center;gap:5px}
+  .dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+  /* P&L Table */
+  .pl-table{width:100%;border-collapse:collapse;font-size:13px}
+  .pl-table tr{border-bottom:0.5px solid var(--border)}
+  .pl-table tr:last-child{border-bottom:none}
+  .pl-table td{padding:9px 12px;color:var(--text)}
+  .pl-table td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pl-table .sec-row td{font-size:11px;font-weight:600;color:var(--text2);background:var(--surface2);text-transform:uppercase;letter-spacing:0.05em;padding:6px 12px}
+  .pl-table .sub-row td{font-weight:600;color:var(--green)}
+  .pl-table .net-row td{font-size:15px;font-weight:700;background:var(--surface2)}
+  .pl-table .indent{padding-left:24px;color:var(--text2)}
+  .negative{color:var(--red) !important}
+
+  /* Expense */
+  .exp-form{display:grid;grid-template-columns:1fr 1.2fr 120px auto;gap:8px;align-items:end;margin-bottom:14px}
+  .exp-list{display:flex;flex-direction:column;gap:6px}
+  .exp-empty{font-size:13px;color:var(--text3);text-align:center;padding:24px}
+  .exp-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--radius-sm);background:var(--surface2)}
+  .exp-cat-badge{font-size:11px;color:var(--text2);min-width:110px;font-weight:500}
+  .exp-desc{flex:1;font-size:13px}
+  .exp-amt{font-size:13px;font-weight:600;min-width:90px;text-align:right;white-space:nowrap}
+  .exp-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:3px 6px;border-radius:4px;transition:all 0.15s}
+  .exp-del:hover{color:var(--red);background:var(--red-light)}
+
+  .user-info{font-size:12px;color:var(--text2);padding:4px 8px;background:var(--surface2);border-radius:var(--radius-sm)}
+
+  @media(max-width:600px){
+    .form-grid{grid-template-columns:1fr}
+    .exp-form{grid-template-columns:1fr 1fr}
+    .metrics-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon"><i class="ti ti-chart-line"></i></div>
+      <div>
+        <div class="brand-name">CerdasBersama</div>
+        <div class="brand-sub">Profit & Loss Report</div>
+      </div>
+    </div>
+    <div class="header-right" id="header-right" style="display:none">
+      <span id="conn-badge" class="badge badge-demo"><i class="ti ti-wifi-off"></i> Demo</span>
+      <span id="user-info" class="user-info" style="display:none"></span>
+      <input type="month" id="dateFrom" value="2026-01">
+      <span style="font-size:12px;color:var(--text2)">s/d</span>
+      <input type="month" id="dateTo" value="2026-05">
+      <button class="btn btn-ghost" onclick="refreshData()"><i class="ti ti-refresh"></i></button>
+      <button class="btn btn-danger" onclick="doLogout()" id="btn-logout" style="display:none"><i class="ti ti-logout"></i> Keluar</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: Firebase Config -->
+  <div id="step-config">
+    <div class="setup-wrap">
+      <div class="card">
+        <div class="setup-step">Langkah 1 dari 2</div>
+        <div class="setup-title">Hubungkan Firebase</div>
+        <div class="setup-desc">Masukkan konfigurasi Firebase project CerdasBersama. Anda bisa temukan ini di Firebase Console → Project Settings → Your Apps → Config.</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <div class="form-label">API Key</div>
+            <input id="fb-apikey" type="password" placeholder="AIza...">
+          </div>
+          <div class="form-group">
+            <div class="form-label">Project ID</div>
+            <input id="fb-projectid" placeholder="cerdas-bersama-b914e" value="cerdas-bersama-b914e">
+          </div>
+          <div class="form-group">
+            <div class="form-label">Auth Domain</div>
+            <input id="fb-authdomain" placeholder="project.firebaseapp.com" value="cerdas-bersama-b914e.firebaseapp.com">
+          </div>
+          <div class="form-group">
+            <div class="form-label">App ID</div>
+            <input id="fb-appid" placeholder="1:xxx:web:yyy" value="1:742743770113:web:8109c06b77a37b5207ec00">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="initFirebase()"><i class="ti ti-arrow-right"></i> Lanjut ke Login</button>
+          <button class="btn btn-ghost" onclick="useDemoMode()">Pakai Demo Mode</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Login -->
+  <div id="step-login" style="display:none">
+    <div class="setup-wrap">
+      <div class="card">
+        <div class="setup-step">Langkah 2 dari 2</div>
+        <div class="setup-title"><i class="ti ti-lock" style="font-size:16px;vertical-align:-2px;margin-right:6px"></i>Login Admin</div>
+        <div class="setup-desc">Masuk dengan akun admin CerdasBersama untuk mengakses data transaksi dari Firestore.</div>
+        <div class="form-group" style="margin-bottom:10px">
+          <div class="form-label">Email Admin</div>
+          <input id="login-email" type="email" placeholder="bersamacerdas1@gmail.com" value="bersamacerdas1@gmail.com">
+        </div>
+        <div class="form-group" style="margin-bottom:16px">
+          <div class="form-label">Password</div>
+          <input id="login-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="doLogin()"><i class="ti ti-login"></i> Masuk & Lihat Data</button>
+        <div id="login-error" class="err"></div>
+        <div style="margin-top:12px;text-align:center">
+          <button class="btn btn-ghost" onclick="backToConfig()" style="font-size:12px"><i class="ti ti-arrow-left"></i> Kembali</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="step-dashboard" style="display:none">
+    <div class="tab-bar">
+      <div class="tab active" onclick="switchTab('overview',this)">Ringkasan</div>
+      <div class="tab" onclick="switchTab('detail',this)">Detail P&L</div>
+      <div class="tab" onclick="switchTab('expenses',this)">Pengeluaran</div>
+    </div>
+
+    <!-- Overview -->
+    <div id="tab-overview">
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">Gross Revenue</div>
+          <div class="metric-val" id="m-revenue">Rp 0</div>
+          <div class="metric-sub" id="m-orders">0 transaksi</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Diskon diberikan</div>
+          <div class="metric-val red" id="m-diskon">Rp 0</div>
+          <div class="metric-sub">Pengurangan harga</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Net Revenue</div>
+          <div class="metric-val green" id="m-netrev">Rp 0</div>
+          <div class="metric-sub">Setelah diskon</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Total Pengeluaran</div>
+          <div class="metric-val red" id="m-opex">Rp 0</div>
+          <div class="metric-sub">COGS + OpEx + CapEx</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Net Profit</div>
+          <div class="metric-val" id="m-netprofit">Rp 0</div>
+          <div class="metric-sub" id="m-margin">Margin: 0%</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="chart-legend">
+          <span><span class="dot" style="background:#1D9E75"></span>Net Revenue</span>
+          <span><span class="dot" style="background:#E24B4A"></span>Total Pengeluaran</span>
+          <span><span class="dot" style="background:#378ADD"></span>Net Profit</span>
+        </div>
+        <div style="position:relative;height:260px">
+          <canvas id="mainChart" role="img" aria-label="Chart bulanan Net Revenue, Pengeluaran, dan Net Profit CerdasBersama">Data P&L bulanan CerdasBersama.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail P&L -->
+    <div id="tab-detail" style="display:none">
+      <div class="card">
+        <div class="card-title">Laporan Profit & Loss</div>
+        <table class="pl-table">
+          <tr class="sec-row"><td colspan="2">A. Pendapatan</td></tr>
+          <tr><td class="indent">Gross Revenue (harga dasar)</td><td id="d-grossrev">Rp 0</td></tr>
+          <tr><td class="indent">(-) Diskon</td><td class="negative" id="d-diskon">Rp 0</td></tr>
+          <tr class="sub-row"><td style="padding-left:12px">Net Revenue</td><td id="d-netrev">Rp 0</td></tr>
+
+          <tr class="sec-row"><td colspan="2">B. Harga Pokok Penjualan (COGS)</td></tr>
+          <tr><td class="indent">Komisi referral</td><td class="negative" id="d-cogs">Rp 0</td></tr>
+          <tr class="sub-row"><td style="padding-left:12px">Gross Profit</td><td id="d-grossprofit">Rp 0</td></tr>
+
+          <tr class="sec-row"><td colspan="2">C. Biaya Operasional (OpEx)</td></tr>
+          <tr><td class="indent">Server & Hosting</td><td class="negative" id="d-opex-hosting">Rp 0</td></tr>
+          <tr><td class="indent">Marketing & Iklan</td><td class="negative" id="d-opex-marketing">Rp 0</td></tr>
+          <tr><td class="indent">Gaji & Honorarium</td><td class="negative" id="d-opex-gaji">Rp 0</td></tr>
+          <tr><td class="indent">Biaya Payment Gateway</td><td class="negative" id="d-opex-payment">Rp 0</td></tr>
+          <tr><td class="indent">Operasional lainnya</td><td class="negative" id="d-opex-ops">Rp 0</td></tr>
+          <tr class="sub-row"><td style="padding-left:12px">EBITDA</td><td id="d-ebitda">Rp 0</td></tr>
+
+          <tr class="sec-row"><td colspan="2">D. Investasi & Aset (CapEx)</td></tr>
+          <tr><td class="indent">Perangkat & Komputer</td><td class="negative" id="d-capex-device">Rp 0</td></tr>
+          <tr><td class="indent">Server & Infrastruktur</td><td class="negative" id="d-capex-infra">Rp 0</td></tr>
+          <tr><td class="indent">CapEx lainnya</td><td class="negative" id="d-capex-other">Rp 0</td></tr>
+
+          <tr class="net-row"><td>NET PROFIT / (LOSS)</td><td id="d-netprofit">Rp 0</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Expenses -->
+    <div id="tab-expenses" style="display:none">
+      <div class="card">
+        <div class="card-title">Input pengeluaran manual</div>
+        <div class="exp-form">
+          <div class="form-group">
+            <div class="form-label">Kategori</div>
+            <select id="exp-cat">
+              <option value="hosting">Server / Hosting</option>
+              <option value="marketing">Marketing / Iklan</option>
+              <option value="gaji">Gaji / Honorarium</option>
+              <option value="payment">Payment Gateway</option>
+              <option value="ops">Operasional lain</option>
+              <option value="device">Perangkat / Komputer</option>
+              <option value="infra">Server Infrastruktur</option>
+              <option value="capex_other">CapEx lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Deskripsi</div>
+            <input id="exp-desc" type="text" placeholder="contoh: Vercel Pro Plan">
+          </div>
+          <div class="form-group">
+            <div class="form-label">Jumlah (Rp)</div>
+            <input id="exp-amt" type="number" min="0" placeholder="150000">
+          </div>
+          <div class="form-group">
+            <div class="form-label">&nbsp;</div>
+            <button class="btn btn-primary" onclick="addExpense()"><i class="ti ti-plus"></i> Tambah</button>
+          </div>
+        </div>
+        <div class="exp-list" id="exp-list">
+          <div class="exp-empty">Belum ada pengeluaran. Tambahkan di atas.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const fmt = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+const fmtS = n => {
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : '';
+  if(abs >= 1000000) return sign + 'Rp ' + (abs/1000000).toFixed(1) + 'jt';
+  if(abs >= 1000) return sign + 'Rp ' + (abs/1000).toFixed(0) + 'rb';
+  return fmt(n);
+};
+
+let expenses = JSON.parse(localStorage.getItem('cb_pl_expenses') || '[]');
+let revenueData = {gross:0,diskon:0,komisi:0,orders:0,monthly:{}};
+let mainChart = null;
+let fbConfig = null;
+let authToken = null;
+
+const DEMO = [
+  {hargaBase:34900,diskon:17450,komisi:2618,status:'paid',createdAt:{seconds:1740000000}},
+  {hargaBase:34900,diskon:0,komisi:2618,status:'paid',createdAt:{seconds:1740200000}},
+  {hargaBase:69900,diskon:34950,komisi:5243,status:'paid',createdAt:{seconds:1741000000}},
+  {hargaBase:34900,diskon:17450,komisi:2618,status:'paid',createdAt:{seconds:1742000000}},
+  {hargaBase:99900,diskon:0,komisi:7493,status:'paid',createdAt:{seconds:1742500000}},
+  {hargaBase:34900,diskon:0,komisi:0,status:'paid',createdAt:{seconds:1743000000}},
+  {hargaBase:69900,diskon:34950,komisi:5243,status:'paid',createdAt:{seconds:1744000000}},
+  {hargaBase:34900,diskon:17450,komisi:2618,status:'paid',createdAt:{seconds:1744500000}},
+  {hargaBase:99900,diskon:49950,komisi:7493,status:'paid',createdAt:{seconds:1745000000}},
+  {hargaBase:34900,diskon:0,komisi:2618,status:'paid',createdAt:{seconds:1745500000}},
+  {hargaBase:69900,diskon:0,komisi:5243,status:'paid',createdAt:{seconds:1746000000}},
+  {hargaBase:34900,diskon:17450,komisi:2618,status:'paid',createdAt:{seconds:1746800000}},
+];
+
+const $ = id => document.getElementById(id);
+const show = id => $(id).style.display = 'block';
+const hide = id => $(id).style.display = 'none';
+
+function initFirebase() {
+  const apiKey = $('fb-apikey').value.trim();
+  const projectId = $('fb-projectid').value.trim();
+  const authDomain = $('fb-authdomain').value.trim();
+  const appId = $('fb-appid').value.trim();
+  if(!apiKey || !projectId) { alert('Minimal isi API Key dan Project ID.'); return; }
+  fbConfig = {apiKey, projectId, authDomain, appId};
+  localStorage.setItem('cb_fbconfig', JSON.stringify(fbConfig));
+  hide('step-config');
+  show('step-login');
+}
+
+function backToConfig() {
+  hide('step-login');
+  show('step-config');
+}
+
+function useDemoMode() {
+  hide('step-config');
+  showDashboard(false);
+  processOrders(DEMO);
+}
+
+async function doLogin() {
+  const email = $('login-email').value.trim();
+  const pass = $('login-pass').value;
+  const errEl = $('login-error');
+  errEl.style.display = 'none';
+  if(!email || !pass) { errEl.textContent = 'Isi email dan password.'; errEl.style.display = 'block'; return; }
+  try {
+    const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${fbConfig.apiKey}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password: pass, returnSecureToken: true})
+    });
+    const data = await res.json();
+    if(data.error) { errEl.textContent = 'Login gagal: ' + (data.error.message || 'Cek email/password'); errEl.style.display = 'block'; return; }
+    authToken = data.idToken;
+    hide('step-login');
+    showDashboard(true, email);
+    await loadFromFirestore();
+  } catch(e) {
+    errEl.textContent = 'Error: ' + e.message; errEl.style.display = 'block';
+  }
+}
+
+function showDashboard(loggedIn, email) {
+  show('step-dashboard');
+  show('header-right');
+  if(loggedIn) {
+    $('conn-badge').className = 'badge badge-ok';
+    $('conn-badge').innerHTML = '<i class="ti ti-wifi"></i> Terhubung';
+    $('user-info').textContent = email;
+    $('user-info').style.display = 'inline-flex';
+    $('btn-logout').style.display = 'inline-flex';
+  }
+  renderExpenses();
+}
+
+async function loadFromFirestore() {
+  try {
+    const url = `https://firestore.googleapis.com/v1/projects/${fbConfig.projectId}/databases/(default)/documents:runQuery`;
+    const body = {structuredQuery:{from:[{collectionId:'orders'}],where:{fieldFilter:{field:{fieldPath:'status'},op:'EQUAL',value:{stringValue:'paid'}}}}};
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':'Bearer '+authToken},
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if(!Array.isArray(data)) { console.error('Firestore error', data); return; }
+    const orders = data.filter(r => r.document).map(r => {
+      const f = r.document.fields || {};
+      const ts = f.createdAt?.timestampValue;
+      return {
+        hargaBase: parseFloat(f.hargaBase?.integerValue || f.hargaBase?.doubleValue || 0),
+        diskon: parseFloat(f.diskon?.integerValue || f.diskon?.doubleValue || 0),
+        komisi: parseFloat(f.komisi?.integerValue || f.komisi?.doubleValue || 0),
+        status: f.status?.stringValue || '',
+        createdAt: {seconds: ts ? Math.floor(new Date(ts).getTime()/1000) : 0}
+      };
+    });
+    processOrders(orders);
+  } catch(e) { console.error('Load error', e); }
+}
+
+function doLogout() {
+  authToken = null; fbConfig = null;
+  localStorage.removeItem('cb_fbconfig');
+  hide('step-dashboard'); hide('header-right');
+  show('step-config');
+}
+
+function refreshData() {
+  if(authToken) loadFromFirestore();
+  else processOrders(DEMO);
+}
+
+function processOrders(orders) {
+  const from = $('dateFrom').value;
+  const to = $('dateTo').value;
+  const fromMs = new Date(from+'-01').getTime()/1000;
+  const toDate = new Date(to+'-01'); toDate.setMonth(toDate.getMonth()+1);
+  const toMs = toDate.getTime()/1000;
+  let gross=0, diskon=0, komisi=0, count=0;
+  const monthly = {};
+  orders.filter(o => o.status === 'paid').forEach(o => {
+    const ts = o.createdAt?.seconds || 0;
+    if(ts < fromMs || ts >= toMs) return;
+    const d = new Date(ts*1000);
+    const key = d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0');
+    if(!monthly[key]) monthly[key] = {gross:0,diskon:0,komisi:0};
+    gross += o.hargaBase||0; diskon += o.diskon||0; komisi += o.komisi||0; count++;
+    monthly[key].gross += o.hargaBase||0; monthly[key].diskon += o.diskon||0; monthly[key].komisi += o.komisi||0;
+  });
+  revenueData = {gross, diskon, komisi, orders:count, monthly};
+  updateUI();
+}
+
+function getExpTotals() {
+  const c = {hosting:0,marketing:0,gaji:0,payment:0,ops:0,device:0,infra:0,capex_other:0};
+  expenses.forEach(e => { if(c[e.cat] !== undefined) c[e.cat] += e.amt; });
+  return c;
+}
+
+function updateUI() {
+  const {gross, diskon, komisi, orders, monthly} = revenueData;
+  const netrev = gross - diskon;
+  const gp = netrev - komisi;
+  const c = getExpTotals();
+  const opex = c.hosting + c.marketing + c.gaji + c.payment + c.ops;
+  const capex = c.device + c.infra + c.capex_other;
+  const ebitda = gp - opex;
+  const net = ebitda - capex;
+  const margin = netrev > 0 ? (net/netrev*100).toFixed(1) : 0;
+
+  $('m-revenue').textContent = fmt(gross);
+  $('m-diskon').textContent = fmt(diskon);
+  $('m-netrev').textContent = fmt(netrev);
+  $('m-opex').textContent = fmt(opex + capex + komisi);
+  $('m-orders').textContent = orders + ' transaksi';
+  const npEl = $('m-netprofit'); npEl.textContent = fmt(net);
+  npEl.className = 'metric-val ' + (net >= 0 ? 'green' : 'red');
+  $('m-margin').textContent = 'Margin: ' + margin + '%';
+
+  $('d-grossrev').textContent = fmt(gross);
+  $('d-diskon').textContent = '(' + fmt(diskon) + ')';
+  $('d-netrev').textContent = fmt(netrev);
+  $('d-cogs').textContent = '(' + fmt(komisi) + ')';
+  $('d-grossprofit').textContent = fmt(gp);
+  $('d-opex-hosting').textContent = '(' + fmt(c.hosting) + ')';
+  $('d-opex-marketing').textContent = '(' + fmt(c.marketing) + ')';
+  $('d-opex-gaji').textContent = '(' + fmt(c.gaji) + ')';
+  $('d-opex-payment').textContent = '(' + fmt(c.payment) + ')';
+  $('d-opex-ops').textContent = '(' + fmt(c.ops) + ')';
+  $('d-ebitda').textContent = fmt(ebitda);
+  $('d-capex-device').textContent = '(' + fmt(c.device) + ')';
+  $('d-capex-infra').textContent = '(' + fmt(c.infra) + ')';
+  $('d-capex-other').textContent = '(' + fmt(c.capex_other) + ')';
+  const dnp = $('d-netprofit'); dnp.textContent = fmt(net);
+  dnp.className = net >= 0 ? '' : 'negative';
+
+  updateChart(monthly, opex, capex);
+}
+
+function updateChart(monthly, opex, capex) {
+  const from = $('dateFrom').value, to = $('dateTo').value;
+  const labels = [], revArr = [], expArr = [], profArr = [];
+  let cur = new Date(from+'-01'), end = new Date(to+'-01');
+  let tm = 0; let tmp = new Date(from+'-01');
+  while(tmp <= end) { tm++; tmp.setMonth(tmp.getMonth()+1); }
+  tm = tm || 1;
+  while(cur <= end) {
+    const key = cur.getFullYear()+'-'+(cur.getMonth()+1).toString().padStart(2,'0');
+    labels.push(key);
+    const m = monthly[key] || {gross:0,diskon:0,komisi:0};
+    const mRev = m.gross - m.diskon;
+    const mExp = m.komisi + (opex + capex)/tm;
+    revArr.push(Math.round(mRev));
+    expArr.push(Math.round(mExp));
+    profArr.push(Math.round(mRev - mExp));
+    cur.setMonth(cur.getMonth()+1);
+  }
+  if(mainChart) mainChart.destroy();
+  mainChart = new Chart($('mainChart'), {
+    type: 'bar',
+    data: {labels, datasets: [
+      {label:'Net Revenue', data:revArr, backgroundColor:'rgba(29,158,117,0.75)', borderRadius:4},
+      {label:'Pengeluaran', data:expArr, backgroundColor:'rgba(226,75,74,0.65)', borderRadius:4},
+      {type:'line', label:'Net Profit', data:profArr, borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.08)', borderWidth:2, pointRadius:4, tension:0.3, fill:true}
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false}},
+      scales: {
+        y: {ticks: {callback: v => fmtS(v)}, grid: {color:'rgba(128,128,128,0.08)'}},
+        x: {grid: {display: false}, ticks: {autoSkip: false, maxRotation: 0}}
+      }
+    }
+  });
+}
+
+const catLabels = {hosting:'Server / Hosting', marketing:'Marketing / Iklan', gaji:'Gaji / Honorarium', payment:'Payment Gateway', ops:'Operasional lain', device:'Perangkat / Komputer', infra:'Server Infrastruktur', capex_other:'CapEx lainnya'};
+
+function addExpense() {
+  const cat = $('exp-cat').value;
+  const desc = $('exp-desc').value.trim();
+  const amt = parseFloat($('exp-amt').value) || 0;
+  if(!desc || amt <= 0) { alert('Isi deskripsi dan jumlah terlebih dahulu.'); return; }
+  expenses.push({cat, desc, amt, id: Date.now()});
+  localStorage.setItem('cb_pl_expenses', JSON.stringify(expenses));
+  $('exp-desc').value = ''; $('exp-amt').value = '';
+  renderExpenses(); updateUI();
+}
+
+function deleteExpense(id) {
+  expenses = expenses.filter(e => e.id !== id);
+  localStorage.setItem('cb_pl_expenses', JSON.stringify(expenses));
+  renderExpenses(); updateUI();
+}
+
+function renderExpenses() {
+  const list = $('exp-list');
+  if(!expenses.length) { list.innerHTML = '<div class="exp-empty">Belum ada pengeluaran. Tambahkan di atas.</div>'; return; }
+  list.innerHTML = expenses.map(e => `
+    <div class="exp-item">
+      <span class="exp-cat-badge">${catLabels[e.cat]||e.cat}</span>
+      <span class="exp-desc">${e.desc}</span>
+      <span class="exp-amt">${fmt(e.amt)}</span>
+      <button class="exp-del" onclick="deleteExpense(${e.id})" aria-label="Hapus"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['overview','detail','expenses'].forEach(t => {
+    $(('tab-'+t)).style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+// Load saved config
+const saved = localStorage.getItem('cb_fbconfig');
+if(saved) {
+  try {
+    fbConfig = JSON.parse(saved);
+    if(fbConfig.projectId) $('fb-projectid').value = fbConfig.projectId;
+    if(fbConfig.authDomain) $('fb-authdomain').value = fbConfig.authDomain;
+    if(fbConfig.appId) $('fb-appid').value = fbConfig.appId;
+  } catch(e) {}
+}
+</script>
+</body>
+</html>
