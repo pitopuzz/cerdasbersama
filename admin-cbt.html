@@ -172,6 +172,17 @@
   </div>
 </main>
 
+<script>
+  function switchTab(tabId, elBtn) {
+    document.getElementById('tabTambah').style.display = 'none';
+    document.getElementById('tabBulk').style.display = 'none';
+    document.getElementById('tabTambahBtn').classList.remove('active');
+    document.getElementById('tabBulkBtn').classList.remove('active');
+    document.getElementById(tabId).style.display = 'block';
+    elBtn.classList.add('active');
+  }
+</script>
+
 <script type="module">
   import { auth, db } from "./firebase-config.js";
   import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -179,16 +190,6 @@
   const $ = id => document.getElementById(id);
   let selectedJawabanPG = '';
   let parsedRows = [];
-
-  window.switchTab = function(tabId, elBtn) {
-    $('tabTambah').style.display = 'none';
-    $('tabBulk').style.display = 'none';
-    $('tabTambahBtn').classList.remove('active');
-    $('tabBulkBtn').classList.remove('active');
-    
-    $(tabId).style.display = 'block';
-    elBtn.classList.add('active');
-  };
 
   window.updateKategoriOptions = function() {
     const segmen = $('fSegmen').value;
