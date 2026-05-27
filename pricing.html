@@ -462,30 +462,94 @@ window.switchTab=async function(el,tab){
   updateOrder();
 };
 
-// ── REFERRAL ──
-function applyRefUI(){
+// ── State kode aktif ──
+// isPromoCode=true berarti kode dari promoCodes, false berarti kode referral user biasa
+let isPromoCode = false;
+let promoData   = null; // data dokumen promoCodes jika kode promo
+let discPct     = 50;   // default diskon % (kode referral biasa = 50%)
+let komisiPct   = 15;   // default komisi %
+
+// ── REFERRAL / PROMO ──
+function applyRefUI(discountPct, msg){
   $('refBox').className='ref-box unlocked';
-  $('refStatus').className='ref-status ok';$('refStatus').textContent='Diskon aktif ✓';
+  $('refStatus').className='ref-status ok';
+  $('refStatus').textContent='Diskon aktif ✓';
   $('refInputRow').style.display='none';
-  $('refHint').className='ref-ok-msg';$('refHint').textContent='✅ Kode valid! Diskon 50% untuk pembelian pertama.';
+  $('refHint').className='ref-ok-msg';
+  $('refHint').textContent=msg||`✅ Kode valid! Diskon ${discountPct}%`;
+  discApplied=true;
+  discPct=discountPct;
   updateOrder();
 }
+
 window.applyRef=async function(){
-  if(currentUserData?.hasUsedReferral){$('refHint').style.color='#C0392B';$('refHint').textContent='Kamu sudah pernah pakai kode referral.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';},3000);return;}
   const code=$('refCode').value.trim().toUpperCase();
   if(!code)return;
   $('btnApply').disabled=true;$('btnApply').textContent='...';
+
   try{
-    const snap=await getDocs(query(collection(db,'users'),where('referralCode','==',code)));
-    if(!snap.empty){discApplied=true;validRefCode=code;applyRefUI();}
-    else{$('refHint').style.color='#C0392B';$('refHint').textContent='Kode tidak ditemukan.';setTimeout(()=>{$('refHint').style.color='';$('refHint').textContent='Kode didapat dari teman atau admin.';$('refStatus').textContent='Belum dipakai';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';},2500);}
-  }catch(e){$('refHint').style.color='#C0392B';$('refHint').textContent='Gagal verifikasi.';$('btnApply').disabled=false;$('btnApply').textContent='Pakai';}
+    // 1. Cek di promoCodes dulu
+    const promoSnap=await getDocs(query(collection(db,'promoCodes'),where('code','==',code)));
+    if(!promoSnap.empty){
+      const pd=promoSnap.docs[0].data();
+      const pdId=promoSnap.docs[0].id;
+      // Cek aktif
+      if(!pd.aktif){
+        showRefError('Kode promo sudah tidak aktif.');return;
+      }
+      // Cek kuota
+      if(pd.kuota && (pd.usedCount||0)>=pd.kuota){
+        showRefError('Kuota kode promo sudah habis.');return;
+      }
+      // Valid — simpan data promo
+      isPromoCode=true;
+      promoData={...pd, docId:pdId};
+      validRefCode=code;
+      komisiPct=pd.komisi||15;
+      applyRefUI(pd.discount, `✅ Kode promo valid! Diskon ${pd.discount}%${pd.ownerEmail?' · Komisi untuk '+pd.ownerEmail:''}`);
+      return;
+    }
+
+    // 2. Cek di users (kode referral biasa)
+    if(currentUserData?.hasUsedReferral){
+      showRefError('Kamu sudah pernah pakai kode referral.');return;
+    }
+    const userSnap=await getDocs(query(collection(db,'users'),where('referralCode','==',code)));
+    if(!userSnap.empty){
+      isPromoCode=false;
+      promoData=null;
+      validRefCode=code;
+      komisiPct=15;
+      applyRefUI(50,'✅ Kode referral valid! Diskon 50% untuk pembelian pertama.');
+    } else {
+      showRefError('Kode tidak ditemukan.');
+    }
+  }catch(e){
+    showRefError('Gagal verifikasi kode.');
+    $('btnApply').disabled=false;$('btnApply').textContent='Pakai';
+  }
 };
-if(discApplied&&validRefCode) setTimeout(applyRefUI,500);
+
+function showRefError(msg){
+  $('refHint').style.color='#C0392B';
+  $('refHint').textContent=msg;
+  setTimeout(()=>{
+    $('refHint').style.color='';
+    $('refHint').textContent='Kode didapat dari teman atau admin CerdasBersama.';
+    $('refStatus').textContent='Belum dipakai';
+    $('btnApply').disabled=false;
+    $('btnApply').textContent='Pakai';
+  },2500);
+}
+
+// Auto-apply jika user sudah punya referredBy
+if(discApplied&&validRefCode) setTimeout(()=>applyRefUI(50,'✅ Kode referral aktif! Diskon 50%'),500);
 
 // ── UPDATE ORDER ──
 function updateOrder(){
-  const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
+  const base=curPkg.price;
+  const disc=discApplied?Math.round(base*(discPct/100)):0;
+  const total=base-disc;
   let subbabLabel='';
   if(curPkg.type==='alacarte'&&selAlacarte.length)subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
   else if(curPkg.type==='bundling'&&selBundling.length)subbabLabel=selBundling.map(s=>s.subbab).join(', ');
@@ -494,7 +558,7 @@ function updateOrder(){
   $('orderSubbab').textContent=subbabLabel;
   $('orderBase').textContent='Rp '+base.toLocaleString('id');
   $('discRow').style.display=disc>0?'flex':'none';
-  $('discAmt').textContent='-Rp '+disc.toLocaleString('id');
+  $('discAmt').textContent=`-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
   $('totalAmt').textContent='Rp '+total.toLocaleString('id');
 }
 
@@ -503,26 +567,71 @@ window.doPay=async function(){
   const btn=$('btnPay');$('warnMsg').style.display='none';
   if(curPkg.type==='alacarte'&&selAlacarte.length===0){$('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab.';$('warnMsg').style.display='block';return;}
   if(curPkg.type==='bundling'&&selBundling.length===0){$('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling.';$('warnMsg').style.display='block';return;}
-  const base=curPkg.price,disc=discApplied?Math.round(base*0.5):0,total=base-disc;
-  const komisi=Math.round(total*KOMISI_RATE);
-  const referredBy=validRefCode||currentUserData?.referredBy||null;
-  const orderId='CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
+
+  const base  = curPkg.price;
+  const disc  = discApplied ? Math.round(base*(discPct/100)) : 0;
+  const total = base - disc;
+  const komisi = Math.round(total*(komisiPct/100));
+  const referredBy = validRefCode || currentUserData?.referredBy || null;
+  const orderId = 'CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
+
   let subBabDibeli=[];
   if(curPkg.type==='alacarte')subBabDibeli=selAlacarte.map(s=>s.subbab);
   else if(curPkg.type==='bundling')subBabDibeli=selBundling.map(s=>s.subbab);
   else subBabDibeli=['__premium__'];
+
   btn.disabled=true;btn.textContent='Memproses...';
   try{
-    await addDoc(collection(db,'orders'),{uid:currentUser.uid,email:currentUser.email,segmen:selectedSegmen,paket:curPkg.name,tipe:curPkg.type,subBabDibeli,hargaBase:base,diskon:disc,total,refCode:referredBy,komisi,midtransOrderId:orderId,status:'pending',createdAt:serverTimestamp()});
-    if(referredBy&&discApplied&&!currentUserData?.hasUsedReferral){await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});if(currentUserData)currentUserData.hasUsedReferral=true;}
-    const res=await fetch('/api/create-transaction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:`${selectedSegmen} - ${curPkg.name}`})});
+    // Simpan order
+    await addDoc(collection(db,'orders'),{
+      uid:currentUser.uid, email:currentUser.email,
+      segmen:selectedSegmen, paket:curPkg.name, tipe:curPkg.type,
+      subBabDibeli, hargaBase:base, diskon:disc, discPct,
+      total, refCode:referredBy, komisi, komisiPct,
+      isPromoCode, midtransOrderId:orderId,
+      status:'pending', createdAt:serverTimestamp()
+    });
+
+    // Update hasUsedReferral hanya untuk kode referral user biasa
+    if(!isPromoCode && referredBy && discApplied && !currentUserData?.hasUsedReferral){
+      await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});
+      if(currentUserData)currentUserData.hasUsedReferral=true;
+    }
+
+    // Update usedCount kode promo
+    if(isPromoCode && promoData?.docId){
+      await updateDoc(doc(db,'promoCodes',promoData.docId),{
+        usedCount: (promoData.usedCount||0)+1
+      });
+    }
+
+    const res=await fetch('/api/create-transaction',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:`${selectedSegmen} - ${curPkg.name}`})
+    });
     const data=await res.json();
     if(!data.token)throw new Error(JSON.stringify(data.error));
+
     window.snap.pay(data.token,{
       onSuccess:async function(){
-        if(curPkg.type==='bulanan'){const exp=new Date();exp.setMonth(exp.getMonth()+1);await updateDoc(doc(db,'users',currentUser.uid),{plan:'premium',expiredAt:exp,subBabAkses:['__premium__']});}
-        else{await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});}
-        if(referredBy){const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});}
+        if(curPkg.type==='bulanan'){
+          const exp=new Date();exp.setMonth(exp.getMonth()+1);
+          await updateDoc(doc(db,'users',currentUser.uid),{plan:'premium',expiredAt:exp,subBabAkses:['__premium__']});
+        } else {
+          await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});
+        }
+        // Kirim komisi ke owner kode
+        if(referredBy && komisi > 0){
+          // Cek kode promo dulu
+          if(isPromoCode && promoData?.ownerUid){
+            await updateDoc(doc(db,'users',promoData.ownerUid),{komisiTotal:increment(komisi)});
+          } else if(!isPromoCode){
+            // Kode referral user biasa
+            const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));
+            if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});
+          }
+        }
         $('successSubbab').textContent=curPkg.type==='bulanan'?'Semua sub-bab sudah terbuka!':`Sub-bab aktif: ${subBabDibeli.join(', ')}`;
         $('mainView').style.display='none';$('successView').style.display='block';
       },
