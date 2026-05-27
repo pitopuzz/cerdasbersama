@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulasi CBT — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #faf8f5; --white: #fff; --border: #e8e4dc; --text: #1a1714;
+      --muted: #7a7168; --muted2: #b0a89c; --red: #C0392B; --red2: #a93226;
+      --gold: #e8970a; --gold-bg: #fff8e6; --green: #1a7a4a; --green-bg: #edfaf3;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06); --shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    
+    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    .nav-logo { font-weight: 800; font-size: 17px; color: var(--red); }
+    .nav-logo span { color: var(--text); }
+    .nav-back { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--muted); text-decoration: none; }
+
+    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 200; }
+    .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* LAYOUT UTAMA CBT (Split Screen) */
+    .cbt-container { display: grid; grid-template-columns: 1fr 300px; gap: 20px; max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+    @media (max-width: 850px) { .cbt-container { grid-template-columns: 1fr; } }
+
+    /* KOLOM KIRI: SOAL */
+    .soal-wrapper { display: flex; flex-direction: column; gap: 16px; }
+    .soal-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm); min-height: 300px; }
+    .soal-meta { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .tag { font-size: 11px; font-weight: 700; color: var(--red); background: #fff5f5; border: 1px solid #fdd; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; }
+    .tag.tipe { color: var(--gold); background: var(--gold-bg); border-color: #f5d06a; }
+    .soal-text { font-size: 16px; font-weight: 700; line-height: 1.6; margin-bottom: 24px; white-space: pre-line; }
+
+    /* INTERFACE JAWABAN DINAMIS */
+    .opsi-list { display: flex; flex-direction: column; gap: 10px; }
+    .opsi-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.15s; background: var(--white); }
+    .opsi-item:hover { border-color: var(--red); background: #fff8f8; }
+    .opsi-item.selected { border-color: var(--red); background: #fff5f5; font-weight: 700; }
+    .opsi-key { width: 32px; height: 32px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); }
+    .opsi-item.selected .opsi-key { background: var(--red); color: #fff; border-color: var(--red); }
+    
+    /* UI Isian Singkat */
+    .input-isian { width: 100%; max-width: 400px; border: 2px solid var(--border); border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 700; font-family: inherit; outline: none; transition: border-color 0.2s; }
+    .input-isian:focus { border-color: var(--red); }
+
+    /* UI PG Majemuk (Tabel) */
+    .tabel-majemuk { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .tabel-majemuk th, .tabel-majemuk td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+    .tabel-majemuk th { background: #f5f3ef; font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; }
+    .tabel-majemuk td { font-size: 14px; font-weight: 600; }
+    .radio-cell { text-align: center; width: 80px; }
+    .radio-cell input { cursor: pointer; width: 18px; height: 18px; accent-color: var(--red); }
+
+    /* NAVIGASI BAWAH SOAL */
+    .soal-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+    .btn-cbt { padding: 12px 24px; border-radius: 50px; border: none; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-cbt.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.25); }
+    .btn-cbt.primary:hover { background: var(--red2); }
+    .btn-cbt.secondary { background: #f5f3ef; color: var(--text); border: 1.5px solid var(--border); }
+    .btn-cbt.secondary:hover { background: var(--border); }
+    .btn-cbt:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* KOLOM KANAN: SIDEBAR GRID NOMOR */
+    .sidebar-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: var(--shadow-sm); position: sticky; top: 80px; }
+    .sidebar-title { font-size: 13px; font-weight: 800; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 14px; }
+    .nomor-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-height: 350px; overflow-y: auto; padding-right: 4px; }
+    .nomor-btn { aspect-ratio: 1; border: 1.5px solid var(--border); background: var(--white); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--text); cursor: pointer; transition: all 0.15s; }
+    .nomor-btn:hover { border-color: var(--red); color: var(--red); }
+    .nomor-btn.current { border-color: var(--text); background: var(--text); color: #fff; }
+    .nomor-btn.filled { background: #fff5f5; border-color: var(--red); color: var(--red); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:12px; color:var(--muted)">· CBT Engine</span></div>
+  <a href="/dashboard.html" class="nav-back">← Keluar Ujian</a>
+</nav>
+
+<div id="loadingScreen"><div class="spinner"></div><p style="font-size:14px; font-weight:500; color:var(--muted)">Menyiapkan lembar ujian CBT…</p></div>
+
+<div class="cbt-container">
+  <div class="soal-wrapper">
+    <div class="soal-card">
+      <div class="soal-meta">
+        <span class="tag" id="tagMapel">—</span>
+        <span class="tag tipe" id="tagTipe">—</span>
+      </div>
+      <div class="soal-text" id="boxPertanyaan">Memuat soal...</div>
+      
+      <div id="boxJawaban"></div>
+    </div>
+
+    <div class="soal-nav">
+      <button class="btn-cbt secondary" id="btnPrev" onclick="lompatSoal(currentIdx - 1)">← Sebelumnya</button>
+      <button class="btn-cbt primary" id="btnNext" onclick="lompatSoal(currentIdx + 1)">Selanjutnya →</button>
+    </div>
+  </div>
+
+  <div class="sidebar-card">
+    <div class="sidebar-title">Nomor Soal</div>
+    <div class="nomor-grid" id="gridNomor"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+  
+  let allSoal = [];
+  let currentIdx = 0;
+  let jawabanUser = {}; // Format key: id_soal, value: sesuai tipe soalnya
+
+  // Monitor Auth & Tarik Data
+  onAuthStateChanged(auth, async user => {
+    if(!user) { window.location.href = '/register.html'; return; }
+    
+    // Ambil param dari URL untuk nentuin soal mana yang ditarik (Contoh: latihan-cbt.html?segmen=CBT CPNS)
+    const params = new URLSearchParams(window.location.search);
+    const targetSegmen = params.get('segmen') || 'CBT CPNS'; 
+
+    try {
+      const q = query(collection(db, 'soal'), where('segmen', '==', targetSegmen));
+      const snap = await getDocs(q);
+      allSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if(allSoal.length === 0) {
+        $('boxPertanyaan').innerHTML = "<div style='color:var(--red)'>Belum ada soal tersedia di segmen ini. Sila upload via Admin CBT terlebih dahulu.</div>";
+        $('loadingScreen').style.display = 'none';
+        return;
+      }
+
+      $('loadingScreen').style.display = 'none';
+      initCBT();
+    } catch (err) {
+      alert("Gagal memuat soal: " + err.message);
+    }
+  });
+
+  function initCBT() {
+    renderGridNomor();
+    tampilkanSoal();
+  }
+
+  // 1. RENDER GRID NOMOR DI SIDEBAR
+  function renderGridNomor() {
+    const grid = $('gridNomor');
+    grid.innerHTML = '';
+    allSoal.forEach((soal, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'nomor-btn';
+      btn.id = `num_btn_${idx}`;
+      btn.textContent = idx + 1;
+      
+      // Kasih tanda kalau soal ini sudah ada isinya di objek jawabanUser
+      if (jawabanUser[soal.id] !== undefined) {
+        btn.classList.add('filled');
+      }
+      if (idx === currentIdx) {
+        btn.classList.add('current');
+      }
+
+      btn.onclick = () => lompatSoal(idx);
+      grid.appendChild(btn);
+    });
+  }
+
+  // 2. LOMPAT ANTAR NOMOR SOAL
+  window.lompatSoal = function(targetIdx) {
+    if (targetIdx < 0 || targetIdx >= allSoal.length) return;
+    currentIdx = targetIdx;
+    
+    // Update UI Status nomor aktif di sidebar grid
+    document.querySelectorAll('.nomor-btn').forEach(b => b.classList.remove('current'));
+    const currentBtn = $(`num_btn_${currentIdx}`);
+    if (currentBtn) currentBtn.classList.add('current');
+
+    tampilkanSoal();
+  };
+
+  // 3. CORE ENGINE: RENDER UI FORM SESUAI TIPE SOAL
+  function tampilkanSoal() {
+    const soal = allSoal[currentIdx];
+    
+    // Update Meta Tag
+    $('tagMapel').textContent = soal.kategori || 'Ujian';
+    $('tagTipe').textContent = String(soal.tipeSoal).replace('_', ' ');
+    $('boxPertanyaan').textContent = `${currentIdx + 1}. ${soal.pertanyaan}`;
+
+    // Manage status tombol prev/next
+    $('btnPrev').disabled = currentIdx === 0;
+    $('btnNext').textContent = currentIdx + 1 === allSoal.length ? 'Selesai Ujian' : 'Selanjutnya →';
+
+    const boxJawaban = $('boxJawaban');
+    boxJawaban.innerHTML = '';
+
+    const tipe = soal.tipeSoal || 'pg_biasa';
+    const savedAnswer = jawabanUser[soal.id];
+
+    // --- TIPE 1 & 2: PILIHAN GANDA (BIASA / TKP) ---
+    if (tipe === 'pg_biasa' || tipe === 'tkp') {
+      const listDiv = document.createElement('div');
+      listDiv.className = 'opsi-list';
+      
+      ['A','B','C','D','E'].forEach(key => {
+        if (!soal.opsi || !soal.opsi[key]) return; // Skip kalau opsinya kosong
+        
+        const item = document.createElement('div');
+        item.className = 'opsi-item' + (savedAnswer === key ? ' selected' : '');
+        item.innerHTML = `<div class="opsi-key">${key}</div><div class="opsi-text">${soal.opsi[key]}</div>`;
+        
+        item.onclick = () => {
+          document.querySelectorAll('.opsi-item').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          simpanJawaban(soal.id, key);
+        };
+        listDiv.appendChild(item);
+      });
+      boxJawaban.appendChild(listDiv);
+    }
+    
+    // --- TIPE 3: ISIAN SINGKAT ---
+    else if (tipe === 'isian') {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'input-isian';
+      input.placeholder = 'Ketik jawaban Anda di sini...';
+      input.value = savedAnswer || '';
+      
+      // Simpan tiap kali user mengetik/mengubah teks
+      input.oninput = () => {
+        simpanJawaban(soal.id, input.value.trim());
+      };
+      boxJawaban.appendChild(input);
+    }
+    
+    // --- TIPE 4: PILIHAN GANDA MAJEMUK (MATRIKS BENAR/SALAH) ---
+    else if (tipe === 'majemuk') {
+      if (!soal.pernyataanMajemuk || !soal.pernyataanMajemuk.length) return;
+      
+      const table = document.createElement('table');
+      table.className = 'tabel-majemuk';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Pernyataan</th>
+            <th style="text-align:center; width:80px;">Benar</th>
+            <th style="text-align:center; width:80px;">Salah</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+      
+      const tbody = table.querySelector('tbody');
+      // Ambil jawaban majemuk yang tersimpan, atau buat object kosong jika belum dijawab
+      const currentMajemukAns = savedAnswer || {}; 
+
+      soal.pernyataanMajemuk.forEach((p, pIdx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${p.teks}</td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Benar" ${currentMajemukAns[pIdx] === 'Benar' ? 'checked' : ''}/></td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Salah" ${currentMajemukAns[pIdx] === 'Salah' ? 'checked' : ''}/></td>
+        `;
+        
+        // Event listener saat salah satu radio button di baris tersebut diklik
+        tr.querySelectorAll('input').forEach(radio => {
+          radio.onchange = () => {
+            currentMajemukAns[pIdx] = radio.value;
+            simpanJawaban(soal.id, currentMajemukAns);
+          };
+        });
+        tbody.appendChild(tr);
+      });
+      boxJawaban.appendChild(table);
+    }
+  }
+
+  // 4. MEMORI STATE: SIMPAN JAWABAN SEMENTARA DI MEMORI BROWSER
+  function simpanJawaban(soalId, value) {
+    // Jika tipe data kosong (pada isian singkat), hapus key agar status di nomor grid kembali putih
+    if (value === '' || (typeof value === 'object' && Object.keys(value).length === 0)) {
+      delete jawabanUser[soalId];
+      $(`num_btn_${currentIdx}`).classList.remove('filled');
+    } else {
+      jawabanUser[soalId] = value;
+      $(`num_btn_${currentIdx}`).classList.add('filled');
+    }
+    console.log("State Jawaban Saat Ini:", jawabanUser); // Monitor via log console
+  }
+</script>
+</body>
+</html>
