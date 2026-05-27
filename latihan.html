@@ -196,7 +196,7 @@
       </div>
       <button class="btn-hasil pdf" onclick="downloadPDF()">📄 Download PDF Hasil & Pembahasan</button>
       <button class="btn-hasil primary" onclick="ulangiLatihan()">🔄 Ulangi Sub-Bab Ini</button>
-      <button class="btn-hasil secondary" onclick="goToScreen('screenSubbab')">← Pilih Sub-Bab Lain</button>
+      <button class="btn-hasil secondary" id="btnBackFromHasil">← Kembali</button>
     </div>
     <div id="reviewSection"></div>
   </div>
@@ -223,11 +223,26 @@
   let currentSegmen='', currentKategori='', currentSubbab='';
   let soalLatihan=[], currentIdx=0, jawaban=[], answered=false;
 
+  // Baca URL params — untuk deep link dari dashboard
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramSubbab  = urlParams.get('subbab')  || '';
+  const paramSegmen  = urlParams.get('segmen')  || '';
+  const paramMapel   = urlParams.get('mapel')   || '';
+  const deepLink     = !!paramSubbab;
+
   const MAPEL_ICON={'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'};
 
   function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
   function goToScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);}
   function hasAccess(subbab){if(isPremium||subBabAkses.includes('__premium__'))return true;return subBabAkses.includes(subbab);}
+
+  // Simpan progress done di localStorage
+  function markSubbabDone(sb) {
+    try {
+      const done = JSON.parse(localStorage.getItem('cb_done_subbab') || '[]');
+      if (!done.includes(sb)) { done.push(sb); localStorage.setItem('cb_done_subbab', JSON.stringify(done)); }
+    } catch(_) {}
+  }
 
   window.goToScreen=goToScreen;
 
@@ -245,15 +260,42 @@
     isPremium    = userData.plan==='premium';
     subBabAkses  = userData.subBabAkses||[];
     allSoal      = soalSnap.docs.map(d=>({id:d.id,...d.data()}));
-    // Semua segmen dari Firestore — aktif maupun coming soon
     allSegmen    = segmenSnap.docs.map(d=>d.data());
 
     $('loadingScreen').style.opacity='0';
     setTimeout(()=>$('loadingScreen').style.display='none',300);
-    renderSegmen();
+
+    // ── DEEP LINK: langsung ke soal ──
+    if (deepLink && hasAccess(paramSubbab)) {
+      currentSegmen  = paramSegmen;
+      currentKategori = paramMapel;
+      currentSubbab  = paramSubbab;
+
+      // Filter soal: match subKategori, dan segmen kalau ada
+      let soalList = allSoal.filter(s => s.subKategori === paramSubbab);
+      if (paramSegmen && soalList.some(s => s.segmen === paramSegmen)) {
+        soalList = soalList.filter(s => s.segmen === paramSegmen);
+      }
+
+      if (soalList.length) {
+        // Tombol back dari hasil → balik ke dashboard
+        $('btnBackFromHasil').onclick = () => window.location.href = '/dashboard.html';
+        startLatihan(paramSubbab, soalList);
+      } else {
+        showToast('Soal tidak ditemukan untuk sub-bab ini.');
+        renderSegmen();
+      }
+    } else if (deepLink && !hasAccess(paramSubbab)) {
+      showToast('Sub-bab ini belum dibeli.');
+      renderSegmen();
+    } else {
+      // Normal flow
+      $('btnBackFromHasil').onclick = () => goToScreen('screenSubbab');
+      renderSegmen();
+    }
   });
 
-  // ── SCREEN 1: SEGMEN (dinamis dari Firestore) ──
+  // ── SCREEN 1: SEGMEN ──
   function renderSegmen(){
     const grid=$('segmenGrid');
     grid.innerHTML='';
@@ -270,6 +312,7 @@
       else div.onclick=()=>showToast('Segmen ini akan segera hadir! 🚧');
       grid.appendChild(div);
     });
+    goToScreen('screenSegmen');
   }
 
   function selectSegmen(segmen){
@@ -279,7 +322,7 @@
     goToScreen('screenKategori');
   }
 
-  // ── SCREEN 2: KATEGORI (dinamis dari soal) ──
+  // ── SCREEN 2: KATEGORI ──
   function renderKategori(segmen){
     const soalSegmen = allSoal.filter(s=>s.segmen===segmen);
     const soalFiltered = soalSegmen.length ? soalSegmen : allSoal.filter(s=>!s.segmen);
@@ -403,6 +446,10 @@
   // ── SCREEN 5: HASIL ──
   function showHasil(){
     const total=jawaban.length,benar=jawaban.filter(j=>j.benar).length,salah=total-benar,skor=Math.round((benar/total)*100);
+
+    // Tandai sub-bab sebagai done kalau selesai
+    markSubbabDone(currentSubbab);
+
     let emoji='😢',title='Terus Semangat!';
     if(skor>=80){emoji='🎉';title='Luar Biasa!';}
     else if(skor>=60){emoji='👍';title='Bagus!';}
@@ -424,11 +471,12 @@
   }
 
   window.ulangiLatihan=function(){
-    const soalList=allSoal.filter(s=>s.subKategori===currentSubbab&&s.segmen===currentSegmen);
+    let soalList=allSoal.filter(s=>s.subKategori===currentSubbab);
+    if(currentSegmen) soalList=soalList.filter(s=>s.segmen===currentSegmen||!s.segmen);
     startLatihan(currentSubbab,soalList);
   };
 
-  // ── DOWNLOAD PDF (sama seperti sebelumnya) ──
+  // ── PDF ──
   window.downloadPDF=function(){
     const {jsPDF}=window.jspdf;
     const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
