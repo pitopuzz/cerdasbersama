@@ -207,7 +207,7 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <div class="order-box">
         <div class="section-label">Ringkasan pesanan</div>
         <div class="order-row"><div><div class="label" id="orderName">—</div><div class="order-subbab" id="orderSubbab"></div></div><span id="orderBase">—</span></div>
-        <div class="order-row disc" id="discRow" style="display:none"><span class="label">Diskon 50% (pembelian pertama)</span><span id="discAmt">—</span></div>
+        <div class="order-row disc" id="discRow" style="display:none"><span class="label" id="discLabel">Diskon</span><span id="discAmt">—</span></div>
         <div class="order-row total"><span>Total bayar</span><span id="totalAmt" style="color:#C0392B">—</span></div>
       </div>
       <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
@@ -559,6 +559,7 @@ function updateOrder(){
   $('orderBase').textContent='Rp '+base.toLocaleString('id');
   $('discRow').style.display=disc>0?'flex':'none';
   $('discAmt').textContent=`-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
+  $('discLabel').textContent=`Diskon ${discPct}%${isPromoCode?' (kode promo)':' (pembelian pertama)'}`;
   $('totalAmt').textContent='Rp '+total.toLocaleString('id');
 }
 
