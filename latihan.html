@@ -10,30 +10,25 @@
     :root{--bg:#faf8f5;--white:#fff;--surface2:#f5f3ef;--border:#e8e4dc;--text:#1a1714;--muted:#7a7168;--muted2:#b0a89c;--red:#C0392B;--red2:#a93226;--gold:#e8970a;--gold-bg:#fff8e6;--gold-border:#f5d06a;--green:#1a7a4a;--green-bg:#edfaf3;--shadow-sm:0 1px 3px rgba(0,0,0,0.06);--shadow:0 4px 16px rgba(0,0,0,0.08)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-
     nav{background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
     .nav-logo{font-weight:800;font-size:17px;color:var(--red)}
     .nav-logo span{color:var(--text)}
     .nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;transition:color 0.18s}
     .nav-back:hover{color:var(--red)}
-
     #loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;transition:opacity 0.3s}
     .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.75s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
     #loadingScreen p{font-size:14px;color:var(--muted);font-weight:500}
-
     main{max-width:760px;margin:0 auto;padding:28px 20px 80px}
     .screen{display:none}
     .screen.active{display:block;animation:fadeUp 0.35s ease}
     @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
     .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px}
     .page-sub{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:24px}
-
     .back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;margin-bottom:20px;background:none;border:none;transition:color 0.18s;padding:0}
     .back-btn:hover{color:var(--red)}
 
-    /* SEGMEN GRID */
+    /* SEGMEN */
     .segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px}
     .segmen-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:18px 14px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden;text-align:center}
     .segmen-card:hover:not(.coming-soon){border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shadow)}
@@ -43,7 +38,7 @@
     .segmen-desc{font-size:11px;color:var(--muted);font-weight:500}
     .cs-badge{position:absolute;top:8px;right:8px;background:var(--surface2);border:1px solid var(--border);border-radius:50px;padding:2px 7px;font-size:9px;font-weight:800;color:var(--muted2);text-transform:uppercase;letter-spacing:0.4px}
 
-    /* KATEGORI GRID */
+    /* KATEGORI */
     .kategori-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
     @media(max-width:500px){.kategori-grid{grid-template-columns:1fr}}
     .kat-card{background:var(--white);border:2px solid var(--border);border-radius:18px;padding:22px 18px;text-align:center;cursor:pointer;transition:all 0.2s}
@@ -65,7 +60,6 @@
     .access-badge.ok{background:var(--green-bg);color:var(--green)}
     .access-badge.lock{background:var(--gold-bg);color:#8a5e00;border:1px solid var(--gold-border)}
     .access-badge.premium-ok{background:var(--gold-bg);color:#8a5e00}
-
     .upgrade-wall{background:linear-gradient(135deg,#fffbf0,#fff8e0);border:2px solid var(--gold-border);border-radius:20px;padding:28px 24px;text-align:center;margin-top:8px}
     .upgrade-wall h3{font-size:17px;font-weight:900;margin-bottom:8px}
     .upgrade-wall p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;font-weight:500}
@@ -79,11 +73,9 @@
     .soal-progress-bar{height:6px;background:var(--border);border-radius:50px;overflow:hidden}
     .soal-progress-fill{height:100%;background:var(--red);border-radius:50px;transition:width 0.4s ease}
     .soal-counter{font-size:13px;font-weight:800;color:var(--red);background:#fff5f5;border:1.5px solid #fdd;padding:6px 14px;border-radius:50px;white-space:nowrap}
-
     .soal-card{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
     .soal-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--red);background:#fff5f5;border:1px solid #fdd;padding:4px 12px;border-radius:50px;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
     .soal-text{font-size:16px;font-weight:700;line-height:1.6;color:var(--text);margin-bottom:20px}
-
     .opsi-list{display:flex;flex-direction:column;gap:10px}
     .opsi-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all 0.18s;background:var(--white)}
     .opsi-item:hover:not(.answered){border-color:var(--red);background:#fff8f8}
@@ -95,13 +87,11 @@
     .opsi-item.wrong .opsi-key{background:var(--red);color:#fff}
     .opsi-item.show-correct .opsi-key{background:var(--green);color:#fff}
     .opsi-text{font-size:14px;font-weight:500;color:var(--text);line-height:1.5}
-
     .pembahasan-box{background:var(--green-bg);border:1.5px solid #b8e6d0;border-radius:14px;padding:16px 18px;margin-top:14px;display:none;animation:fadeUp 0.3s ease}
     .pembahasan-box.wrong-box{background:#fef2f2;border-color:#fdd}
     .pembahasan-title{font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
     .pembahasan-box.wrong-box .pembahasan-title{color:var(--red)}
     .pembahasan-text{font-size:13px;color:var(--text);line-height:1.6;font-weight:500}
-
     .soal-nav{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
     .btn-soal{padding:12px 28px;border-radius:50px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.18s}
     .btn-soal.primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.25)}
@@ -123,7 +113,6 @@
     .hasil-stat .lbl{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-top:3px}
     .hasil-stat.green .val{color:var(--green)}
     .hasil-stat.red .val{color:var(--red)}
-
     .btn-hasil{display:block;width:100%;padding:14px;border-radius:50px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;margin-bottom:10px;transition:all 0.18s}
     .btn-hasil.primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.25)}
     .btn-hasil.primary:hover{background:var(--red2)}
@@ -131,7 +120,6 @@
     .btn-hasil.secondary:hover{background:var(--border)}
     .btn-hasil.pdf{background:var(--green-bg);color:var(--green);border:1.5px solid #b8e6d0}
     .btn-hasil.pdf:hover{background:#d4f5e6}
-
     .review-list{display:flex;flex-direction:column;gap:14px;margin-top:20px}
     .review-item{background:var(--white);border-radius:16px;padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm)}
     .review-item.benar{border-color:#b8e6d0}
@@ -144,48 +132,34 @@
     .review-pill.user-salah{background:#fef2f2;color:var(--red)}
     .review-pill.correct{background:var(--green-bg);color:var(--green)}
     .review-pembahasan{font-size:12px;color:var(--muted);line-height:1.6;font-weight:500;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
-
     #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:#fff;border-radius:50px;padding:10px 22px;font-size:13px;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:var(--shadow)}
     #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   </style>
 </head>
 <body>
-
-<div id="loadingScreen">
-  <div class="spinner"></div>
-  <p>Memuat soal…</p>
-</div>
-
+<div id="loadingScreen"><div class="spinner"></div><p>Memuat soal…</p></div>
 <nav>
   <div class="nav-logo">Cerdas<span>Bersama</span></div>
   <a href="/dashboard.html" class="nav-back">← Dashboard</a>
 </nav>
-
 <main>
-  <!-- SCREEN 1: PILIH SEGMEN -->
   <div class="screen active" id="screenSegmen">
     <div class="page-title">Pilih Segmen</div>
     <div class="page-sub">Pilih jenjang yang ingin kamu latih.</div>
     <div class="segmen-grid" id="segmenGrid"></div>
   </div>
-
-  <!-- SCREEN 2: PILIH KATEGORI -->
   <div class="screen" id="screenKategori">
     <button class="back-btn" onclick="goToScreen('screenSegmen')">← Ganti Segmen</button>
     <div class="page-title" id="kategoriTitle">Pilih Mata Pelajaran</div>
     <div class="page-sub">Pilih pelajaran yang ingin kamu latih.</div>
     <div class="kategori-grid" id="kategoriGrid"></div>
   </div>
-
-  <!-- SCREEN 3: PILIH SUB-BAB -->
   <div class="screen" id="screenSubbab">
     <button class="back-btn" onclick="goToScreen('screenKategori')">← Ganti Pelajaran</button>
     <div class="page-title" id="subbabTitle">Pilih Sub-Bab</div>
     <div class="page-sub">Pilih topik yang ingin kamu pelajari.</div>
     <div class="subbab-list" id="subbabList"></div>
   </div>
-
-  <!-- SCREEN 4: SOAL -->
   <div class="screen" id="screenSoal">
     <div class="soal-header">
       <div class="soal-progress-wrap">
@@ -208,8 +182,6 @@
       <button class="btn-soal primary" id="btnNext" onclick="nextSoal()" disabled>Lanjut →</button>
     </div>
   </div>
-
-  <!-- SCREEN 5: HASIL -->
   <div class="screen" id="screenHasil">
     <div class="hasil-card">
       <span class="hasil-emoji" id="hasilEmoji">🎉</span>
@@ -229,13 +201,12 @@
     <div id="reviewSection"></div>
   </div>
 </main>
-
 <div id="toast"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, query, where, getDocs, doc, getDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   let firebaseConfig;
   try { const mod=await import('./firebase-config.js'); firebaseConfig=mod.firebaseConfig||mod.default; }
@@ -248,69 +219,54 @@
 
   let currentUser=null, userData=null;
   let subBabAkses=[], isPremium=false;
-  let allSoal=[];
+  let allSoal=[], allSegmen=[];
   let currentSegmen='', currentKategori='', currentSubbab='';
   let soalLatihan=[], currentIdx=0, jawaban=[], answered=false;
-
-  const SEGMEN_CONFIG = [
-    { id:'SD Kelas 6', icon:'📚', desc:'Matematika, IPAS, B.Inggris', aktif:true },
-    { id:'SMP Kelas 7', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
-    { id:'SMP Kelas 8', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
-    { id:'SMP Kelas 9', icon:'📚', desc:'Mat, B.Indo, B.Ing, IPA, IPS', aktif:false },
-    { id:'SMA Kelas 10', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
-    { id:'SMA Kelas 11', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
-    { id:'SMA Kelas 12', icon:'📚', desc:'Mat, B.Indo, B.Ing, Fisika, dll', aktif:false },
-    { id:'Try Out', icon:'📝', desc:'Persiapan UTS/UAS Kelas 6-12', aktif:false },
-    { id:'SNBT PTN', icon:'🎯', desc:'195 menit · 160 soal', aktif:false },
-    { id:'CBT CPNS', icon:'🏛️', desc:'130 menit · 110 soal', aktif:false },
-  ];
 
   const MAPEL_ICON={'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️','Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'};
 
   function showToast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+  function goToScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);}
+  function hasAccess(subbab){if(isPremium||subBabAkses.includes('__premium__'))return true;return subBabAkses.includes(subbab);}
 
-  function goToScreen(id){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    $(id).classList.add('active');
-    window.scrollTo(0,0);
-  }
+  window.goToScreen=goToScreen;
 
-  function hasAccess(subbab){
-    if(isPremium||subBabAkses.includes('__premium__')) return true;
-    return subBabAkses.includes(subbab);
-  }
-
-  // ── AUTH ──
   onAuthStateChanged(auth, async user => {
     if(!user){window.location.href='/register.html';return;}
     currentUser=user;
-    const userSnap=await getDoc(doc(db,'users',user.uid));
-    if(!userSnap.exists()){window.location.href='/register.html';return;}
-    userData=userSnap.data();
-    isPremium=userData.plan==='premium';
-    subBabAkses=userData.subBabAkses||[];
+    const [userSnap, soalSnap, segmenSnap] = await Promise.all([
+      getDoc(doc(db,'users',user.uid)),
+      getDocs(collection(db,'soal')),
+      getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
+    ]);
 
-    const snap=await getDocs(collection(db,'soal'));
-    allSoal=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!userSnap.exists()){window.location.href='/register.html';return;}
+    userData     = userSnap.data();
+    isPremium    = userData.plan==='premium';
+    subBabAkses  = userData.subBabAkses||[];
+    allSoal      = soalSnap.docs.map(d=>({id:d.id,...d.data()}));
+    // Semua segmen dari Firestore — aktif maupun coming soon
+    allSegmen    = segmenSnap.docs.map(d=>d.data());
 
     $('loadingScreen').style.opacity='0';
     setTimeout(()=>$('loadingScreen').style.display='none',300);
     renderSegmen();
   });
 
-  // ── SCREEN 1: SEGMEN ──
+  // ── SCREEN 1: SEGMEN (dinamis dari Firestore) ──
   function renderSegmen(){
     const grid=$('segmenGrid');
     grid.innerHTML='';
-    SEGMEN_CONFIG.forEach(s=>{
+    allSegmen.forEach(s=>{
+      const aktif = s.aktif === true;
       const div=document.createElement('div');
-      div.className='segmen-card'+(s.aktif?'':' coming-soon');
+      div.className='segmen-card'+(aktif?'':' coming-soon');
       div.innerHTML=`
-        ${!s.aktif?'<div class="cs-badge">🚧 Coming Soon</div>':''}
-        <div class="segmen-icon">${s.icon}</div>
+        ${!aktif?'<div class="cs-badge">🚧 Coming Soon</div>':''}
+        <div class="segmen-icon">${s.icon||'📚'}</div>
         <div class="segmen-name">${s.id}</div>
-        <div class="segmen-desc">${s.desc}</div>`;
-      if(s.aktif) div.onclick=()=>selectSegmen(s.id);
+        <div class="segmen-desc">${s.desc||''}</div>`;
+      if(aktif) div.onclick=()=>selectSegmen(s.id);
       else div.onclick=()=>showToast('Segmen ini akan segera hadir! 🚧');
       grid.appendChild(div);
     });
@@ -323,11 +279,10 @@
     goToScreen('screenKategori');
   }
 
-  // ── SCREEN 2: KATEGORI ──
+  // ── SCREEN 2: KATEGORI (dinamis dari soal) ──
   function renderKategori(segmen){
-    const soalSegmen=allSoal.filter(s=>s.segmen===segmen);
-    // Fallback: kalau belum ada field segmen, tampilkan semua (untuk soal lama SD)
-    const soalFiltered = soalSegmen.length ? soalSegmen : allSoal;
+    const soalSegmen = allSoal.filter(s=>s.segmen===segmen);
+    const soalFiltered = soalSegmen.length ? soalSegmen : allSoal.filter(s=>!s.segmen);
     const kats=[...new Set(soalFiltered.map(s=>s.kategori))];
     const grid=$('kategoriGrid');
     grid.innerHTML='';
@@ -341,32 +296,28 @@
     });
   }
 
-  function selectKategori(kat, soalFiltered){
+  function selectKategori(kat,soalFiltered){
     currentKategori=kat;
-    const icon=MAPEL_ICON[kat]||'📚';
-    $('subbabTitle').textContent=`${icon} ${kat}`;
-    renderSubbab(kat, soalFiltered);
+    $('subbabTitle').textContent=`${MAPEL_ICON[kat]||'📚'} ${kat}`;
+    renderSubbab(kat,soalFiltered);
     goToScreen('screenSubbab');
   }
 
   // ── SCREEN 3: SUB-BAB ──
-  function renderSubbab(kat, soalAll){
+  function renderSubbab(kat,soalAll){
     const soalKat=soalAll.filter(s=>s.kategori===kat);
     const subBabs=[...new Set(soalKat.map(s=>s.subKategori))].sort((a,b)=>{
       const minA=Math.min(...soalKat.filter(s=>s.subKategori===a).map(s=>s.urutan||99));
       const minB=Math.min(...soalKat.filter(s=>s.subKategori===b).map(s=>s.urutan||99));
       return minA-minB;
     });
-
     const list=$('subbabList');
     list.innerHTML='';
     let hasLocked=false;
-
     subBabs.forEach((sb,i)=>{
       const soalSb=soalKat.filter(s=>s.subKategori===sb);
       const canAccess=hasAccess(sb);
       if(!canAccess) hasLocked=true;
-
       const div=document.createElement('div');
       div.className='subbab-item'+(canAccess?'':' locked');
       div.innerHTML=`
@@ -380,16 +331,14 @@
         <span class="access-badge ${canAccess?(isPremium||subBabAkses.includes('__premium__')?'premium-ok':'ok'):'lock'}">
           ${canAccess?(isPremium||subBabAkses.includes('__premium__')?'⭐ Premium':'✓ Aktif'):'🔒 Beli'}
         </span>`;
-
       if(canAccess) div.onclick=()=>startLatihan(sb,soalSb);
       else div.onclick=()=>showToast('Sub-bab ini belum dibeli. Klik Beli untuk akses!');
       list.appendChild(div);
     });
-
     if(hasLocked){
       const wall=document.createElement('div');
       wall.className='upgrade-wall';
-      wall.innerHTML=`<h3>🔒 Buka Sub-Bab Ini</h3><p>Beli à la carte per sub-bab (Rp 7.900) atau bundling untuk harga lebih hemat. Premium bulanan buka semua!</p><a href="/pricing.html" class="btn-upgrade-wall">Lihat Paket →</a>`;
+      wall.innerHTML=`<h3>🔒 Buka Sub-Bab Ini</h3><p>Beli à la carte per sub-bab (Rp 7.900) atau bundling untuk harga lebih hemat.</p><a href="/pricing.html" class="btn-upgrade-wall">Lihat Paket →</a>`;
       list.appendChild(wall);
     }
   }
@@ -398,9 +347,8 @@
   function startLatihan(subbab,soalList){
     currentSubbab=subbab;
     soalLatihan=[...soalList].sort((a,b)=>(a.urutan||99)-(b.urutan||99));
-    currentIdx=0; jawaban=[]; answered=false;
-    goToScreen('screenSoal');
-    renderSoal();
+    currentIdx=0;jawaban=[];answered=false;
+    goToScreen('screenSoal');renderSoal();
   }
 
   function renderSoal(){
@@ -414,35 +362,31 @@
     $('pembahasanBox').style.display='none';
     $('pembahasanBox').className='pembahasan-box';
     answered=false;
-    $('btnNext').disabled=true; $('btnNext').textContent='Lanjut →';
+    $('btnNext').disabled=true;$('btnNext').textContent='Lanjut →';
     $('btnSkip').style.display='inline-block';
-
-    const opsiList=$('opsiList');
-    opsiList.innerHTML='';
+    const opsiList=$('opsiList');opsiList.innerHTML='';
     ['A','B','C','D','E'].filter(k=>soal.opsi[k]!==undefined).forEach(key=>{
-      const val=soal.opsi[key];
       const div=document.createElement('div');
-      div.className='opsi-item'; div.dataset.key=key;
-      div.innerHTML=`<div class="opsi-key">${key}</div><div class="opsi-text">${val}</div>`;
+      div.className='opsi-item';div.dataset.key=key;
+      div.innerHTML=`<div class="opsi-key">${key}</div><div class="opsi-text">${soal.opsi[key]}</div>`;
       div.onclick=()=>pilihJawaban(key,soal);
       opsiList.appendChild(div);
     });
   }
 
   function pilihJawaban(key,soal){
-    if(answered) return;
+    if(answered)return;
     answered=true;
-    $('btnNext').disabled=false; $('btnSkip').style.display='none';
+    $('btnNext').disabled=false;$('btnSkip').style.display='none';
     const isBenar=key===soal.jawaban;
     jawaban.push({soal,pilihan:key,benar:isBenar});
     document.querySelectorAll('.opsi-item').forEach(item=>{
-      item.classList.add('answered'); item.style.cursor='default';
+      item.classList.add('answered');item.style.cursor='default';
       const k=item.dataset.key;
-      if(k===soal.jawaban) item.classList.add('show-correct');
-      else if(k===key) item.classList.add('wrong');
+      if(k===soal.jawaban)item.classList.add('show-correct');
+      else if(k===key)item.classList.add('wrong');
     });
-    const box=$('pembahasanBox');
-    box.style.display='block';
+    const box=$('pembahasanBox');box.style.display='block';
     if(isBenar){box.className='pembahasan-box';$('pembahasanTitle').textContent='✓ Jawaban Benar!';}
     else{box.className='pembahasan-box wrong-box';$('pembahasanTitle').textContent=`✗ Salah — Kunci: ${soal.jawaban}`;}
     $('pembahasanText').textContent=soal.pembahasan;
@@ -450,61 +394,41 @@
   }
 
   window.nextSoal=function(){
-    if(!answered) jawaban.push({soal:soalLatihan[currentIdx],pilihan:null,benar:false});
+    if(!answered)jawaban.push({soal:soalLatihan[currentIdx],pilihan:null,benar:false});
     currentIdx++;
-    if(currentIdx>=soalLatihan.length) showHasil();
+    if(currentIdx>=soalLatihan.length)showHasil();
     else renderSoal();
   };
 
   // ── SCREEN 5: HASIL ──
   function showHasil(){
-    const total=jawaban.length;
-    const benar=jawaban.filter(j=>j.benar).length;
-    const salah=total-benar;
-    const skor=Math.round((benar/total)*100);
+    const total=jawaban.length,benar=jawaban.filter(j=>j.benar).length,salah=total-benar,skor=Math.round((benar/total)*100);
     let emoji='😢',title='Terus Semangat!';
     if(skor>=80){emoji='🎉';title='Luar Biasa!';}
     else if(skor>=60){emoji='👍';title='Bagus!';}
     else if(skor>=40){emoji='💪';title='Terus Berlatih!';}
-    $('hasilEmoji').textContent=emoji;
-    $('hasilTitle').textContent=title;
+    $('hasilEmoji').textContent=emoji;$('hasilTitle').textContent=title;
     $('hasilSub').textContent=`${currentSegmen} · ${currentKategori} · ${currentSubbab} · ${new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})}`;
-    $('skorDisplay').textContent=skor;
-    $('statBenar').textContent=benar;
-    $('statSalah').textContent=salah;
-    $('statTotal').textContent=total;
-
+    $('skorDisplay').textContent=skor;$('statBenar').textContent=benar;$('statSalah').textContent=salah;$('statTotal').textContent=total;
     const review=$('reviewSection');
     review.innerHTML='<div style="font-size:15px;font-weight:800;margin-bottom:12px">📋 Review Jawaban</div>';
-    const reviewList=document.createElement('div');
-    reviewList.className='review-list';
+    const reviewList=document.createElement('div');reviewList.className='review-list';
     jawaban.forEach((j,i)=>{
-      const item=document.createElement('div');
-      item.className='review-item '+(j.benar?'benar':'salah');
+      const item=document.createElement('div');item.className='review-item '+(j.benar?'benar':'salah');
       const userAns=j.pilihan?`${j.pilihan}: ${j.soal.opsi[j.pilihan]}`:'Dilewati';
       const correctAns=`${j.soal.jawaban}: ${j.soal.opsi[j.soal.jawaban]}`;
-      item.innerHTML=`
-        <div class="review-no">Soal ${i+1} · ${j.benar?'✓ Benar':'✗ Salah'}</div>
-        <div class="review-q">${j.soal.pertanyaan}</div>
-        <div class="review-ans">
-          <span class="review-pill ${j.benar?'user-benar':'user-salah'}">Jawaban kamu: ${userAns}</span>
-          ${!j.benar?`<span class="review-pill correct">Kunci: ${correctAns}</span>`:''}
-        </div>
-        <div class="review-pembahasan">${j.soal.pembahasan}</div>`;
+      item.innerHTML=`<div class="review-no">Soal ${i+1} · ${j.benar?'✓ Benar':'✗ Salah'}</div><div class="review-q">${j.soal.pertanyaan}</div><div class="review-ans"><span class="review-pill ${j.benar?'user-benar':'user-salah'}">Jawaban kamu: ${userAns}</span>${!j.benar?`<span class="review-pill correct">Kunci: ${correctAns}</span>`:''}</div><div class="review-pembahasan">${j.soal.pembahasan}</div>`;
       reviewList.appendChild(item);
     });
-    review.appendChild(reviewList);
-    goToScreen('screenHasil');
+    review.appendChild(reviewList);goToScreen('screenHasil');
   }
 
   window.ulangiLatihan=function(){
-    const soalList=allSoal.filter(s=>s.subKategori===currentSubbab);
+    const soalList=allSoal.filter(s=>s.subKategori===currentSubbab&&s.segmen===currentSegmen);
     startLatihan(currentSubbab,soalList);
   };
 
-  window.goToScreen=goToScreen;
-
-  // ── DOWNLOAD PDF ──
+  // ── DOWNLOAD PDF (sama seperti sebelumnya) ──
   window.downloadPDF=function(){
     const {jsPDF}=window.jspdf;
     const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
@@ -514,60 +438,41 @@
     const total=jawaban.length,benar=jawaban.filter(j=>j.benar).length,skor=Math.round((benar/total)*100);
     const nama=userData?.nama||currentUser?.email||'Siswa';
     const tanggal=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
-
     function checkPage(needed=20){if(y+needed>pageH-margin){doc.addPage();y=margin;}}
     function wrapText(text,maxW,fontSize){doc.setFontSize(fontSize);return doc.splitTextToSize(String(text),maxW);}
-
-    // Header
-    doc.setFillColor(...RED); doc.rect(0,0,pageW,40,'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(18);
-    doc.text('CerdasBersama',margin,16);
-    doc.setFontSize(10); doc.setFont('helvetica','normal');
-    doc.text('Hasil Latihan Soal',margin,24);
-    doc.setFontSize(9);
-    doc.text(`${nama}  ·  ${tanggal}`,margin,31);
-    doc.text(`${currentSegmen} · ${currentKategori} · ${currentSubbab}`,margin,37);
+    doc.setFillColor(...RED);doc.rect(0,0,pageW,40,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(18);doc.text('CerdasBersama',margin,16);
+    doc.setFontSize(10);doc.setFont('helvetica','normal');doc.text('Hasil Latihan Soal',margin,24);
+    doc.setFontSize(9);doc.text(`${nama}  ·  ${tanggal}`,margin,31);doc.text(`${currentSegmen} · ${currentKategori} · ${currentSubbab}`,margin,37);
     y=50;
-
-    // Skor box
-    doc.setFillColor(255,245,245); doc.roundedRect(margin,y,contentW,32,4,4,'F');
-    doc.setDrawColor(...RED); doc.setLineWidth(0.5); doc.roundedRect(margin,y,contentW,32,4,4,'S');
-    doc.setTextColor(...RED); doc.setFont('helvetica','bold'); doc.setFontSize(28);
-    doc.text(`${skor}`,margin+contentW/2,y+17,{align:'center'});
-    doc.setFontSize(9); doc.setFont('helvetica','normal');
-    doc.text('SKOR',margin+contentW/2,y+25,{align:'center'});
+    doc.setFillColor(255,245,245);doc.roundedRect(margin,y,contentW,32,4,4,'F');
+    doc.setDrawColor(...RED);doc.setLineWidth(0.5);doc.roundedRect(margin,y,contentW,32,4,4,'S');
+    doc.setTextColor(...RED);doc.setFont('helvetica','bold');doc.setFontSize(28);doc.text(`${skor}`,margin+contentW/2,y+17,{align:'center'});
+    doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('SKOR',margin+contentW/2,y+25,{align:'center'});
     const colW=contentW/3;
     [{label:'Benar',val:benar,color:GREEN_TEXT},{label:'Salah',val:total-benar,color:RED},{label:'Total Soal',val:total,color:DARK}].forEach((s,i)=>{
       const x=margin+i*colW+colW-20;
-      doc.setTextColor(...s.color); doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text(String(s.val),x,y+8);
-      doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(...MUTED); doc.text(s.label,x,y+14);
+      doc.setTextColor(...s.color);doc.setFont('helvetica','bold');doc.setFontSize(14);doc.text(String(s.val),x,y+8);
+      doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(...MUTED);doc.text(s.label,x,y+14);
     });
     y+=40;
-
-    // Soal & Pembahasan
-    doc.setTextColor(...RED); doc.setFont('helvetica','bold'); doc.setFontSize(11);
-    doc.text('SOAL & PEMBAHASAN',margin,y); y+=6;
-    doc.setDrawColor(...RED); doc.setLineWidth(0.4); doc.line(margin,y,margin+contentW,y); y+=8;
-
+    doc.setTextColor(...RED);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('SOAL & PEMBAHASAN',margin,y);y+=6;
+    doc.setDrawColor(...RED);doc.setLineWidth(0.4);doc.line(margin,y,margin+contentW,y);y+=8;
     jawaban.forEach((j,i)=>{
       const isBenar=j.benar;
-      const bgColor=isBenar?GREEN_BG:RED_BG;
-      const borderColor=isBenar?GREEN_TEXT:RED;
+      const bgColor=isBenar?GREEN_BG:RED_BG,borderColor=isBenar?GREEN_TEXT:RED;
       const qLines=wrapText(`${i+1}. ${j.soal.pertanyaan}`,contentW-8,10);
       const pemLines=wrapText(j.soal.pembahasan,contentW-16,8);
       const opsiCount=Object.keys(j.soal.opsi).length;
       const estimatedH=8+qLines.length*5+opsiCount*5+pemLines.length*4+20;
       checkPage(estimatedH);
-
-      doc.setFillColor(...bgColor); doc.roundedRect(margin,y,contentW,estimatedH,3,3,'F');
-      doc.setDrawColor(...borderColor); doc.setLineWidth(0.3); doc.roundedRect(margin,y,contentW,estimatedH,3,3,'S');
+      doc.setFillColor(...bgColor);doc.roundedRect(margin,y,contentW,estimatedH,3,3,'F');
+      doc.setDrawColor(...borderColor);doc.setLineWidth(0.3);doc.roundedRect(margin,y,contentW,estimatedH,3,3,'S');
       y+=5;
-      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...borderColor);
-      doc.text(`SOAL ${i+1}  ${isBenar?'✓ BENAR':'✗ SALAH'}`,margin+4,y); y+=5;
-      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(...DARK);
-      const qText=wrapText(j.soal.pertanyaan,contentW-8,10);
-      doc.text(qText,margin+4,y); y+=qText.length*5+3;
-      doc.setFontSize(8); doc.setFont('helvetica','normal');
+      doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...borderColor);doc.text(`SOAL ${i+1}  ${isBenar?'✓ BENAR':'✗ SALAH'}`,margin+4,y);y+=5;
+      doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...DARK);
+      const qText=wrapText(j.soal.pertanyaan,contentW-8,10);doc.text(qText,margin+4,y);y+=qText.length*5+3;
+      doc.setFontSize(8);doc.setFont('helvetica','normal');
       ['A','B','C','D','E'].filter(k=>j.soal.opsi[k]).forEach(k=>{
         const isKunci=k===j.soal.jawaban,isPilihan=k===j.pilihan;
         if(isKunci){doc.setTextColor(...GREEN_TEXT);doc.setFont('helvetica','bold');}
@@ -575,26 +480,20 @@
         else{doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');}
         const prefix=isKunci?`✓ ${k}.`:`   ${k}.`;
         const opsiLines=wrapText(`${prefix} ${j.soal.opsi[k]}`,contentW-16,8);
-        checkPage(opsiLines.length*4+2); doc.text(opsiLines,margin+8,y); y+=opsiLines.length*4+1;
+        checkPage(opsiLines.length*4+2);doc.text(opsiLines,margin+8,y);y+=opsiLines.length*4+1;
       });
       if(!isBenar&&j.pilihan){y+=2;doc.setTextColor(...RED);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.text(`Jawaban kamu: ${j.pilihan}. ${j.soal.opsi[j.pilihan]||'—'}`,margin+8,y);y+=5;}
-      y+=2; doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...GREEN_TEXT);
-      doc.text('Pembahasan:',margin+4,y); y+=4;
-      doc.setFont('helvetica','normal'); doc.setTextColor(...DARK);
-      const pemText=wrapText(j.soal.pembahasan,contentW-16,8);
-      checkPage(pemText.length*4+4); doc.text(pemText,margin+8,y); y+=pemText.length*4+8;
+      y+=2;doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...GREEN_TEXT);doc.text('Pembahasan:',margin+4,y);y+=4;
+      doc.setFont('helvetica','normal');doc.setTextColor(...DARK);
+      const pemText=wrapText(j.soal.pembahasan,contentW-16,8);checkPage(pemText.length*4+4);doc.text(pemText,margin+8,y);y+=pemText.length*4+8;
     });
-
-    // Footer
     const pageCount=doc.internal.getNumberOfPages();
     for(let i=1;i<=pageCount;i++){
-      doc.setPage(i); doc.setFontSize(8); doc.setTextColor(...MUTED); doc.setFont('helvetica','normal');
+      doc.setPage(i);doc.setFontSize(8);doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');
       doc.text(`CerdasBersama · ${currentSegmen} · ${currentSubbab} · ${tanggal}`,margin,pageH-8);
       doc.text(`Halaman ${i} / ${pageCount}`,pageW-margin,pageH-8,{align:'right'});
     }
-
-    const fileName=`HasilLatihan-${currentSegmen.replace(/\s+/g,'-')}-${currentSubbab.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.pdf`;
-    doc.save(fileName);
+    doc.save(`HasilLatihan-${currentSegmen.replace(/\s+/g,'-')}-${currentSubbab.replace(/\s+/g,'-')}-${new Date().toISOString().slice(0,10)}.pdf`);
     showToast('PDF berhasil didownload!');
   };
 </script>
