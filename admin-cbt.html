@@ -222,7 +222,7 @@
       });
       html += '</div><div class="field"><label>Kunci Jawaban Pasti (Benar=5, Salah=0)</label><div class="jawaban-select">';
       ['A','B','C','D','E'].forEach(k => {
-        html += '<button class="jaw-btn" onclick="setJawabanPG('' + k + '')">' + k + '</button>';
+        html += '<button class="jaw-btn" onclick="setJawabanPG(\'' + k + '\')">' + k + '</button>';
       });
       html += '</div></div>';
       container.innerHTML = html;
