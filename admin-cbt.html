@@ -82,8 +82,33 @@
         <div class="field">
           <label>Segmen Ujian</label>
           <select id="fSegmen" onchange="updateKategoriOptions()">
-            <option value="CBT CPNS">🏛️ CBT CPNS</option>
-            <option value="SNBT PTN">🎯 SNBT PTN</option>
+            <optgroup label="── Try Out STS ──">
+              <option value="Try Out STS Kelas 6">STS Kelas 6</option>
+              <option value="Try Out STS Kelas 7">STS Kelas 7</option>
+              <option value="Try Out STS Kelas 8">STS Kelas 8</option>
+              <option value="Try Out STS Kelas 9">STS Kelas 9</option>
+              <option value="Try Out STS Kelas 10">STS Kelas 10</option>
+              <option value="Try Out STS Kelas 11">STS Kelas 11</option>
+              <option value="Try Out STS Kelas 12">STS Kelas 12</option>
+            </optgroup>
+            <optgroup label="── Try Out SAS ──">
+              <option value="Try Out SAS Kelas 6">SAS Kelas 6</option>
+              <option value="Try Out SAS Kelas 7">SAS Kelas 7</option>
+              <option value="Try Out SAS Kelas 8">SAS Kelas 8</option>
+              <option value="Try Out SAS Kelas 9">SAS Kelas 9</option>
+              <option value="Try Out SAS Kelas 10">SAS Kelas 10</option>
+              <option value="Try Out SAS Kelas 11">SAS Kelas 11</option>
+              <option value="Try Out SAS Kelas 12">SAS Kelas 12</option>
+            </optgroup>
+            <optgroup label="── CBT Kenaikan Kelas ──">
+              <option value="CBT Kelas 6">CBT Kelas 6</option>
+              <option value="CBT Kelas 9">CBT Kelas 9</option>
+              <option value="CBT Kelas 12">CBT Kelas 12</option>
+            </optgroup>
+            <optgroup label="── Nasional ──">
+              <option value="SNBT PTN">SNBT PTN</option>
+              <option value="CBT CPNS">CBT CPNS</option>
+            </optgroup>
           </select>
         </div>
         <div class="field">
@@ -194,14 +219,33 @@
   });
 
   // ===== KATEGORI & UI =====
+  const KATEGORI_MAP = {
+    'Try Out STS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 9':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'SNBT PTN': ['Penalaran Umum','Pengetahuan & Pemahaman Umum','Pemahaman Bacaan & Menulis','Pengetahuan Kuantitatif','Literasi Bahasa Indonesia','Literasi Bahasa Inggris','Penalaran Matematika'],
+    'CBT CPNS': ['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi'],
+  };
+
   window.updateKategoriOptions = function() {
     const segmen = $('fSegmen').value;
     const kat = $('fKategori');
-    if (segmen === 'CBT CPNS') {
-      kat.innerHTML = '<option>TWK — Wawasan Kebangsaan</option><option>TIU — Intelejensi Umum</option><option>TKP — Karakteristik Pribadi</option>';
-    } else if (segmen === 'SNBT PTN') {
-      kat.innerHTML = '<option>Penalaran Umum</option><option>Pengetahuan Kuantitatif</option><option>Literasi Bahasa Indonesia</option><option>Literasi Bahasa Inggris</option><option>Penalaran Matematika</option>';
-    }
+    const list = KATEGORI_MAP[segmen] || [];
+    kat.innerHTML = list.map(k => '<option>' + k + '</option>').join('');
     $('fTipeSoal').value = 'pg_biasa';
     renderUI();
   };
