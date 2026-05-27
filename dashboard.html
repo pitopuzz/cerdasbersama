@@ -42,7 +42,6 @@
     main { max-width: 960px; margin: 0 auto; padding: 32px 20px 120px; opacity: 0; transform: translateY(12px); transition: opacity 0.45s, transform 0.45s; }
     main.visible { opacity: 1; transform: none; }
 
-    /* HERO */
     .hero { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 20px; box-shadow: var(--shadow-sm); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     .hero-left h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
     .hero-left p { margin-top: 6px; font-size: 14px; color: var(--muted); font-weight: 500; }
@@ -58,7 +57,6 @@
     .btn-latihan { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; box-shadow: 0 4px 14px rgba(192,57,43,0.25); white-space: nowrap; }
     .btn-latihan:hover { background: var(--red2); transform: translateY(-1px); }
 
-    /* STATS */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
     @media(max-width: 680px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
     .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; }
@@ -68,11 +66,9 @@
     .stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
     .stat-sub { margin-top: 4px; font-size: 11px; color: var(--muted2); font-weight: 500; }
 
-    /* SECTION LABEL */
     .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* CARD */
     .card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
     .card-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
@@ -80,7 +76,8 @@
     .subbab-akses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
     .subbab-tag { background: var(--green-bg); border: 1.5px solid #b8e6d0; border-radius: 10px; padding: 10px 14px; font-size: 12px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 6px; }
     .subbab-tag .mapel-icon { font-size: 14px; }
-    .subbab-empty { text-align: center; padding: 20px; color: var(--muted2); font-size: 13px; }
+    .segmen-group { margin-bottom: 16px; }
+    .segmen-group-title { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
 
     /* REFERRAL */
     .ref-code-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -96,21 +93,18 @@
     .ref-stat .val { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
     .ref-stat .val.green { color: var(--green); }
 
-    /* PREMIUM BANNER */
     .premium-banner { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 1.5px solid var(--gold-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
     .premium-banner::before { content: '⭐'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 56px; opacity: 0.12; }
     .premium-banner h3 { font-size: 15px; font-weight: 800; color: #8a5e00; }
     .premium-banner p { font-size: 13px; color: #9a7020; margin-top: 4px; line-height: 1.5; font-weight: 500; }
     .expiry-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; }
 
-    /* UPGRADE CTA */
     .upgrade-cta { background: var(--red); border-radius: 20px; padding: 24px 26px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     .upgrade-cta h3 { font-size: 17px; font-weight: 800; color: #fff; }
     .upgrade-cta p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
     .btn-upgrade { flex-shrink: 0; padding: 12px 28px; border-radius: 50px; border: none; background: #fff; color: var(--red); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
     .btn-upgrade:hover { transform: translateY(-2px); }
 
-    /* PAKET GRID */
     .paket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width: 500px) { .paket-grid { grid-template-columns: 1fr; } }
     .paket-item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.18s; position: relative; overflow: hidden; }
@@ -125,7 +119,6 @@
     .btn-beli:hover { background: var(--red2); }
     .paket-item.popular .btn-beli { background: var(--gold); }
 
-    /* ORDER */
     .order-list { display: flex; flex-direction: column; gap: 10px; }
     .order-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 12px; padding: 13px 16px; }
     .order-info { flex: 1; min-width: 0; }
@@ -139,13 +132,11 @@
     .status-pill.failed { background: #fef2f2; color: var(--red); }
     .empty-state { text-align: center; padding: 28px; color: var(--muted2); font-size: 13px; font-weight: 500; }
 
-    /* PROFILE */
     .profile-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .profile-row:last-child { border-bottom: none; }
     .profile-row .lbl { color: var(--muted); font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
     .profile-row .val { font-weight: 700; word-break: break-all; }
 
-    /* STICKY CTA */
     #stickyCta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 20px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 90; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
     #stickyCta .info strong { font-weight: 800; color: var(--red); font-size: 15px; }
     #stickyCta .info span { color: var(--muted); font-weight: 500; font-size: 12px; display: block; }
@@ -181,8 +172,6 @@
 </div>
 
 <main id="mainContent">
-
-  <!-- HERO -->
   <div class="hero" data-s>
     <div class="hero-left">
       <h1 id="greetText">Halo! 👋</h1>
@@ -190,13 +179,10 @@
     </div>
     <div class="hero-right">
       <div id="planBadgeWrap"></div>
-      <button class="btn-latihan" onclick="location.href='/latihan.html'">
-        📝 Mulai Latihan
-      </button>
+      <button class="btn-latihan" onclick="location.href='/latihan.html'">📝 Mulai Latihan</button>
     </div>
   </div>
 
-  <!-- STATS -->
   <div class="stats-grid" data-s style="transition-delay:.06s">
     <div class="stat-card">
       <div class="stat-icon" style="background:#fff0ef">📚</div>
@@ -224,7 +210,6 @@
     </div>
   </div>
 
-  <!-- REFERRAL -->
   <div class="section-label" data-s style="transition-delay:.12s">🔗 Referral Kamu</div>
   <div class="card" data-s style="transition-delay:.14s">
     <div class="card-title">Kode & Link Referral</div>
@@ -245,26 +230,19 @@
     </div>
   </div>
 
-  <!-- DYNAMIC SECTION -->
   <div id="dynamicSection"></div>
 
-  <!-- ORDER HISTORY -->
   <div class="section-label" data-s style="transition-delay:.28s">🧾 Riwayat Order</div>
   <div class="card" data-s style="transition-delay:.3s">
-    <div class="order-list" id="orderList">
-      <div class="empty-state">Memuat riwayat…</div>
-    </div>
+    <div class="order-list" id="orderList"><div class="empty-state">Memuat riwayat…</div></div>
   </div>
 
-  <!-- PROFILE -->
   <div class="section-label" data-s style="transition-delay:.36s">👤 Profil Saya</div>
   <div class="card" data-s style="transition-delay:.38s">
     <div id="profileInfo"></div>
   </div>
-
 </main>
 
-<!-- STICKY CTA -->
 <div id="stickyCta">
   <div class="info">
     <strong>Beli Sub-Bab</strong>
@@ -286,19 +264,19 @@
     firebaseConfig = mod.firebaseConfig || mod.default;
   } catch { firebaseConfig = window._fbConfig || {}; }
 
-  const app = initializeApp(firebaseConfig);
+  const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db   = getFirestore(app);
 
   const $ = id => document.getElementById(id);
-  const fmtRp = n => 'Rp ' + Number(n).toLocaleString('id-ID');
+  const fmtRp   = n => 'Rp ' + Number(n).toLocaleString('id-ID');
   const fmtDate = ts => {
     if (!ts) return '—';
     const d = ts.toDate ? ts.toDate() : new Date(ts);
     return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' });
   };
 
-  const MAPEL_ICON = { Matematika:'📐', IPAS:'🔬', 'B.Inggris':'🔤' };
+  const MAPEL_ICON = { Matematika:'📐', IPAS:'🔬', 'B.Inggris':'🔤', 'Bahasa Indonesia':'📖', 'Bahasa Inggris':'🔤', IPA:'🔬', IPS:'🌏', PKn:'🏛️', Fisika:'⚛️', Kimia:'🧪', Biologi:'🌿', Ekonomi:'📊', Sejarah:'📜', Geografi:'🗺️' };
 
   function showToast(msg) {
     const t = $('toast'); t.textContent = msg; t.classList.add('show');
@@ -325,16 +303,22 @@
 
   async function loadDashboard(user) {
     try {
-      const userSnap = await getDoc(doc(db, 'users', user.uid));
-      const ud = userSnap.exists() ? userSnap.data() : {};
-      const plan = ud.plan || 'none';
-      const isPremium = plan === 'premium';
+      // Fetch user data, orders, segmen dari Firestore secara paralel
+      const [userSnap, ordSnap, segmenSnap] = await Promise.all([
+        getDoc(doc(db, 'users', user.uid)),
+        getDocs(query(collection(db,'orders'), where('uid','==',user.uid), orderBy('createdAt','desc'), limit(10))),
+        getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
+      ]);
+
+      const ud          = userSnap.exists() ? userSnap.data() : {};
+      const plan        = ud.plan || 'none';
+      const isPremium   = plan === 'premium';
       const subBabAkses = ud.subBabAkses || [];
       const hasPremiumAll = subBabAkses.includes('__premium__') || isPremium;
+      const orders      = ordSnap.docs.map(d => ({id:d.id,...d.data()}));
 
-      const ordQ = query(collection(db,'orders'), where('uid','==',user.uid), orderBy('createdAt','desc'), limit(10));
-      const ordSnap = await getDocs(ordQ);
-      const orders = ordSnap.docs.map(d => ({id:d.id,...d.data()}));
+      // Semua segmen dari Firestore (dinamis)
+      const allSegmen = segmenSnap.docs.map(d => d.data()).filter(s => s.aktif);
 
       let refCount = 0;
       try {
@@ -342,7 +326,18 @@
         refCount = (await getDocs(refQ)).size;
       } catch(_) {}
 
-      renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount);
+      // Fetch icon sub-bab dari Firestore (dinamis, semua segmen aktif)
+      const subBabIconMap = {};
+      try {
+        const subBabSnap = await getDocs(collection(db, 'subBab'));
+        subBabSnap.docs.forEach(d => {
+          const data = d.data();
+          const icon = MAPEL_ICON[data.mapel] || '📚';
+          (data.list || []).forEach(sb => subBabIconMap[sb] = { icon, segmen: data.segmen, mapel: data.mapel });
+        });
+      } catch(_) {}
+
+      renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount, allSegmen, subBabIconMap);
 
       $('loadingScreen').style.opacity = '0';
       setTimeout(() => $('loadingScreen').style.display = 'none', 350);
@@ -358,13 +353,13 @@
     }
   }
 
-  function renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount) {
-    const nama = ud.nama || user.email;
+  function renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount, allSegmen, subBabIconMap) {
+    const nama      = ud.nama || user.email;
     const namaFirst = nama.split(' ')[0];
 
-    $('navName').textContent = namaFirst;
+    $('navName').textContent  = namaFirst;
     $('greetText').textContent = `Halo, ${namaFirst}! 👋`;
-    $('greetSub').textContent = hasPremiumAll
+    $('greetSub').textContent  = hasPremiumAll
       ? 'Akses penuh aktif — selamat belajar tanpa batas!'
       : subBabAkses.length
         ? `Kamu punya ${subBabAkses.length} sub-bab aktif. Selamat belajar!`
@@ -385,14 +380,14 @@
     $('planBadgeWrap').appendChild(badge);
 
     // Stats
-    $('statSubbab').textContent = hasPremiumAll ? 'Semua' : subBabAkses.length;
+    $('statSubbab').textContent    = hasPremiumAll ? 'Semua' : subBabAkses.length;
     $('statSubbabSub').textContent = hasPremiumAll ? 'akses penuh' : 'sub-bab terbuka';
-    $('statKomisi').textContent = fmtRp(ud.komisiTotal || 0);
-    $('statPlan').textContent = hasPremiumAll ? '⭐ Premium' : subBabAkses.length ? '📚 À la carte' : '—';
-    $('statRefCode').textContent = ud.referralCode || '—';
+    $('statKomisi').textContent    = fmtRp(ud.komisiTotal || 0);
+    $('statPlan').textContent      = hasPremiumAll ? '⭐ Premium' : subBabAkses.length ? '📚 À la carte' : '—';
+    $('statRefCode').textContent   = ud.referralCode || '—';
 
     if (isPremium && ud.expiredAt) {
-      const exp = ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt);
+      const exp  = ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt);
       const diff = Math.ceil((exp - new Date()) / 86400000);
       $('statExpiry').textContent = diff > 0 ? `Aktif ${diff} hari lagi` : 'Sudah expired';
     } else if (subBabAkses.length) {
@@ -402,12 +397,12 @@
     }
 
     // Referral
-    const code = ud.referralCode || '';
-    $('refCodeBig').textContent = code || '—';
-    $('refCount').textContent = refCount;
-    $('refKomisi').textContent = fmtRp(ud.komisiTotal || 0);
-
+    const code   = ud.referralCode || '';
     const baseUrl = window.location.origin + '/register.html?ref=';
+    $('refCodeBig').textContent = code || '—';
+    $('refCount').textContent   = refCount;
+    $('refKomisi').textContent  = fmtRp(ud.komisiTotal || 0);
+
     $('btnCopyLink').addEventListener('click', () => {
       navigator.clipboard.writeText(baseUrl + code).then(() => {
         $('btnCopyLink').classList.add('copied');
@@ -420,19 +415,27 @@
       });
     });
     $('btnCopyWA').addEventListener('click', () => {
-      const msg = `Halo! Aku pakai CerdasBersama buat latihan soal persiapan ujian. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
+      const msg = `Halo! Aku pakai CerdasBersama buat latihan soal. Daftar pakai kode referral aku dan dapet diskon!\n👉 ${baseUrl + code}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
 
-    // Dynamic Section
+    // Dynamic section
     const ds = $('dynamicSection');
 
     if (hasPremiumAll) {
       // ── PREMIUM ──
-      const exp = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
-      const expStr = exp ? fmtDate(exp) : '—';
-      const diff = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
+      const exp     = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
+      const expStr  = exp ? fmtDate(exp) : '—';
+      const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
       const isExpired = diff <= 0;
+
+      // Buat list segmen aktif dari Firestore (dinamis)
+      const segmenListHTML = allSegmen.map(s =>
+        `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
+          <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
+          ${s.icon || '📚'} ${s.id}
+        </div>`
+      ).join('');
 
       ds.innerHTML = `
         <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
@@ -445,31 +448,19 @@
         <div class="two-col" data-s style="transition-delay:.24s">
           <div class="card" style="margin-bottom:0">
             <div class="card-title">📚 Segmen Aktif</div>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              ${[
-                {icon:'📚',label:'SD Kelas 6 — Matematika, IPAS, B.Inggris'},
-                {icon:'🚧',label:'SMP & SMA — Coming Soon'},
-                {icon:'🚧',label:'Try Out, SNBT, CBT CPNS — Coming Soon'},
-              ].map(m =>
-                `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
-                  <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
-                  ${m.icon} ${m.label}
-                </div>`
-              ).join('')}
-            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">${segmenListHTML}</div>
           </div>
           <div class="card" style="margin-bottom:0">
             <div class="card-title">📊 Statistik Belajar</div>
             <div style="text-align:center;padding:24px 0">
               <div style="font-size:40px">🚀</div>
               <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Coming soon…</div>
-              <div style="font-size:12px;color:var(--muted2);margin-top:4px">Statistik detail akan hadir segera</div>
             </div>
           </div>
         </div>`;
 
     } else if (subBabAkses.length) {
-      // ── À LA CARTE / BUNDLING ──
+      // ── À LA CARTE ──
       ds.innerHTML = `
         <div class="section-label" data-s style="transition-delay:.2s">📚 Sub-Bab Aktif Kamu</div>
         <div class="card" data-s style="transition-delay:.22s">
@@ -488,44 +479,35 @@
           <button class="btn-upgrade" onclick="location.href='/pricing.html'">Upgrade →</button>
         </div>`;
 
-      setTimeout(async () => {
+      // Render sub-bab dikelompokkan per segmen (dinamis dari subBabIconMap)
+      setTimeout(() => {
         const grid = document.getElementById('subbabAksesGrid');
         if (!grid) return;
 
-        // Fetch subBab dari Firestore untuk deteksi icon
-const subBabIconMap = {};
-try {
-  const mapels = ['Matematika','IPAS','B.Inggris'];
-  for (const mapel of mapels) {
-    const q = query(collection(db,'subBab'), where('segmen','==','SD Kelas 6'), where('mapel','==',mapel));
-    const snap = await getDocs(q);
-    if (!snap.empty) {
-      (snap.docs[0].data().list || []).forEach(sb => subBabIconMap[sb] = MAPEL_ICON[mapel] || '📚');
-    }
-  }
-} catch(e) { console.error('fetchSubBabIcon error:', e) }
-        // Group by segmen dari orders
+        // Group by segmen
         const segmenMap = {};
-        orders.filter(o=>o.status==='paid'&&o.subBabDibeli?.length).forEach(o=>{
-          const seg = o.segmen || 'SD Kelas 6';
-          if(!segmenMap[seg]) segmenMap[seg]=new Set();
-          o.subBabDibeli.forEach(sb=>segmenMap[seg].add(sb));
+        subBabAkses.forEach(sb => {
+          const info   = subBabIconMap[sb] || { icon: '📚', segmen: 'Lainnya' };
+          const seg    = info.segmen;
+          if (!segmenMap[seg]) segmenMap[seg] = [];
+          segmenMap[seg].push({ sb, icon: info.icon });
         });
 
-        // Fallback: kalau orders tidak ada segmen, grouping dari subBabAkses saja
-        if(!Object.keys(segmenMap).length) segmenMap['SD Kelas 6']=new Set(subBabAkses);
+        // Fallback dari orders jika subBabIconMap kosong
+        if (!Object.keys(segmenMap).length) {
+          segmenMap['SD Kelas 6'] = subBabAkses.map(sb => ({ sb, icon: '📚' }));
+        }
 
-        Object.entries(segmenMap).forEach(([seg, sbs])=>{
-          const segDiv = document.createElement('div');
-          segDiv.style.cssText='margin-bottom:16px';
-          segDiv.innerHTML=`<div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">📚 ${seg}</div>`;
-          const tagWrap = document.createElement('div');
-          tagWrap.className='subbab-akses-grid';
-          sbs.forEach(sb=>{
-            const icon = subBabIconMap[sb] || '📚';
-            const div=document.createElement('div');
-            div.className='subbab-tag';
-            div.innerHTML=`<span class="mapel-icon">${icon}</span>${sb}`;
+        Object.entries(segmenMap).forEach(([seg, items]) => {
+          const segDiv      = document.createElement('div');
+          segDiv.className  = 'segmen-group';
+          segDiv.innerHTML  = `<div class="segmen-group-title">📚 ${seg}</div>`;
+          const tagWrap     = document.createElement('div');
+          tagWrap.className = 'subbab-akses-grid';
+          items.forEach(({ sb, icon }) => {
+            const div       = document.createElement('div');
+            div.className   = 'subbab-tag';
+            div.innerHTML   = `<span class="mapel-icon">${icon}</span>${sb}`;
             tagWrap.appendChild(div);
           });
           segDiv.appendChild(tagWrap);
@@ -538,21 +520,21 @@ try {
     } else {
       // ── BELUM BELI ──
       $('flashBanner').style.display = 'block';
-      $('stickyCta').style.display = 'flex';
+      $('stickyCta').style.display   = 'flex';
       startFlashTimer();
 
       const pakets = [
-        { nama: 'À la carte', soal: 'Per sub-bab pilihan', harga: 7900, popular: false, url: '/pricing.html?tab=alacarte' },
-        { nama: 'Bundling 5', soal: '5 sub-bab pilihan', harga: 34900, popular: true, url: '/pricing.html?tab=bundling&pkg=5' },
-        { nama: 'Bundling 10', soal: '10 sub-bab pilihan', harga: 64900, popular: false, url: '/pricing.html?tab=bundling&pkg=10' },
-        { nama: 'Premium Bulanan', soal: 'Semua mapel & sub-bab', harga: 99900, popular: false, url: '/pricing.html?tab=bulanan' },
+        { nama:'À la carte', soal:'Per sub-bab pilihan', harga:7900, popular:false, url:'/pricing.html?tab=alacarte' },
+        { nama:'Bundling 5', soal:'5 sub-bab pilihan', harga:34900, popular:true, url:'/pricing.html?tab=bundling&pkg=5' },
+        { nama:'Bundling 10', soal:'10 sub-bab pilihan', harga:64900, popular:false, url:'/pricing.html?tab=bundling&pkg=10' },
+        { nama:'Premium Bulanan', soal:'Semua mapel & sub-bab', harga:99900, popular:false, url:'/pricing.html?tab=bulanan' },
       ];
 
       ds.innerHTML = `
         <div class="section-label" data-s style="transition-delay:.2s">📦 Mulai Belajar</div>
         <div class="card" data-s style="transition-delay:.22s">
           <div class="card-title">🛒 Pilih Paket Belajar</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;line-height:1.6">Beli sub-bab yang kamu butuhkan satu per satu, atau hemat lebih banyak dengan bundling & premium.</p>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;line-height:1.6">Beli sub-bab yang kamu butuhkan, atau hemat lebih banyak dengan bundling & premium.</p>
           <div class="paket-grid" id="paketGrid"></div>
         </div>
         <div class="upgrade-cta" data-s style="transition-delay:.28s">
@@ -566,9 +548,9 @@ try {
       const grid = document.getElementById('paketGrid');
       if (grid) {
         pakets.forEach(p => {
-          const div = document.createElement('div');
-          div.className = 'paket-item' + (p.popular ? ' popular' : '');
-          div.innerHTML = `
+          const div       = document.createElement('div');
+          div.className   = 'paket-item' + (p.popular ? ' popular' : '');
+          div.innerHTML   = `
             ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
             <div class="paket-nama">${p.nama}</div>
             <div class="paket-soal">${p.soal}</div>
@@ -587,8 +569,8 @@ try {
       list.innerHTML = orders.map(o => {
         const sc = o.status==='paid'?'paid':o.status==='pending'?'pending':'failed';
         const sl = o.status==='paid'?'Lunas':o.status==='pending'?'Menunggu':'Gagal';
-        const subBabLabel = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
-        const segmenLabel = o.segmen ? `📚 ${o.segmen}` : '';
+        const subBabLabel  = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
+        const segmenLabel  = o.segmen ? `📚 ${o.segmen}` : '';
         return `<div class="order-item">
           <div class="order-info">
             <div class="order-paket">${o.paket||'—'} ${segmenLabel?`<span style="font-size:10px;font-weight:600;color:var(--muted);margin-left:4px">${segmenLabel}</span>`:''}</div>
@@ -603,13 +585,13 @@ try {
 
     // Profile
     $('profileInfo').innerHTML = [
-      { lbl: 'Nama', val: ud.nama||'—' },
-      { lbl: 'Email', val: user.email },
-      { lbl: 'WhatsApp', val: ud.wa||'—' },
-      { lbl: 'Plan', val: hasPremiumAll?'Premium':subBabAkses.length?'À la carte':'Belum ada akses' },
-      { lbl: 'Kode Referral', val: ud.referralCode||'—' },
-      { lbl: 'Direferral oleh', val: ud.referredBy||'Tidak ada' },
-    ].map(r=>`<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`).join('');
+      { lbl:'Nama',           val: ud.nama||'—' },
+      { lbl:'Email',          val: user.email },
+      { lbl:'WhatsApp',       val: ud.wa||'—' },
+      { lbl:'Plan',           val: hasPremiumAll?'Premium':subBabAkses.length?'À la carte':'Belum ada akses' },
+      { lbl:'Kode Referral',  val: ud.referralCode||'—' },
+      { lbl:'Direferral oleh',val: ud.referredBy||'Tidak ada' },
+    ].map(r => `<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`).join('');
   }
 
   $('btnLogout').addEventListener('click', async () => {
