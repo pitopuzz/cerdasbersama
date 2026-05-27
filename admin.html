@@ -7,11 +7,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5rem;max-width:1000px;margin:0 auto}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5rem;max-width:1100px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
 .logo{font-size:17px;font-weight:800;color:#1a6b4a}
 .logo span{color:#f5a623}
-.admin-badge{font-size:11px;background:#FAEEDA;color:#854F0B;padding:4px 12px;border-radius:20px;font-weight:700}
+.admin-badge{font-size:11px;padding:4px 12px;border-radius:20px;font-weight:700}
+.admin-badge.super{background:#FAEEDA;color:#854F0B}
+.admin-badge.admin{background:#E8F5EE;color:#085041}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
 .stat{background:#F5F3EE;border-radius:12px;padding:1rem}
 .stat-label{font-size:11px;color:#aaa;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
@@ -20,10 +22,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#FAFAF8;padding:1.5re
 .stat-val.amber{color:#BA7517}
 .stat-val.red{color:#E24B4A}
 .tabs{display:flex;gap:6px;margin-bottom:1.5rem;background:#F5F3EE;padding:4px;border-radius:10px;width:fit-content;flex-wrap:wrap}
-.tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:none;color:#aaa;font-family:inherit}
+.tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:none;color:#aaa;font-family:inherit;transition:all .18s}
 .tab.active{background:#fff;color:#1a6b4a;border:1px solid #E0EDE7}
 .card{background:#fff;border:1px solid #E8E6DF;border-radius:14px;padding:1.25rem;margin-bottom:1rem}
-.card-title{font-size:14px;font-weight:800;color:#111;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-title{font-size:14px;font-weight:800;color:#111;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{text-align:left;font-size:11px;font-weight:700;color:#aaa;padding:0 0 8px;border-bottom:1px solid #F0EEE8;text-transform:uppercase;letter-spacing:.5px}
 td{padding:10px 4px;border-bottom:1px solid #F0EEE8;color:#333;vertical-align:middle}
@@ -33,8 +35,10 @@ tr:last-child td{border-bottom:none}
 .badge.paid{background:#E8F5EE;color:#085041}
 .badge.free{background:#F5F3EE;color:#888}
 .badge.premium{background:#E8F5EE;color:#085041}
-.badge.inactive{background:#F5F3EE;color:#aaa}
-.btn-sm{font-size:12px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit;border:1.5px solid #E0EDE7;background:#fff;color:#333;font-weight:600;white-space:nowrap}
+.badge.super{background:#FAEEDA;color:#854F0B}
+.badge.admin{background:#EEF3FC;color:#1a4fa0}
+.badge.user{background:#F5F3EE;color:#888}
+.btn-sm{font-size:12px;padding:5px 12px;border-radius:8px;cursor:pointer;font-family:inherit;border:1.5px solid #E0EDE7;background:#fff;color:#333;font-weight:600;white-space:nowrap;transition:all .18s}
 .btn-sm:hover{background:#F5F3EE}
 .btn-sm:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm.green{border-color:#1a6b4a;color:#1a6b4a}
@@ -43,348 +47,506 @@ tr:last-child td{border-bottom:none}
 .btn-sm.red:hover{background:#FCEBEB}
 .btn-sm.amber{border-color:#BA7517;color:#BA7517}
 .btn-sm.amber:hover{background:#FAEEDA}
-.btn-main{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-main{background:#1a6b4a;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .18s}
 .btn-main:hover{background:#145a3d}
+.btn-main:disabled{background:#aaa;cursor:not-allowed}
 .btn-logout{background:none;border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#555}
 .search-input{border:1.5px solid #E0EDE7;border-radius:8px;padding:7px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none;width:200px}
 .search-input:focus{border-color:#1a6b4a}
 .date-input{border:1.5px solid #E0EDE7;border-radius:8px;padding:5px 8px;font-size:12px;font-family:inherit;color:#333;background:#fff;outline:none}
 .date-input:focus{border-color:#1a6b4a}
+.select-sm{border:1.5px solid #E0EDE7;border-radius:8px;padding:5px 8px;font-size:12px;font-family:inherit;color:#333;background:#fff;outline:none;cursor:pointer}
+.select-sm:focus{border-color:#1a6b4a}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a6b4a;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.15)}
+.toast.err{background:#E24B4A}
 .flex-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
-.section-label{font-size:11px;font-weight:700;color:#aaa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
-.loading{text-align:center;padding:2rem;color:#aaa;font-size:13px}
-.access-denied{text-align:center;padding:4rem 2rem}
-.access-denied h2{color:#E24B4A;margin-bottom:8px}
-.access-denied p{color:#aaa;font-size:13px}
-.expired-warn{font-size:10px;color:#E24B4A;font-weight:700}
-.code-row{display:flex;gap:8px;align-items:center;background:#F5FBF8;border:1.5px solid #c8e6d8;border-radius:10px;padding:10px 14px;margin-bottom:8px}
-.code-val{font-size:15px;font-weight:800;color:#1a6b4a;font-family:monospace;flex:1;letter-spacing:1px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:4px}
-.field input{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none}
+.field input,.field select{border:1.5px solid #E0EDE7;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;color:#333;background:#fff;outline:none;width:100%}
+.field input:focus,.field select:focus{border-color:#1a6b4a}
+.loading{text-align:center;padding:2rem;color:#aaa;font-size:13px}
+.access-denied{text-align:center;padding:4rem 2rem}
+.expired-warn{font-size:10px;color:#E24B4A;font-weight:700}
+.section-label{font-size:11px;font-weight:700;color:#aaa;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;margin-top:12px}
+.divider{border:none;border-top:1px solid #F0EEE8;margin:1rem 0}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:#fff;border-radius:16px;padding:1.5rem;width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:1rem}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:1rem}
 </style>
 </head>
 <body>
 
 <div id="loadingView" class="loading">Memeriksa akses admin...</div>
-<div id="deniedView" class="access-denied" style="display:none">
-  <h2>Akses Ditolak</h2>
-  <p>Kamu tidak memiliki akses ke halaman ini.</p>
-  <br>
-  <a href="index.html" style="color:#1a6b4a;font-weight:600;font-size:13px">← Kembali ke beranda</a>
+<div id="deniedView" style="display:none;text-align:center;padding:4rem 2rem">
+  <h2 style="color:#E24B4A">Akses Ditolak</h2>
+  <p style="color:#aaa;font-size:13px;margin-top:8px">Kamu tidak memiliki akses ke halaman ini.</p>
+  <br><a href="/" style="color:#1a6b4a;font-weight:600;font-size:13px">← Kembali</a>
 </div>
 
 <div id="mainView" style="display:none">
-<div class="topbar">
-  <div class="logo">Cerdas<span>Bersama</span> <span style="font-size:12px;font-weight:400;color:#aaa;margin-left:4px">Admin Panel</span></div>
-  <div style="display:flex;gap:8px;align-items:center">
-    <span class="admin-badge">Super Admin</span>
-    <button class="btn-logout" onclick="doLogout()">Keluar</button>
-  </div>
-</div>
-
-<div class="stats">
-  <div class="stat"><div class="stat-label">Total user</div><div class="stat-val" id="statTotal">–</div></div>
-  <div class="stat"><div class="stat-label">User premium</div><div class="stat-val green" id="statPremium">–</div></div>
-  <div class="stat"><div class="stat-label">User free</div><div class="stat-val amber" id="statFree">–</div></div>
-  <div class="stat"><div class="stat-label">Order pending</div><div class="stat-val red" id="statPending">–</div></div>
-</div>
-
-<div class="tabs">
-  <button class="tab active" onclick="switchTab(this,'transaksi')">Transaksi</button>
-  <button class="tab" onclick="switchTab(this,'users')">Users</button>
-  <button class="tab" onclick="switchTab(this,'pencairan')">Pencairan</button>
-  <button class="tab" onclick="switchTab(this,'kode')">Kode Promo</button>
-</div>
-
-<!-- TRANSAKSI -->
-<div id="transaksi">
-  <div class="card">
-    <div class="card-title">
-      <span>Semua transaksi</span>
-      <button class="btn-sm" onclick="loadOrders()">↻ Refresh</button>
+  <div class="topbar">
+    <div class="logo">Cerdas<span>Bersama</span> <span style="font-size:12px;font-weight:400;color:#aaa;margin-left:4px">Admin Panel</span></div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="admin-badge" id="roleBadge">–</span>
+      <a href="/admin-soal.html" class="btn-sm">📚 Kelola Soal</a>
+      <button class="btn-logout" onclick="doLogout()">Keluar</button>
     </div>
-    <table>
-      <thead><tr><th>User</th><th>Paket</th><th>Total</th><th>Metode</th><th>Ref</th><th>Komisi</th><th>Status</th><th>Aksi</th></tr></thead>
-      <tbody id="ordersBody">
-        <tr><td colspan="8" class="loading">Memuat transaksi...</td></tr>
-      </tbody>
-    </table>
   </div>
-</div>
 
-<!-- USERS -->
-<div id="users" style="display:none">
-  <div class="card">
-    <div class="card-title">
-      <span>Daftar user</span>
-      <input type="text" class="search-input" placeholder="Cari nama / email..." oninput="filterUsers(this.value)" />
-    </div>
-    <table>
-      <thead><tr><th>Nama</th><th>Email</th><th>Ref code</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Aksi</th></tr></thead>
-      <tbody id="usersBody">
-        <tr><td colspan="7" class="loading">Memuat data user...</td></tr>
-      </tbody>
-    </table>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total user</div><div class="stat-val" id="statTotal">–</div></div>
+    <div class="stat"><div class="stat-label">Premium</div><div class="stat-val green" id="statPremium">–</div></div>
+    <div class="stat"><div class="stat-label">Free</div><div class="stat-val amber" id="statFree">–</div></div>
+    <div class="stat"><div class="stat-label">Order pending</div><div class="stat-val red" id="statPending">–</div></div>
+    <div class="stat"><div class="stat-label">Total order</div><div class="stat-val" id="statOrders">–</div></div>
+    <div class="stat"><div class="stat-label">Revenue</div><div class="stat-val green" id="statRevenue">–</div></div>
   </div>
-</div>
 
-<!-- PENCAIRAN -->
-<div id="pencairan" style="display:none">
-  <div class="card">
-    <div class="card-title">Request pencairan masuk</div>
-    <table>
-      <thead><tr><th>User</th><th>Rekening</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
-      <tbody>
-        <tr><td colspan="5" style="text-align:center;color:#aaa;padding:2rem">Belum ada request pencairan.</td></tr>
-      </tbody>
-    </table>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(this,'transaksi')">📋 Transaksi</button>
+    <button class="tab" onclick="switchTab(this,'users')">👥 Users</button>
+    <button class="tab" onclick="switchTab(this,'tambahUser')">➕ Tambah User</button>
+    <button class="tab" onclick="switchTab(this,'pencairan')">💸 Pencairan</button>
   </div>
-</div>
 
-<!-- KODE PROMO -->
-<div id="kode" style="display:none">
-  <div class="card">
-    <div class="card-title">Kode promo aktif</div>
-    <div class="code-row">
-      <span>🏷️</span>
-      <span class="code-val" id="activeCode">••••••••</span>
-      <button class="btn-sm" onclick="toggleReveal(this)" id="revealBtn">Tampilkan</button>
-      <button class="btn-sm red" onclick="deactivateCode()">Nonaktifkan</button>
-    </div>
-    <p style="font-size:12px;color:#aaa;margin-bottom:1.5rem">Kode ini berlaku untuk semua user baru.</p>
-    <div class="section-label">Buat kode baru</div>
-    <div class="flex-row">
-      <div class="field" style="flex:1;min-width:140px;margin-bottom:0">
-        <label>Nama kode</label>
-        <input type="text" id="newCode" placeholder="Contoh: CAMPAIGN2025" style="width:100%;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" />
+  <!-- TRANSAKSI -->
+  <div id="transaksi">
+    <div class="card">
+      <div class="card-title">
+        <span>Semua Transaksi</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="search-input" placeholder="Cari email..." style="width:160px" oninput="filterOrders(this.value)"/>
+          <select class="select-sm" onchange="filterOrderStatus(this.value)">
+            <option value="semua">Semua status</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+          </select>
+          <button class="btn-sm green" onclick="loadOrders()">↻ Refresh</button>
+        </div>
       </div>
-      <div class="field" style="width:110px;margin-bottom:0">
-        <label>Diskon %</label>
-        <input type="number" id="newDisc" value="50" min="1" max="100" style="width:100%" />
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Email</th><th>Segmen</th><th>Paket</th><th>Total</th><th>Ref</th><th>Komisi</th><th>Tgl</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="ordersBody"><tr><td colspan="9" class="loading">Memuat...</td></tr></tbody>
+        </table>
       </div>
-      <button class="btn-main" onclick="createCode()">Buat & Aktifkan</button>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div id="users" style="display:none">
+    <div class="card">
+      <div class="card-title">
+        <span>Daftar User</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="search-input" placeholder="Cari nama / email..." oninput="filterUsers(this.value)"/>
+          <select class="select-sm" onchange="filterUserPlan(this.value)">
+            <option value="semua">Semua plan</option>
+            <option value="premium">Premium</option>
+            <option value="free">Free</option>
+          </select>
+          <button class="btn-sm green" onclick="loadUsers()">↻ Refresh</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Nama</th><th>Email</th><th>WA</th><th>Role</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Ref Code</th><th>Aksi</th></tr></thead>
+          <tbody id="usersBody"><tr><td colspan="9" class="loading">Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAMBAH USER MANUAL -->
+  <div id="tambahUser" style="display:none">
+    <div class="card">
+      <div class="card-title">➕ Tambah User Manual</div>
+      <div id="alertTambah" style="display:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:12px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="field"><label>Nama Lengkap</label><input type="text" id="tNama" placeholder="Nama lengkap"/></div>
+        <div class="field"><label>Email</label><input type="email" id="tEmail" placeholder="email@kamu.com"/></div>
+        <div class="field"><label>Nomor WhatsApp</label><input type="tel" id="tWa" placeholder="08123456789"/></div>
+        <div class="field"><label>Password</label><input type="password" id="tPass" placeholder="Min. 8 karakter"/></div>
+        <div class="field">
+          <label>Role</label>
+          <select id="tRole">
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Plan</label>
+          <select id="tPlan" onchange="toggleExpiredField()">
+            <option value="free">Free</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
+        <div class="field" id="expiredField" style="display:none">
+          <label>Expired Premium</label>
+          <input type="date" id="tExpired"/>
+        </div>
+      </div>
+      <button class="btn-main" id="btnTambahUser" onclick="tambahUserManual()" style="margin-top:8px">➕ Buat Akun</button>
+    </div>
+  </div>
+
+  <!-- PENCAIRAN -->
+  <div id="pencairan" style="display:none">
+    <div class="card">
+      <div class="card-title">💸 Request Pencairan</div>
+      <table>
+        <thead><tr><th>User</th><th>Rekening</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody><tr><td colspan="5" style="text-align:center;color:#aaa;padding:2rem">Belum ada request pencairan.</td></tr></tbody>
+      </table>
     </div>
   </div>
 </div>
 
+<!-- MODAL EDIT USER -->
+<div class="modal-overlay" id="modalEdit" style="display:none">
+  <div class="modal">
+    <div class="modal-title">✏️ Edit User</div>
+    <input type="hidden" id="editUid"/>
+    <div class="field"><label>Role</label>
+      <select id="editRole">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+        <option value="super_admin">Super Admin</option>
+      </select>
+    </div>
+    <div class="field"><label>Plan</label>
+      <select id="editPlan" onchange="toggleEditExpired()">
+        <option value="free">Free</option>
+        <option value="premium">Premium</option>
+      </select>
+    </div>
+    <div class="field" id="editExpiredField">
+      <label>Expired Premium</label>
+      <input type="date" id="editExpired"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sm" onclick="closeModal()">Batal</button>
+      <button class="btn-main" id="btnSaveEdit" onclick="saveEditUser()">Simpan</button>
+    </div>
+  </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
 import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, getDocs, doc, getDoc, updateDoc, Timestamp, query, orderBy, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc,
+  Timestamp, query, orderBy, where, arrayUnion, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const ADMIN_EMAILS = ['bersamacerdas1@gmail.com'];
+const SUPER_ADMINS = ['bersamacerdas1@gmail.com'];
+const ADMIN_EMAILS = ['bersamacerdas1@gmail.com']; // tambah admin lain di sini
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let isSuperAdmin = false;
 let allUsers = [], allOrders = [];
+let filterOrderQ = '', filterOrderSt = 'semua';
+let filterUserQ = '', filterUserPl = 'semua';
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user || !ADMIN_EMAILS.includes(user.email)) {
-    document.getElementById('loadingView').style.display = 'none';
-    document.getElementById('deniedView').style.display = 'block';
+const fmtRp  = n => 'Rp ' + Number(n||0).toLocaleString('id-ID');
+const fmtDate = ts => {
+  if (!ts) return '–';
+  const d = ts.toDate ? ts.toDate() : new Date(ts.seconds*1000);
+  return d.toLocaleDateString('id-ID', {day:'2-digit',month:'short',year:'numeric'});
+};
+
+// ── AUTH ──
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.href = '/register.html'; return; }
+
+  // Cek role dari Firestore
+  const snap = await getDoc(doc(db,'users',user.uid));
+  const ud   = snap.exists() ? snap.data() : {};
+  const role = ud.role || (ADMIN_EMAILS.includes(user.email) ? 'admin' : 'user');
+
+  if (role !== 'admin' && role !== 'super_admin' && !ADMIN_EMAILS.includes(user.email)) {
+    $('loadingView').style.display = 'none';
+    $('deniedView').style.display  = 'block';
     return;
   }
+
+  currentUser  = user;
+  isSuperAdmin = SUPER_ADMINS.includes(user.email) || role === 'super_admin';
+
+  const badge = $('roleBadge');
+  badge.textContent  = isSuperAdmin ? 'Super Admin' : 'Admin';
+  badge.className    = `admin-badge ${isSuperAdmin ? 'super' : 'admin'}`;
+
   await Promise.all([loadUsers(), loadOrders()]);
-  document.getElementById('loadingView').style.display = 'none';
-  document.getElementById('mainView').style.display = 'block';
+  $('loadingView').style.display = 'none';
+  $('mainView').style.display    = 'block';
 });
 
-async function loadUsers() {
-  const snap = await getDocs(collection(db, 'users'));
-  allUsers = snap.docs.map(d => ({...d.data(), docId: d.id}));
-  document.getElementById('statTotal').textContent = allUsers.length;
-  document.getElementById('statPremium').textContent = allUsers.filter(u => u.plan === 'premium').length;
-  document.getElementById('statFree').textContent = allUsers.filter(u => u.plan !== 'premium').length;
-  renderUsers(allUsers);
-}
+// ── LOAD USERS ──
+window.loadUsers = async function() {
+  const snap = await getDocs(collection(db,'users'));
+  allUsers   = snap.docs.map(d => ({...d.data(), docId:d.id}));
+  $('statTotal').textContent   = allUsers.length;
+  $('statPremium').textContent = allUsers.filter(u=>u.plan==='premium').length;
+  $('statFree').textContent    = allUsers.filter(u=>u.plan!=='premium').length;
+  renderUsers();
+};
 
-function renderUsers(users) {
-  const tbody = document.getElementById('usersBody');
-  if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>';
-    return;
-  }
-  const def30 = new Date();
-  def30.setDate(def30.getDate() + 30);
-  const defVal = def30.toISOString().split('T')[0];
-  tbody.innerHTML = users.map(u => {
-    const expiredAt = u.expiredAt ? new Date(u.expiredAt.seconds * 1000) : null;
-    const expStr = expiredAt ? expiredAt.toLocaleDateString('id-ID') : '–';
-    const isExpired = expiredAt && expiredAt < new Date();
-    const expInputVal = expiredAt ? expiredAt.toISOString().split('T')[0] : defVal;
-    return `
-    <tr>
-      <td><strong>${u.nama||'–'}</strong><br><span style="font-size:11px;color:#aaa">${u.wa||'–'}</span></td>
+function renderUsers() {
+  let list = allUsers;
+  if (filterUserQ)  list = list.filter(u => (u.nama||'').toLowerCase().includes(filterUserQ.toLowerCase()) || (u.email||'').toLowerCase().includes(filterUserQ.toLowerCase()));
+  if (filterUserPl !== 'semua') list = list.filter(u => filterUserPl === 'premium' ? u.plan==='premium' : u.plan!=='premium');
+
+  const tbody = $('usersBody');
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>'; return; }
+
+  tbody.innerHTML = list.map(u => {
+    const exp       = u.expiredAt ? (u.expiredAt.toDate ? u.expiredAt.toDate() : new Date(u.expiredAt.seconds*1000)) : null;
+    const isExpired = exp && exp < new Date();
+    const role      = u.role || 'user';
+    return `<tr>
+      <td><strong>${u.nama||'–'}</strong></td>
       <td style="font-size:12px">${u.email||'–'}</td>
-      <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode||'–'}</td>
+      <td style="font-size:12px">${u.wa||'–'}</td>
+      <td><span class="badge ${role==='super_admin'?'super':role==='admin'?'admin':'user'}">${role==='super_admin'?'Super Admin':role==='admin'?'Admin':'User'}</span></td>
       <td><span class="badge ${u.plan==='premium'?'premium':'free'}">${u.plan==='premium'?'Premium':'Free'}</span></td>
-      <td style="font-size:12px">${expStr}${isExpired?'<div class="expired-warn">⚠️ Expired</div>':''}</td>
-      <td style="color:#1a6b4a;font-weight:700">Rp ${(u.komisiTotal||0).toLocaleString('id-ID')}</td>
+      <td style="font-size:12px">${exp?fmtDate(u.expiredAt):'–'}${isExpired?'<div class="expired-warn">⚠️ Expired</div>':''}</td>
+      <td style="color:#1a6b4a;font-weight:700">${fmtRp(u.komisiTotal)}</td>
+      <td style="font-family:monospace;font-size:12px;color:#1a6b4a;font-weight:700">${u.referralCode||'–'}</td>
       <td>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <input type="date" class="date-input" id="exp_${u.uid}" value="${expInputVal}" />
-          ${u.plan !== 'premium'
-            ? `<button class="btn-sm green" onclick="setPlan('${u.uid}','premium',this)">→ Premium</button>`
-            : `<button class="btn-sm red" onclick="setPlan('${u.uid}','free',this)">→ Free</button>`
-          }
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-sm amber" onclick="openEditUser('${u.uid||u.docId}','${u.plan||'free'}','${u.role||'user'}','${exp?exp.toISOString().split('T')[0]:''}')">✏️ Edit</button>
+          ${isSuperAdmin ? `<button class="btn-sm red" onclick="hapusUser('${u.uid||u.docId}','${u.email||''}')">🗑️ Hapus</button>` : ''}
         </div>
       </td>
-    </tr>`
+    </tr>`;
   }).join('');
 }
 
-window.filterUsers = function(q) {
-  renderUsers(allUsers.filter(u =>
-    (u.nama||'').toLowerCase().includes(q.toLowerCase()) ||
-    (u.email||'').toLowerCase().includes(q.toLowerCase())
-  ));
-}
+window.filterUsers     = q  => { filterUserQ  = q;  renderUsers(); };
+window.filterUserPlan  = v  => { filterUserPl = v;  renderUsers(); };
 
-window.setPlan = async function(uid, plan, btn) {
+// ── EDIT USER ──
+window.openEditUser = function(uid, plan, role, expVal) {
+  $('editUid').value   = uid;
+  $('editPlan').value  = plan;
+  $('editRole').value  = role;
+  $('editExpired').value = expVal || '';
+  toggleEditExpired();
+  $('modalEdit').style.display = 'flex';
+};
+window.closeModal = () => $('modalEdit').style.display = 'none';
+
+window.toggleEditExpired = function() {
+  $('editExpiredField').style.display = $('editPlan').value === 'premium' ? 'block' : 'none';
+};
+
+window.saveEditUser = async function() {
+  const uid  = $('editUid').value;
+  const plan = $('editPlan').value;
+  const role = $('editRole').value;
+  const btn  = $('btnSaveEdit');
   btn.disabled = true; btn.textContent = '...';
   try {
-    const update = { plan };
+    const update = { plan, role };
     if (plan === 'premium') {
-      const dateInput = document.getElementById('exp_' + uid);
-      const expDate = dateInput ? new Date(dateInput.value) : new Date();
-      if (isNaN(expDate)) { showToast('Tanggal expired tidak valid.'); btn.disabled = false; btn.textContent = '→ Premium'; return; }
-      update.expiredAt = Timestamp.fromDate(expDate);
+      const expVal = $('editExpired').value;
+      if (!expVal) { showToast('Pilih tanggal expired!', true); btn.disabled=false; btn.textContent='Simpan'; return; }
+      update.expiredAt   = Timestamp.fromDate(new Date(expVal));
       update.subBabAkses = ['__premium__'];
     } else {
-      update.expiredAt = null;
+      update.expiredAt   = null;
       update.subBabAkses = [];
     }
-    await updateDoc(doc(db, 'users', uid), update);
-    showToast(`✅ User diupdate ke ${plan}`);
+    await updateDoc(doc(db,'users',uid), update);
+    showToast('✅ User berhasil diupdate!');
+    closeModal();
     await loadUsers();
-  } catch(e) {
-    showToast('Gagal: ' + e.message);
-    btn.disabled = false;
-  }
-}
+  } catch(e) { showToast('Gagal: '+e.message, true); }
+  btn.disabled = false; btn.textContent = 'Simpan';
+};
 
-window.loadOrders = async function() {
-  document.getElementById('ordersBody').innerHTML = '<tr><td colspan="8" class="loading">Memuat...</td></tr>';
+// ── HAPUS USER ──
+window.hapusUser = async function(uid, email) {
+  if (!isSuperAdmin) { showToast('Hanya super admin yang bisa hapus user!', true); return; }
+  if (!confirm(`Hapus user ${email}?\n\nIni akan menghapus dari Firebase Auth dan Firestore secara permanen.`)) return;
+
   try {
-    const snap = await getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc')));
-    allOrders = snap.docs.map(d => ({...d.data(), docId: d.id}));
-    document.getElementById('statPending').textContent = allOrders.filter(o => o.status === 'pending').length;
-    renderOrders(allOrders);
-  } catch(e) {
-    document.getElementById('ordersBody').innerHTML = `<tr><td colspan="8" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`;
-  }
+    showToast('⏳ Menghapus user...');
+    const res  = await fetch('/api/delete-user', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ uid, callerEmail: currentUser.email }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal hapus');
+    showToast('✅ User berhasil dihapus!');
+    await loadUsers();
+  } catch(e) { showToast('Gagal: '+e.message, true); }
+};
+
+// ── TAMBAH USER MANUAL ──
+window.toggleExpiredField = function() {
+  $('expiredField').style.display = $('tPlan').value === 'premium' ? 'block' : 'none';
+};
+
+window.tambahUserManual = async function() {
+  const nama  = $('tNama').value.trim();
+  const email = $('tEmail').value.trim();
+  const wa    = $('tWa').value.trim();
+  const pass  = $('tPass').value;
+  const role  = $('tRole').value;
+  const plan  = $('tPlan').value;
+  const btn   = $('btnTambahUser');
+
+  if (!nama||!email||!wa||!pass) { showAlertTambah('Semua field wajib diisi!', true); return; }
+  if (pass.length < 8) { showAlertTambah('Password minimal 8 karakter!', true); return; }
+
+  btn.disabled = true; btn.textContent = '⏳ Membuat akun...';
+  try {
+    // Buat user via Firebase Auth (akan auto login — perlu workaround)
+    // Gunakan secondary app untuk buat user tanpa ganti sesi login
+    const res = await fetch('/api/create-user', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ email, password: pass, callerEmail: currentUser.email }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal buat user');
+    const uid = data.uid;
+
+    // Generate referral code
+    const clean = nama.toUpperCase().replace(/[^A-Z]/g,'').slice(0,4)||'USER';
+    const refCode = 'CB-' + clean + Math.floor(1000+Math.random()*9000);
+
+    const update = { uid, nama, email, wa, referralCode:refCode, role, plan, soalGratis:0, komisiTotal:0, hasUsedReferral:false, subBabAkses:[], referredBy:null, createdAt:serverTimestamp() };
+    if (plan === 'premium') {
+      const expVal = $('tExpired').value;
+      if (expVal) { update.expiredAt = Timestamp.fromDate(new Date(expVal)); update.subBabAkses = ['__premium__']; }
+    }
+    await setDoc(doc(db,'users',uid), update);
+    showAlertTambah('✅ Akun berhasil dibuat!', false);
+    ['tNama','tEmail','tWa','tPass'].forEach(id => $(id).value = '');
+    await loadUsers();
+  } catch(e) { showAlertTambah('Gagal: '+e.message, true); }
+  btn.disabled = false; btn.textContent = '➕ Buat Akun';
+};
+
+function showAlertTambah(msg, isErr) {
+  const el = $('alertTambah');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.background = isErr ? '#FCEBEB' : '#E8F5EE';
+  el.style.color = isErr ? '#A32D2D' : '#085041';
+  el.style.border = `1px solid ${isErr?'#fdd':'#b8e6d0'}`;
+  setTimeout(() => el.style.display='none', 4000);
 }
 
-function renderOrders(orders) {
-  const tbody = document.getElementById('ordersBody');
-  if (!orders.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:2rem">Belum ada transaksi.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = orders.map(o => {
-    const tgl = o.createdAt ? new Date(o.createdAt.seconds*1000).toLocaleDateString('id-ID') : '–';
+// ── LOAD ORDERS ──
+window.loadOrders = async function() {
+  $('ordersBody').innerHTML = '<tr><td colspan="9" class="loading">Memuat...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db,'orders'), orderBy('createdAt','desc')));
+    allOrders  = snap.docs.map(d => ({...d.data(), docId:d.id}));
+    $('statPending').textContent = allOrders.filter(o=>o.status==='pending').length;
+    $('statOrders').textContent  = allOrders.length;
+    const revenue = allOrders.filter(o=>o.status==='paid').reduce((s,o)=>s+(o.total||0),0);
+    $('statRevenue').textContent = fmtRp(revenue);
+    renderOrders();
+  } catch(e) { $('ordersBody').innerHTML = `<tr><td colspan="9" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`; }
+};
+
+function renderOrders() {
+  let list = allOrders;
+  if (filterOrderQ)  list = list.filter(o=>(o.email||'').toLowerCase().includes(filterOrderQ.toLowerCase()));
+  if (filterOrderSt !== 'semua') list = list.filter(o=>o.status===filterOrderSt);
+
+  const tbody = $('ordersBody');
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:2rem">Tidak ada transaksi.</td></tr>'; return; }
+
+  tbody.innerHTML = list.map(o => {
     const isPending = o.status === 'pending';
-    return `
-    <tr>
-      <td style="font-size:12px">${o.email||'–'}<br><span style="color:#aaa">${tgl}</span></td>
+    return `<tr>
+      <td style="font-size:12px">${o.email||'–'}</td>
+      <td style="font-size:12px">${o.segmen||'–'}</td>
       <td style="font-size:12px">${o.paket||'–'}</td>
-      <td style="font-weight:700">Rp ${(o.total||0).toLocaleString('id-ID')}</td>
-      <td style="font-size:12px">${o.payMethod||'–'}</td>
+      <td style="font-weight:700">${fmtRp(o.total)}</td>
       <td style="font-family:monospace;font-size:11px;color:#1a6b4a">${o.refCode||'–'}</td>
-      <td style="color:#1a6b4a;font-weight:700">Rp ${(o.komisi||0).toLocaleString('id-ID')}</td>
+      <td style="color:#1a6b4a;font-weight:700">${fmtRp(o.komisi)}</td>
+      <td style="font-size:12px">${fmtDate(o.createdAt)}</td>
       <td><span class="badge ${isPending?'pending':'paid'}">${isPending?'Pending':'Paid'}</span></td>
       <td>
-        ${isPending
-          ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}', this)">✓ Konfirmasi</button>`
-          : `<span style="font-size:12px;color:#aaa">Lunas</span>`
-        }
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${isPending ? `<button class="btn-sm green" onclick="confirmPaid('${o.docId}',this)">✓ Konfirmasi</button>` : ''}
+          ${isSuperAdmin ? `<button class="btn-sm red" onclick="hapusOrder('${o.docId}')">🗑️</button>` : ''}
+        </div>
       </td>
-    </tr>`
+    </tr>`;
   }).join('');
 }
 
-// ── Konfirmasi bayar — update order + subBabAkses user ──
+window.filterOrders      = q => { filterOrderQ  = q; renderOrders(); };
+window.filterOrderStatus = v => { filterOrderSt = v; renderOrders(); };
+
+// ── KONFIRMASI PAID ──
 window.confirmPaid = async function(orderId, btn) {
   if (!confirm('Konfirmasi pembayaran ini sudah diterima?')) return;
   btn.disabled = true; btn.textContent = '...';
   try {
-    // 1. Ambil data order
-    const orderSnap = await getDoc(doc(db, 'orders', orderId));
-    if (!orderSnap.exists()) { showToast('Order tidak ditemukan.'); return; }
-    const orderData = orderSnap.data();
-
-    // 2. Update status order → paid
-    await updateDoc(doc(db, 'orders', orderId), { status: 'paid' });
-
-    // 3. Update subBabAkses user
-    const uid = orderData.uid;
-    const tipe = orderData.tipe || 'alacarte';
-    const subBabDibeli = orderData.subBabDibeli || [];
-
-    if (uid) {
-      const userRef = doc(db, 'users', uid);
-      if (tipe === 'bulanan') {
-        const exp = new Date();
-        exp.setMonth(exp.getMonth() + 1);
-        await updateDoc(userRef, {
-          plan: 'premium',
-          subBabAkses: ['__premium__'],
-          expiredAt: Timestamp.fromDate(exp)
-        });
-      } else if (subBabDibeli.length > 0) {
-        await updateDoc(userRef, {
-          plan: 'alacarte',
-          subBabAkses: arrayUnion(...subBabDibeli)
-        });
+    const orderSnap = await getDoc(doc(db,'orders',orderId));
+    if (!orderSnap.exists()) { showToast('Order tidak ditemukan.', true); return; }
+    const o = orderSnap.data();
+    await updateDoc(doc(db,'orders',orderId), { status:'paid' });
+    if (o.uid) {
+      const userRef = doc(db,'users',o.uid);
+      if (o.tipe === 'bulanan') {
+        const exp = new Date(); exp.setMonth(exp.getMonth()+1);
+        await updateDoc(userRef, { plan:'premium', subBabAkses:['__premium__'], expiredAt:Timestamp.fromDate(exp) });
+      } else if ((o.subBabDibeli||[]).length > 0) {
+        await updateDoc(userRef, { plan:'alacarte', subBabAkses:arrayUnion(...o.subBabDibeli) });
       }
     }
-
-    showToast('✅ Pembayaran dikonfirmasi & akses user diupdate!');
+    showToast('✅ Pembayaran dikonfirmasi & akses diupdate!');
     await loadOrders();
-  } catch(e) {
-    showToast('Gagal: ' + e.message);
-    btn.disabled = false; btn.textContent = '✓ Konfirmasi';
-  }
-}
+  } catch(e) { showToast('Gagal: '+e.message, true); btn.disabled=false; btn.textContent='✓ Konfirmasi'; }
+};
+
+// ── HAPUS ORDER ──
+window.hapusOrder = async function(orderId) {
+  if (!isSuperAdmin) { showToast('Hanya super admin yang bisa hapus order!', true); return; }
+  if (!confirm('Hapus order ini secara permanen?')) return;
+  try {
+    await deleteDoc(doc(db,'orders',orderId));
+    showToast('✅ Order berhasil dihapus!');
+    await loadOrders();
+  } catch(e) { showToast('Gagal: '+e.message, true); }
+};
+
+// ── HELPERS ──
+window.switchTab = function(el, tab) {
+  document.querySelectorAll('.tab').forEach(t=>t.className='tab');
+  el.className='tab active';
+  ['transaksi','users','tambahUser','pencairan'].forEach(t=>$(t).style.display='none');
+  $(tab).style.display='block';
+};
 
 window.doLogout = async function() {
   await signOut(auth);
-  window.location.href = 'register.html';
-}
+  location.href = '/register.html';
+};
 
-window.switchTab = function(el, tab) {
-  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
-  el.className = 'tab active';
-  ['transaksi','users','pencairan','kode'].forEach(t => document.getElementById(t).style.display = 'none');
-  document.getElementById(tab).style.display = 'block';
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3500);
-}
-
-let revealed = false;
-window.toggleReveal = function(btn) {
-  revealed = !revealed;
-  document.getElementById('activeCode').textContent = revealed ? 'CB-DISKON50' : '••••••••';
-  btn.textContent = revealed ? 'Sembunyikan' : 'Tampilkan';
-}
-window.deactivateCode = function() {
-  document.getElementById('activeCode').textContent = '••••••••';
-  revealed = false;
-  document.getElementById('revealBtn').textContent = 'Tampilkan';
-  showToast('Kode dinonaktifkan.');
-}
-window.createCode = function() {
-  const code = document.getElementById('newCode').value.trim();
-  const disc = document.getElementById('newDisc').value;
-  if (!code) { alert('Masukkan nama kode.'); return; }
-  document.getElementById('newCode').value = '';
-  showToast(`✅ Kode ${code} (${disc}%) aktif.`);
+function showToast(msg, isErr=false) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className   = `toast${isErr?' err':''}`;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display='none', 3500);
 }
 </script>
 </body>
