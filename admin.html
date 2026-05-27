@@ -563,6 +563,7 @@ window.switchTab = function(el, tab) {
   el.className='tab active';
   ['transaksi','users','tambahUser','pencairan','kodePromo'].forEach(t=>$(t).style.display='none');
   $(tab).style.display='block';
+  if(tab==='kodePromo') loadKodePromo();
 };
 
 window.doLogout = async function() {
@@ -585,7 +586,7 @@ window.loadKodePromo = async function() {
   if (!isSuperAdmin) return;
   $('kodePromoBody').innerHTML = '<tr><td colspan="8" class="loading">Memuat...</td></tr>';
   try {
-    const snap = await getDocs(query(collection(db,'promoCodes'), orderBy('createdAt','desc')));
+    const snap = await getDocs(collection(db,'promoCodes'));
     allKodePromo = snap.docs.map(d => ({...d.data(), docId:d.id}));
     renderKodePromo();
   } catch(e) {
