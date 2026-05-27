@@ -171,44 +171,11 @@
     </div>
   </div>
 
-  <!-- STEP 1: Firebase Config -->
-  <div id="step-config">
-    <div class="setup-wrap">
-      <div class="card">
-        <div class="setup-step">Langkah 1 dari 2</div>
-        <div class="setup-title">Hubungkan Firebase</div>
-        <div class="setup-desc">Masukkan konfigurasi Firebase project CerdasBersama. Anda bisa temukan ini di Firebase Console → Project Settings → Your Apps → Config.</div>
-        <div class="form-grid">
-          <div class="form-group">
-            <div class="form-label">API Key</div>
-            <input id="fb-apikey" type="password" placeholder="AIza...">
-          </div>
-          <div class="form-group">
-            <div class="form-label">Project ID</div>
-            <input id="fb-projectid" placeholder="cerdas-bersama-b914e" value="cerdas-bersama-b914e">
-          </div>
-          <div class="form-group">
-            <div class="form-label">Auth Domain</div>
-            <input id="fb-authdomain" placeholder="project.firebaseapp.com" value="cerdas-bersama-b914e.firebaseapp.com">
-          </div>
-          <div class="form-group">
-            <div class="form-label">App ID</div>
-            <input id="fb-appid" placeholder="1:xxx:web:yyy" value="1:742743770113:web:8109c06b77a37b5207ec00">
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-primary" onclick="initFirebase()"><i class="ti ti-arrow-right"></i> Lanjut ke Login</button>
-          <button class="btn btn-ghost" onclick="useDemoMode()">Pakai Demo Mode</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- STEP 2: Login -->
-  <div id="step-login" style="display:none">
+  <div id="step-login">
     <div class="setup-wrap">
       <div class="card">
-        <div class="setup-step">Langkah 2 dari 2</div>
+        
         <div class="setup-title"><i class="ti ti-lock" style="font-size:16px;vertical-align:-2px;margin-right:6px"></i>Login Admin</div>
         <div class="setup-desc">Masuk dengan akun admin CerdasBersama untuk mengakses data transaksi dari Firestore.</div>
         <div class="form-group" style="margin-bottom:10px">
@@ -221,9 +188,6 @@
         </div>
         <button class="btn btn-primary btn-full" onclick="doLogin()"><i class="ti ti-login"></i> Masuk & Lihat Data</button>
         <div id="login-error" class="err"></div>
-        <div style="margin-top:12px;text-align:center">
-          <button class="btn btn-ghost" onclick="backToConfig()" style="font-size:12px"><i class="ti ti-arrow-left"></i> Kembali</button>
-        </div>
       </div>
     </div>
   </div>
@@ -363,7 +327,12 @@ const fmtS = n => {
 let expenses = JSON.parse(localStorage.getItem('cb_pl_expenses') || '[]');
 let revenueData = {gross:0,diskon:0,komisi:0,orders:0,monthly:{}};
 let mainChart = null;
-let fbConfig = null;
+let fbConfig = {
+  apiKey: "AIzaSyDYl792JM-8MLSqn_ismOecFbtA1tjH5-g",
+  authDomain: "cerdas-bersama-b914e.firebaseapp.com",
+  projectId: "cerdas-bersama-b914e",
+  appId: "1:742743770113:web:8109c06b77a37b5207ec00"
+};
 let authToken = null;
 
 const DEMO = [
@@ -384,29 +353,6 @@ const DEMO = [
 const $ = id => document.getElementById(id);
 const show = id => $(id).style.display = 'block';
 const hide = id => $(id).style.display = 'none';
-
-function initFirebase() {
-  const apiKey = $('fb-apikey').value.trim();
-  const projectId = $('fb-projectid').value.trim();
-  const authDomain = $('fb-authdomain').value.trim();
-  const appId = $('fb-appid').value.trim();
-  if(!apiKey || !projectId) { alert('Minimal isi API Key dan Project ID.'); return; }
-  fbConfig = {apiKey, projectId, authDomain, appId};
-  localStorage.setItem('cb_fbconfig', JSON.stringify(fbConfig));
-  hide('step-config');
-  show('step-login');
-}
-
-function backToConfig() {
-  hide('step-login');
-  show('step-config');
-}
-
-function useDemoMode() {
-  hide('step-config');
-  showDashboard(false);
-  processOrders(DEMO);
-}
 
 async function doLogin() {
   const email = $('login-email').value.trim();
@@ -471,10 +417,10 @@ async function loadFromFirestore() {
 }
 
 function doLogout() {
-  authToken = null; fbConfig = null;
-  localStorage.removeItem('cb_fbconfig');
+  authToken = null;
   hide('step-dashboard'); hide('header-right');
-  show('step-config');
+  show('step-login');
+  $('login-pass').value = '';
 }
 
 function refreshData() {
@@ -625,16 +571,7 @@ function switchTab(tab, el) {
   });
 }
 
-// Load saved config
-const saved = localStorage.getItem('cb_fbconfig');
-if(saved) {
-  try {
-    fbConfig = JSON.parse(saved);
-    if(fbConfig.projectId) $('fb-projectid').value = fbConfig.projectId;
-    if(fbConfig.authDomain) $('fb-authdomain').value = fbConfig.authDomain;
-    if(fbConfig.appId) $('fb-appid').value = fbConfig.appId;
-  } catch(e) {}
-}
+// Config already hardcoded
 </script>
 </body>
 </html>
