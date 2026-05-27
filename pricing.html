@@ -646,7 +646,12 @@ window.doPay=async function(){
       onError:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Pembayaran gagal.');},
       onClose:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';}
     });
-  }catch(e){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Error: '+e.message);}
+  }catch(e){
+  btn.disabled=false;
+  btn.textContent='Bayar Sekarang';
+  $('warnMsg').textContent='❌ Error: '+e.message;
+  $('warnMsg').style.display='block';
+}
 };
 
 // ── COUNTDOWN ke dashboard setelah sukses ──
