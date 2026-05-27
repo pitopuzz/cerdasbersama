@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin CBT — Mesin Hitung IRT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Plus Jakarta Sans',sans-serif; background:#faf8f5; color:#1a1714; min-height:100vh; }
+    nav { background:#fff; border-bottom:1px solid #e8e4dc; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+    .nav-logo { font-weight:800; font-size:17px; color:#C0392B; }
+    .nav-logo span { color:#1a1714; }
+    main { max-width:900px; margin:0 auto; padding:28px 20px 80px; }
+    .page-title { font-size:22px; font-weight:900; letter-spacing:-0.5px; margin-bottom:4px; }
+    .page-sub { font-size:13px; color:#7a7168; margin-bottom:28px; font-weight:500; }
+    .card { background:#fff; border:1px solid #e8e4dc; border-radius:20px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:16px; }
+    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom: 2px solid #fff5f5; padding-bottom: 10px;}
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:11px; font-weight:800; color:#7a7168; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+    .field select { width:100%; border:1.5px solid #e8e4dc; border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:#1a1714; background:#fafaf8; outline:none; transition:border-color 0.18s; }
+    .field select:focus { border-color:#C0392B; background:#fff; }
+    .btn { padding:14px 24px; border-radius:12px; border:none; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; transition:all 0.18s; width: 100%; }
+    .btn.primary { background:#C0392B; color:#fff; }
+    .btn.primary:hover { background:#a93226; }
+    .btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .terminal { background:#1a1714; border-radius:12px; padding:16px; font-family:monospace; font-size:13px; color:#eef0f5; height:300px; overflow-y:auto; margin-top:20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+    .log-line { padding:4px 0; border-bottom: 1px solid #2a2622; }
+    .log-line:last-child { border-bottom: none; }
+    .log-line.info { color:#4a9dec; }
+    .log-line.success { color:#3ecf8e; }
+    .log-line.warning { color:#f5c842; }
+    .log-line.error { color:#f76060; }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    .stat-box { background: #fafaf8; border: 1px solid #e8e4dc; border-radius: 12px; padding: 16px; text-align: center; }
+    .stat-val { font-size: 24px; font-weight: 900; color: #C0392B; margin-bottom: 4px; }
+    .stat-label { font-size: 11px; font-weight: 700; color: #7a7168; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span> <span style="font-size:11px;color:#7a7168;font-weight:600">· Admin CBT</span></div>
+</nav>
+
+<main>
+  <div class="page-title">Mesin Hitung IRT & Skoring</div>
+  <div class="page-sub">Proses data jawaban mentah (Batch Processing) untuk generate skor akhir skala UTBK.</div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Konfigurasi Eksekusi</div>
+    <div class="field">
+      <label>Pilih Segmen Ujian yang Akan Dihitung</label>
+      <select id="fSegmen">
+        <option value="SNBT PTN">🎯 SNBT PTN (Penilaian Pseudo-IRT)</option>
+        <option value="CBT CPNS">🏛️ CBT CPNS (Penilaian Mutlak + TKP)</option>
+      </select>
+    </div>
+    <button class="btn primary" id="btnProses">🚀 Tarik Data & Mulai Proses IRT</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Status Pemrosesan</div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-val" id="valPeserta">0</div><div class="stat-label">Total Peserta</div></div>
+      <div class="stat-box"><div class="stat-val" id="valSoal">0</div><div class="stat-label">Total Soal DB</div></div>
+      <div class="stat-box"><div class="stat-val" id="valStatus">—</div><div class="stat-label">Status</div></div>
+    </div>
+    <div class="terminal" id="terminalLog">
+      <div class="log-line info">Sistem siap. Silakan pilih segmen dan klik tombol mulai...</div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { collection, getDocs, query, where, addDoc, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const $ = id => document.getElementById(id);
+  const terminal = $('terminalLog');
+
+  function logMsg(msg, type = 'info') {
+    const div = document.createElement('div');
+    div.className = `log-line ${type}`;
+    div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+
+  $('btnProses').addEventListener('click', async () => {
+    const segmen = $('fSegmen').value;
+    const btn = $('btnProses');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses Data... (Jangan tutup browser)';
+    $('valStatus').textContent = 'PROSES';
+    terminal.innerHTML = '';
+
+    logMsg(`Memulai pemrosesan Batch IRT untuk segmen: ${segmen}`, 'info');
+
+    try {
+      // ===== 1. TARIK BANK SOAL =====
+      logMsg('Menarik data bank soal dari server...', 'info');
+      const qSoal = query(collection(db, 'soal'), where('segmen', '==', segmen));
+      const snapSoal = await getDocs(qSoal);
+      const kunciJawaban = {};
+      snapSoal.forEach(doc => { kunciJawaban[doc.id] = doc.data(); });
+      const totalSoal = Object.keys(kunciJawaban).length;
+      $('valSoal').textContent = totalSoal;
+      if (totalSoal === 0) throw new Error('Tidak ada soal ditemukan untuk segmen ini.');
+      logMsg(`✅ Berhasil memuat ${totalSoal} butir soal.`, 'success');
+
+      // ===== 2. TARIK JAWABAN PESERTA =====
+      logMsg('Menarik data jawaban mentah peserta...', 'info');
+      const qPeserta = query(collection(db, 'jawaban_peserta'), where('segmen', '==', segmen));
+      const snapPeserta = await getDocs(qPeserta);
+      const daftarPeserta = [];
+      snapPeserta.forEach(doc => { daftarPeserta.push({ idDoc: doc.id, ...doc.data() }); });
+      const totalPeserta = daftarPeserta.length;
+      $('valPeserta').textContent = totalPeserta;
+      if (totalPeserta === 0) throw new Error('Belum ada peserta yang submit ujian di segmen ini.');
+      logMsg(`✅ Berhasil memuat data dari ${totalPeserta} peserta.`, 'success');
+
+      // ===== 3. CEK & HAPUS HASIL LAMA (Anti Duplikasi) =====
+      logMsg('Memeriksa dan menghapus hasil kalkulasi lama...', 'warning');
+      const qHasilLama = query(collection(db, 'hasil_tryout'), where('segmen', '==', segmen));
+      const snapHasilLama = await getDocs(qHasilLama);
+      const hapusPromises = [];
+      snapHasilLama.forEach(d => hapusPromises.push(deleteDoc(doc(db, 'hasil_tryout', d.id))));
+      await Promise.all(hapusPromises);
+      if (snapHasilLama.size > 0) logMsg(`🗑️ ${snapHasilLama.size} hasil lama dihapus.`, 'warning');
+      else logMsg('Tidak ada hasil lama, lanjut kalkulasi.', 'info');
+
+      // ===== 4. FASE ANALISIS P-VALUE & BOBOT IRT =====
+      logMsg('Menganalisis tingkat kesulitan tiap butir soal (P-Value)...', 'warning');
+      const statistikSoal = {};
+      for (let idSoal in kunciJawaban) {
+        statistikSoal[idSoal] = { benar: 0, salah: 0, bobotIrt: 0 };
+      }
+
+      daftarPeserta.forEach(p => {
+        const jwbn = p.jawaban || {};
+        for (let idSoal in kunciJawaban) {
+          const soalAsli = kunciJawaban[idSoal];
+          if (soalAsli.tipeSoal === 'tkp') continue; // TKP tidak di-IRT-kan
+          
+          const ans = jwbn[idSoal];
+          const isBenar = cekJawaban(soalAsli, ans);
+          if (isBenar) statistikSoal[idSoal].benar++;
+          else statistikSoal[idSoal].salah++;
+        }
+      });
+
+      // Hitung bobot inverse proportion
+      // p-value tinggi (mudah) → bobot kecil, p-value rendah (sulit) → bobot besar
+      // Rentang bobot: 10 (termudah) - 100 (tersulit)
+      let maxBobotTeoritis = 0;
+      for (let idSoal in statistikSoal) {
+        if (kunciJawaban[idSoal].tipeSoal === 'tkp') continue;
+        const stat = statistikSoal[idSoal];
+        const pValue = totalPeserta > 0 ? stat.benar / totalPeserta : 0;
+        stat.bobotIrt = 10 + ((1 - pValue) * 90);
+        maxBobotTeoritis += stat.bobotIrt;
+      }
+      logMsg(`✅ Analisis bobot IRT selesai. Max skor teoritis: ${Math.round(maxBobotTeoritis)}`, 'success');
+
+      // ===== 5. FASE SKORING AKHIR =====
+      logMsg('Menghitung skor akhir tiap peserta...', 'warning');
+      const hasilAkhir = [];
+
+      daftarPeserta.forEach(p => {
+        const jwbn = p.jawaban || {};
+        let skorIrt = 0;      // Akumulasi skor IRT (non-TKP)
+        let skorTkp = 0;      // Akumulasi skor TKP (mutlak)
+        let rincianKategori = {};
+
+        for (let idSoal in kunciJawaban) {
+          const soalAsli = kunciJawaban[idSoal];
+          const ans = jwbn[idSoal];
+          const kat = soalAsli.kategori || 'Lainnya';
+          if (!rincianKategori[kat]) rincianKategori[kat] = 0;
+
+          if (soalAsli.tipeSoal === 'tkp') {
+            // Skoring mutlak TKP: ambil bobot sesuai pilihan (1-5)
+            const poin = (ans && soalAsli.bobotTkp && soalAsli.bobotTkp[ans]) ? soalAsli.bobotTkp[ans] : 0;
+            rincianKategori[kat] += poin;
+            skorTkp += poin;
+          } else {
+            // Skoring pseudo-IRT
+            if (soalAsli.tipeSoal === 'majemuk' && ans) {
+              // Majemuk: tiap pernyataan punya poin proporsional (tidak harus semua benar)
+              const totalPernyataan = soalAsli.pernyataanMajemuk.length;
+              let pernyataanBenar = 0;
+              soalAsli.pernyataanMajemuk.forEach((pernyataan, idx) => {
+                if (ans[idx] === pernyataan.kunci) pernyataanBenar++;
+              });
+              const rasio = pernyataanBenar / totalPernyataan;
+              const poinProporsional = statistikSoal[idSoal].bobotIrt * rasio;
+              rincianKategori[kat] += poinProporsional;
+              skorIrt += poinProporsional;
+            } else {
+              // pg_biasa & isian: benar/salah
+              const isBenar = cekJawaban(soalAsli, ans);
+              if (isBenar) {
+                const poin = statistikSoal[idSoal].bobotIrt;
+                rincianKategori[kat] += poin;
+                skorIrt += poin;
+              }
+            }
+          }
+        }
+
+        // ===== NORMALISASI SKOR =====
+        let skorFinal;
+        if (segmen === 'SNBT PTN') {
+          // Scaling ke rentang 200-800 (mirip UTBK asli)
+          // Gunakan max skor teoritis IRT sebagai acuan, bukan totalSoal * 100
+          const rasio = maxBobotTeoritis > 0 ? skorIrt / maxBobotTeoritis : 0;
+          skorFinal = Math.round(200 + (rasio * 600));
+        } else {
+          // CPNS: IRT + TKP digabung langsung
+          skorFinal = Math.round(skorIrt + skorTkp);
+        }
+
+        hasilAkhir.push({
+          uid: p.uid,
+          email: p.email,
+          segmen: segmen,
+          skorTotal: skorFinal,
+          skorIrt: Math.round(skorIrt),
+          skorTkp: Math.round(skorTkp),
+          rincian: rincianKategori,
+          tanggalProses: serverTimestamp()
+        });
+      });
+
+      // ===== 6. SIMPAN KE FIRESTORE =====
+      logMsg('Menyimpan hasil ke database...', 'warning');
+      for (let i = 0; i < hasilAkhir.length; i++) {
+        await addDoc(collection(db, 'hasil_tryout'), hasilAkhir[i]);
+        logMsg(`✅ Skor peserta ${hasilAkhir[i].email} → ${hasilAkhir[i].skorTotal}`, 'success');
+      }
+
+      logMsg('🎉 PROSES SELESAI! Seluruh skor peserta telah berhasil di-generate.', 'success');
+      $('valStatus').textContent = 'SELESAI';
+
+    } catch(err) {
+      logMsg(`❌ ERROR: ${err.message}`, 'error');
+      $('valStatus').textContent = 'GAGAL';
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🚀 Tarik Data & Mulai Proses IRT';
+  });
+
+  // ===== HELPER: CEK JAWABAN BENAR/SALAH =====
+  // Dipakai di fase analisis P-Value (bukan untuk majemuk proporsional)
+  function cekJawaban(soalAsli, ans) {
+    if (!ans) return false;
+    if (soalAsli.tipeSoal === 'pg_biasa') return ans === soalAsli.jawaban;
+    if (soalAsli.tipeSoal === 'isian') return ans.toString().toLowerCase().trim() === (soalAsli.jawabanIsian || '').toLowerCase().trim();
+    if (soalAsli.tipeSoal === 'majemuk') {
+      // Untuk P-Value: dianggap benar kalau semua pernyataan benar
+      return soalAsli.pernyataanMajemuk.every((p, idx) => ans[idx] === p.kunci);
+    }
+    return false;
+  }
+</script>
+</body>
+</html>
