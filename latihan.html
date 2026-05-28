@@ -275,18 +275,28 @@
         currentSubbab   = paramSubbab;
         currentSegmen   = soalList[0].segmen  || paramSegmen  || '';
         currentKategori = soalList[0].kategori || paramMapel  || '';
-        $('btnBackFromHasil').onclick = () => window.location.href = '/pool.html';
         startLatihan(paramSubbab, soalList);
       } else {
-        showToast('Soal tidak ditemukan untuk sub-bab ini.');
-        renderSegmen();
+        // Soal belum ada di Firestore — jangan renderSegmen() yang kosong
+        // Tampilkan pesan informatif, beri opsi kembali ke pool
+        $('loadingScreen').style.display = 'none';
+        goToScreen('screenSegmen');
+        document.querySelector('main').innerHTML = `
+          <div style="text-align:center;padding:80px 20px">
+            <div style="font-size:56px;margin-bottom:16px">📭</div>
+            <div style="font-size:20px;font-weight:900;margin-bottom:8px">Soal Belum Tersedia</div>
+            <div style="font-size:14px;color:var(--muted);font-weight:500;line-height:1.6;margin-bottom:28px">
+              Sub-bab <strong>${paramSubbab}</strong> sudah aktif di akunmu,<br>
+              tapi soalnya sedang disiapkan. Cek lagi nanti ya!
+            </div>
+            <a href="/pool.html" style="display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:50px;background:var(--red);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;text-decoration:none">← Kembali ke Pool</a>
+          </div>`;
       }
     } else if (deepLink && !hasAccess(paramSubbab)) {
-      showToast('Sub-bab ini belum dibeli.');
-      renderSegmen();
+      // Sub-bab belum dibeli — redirect ke pool, bukan halaman kosong
+      window.location.href = '/pool.html';
     } else {
       // Normal flow
-      $('btnBackFromHasil').onclick = () => goToScreen('screenSubbab');
       renderSegmen();
     }
   });
@@ -463,19 +473,15 @@
     review.appendChild(reviewList);goToScreen('screenHasil');
   }
 
-  // Selesai → mark done → redirect ke pool
+  // Selesai → mark done → redirect ke pool (atau subBab jika normal flow)
   window.selesaiLatihan=function(){
     markSubbabDone(currentSubbab);
-    window.location.href='/pool.html';
+    window.location.href = deepLink ? '/pool.html' : '/pool.html';
   };
 
-  // Ulangi → confirm dulu karena sudah di halaman hasil
+  // Ulangi → langsung ulang (user sudah di hasil, sudah tau soalnya selesai)
   window.ulangiLatihan=function(){
-    const konfirm=confirm('Kamu sudah menyelesaikan semua soal ini. Mau mengulang dari awal?');
-    if(!konfirm) return;
-    // chip tetap abu2 (tidak di-unmark), langsung ulang soal
     let soalList=allSoal.filter(s=>s.subKategori===currentSubbab);
-    if(currentSegmen) soalList=soalList.filter(s=>s.segmen===currentSegmen||!s.segmen);
     startLatihan(currentSubbab,soalList);
   };
 
