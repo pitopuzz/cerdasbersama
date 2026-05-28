@@ -267,19 +267,15 @@
 
     // ── DEEP LINK: langsung ke soal ──
     if (deepLink && hasAccess(paramSubbab)) {
-      currentSegmen  = paramSegmen;
-      currentKategori = paramMapel;
-      currentSubbab  = paramSubbab;
+      // Filter hanya by subKategori — cukup unik, tidak perlu cocokkan segmen
+      const soalList = allSoal.filter(s => s.subKategori === paramSubbab);
 
-      // Filter soal: match subKategori, dan segmen kalau ada
-      let soalList = allSoal.filter(s => s.subKategori === paramSubbab);
-      if (paramSegmen && soalList.some(s => s.segmen === paramSegmen)) {
-        soalList = soalList.filter(s => s.segmen === paramSegmen);
-      }
-
+      // Set context dari data soal yang ditemukan (bukan dari param)
       if (soalList.length) {
-        // Tombol back dari hasil → balik ke dashboard
-        $('btnBackFromHasil').onclick = () => window.location.href = '/dashboard.html';
+        currentSubbab   = paramSubbab;
+        currentSegmen   = soalList[0].segmen  || paramSegmen  || '';
+        currentKategori = soalList[0].kategori || paramMapel  || '';
+        $('btnBackFromHasil').onclick = () => window.location.href = '/pool.html';
         startLatihan(paramSubbab, soalList);
       } else {
         showToast('Soal tidak ditemukan untuk sub-bab ini.');
