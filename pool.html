@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pool Latihan — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#faf8f5;--white:#fff;--surface2:#f5f3ef;--border:#e8e4dc;--text:#1a1714;--muted:#7a7168;--muted2:#b0a89c;--red:#C0392B;--red2:#a93226;--gold:#e8970a;--gold-bg:#fff8e6;--gold-border:#f5d06a;--green:#1a7a4a;--green-bg:#edfaf3;--shadow-sm:0 1px 3px rgba(0,0,0,0.06);--shadow:0 4px 16px rgba(0,0,0,0.08);--radius:16px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+    nav{background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+    .nav-logo{font-weight:800;font-size:17px;color:var(--red)}
+    .nav-logo span{color:var(--text)}
+    .nav-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;transition:color 0.18s}
+    .nav-back:hover{color:var(--red)}
+
+    #loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:200;transition:opacity 0.3s}
+    .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin 0.75s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    #loadingScreen p{font-size:14px;color:var(--muted);font-weight:500}
+
+    main{max-width:760px;margin:0 auto;padding:32px 20px 80px;opacity:0;transform:translateY(10px);transition:opacity 0.4s,transform 0.4s}
+    main.visible{opacity:1;transform:none}
+
+    .page-header{margin-bottom:28px}
+    .page-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px}
+    .page-sub{font-size:14px;color:var(--muted);font-weight:500}
+
+    /* PROGRESS BAR */
+    .progress-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+    .progress-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .progress-label{font-size:13px;font-weight:700;color:var(--text)}
+    .progress-count{font-size:13px;font-weight:800;color:var(--green)}
+    .progress-bar{height:8px;background:var(--surface2);border-radius:50px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--green),#2ecc8a);border-radius:50px;transition:width 0.6s ease}
+
+    /* SEGMEN GROUP */
+    .segmen-section{margin-bottom:28px}
+    .segmen-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .segmen-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    /* CHIP CARDS */
+    .chips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+
+    .chip-card{border-radius:14px;padding:16px 18px;cursor:pointer;transition:all 0.2s;border:1.5px solid transparent;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+
+    /* BELUM DIKERJAKAN — hijau */
+    .chip-card.undone{background:var(--green-bg);border-color:#b8e6d0}
+    .chip-card.undone:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 20px rgba(26,122,74,0.15)}
+
+    /* SUDAH DIKERJAKAN — abu */
+    .chip-card.done{background:var(--surface2);border-color:var(--border)}
+    .chip-card.done:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow)}
+
+    .chip-icon{font-size:22px;flex-shrink:0;width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+    .chip-card.undone .chip-icon{background:rgba(26,122,74,0.1)}
+    .chip-card.done .chip-icon{background:var(--border)}
+
+    .chip-body{flex:1;min-width:0}
+    .chip-name{font-size:13px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:3px}
+    .chip-card.done .chip-name{color:var(--muted)}
+    .chip-meta{font-size:11px;font-weight:600;color:var(--muted2)}
+
+    .chip-status{flex-shrink:0}
+    .status-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .chip-card.undone .status-dot{background:var(--green);color:#fff}
+    .chip-card.done .status-dot{background:var(--border2);color:var(--white)}
+
+    .done-label{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted2);background:var(--border);border-radius:50px;padding:2px 8px}
+
+    /* ALL DONE BANNER */
+    .all-done-banner{background:linear-gradient(135deg,var(--green-bg),#d4f5e6);border:2px solid #b8e6d0;border-radius:20px;padding:28px 24px;text-align:center;margin-bottom:24px}
+    .all-done-banner .emoji{font-size:48px;margin-bottom:12px;display:block}
+    .all-done-banner h3{font-size:20px;font-weight:900;color:var(--green);margin-bottom:6px}
+    .all-done-banner p{font-size:13px;color:#2e7a5a;font-weight:500;line-height:1.6;margin-bottom:20px}
+    .btn-beli-more{display:inline-flex;align-items:center;gap:8px;padding:13px 28px;border-radius:50px;background:var(--red);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;text-decoration:none;box-shadow:0 4px 14px rgba(192,57,43,0.25);transition:all 0.18s;border:none;cursor:pointer}
+    .btn-beli-more:hover{background:var(--red2);transform:translateY(-1px)}
+
+    /* EMPTY STATE */
+    .empty-state{text-align:center;padding:60px 20px}
+    .empty-state .emoji{font-size:48px;margin-bottom:16px;display:block}
+    .empty-state h3{font-size:18px;font-weight:800;margin-bottom:8px}
+    .empty-state p{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:20px;line-height:1.6}
+
+    /* CONFIRM DIALOG */
+    .dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s}
+    .dialog-overlay.show{opacity:1;pointer-events:all}
+    .dialog-box{background:var(--white);border-radius:20px;padding:28px 24px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);transform:translateY(10px);transition:transform 0.2s}
+    .dialog-overlay.show .dialog-box{transform:none}
+    .dialog-emoji{font-size:36px;margin-bottom:12px;display:block;text-align:center}
+    .dialog-title{font-size:17px;font-weight:900;text-align:center;margin-bottom:8px}
+    .dialog-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;font-weight:500;margin-bottom:20px}
+    .dialog-btns{display:flex;gap:10px}
+    .dialog-btn{flex:1;padding:12px;border-radius:50px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.18s}
+    .dialog-btn.primary{background:var(--red);color:#fff}
+    .dialog-btn.primary:hover{background:var(--red2)}
+    .dialog-btn.secondary{background:var(--surface2);color:var(--text);border:1.5px solid var(--border)}
+    .dialog-btn.secondary:hover{background:var(--border)}
+
+    #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--text);color:#fff;border-radius:50px;padding:10px 22px;font-size:13px;font-weight:600;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:var(--shadow)}
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+
+<div id="loadingScreen"><div class="spinner"></div><p>Memuat sub-bab kamu…</p></div>
+
+<nav>
+  <div class="nav-logo">Cerdas<span>Bersama</span></div>
+  <a href="/dashboard.html" class="nav-back">← Dashboard</a>
+</nav>
+
+<main id="mainContent">
+  <div id="poolContent"></div>
+</main>
+
+<!-- Confirm Dialog -->
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog-box">
+    <span class="dialog-emoji">🔄</span>
+    <div class="dialog-title">Ulangi Sub-Bab?</div>
+    <div class="dialog-sub" id="dialogSub">Kamu sudah menyelesaikan semua soal ini. Mau mengulang dari awal?</div>
+    <div class="dialog-btns">
+      <button class="dialog-btn secondary" onclick="closeDialog()">Batal</button>
+      <button class="dialog-btn primary" id="dialogConfirmBtn">Ya, Ulangi</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  let firebaseConfig;
+  try { const mod=await import('./firebase-config.js'); firebaseConfig=mod.firebaseConfig||mod.default; }
+  catch { firebaseConfig=window._fbConfig||{}; }
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  const $    = id => document.getElementById(id);
+
+  const MAPEL_ICON = { Matematika:'📐',IPAS:'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖','Bahasa Inggris':'🔤',IPA:'🔬',IPS:'🌏','PKn':'🏛️',Fisika:'⚛️',Kimia:'🧪',Biologi:'🌿',Ekonomi:'📊',Sejarah:'📜',Geografi:'🗺️' };
+
+  function showToast(msg){ const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500); }
+
+  function getDoneSubbab(){ try{ return JSON.parse(localStorage.getItem('cb_done_subbab')||'[]'); }catch{ return []; } }
+
+  // Dialog state
+  let pendingUrl = '';
+  window.closeDialog = function(){ $('dialogOverlay').classList.remove('show'); pendingUrl=''; };
+
+  function showDialog(subbabName, url){
+    pendingUrl = url;
+    $('dialogSub').textContent = `Kamu sudah menyelesaikan semua soal "${subbabName}". Mau mengulang dari awal?`;
+    $('dialogConfirmBtn').onclick = () => { closeDialog(); window.location.href = pendingUrl; };
+    $('dialogOverlay').classList.add('show');
+  }
+
+  // Tutup dialog kalau klik overlay
+  $('dialogOverlay').addEventListener('click', e => { if(e.target === $('dialogOverlay')) closeDialog(); });
+
+  onAuthStateChanged(auth, async user => {
+    if(!user){ window.location.href='/register.html'; return; }
+
+    const [userSnap, subBabSnap] = await Promise.all([
+      getDoc(doc(db,'users',user.uid)),
+      getDocs(collection(db,'subBab')),
+    ]);
+
+    if(!userSnap.exists()){ window.location.href='/register.html'; return; }
+
+    const ud          = userSnap.data();
+    const isPremium   = ud.plan === 'premium';
+    const subBabAkses = ud.subBabAkses || [];
+    const hasPremiumAll = subBabAkses.includes('__premium__') || isPremium;
+
+    // Build icon map dari Firestore
+    const subBabIconMap = {};
+    subBabSnap.docs.forEach(d => {
+      const data = d.data();
+      const icon = MAPEL_ICON[data.mapel] || '📚';
+      (data.list||[]).forEach(sb => subBabIconMap[sb] = { icon, segmen: data.segmen||'', mapel: data.mapel||'' });
+    });
+
+    $('loadingScreen').style.opacity='0';
+    setTimeout(()=>$('loadingScreen').style.display='none',300);
+
+    renderPool(subBabAkses, hasPremiumAll, subBabIconMap);
+
+    $('mainContent').classList.add('visible');
+  });
+
+  function renderPool(subBabAkses, hasPremiumAll, subBabIconMap){
+    const content  = $('poolContent');
+    const doneList = getDoneSubbab();
+
+    // Kalau belum beli
+    if(!subBabAkses.length && !hasPremiumAll){
+      content.innerHTML = `
+        <div class="empty-state">
+          <span class="emoji">📚</span>
+          <h3>Belum ada sub-bab</h3>
+          <p>Beli sub-bab untuk mulai latihan soal.</p>
+          <a href="/pricing.html" class="btn-beli-more">Lihat Paket →</a>
+        </div>`;
+      return;
+    }
+
+    const totalSubbab = subBabAkses.length;
+    const doneSoFar   = subBabAkses.filter(sb => doneList.includes(sb)).length;
+    const allDone     = totalSubbab > 0 && doneSoFar === totalSubbab;
+
+    // Group by segmen
+    const segmenMap = {};
+    subBabAkses.forEach(sb => {
+      const info = subBabIconMap[sb] || { icon:'📚', segmen:'Lainnya', mapel:'' };
+      if(!segmenMap[info.segmen]) segmenMap[info.segmen] = [];
+      segmenMap[info.segmen].push({ sb, icon:info.icon, segmen:info.segmen, mapel:info.mapel });
+    });
+    if(!Object.keys(segmenMap).length && subBabAkses.length){
+      segmenMap['Sub-Bab Kamu'] = subBabAkses.map(sb=>({sb,icon:'📚',segmen:'',mapel:''}));
+    }
+
+    // Progress bar
+    const pct = totalSubbab ? Math.round((doneSoFar/totalSubbab)*100) : 0;
+    const progressHTML = `
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <div class="progress-label">Progress Latihan</div>
+          <div class="progress-count">${doneSoFar} / ${totalSubbab} selesai</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+
+    // All done banner
+    const allDoneBanner = allDone ? `
+      <div class="all-done-banner">
+        <span class="emoji">🎉</span>
+        <h3>Semua Sub-Bab Selesai!</h3>
+        <p>Keren! Kamu sudah menyelesaikan semua soal yang kamu punya.<br>Tambah sub-bab baru untuk terus berlatih.</p>
+        <a href="/pricing.html" class="btn-beli-more">+ Beli Sub-Bab Baru</a>
+      </div>` : '';
+
+    // Chips per segmen
+    const segmenSections = Object.entries(segmenMap).map(([seg, items]) => {
+      const showSegmenTitle = Object.keys(segmenMap).length > 1;
+      const chips = items.map(({ sb, icon, segmen, mapel }) => {
+        const isDone = doneList.includes(sb);
+        const params = new URLSearchParams({ subbab:sb, segmen, mapel });
+        const url    = `/latihan.html?${params}`;
+
+        if(isDone){
+          return `<div class="chip-card done" data-subbab="${sb}" data-url="${url}" onclick="handleChipClick(this)">
+            <div class="chip-icon">${icon}</div>
+            <div class="chip-body">
+              <div class="chip-name">${sb}</div>
+              <div class="chip-meta">Sudah dikerjakan</div>
+            </div>
+            <div class="chip-status"><div class="status-dot">✓</div></div>
+          </div>`;
+        }
+        return `<div class="chip-card undone" data-subbab="${sb}" data-url="${url}" onclick="handleChipClick(this)">
+          <div class="chip-icon">${icon}</div>
+          <div class="chip-body">
+            <div class="chip-name">${sb}</div>
+            <div class="chip-meta">Belum dikerjakan</div>
+          </div>
+          <div class="chip-status"><div class="status-dot">▶</div></div>
+        </div>`;
+      }).join('');
+
+      return `
+        <div class="segmen-section">
+          ${showSegmenTitle ? `<div class="segmen-title">📚 ${seg}</div>` : ''}
+          <div class="chips-grid">${chips}</div>
+        </div>`;
+    }).join('');
+
+    content.innerHTML = `
+      <div class="page-header">
+        <div class="page-title">📝 Sub-Bab Kamu</div>
+        <div class="page-sub">Pilih sub-bab untuk mulai atau lanjut latihan.</div>
+      </div>
+      ${progressHTML}
+      ${allDoneBanner}
+      ${segmenSections}`;
+  }
+
+  // Handle klik chip
+  window.handleChipClick = function(el){
+    const isDone = el.classList.contains('done');
+    const url    = el.dataset.url;
+    const name   = el.dataset.subbab;
+    if(isDone){
+      showDialog(name, url);
+    } else {
+      window.location.href = url;
+    }
+  };
+</script>
+</body>
+</html>
