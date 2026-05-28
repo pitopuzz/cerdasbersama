@@ -354,11 +354,18 @@
 
       const subBabIconMap = {};
       try {
-        const subBabSnap = await getDocs(collection(db, 'subBab'));
-        subBabSnap.docs.forEach(d => {
+        // Build dari collection soal — lebih akurat karena langsung match subKategori
+        const soalSnap = await getDocs(collection(db, 'soal'));
+        soalSnap.docs.forEach(d => {
           const data = d.data();
-          const icon = MAPEL_ICON[data.mapel] || '📚';
-          (data.list || []).forEach(sb => subBabIconMap[sb] = { icon, segmen: data.segmen, mapel: data.mapel });
+          const sb   = data.subKategori;
+          if (sb && !subBabIconMap[sb]) {
+            subBabIconMap[sb] = {
+              icon:   MAPEL_ICON[data.kategori] || '📚',
+              segmen: data.segmen  || '',
+              mapel:  data.kategori || '',
+            };
+          }
         });
       } catch(_) {}
 
