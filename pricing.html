@@ -424,30 +424,65 @@ let paketCBTLoaded = false;
 
 const $ = id => document.getElementById(id);
 
-// ── LOAD paketCBT dari Firestore ──
-// Query semua dokumen, filter aktif di client — hindari composite index issue
+// ── FALLBACK: segmen hardcode dari data soal aktual ──
+// Dipakai kalau paketCBT di Firestore kosong
+const FALLBACK_TRYOUT_SEGMEN = {
+  'Try Out STS Kelas 6':   { harga:34900, mapel:'Mat, IPAS, B.Indonesia, B.Inggris' },
+  'Try Out STS Kelas 7':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out STS Kelas 8':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out STS Kelas 9':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out STS Kelas 10':  { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out STS Kelas 11':  { harga:34900, mapel:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  'Try Out STS Kelas 12':  { harga:34900, mapel:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  'Try Out SAS Kelas 6':   { harga:34900, mapel:'Mat, IPAS, B.Indonesia, B.Inggris' },
+  'Try Out SAS Kelas 7':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out SAS Kelas 8':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out SAS Kelas 9':   { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out SAS Kelas 10':  { harga:34900, mapel:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+  'Try Out SAS Kelas 11':  { harga:34900, mapel:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  'Try Out SAS Kelas 12':  { harga:34900, mapel:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  'CBT Kelas 6 - MTSN':    { harga:34900, mapel:'Mat, IPAS, B.Indo, B.Ing, PAI, Peng.Umum' },
+  'CBT Kelas 6 - SMP UMUM':{ harga:34900, mapel:'Mat, IPAS, B.Indo, B.Ing, Peng.Umum' },
+  'CBT Kelas 9 - MA':      { harga:34900, mapel:'Mat, IPAS, B.Indo, B.Ing, PAI, Peng.Umum' },
+  'CBT Kelas 9 - SMA UMUM':{ harga:34900, mapel:'Mat, IPAS, B.Indo, B.Ing, Peng.Umum' },
+  'CBT Kelas 12':          { harga:34900, mapel:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  'SNBT PTN':              { harga:34900, mapel:'Penalaran Umum, Literasi, Mat, dll' },
+  'CBT CPNS':              { harga:34900, mapel:'TWK, TIU, TKP' },
+};
+
+// ── LOAD paketCBT dari Firestore, fallback ke hardcode kalau kosong ──
 async function loadPaketCBT() {
   try {
     const snap = await getDocs(collection(db,'paketCBT'));
     paketCBTData = {};
     snap.docs.forEach(d => {
       const item = d.data();
-      if (item.aktif === false) return;       // skip yang eksplisit non-aktif
-      if (!item.segmen || !item.subKategori) return;  // skip data kotor
-      // Filter: exclude segmen latihan biasa (SD/SMP/SMA) — bukan produk tryout
+      if (item.aktif === false) return;
+      if (!item.segmen || !item.subKategori) return;
       const s = String(item.segmen);
+      // exclude segmen latihan biasa
       if (s.startsWith('SD') || s.startsWith('SMP') || s.startsWith('SMA')) return;
       if (!paketCBTData[item.segmen]) paketCBTData[item.segmen] = [];
-      paketCBTData[item.segmen].push({
-        subKategori: item.subKategori,
-        harga: item.harga || 34900
-      });
+      paketCBTData[item.segmen].push({ subKategori: item.subKategori, harga: item.harga || 34900 });
     });
-    console.log('[paketCBT] loaded:', Object.keys(paketCBTData).length, 'segmen', Object.keys(paketCBTData));
+
+    // Kalau Firestore kosong → pakai fallback hardcode
+    if (Object.keys(paketCBTData).length === 0) {
+      console.log('[paketCBT] Firestore kosong, pakai fallback hardcode');
+      Object.entries(FALLBACK_TRYOUT_SEGMEN).forEach(([segmen, val]) => {
+        paketCBTData[segmen] = [{ subKategori: val.mapel, harga: val.harga }];
+      });
+    } else {
+      console.log('[paketCBT] loaded dari Firestore:', Object.keys(paketCBTData).length, 'segmen');
+    }
     paketCBTLoaded = true;
   } catch(e) {
-    console.error('[paketCBT] load error:', e.message);
+    // Error → pakai fallback
+    console.error('[paketCBT] load error, pakai fallback:', e.message);
     paketCBTData = {};
+    Object.entries(FALLBACK_TRYOUT_SEGMEN).forEach(([segmen, val]) => {
+      paketCBTData[segmen] = [{ subKategori: val.mapel, harga: val.harga }];
+    });
     paketCBTLoaded = true;
   }
 }
