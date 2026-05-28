@@ -16,6 +16,8 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .nav-back:hover{color:#C0392B}
 .wrap{max-width:880px;margin:0 auto;padding:28px 20px 80px}
 .loading{text-align:center;padding:3rem;color:#b0a89c;font-size:14px}
+
+/* STEPS */
 .steps-bar{display:flex;align-items:center;gap:0;margin-bottom:28px}
 .step-item{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#b0a89c}
 .step-item.active{color:#C0392B}
@@ -25,10 +27,19 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .step-item.active .step-circle{background:#C0392B;border-color:#C0392B;color:#fff}
 .step-line{flex:1;height:2px;background:#e8e4dc;margin:0 8px}
 .step-line.done{background:#1a7a4a}
+
 .page-title{font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:4px}
 .page-sub{font-size:13px;color:#7a7168;margin-bottom:24px;font-weight:500}
 
-/* SEGMEN */
+/* MAIN PRODUCT TABS */
+.product-tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:14px;margin-bottom:28px;flex-wrap:wrap}
+.product-tab{padding:10px 20px;border-radius:10px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.product-tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.product-tab.tryout-tab.active{color:#9b59b6}
+.tryout-tab{position:relative}
+.tryout-new-badge{position:absolute;top:-4px;right:-4px;background:#9b59b6;color:#fff;font-size:8px;font-weight:800;padding:2px 5px;border-radius:50px;letter-spacing:0.3px}
+
+/* SEGMEN GRID */
 .segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:24px}
 .segmen-card{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;cursor:pointer;transition:all 0.18s;position:relative;overflow:hidden}
 .segmen-card:hover:not(.coming-soon){border-color:#C0392B;transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
@@ -38,15 +49,47 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .segmen-name{font-size:14px;font-weight:800;color:#1a1714;margin-bottom:3px}
 .segmen-desc{font-size:11px;color:#7a7168;font-weight:500}
 .coming-soon-badge{position:absolute;top:10px;right:10px;background:#f5f3ef;border:1px solid #e8e4dc;border-radius:50px;padding:3px 8px;font-size:9px;font-weight:800;color:#b0a89c;text-transform:uppercase;letter-spacing:0.5px}
-
-/* SEGMEN LOADING */
 .segmen-skeleton{background:#f5f3ef;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;height:96px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 
+/* SUB TABS (inside latihan) */
 .tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content;flex-wrap:wrap}
 .tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+
 .section-label{font-size:11px;font-weight:800;color:#b0a89c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.6px}
+
+/* TRYOUT SEGMEN PICKER */
+.tryout-segmen-groups{display:flex;flex-direction:column;gap:20px;margin-bottom:24px}
+.tryout-group-title{font-size:12px;font-weight:800;color:#7a7168;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.tryout-group-title::after{content:'';flex:1;height:1px;background:#e8e4dc}
+.tryout-segmen-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.tryout-card{background:#fff;border:2px solid #e8e4dc;border-radius:14px;padding:14px;cursor:pointer;transition:all 0.18s;position:relative}
+.tryout-card:hover{border-color:#9b59b6;transform:translateY(-2px);box-shadow:0 4px 14px rgba(155,89,182,0.12)}
+.tryout-card.selected{border-color:#9b59b6;background:#fdf5ff;box-shadow:0 0 0 3px rgba(155,89,182,0.08)}
+.tryout-card.owned{border-color:#1a7a4a;background:#edfaf3;cursor:default}
+.tryout-card.owned:hover{transform:none;box-shadow:none}
+.tryout-card-icon{font-size:22px;margin-bottom:6px}
+.tryout-card-name{font-size:12px;font-weight:800;color:#1a1714;margin-bottom:2px;line-height:1.3}
+.tryout-card-mapel{font-size:10px;color:#7a7168;font-weight:600}
+.tryout-card-price{margin-top:8px;font-size:14px;font-weight:900;color:#9b59b6}
+.tryout-card.owned .tryout-card-price{color:#1a7a4a;font-size:12px}
+.owned-badge{position:absolute;top:8px;right:8px;background:#1a7a4a;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:50px}
+.check-badge{position:absolute;top:8px;right:8px;width:20px;height:20px;background:#9b59b6;border-radius:50%;display:none;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800}
+.tryout-card.selected .check-badge{display:flex}
+
+.tryout-info-box{background:linear-gradient(135deg,#fdf5ff,#f5ecff);border:1.5px solid #e0c8f5;border-radius:14px;padding:18px 20px;margin-bottom:20px}
+.tryout-info-box h3{font-size:14px;font-weight:800;color:#6c3483;margin-bottom:6px}
+.tryout-info-list{display:flex;flex-direction:column;gap:5px}
+.tryout-info-item{font-size:12px;font-weight:600;color:#7d3c98;display:flex;align-items:center;gap:6px}
+
+.selected-tryout-preview{background:#fdf5ff;border:1.5px solid #e0c8f5;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:none}
+.selected-tryout-title{font-size:12px;font-weight:800;color:#9b59b6;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.selected-tryout-tags{display:flex;gap:6px;flex-wrap:wrap}
+.sel-tryout-tag{background:#fff;border:1px solid #e0c8f5;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;color:#9b59b6;display:flex;align-items:center;gap:4px;cursor:pointer}
+.sel-tryout-tag:hover{background:#f5ecff}
+
+/* PKG GRID */
 .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
 .pkg{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px;cursor:pointer;transition:all 0.18s}
 .pkg:hover{border-color:#C0392B;transform:translateY(-2px)}
@@ -83,6 +126,8 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .premium-box{background:linear-gradient(135deg,#fffbf0,#fff8e0);border:2px solid #f5d06a;border-radius:16px;padding:24px;margin-bottom:24px;text-align:center}
 .premium-box h3{font-size:20px;font-weight:900;color:#8a5e00;margin-bottom:6px}
 .premium-box p{font-size:13px;color:#9a7020;line-height:1.6;font-weight:500}
+
+/* REFERRAL */
 .ref-box{border-radius:12px;margin-bottom:20px;padding:14px}
 .ref-box.locked{border:1.5px dashed #e8e4dc;background:#f5f3ef}
 .ref-box.unlocked{border:1.5px solid #1a7a4a;background:#edfaf3}
@@ -99,6 +144,8 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .btn-apply:disabled{opacity:0.5;cursor:not-allowed}
 .ref-hint{font-size:12px;color:#b0a89c;margin-top:6px;font-weight:500}
 .ref-ok-msg{font-size:12px;color:#1a7a4a;margin-top:6px;font-weight:700}
+
+/* ORDER BOX */
 .order-box{background:#fff;border:1px solid #e8e4dc;border-radius:16px;padding:20px;margin-bottom:16px}
 .order-row{display:flex;justify-content:space-between;font-size:13px;color:#7a7168;margin-bottom:8px;align-items:flex-start;gap:12px}
 .order-row .label{flex:1}
@@ -108,6 +155,8 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .btn-pay{width:100%;background:#C0392B;color:#fff;border:none;border-radius:50px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;transition:all 0.18s;box-shadow:0 4px 16px rgba(192,57,43,0.25)}
 .btn-pay:hover{background:#a93226;transform:translateY(-1px)}
 .btn-pay:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-pay.purple{background:#9b59b6;box-shadow:0 4px 16px rgba(155,89,182,0.25)}
+.btn-pay.purple:hover{background:#8e44ad}
 .btn-back{background:none;border:1.5px solid #e8e4dc;border-radius:50px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:#7a7168;margin-bottom:16px;transition:all 0.18s}
 .btn-back:hover{border-color:#C0392B;color:#C0392B}
 .secure-note{text-align:center;font-size:12px;color:#b0a89c;margin-top:10px;font-weight:500}
@@ -122,27 +171,60 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 <div class="wrap">
   <div id="loadingView" class="loading">Memuat halaman…</div>
   <div id="mainView" style="display:none">
+
+    <!-- STEPS -->
     <div class="steps-bar" id="stepsBar">
-      <div class="step-item active" id="step1"><div class="step-circle">1</div><span>Segmen</span></div>
+      <div class="step-item active" id="step1"><div class="step-circle">1</div><span>Produk</span></div>
       <div class="step-line" id="line1"></div>
-      <div class="step-item" id="step2"><div class="step-circle">2</div><span>Paket</span></div>
+      <div class="step-item" id="step2"><div class="step-circle">2</div><span>Pilih</span></div>
       <div class="step-line" id="line2"></div>
       <div class="step-item" id="step3"><div class="step-circle">3</div><span>Bayar</span></div>
     </div>
 
-    <!-- STEP 1: PILIH SEGMEN (dinamis) -->
-    <div id="viewSegmen">
-      <div class="page-title">Pilih Segmen</div>
-      <div class="page-sub">Pilih jenjang atau jenis tes yang ingin kamu pelajari.</div>
-      <div class="segmen-grid" id="segmenGrid">
-        <!-- Skeleton loading -->
-        <div class="segmen-skeleton"></div>
-        <div class="segmen-skeleton"></div>
-        <div class="segmen-skeleton"></div>
+    <!-- STEP 1: PILIH PRODUK -->
+    <div id="viewProduk">
+      <div class="page-title">Mau beli apa?</div>
+      <div class="page-sub">Pilih produk yang ingin kamu akses.</div>
+      <div class="product-tabs">
+        <button class="product-tab active" id="ptLatihan" onclick="switchProductTab('latihan',this)">📚 Latihan Soal</button>
+        <button class="product-tab tryout-tab" id="ptTryout" onclick="switchProductTab('tryout',this)">
+          🎯 Try Out / CBT
+          <span class="tryout-new-badge">NEW</span>
+        </button>
+      </div>
+
+      <!-- LATIHAN: pilih segmen -->
+      <div id="prodLatihan">
+        <div class="page-sub" style="margin-bottom:16px">Pilih jenjang untuk latihan soal per sub-bab.</div>
+        <div class="segmen-grid" id="segmenGrid">
+          <div class="segmen-skeleton"></div>
+          <div class="segmen-skeleton"></div>
+          <div class="segmen-skeleton"></div>
+        </div>
+      </div>
+
+      <!-- TRYOUT: pilih segmen CBT/TO -->
+      <div id="prodTryout" style="display:none">
+        <div class="tryout-info-box">
+          <h3>🎯 Apa itu Try Out / CBT?</h3>
+          <div class="tryout-info-list">
+            <div class="tryout-info-item">⏱ Ujian berbatas waktu (20 menit/mapel)</div>
+            <div class="tryout-info-item">📊 Nilai langsung muncul setelah submit</div>
+            <div class="tryout-info-item">📖 Pembahasan lengkap per soal</div>
+            <div class="tryout-info-item">🔄 Bisa diulang kapan saja, akses selamanya</div>
+          </div>
+        </div>
+        <div class="page-sub" style="margin-bottom:16px">Pilih satu atau lebih segmen ujian — <strong>Rp 34.900 / segmen</strong>.</div>
+        <div id="tryoutSegmenGroups" class="tryout-segmen-groups"></div>
+        <div class="selected-tryout-preview" id="previewTryout">
+          <div class="selected-tryout-title">Segmen dipilih (<span id="countTryout">0</span>)</div>
+          <div class="selected-tryout-tags" id="tagsTryout"></div>
+        </div>
+        <button class="btn-pay purple" id="btnLanjutTryout" onclick="lanjutTryout()" style="margin-top:4px" disabled>Lanjut ke Pembayaran →</button>
       </div>
     </div>
 
-    <!-- STEP 2: PILIH PAKET -->
+    <!-- STEP 2: PILIH PAKET LATIHAN -->
     <div id="viewPaket" style="display:none">
       <button class="btn-back" onclick="goStep(1)">← Ganti Segmen</button>
       <div class="page-title" id="paketTitle">Pilih Paket</div>
@@ -202,7 +284,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
         </div>
         <p class="ref-hint" id="refHint">Kode didapat dari teman atau admin CerdasBersama.</p>
       </div>
-      <!-- RINGKASAN -->
       <div class="warn-msg" id="warnMsg"></div>
       <div class="order-box">
         <div class="section-label">Ringkasan pesanan</div>
@@ -213,12 +294,43 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <button class="btn-pay" id="btnPay" onclick="doPay()">Bayar Sekarang</button>
       <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
     </div>
+
+    <!-- STEP 2B: CHECKOUT TRYOUT -->
+    <div id="viewCheckoutTryout" style="display:none">
+      <button class="btn-back" onclick="goStepTryout(1)">← Ubah Pilihan</button>
+      <div class="page-title">Konfirmasi Try Out</div>
+      <div class="page-sub">Periksa segmen yang dipilih sebelum bayar.</div>
+      <!-- REFERRAL (reuse sama) -->
+      <div class="section-label">Kode referral / promo</div>
+      <div class="ref-box locked" id="refBoxTo">
+        <div class="ref-top">
+          <span>🏷️</span>
+          <span class="ref-top-label">Punya kode diskon?</span>
+          <span class="ref-status no" id="refStatusTo">Belum dipakai</span>
+        </div>
+        <div class="ref-input-row" id="refInputRowTo">
+          <input type="text" id="refCodeTo" placeholder="Masukkan kode referral kamu"/>
+          <button class="btn-apply" id="btnApplyTo" onclick="applyRefTo()">Pakai</button>
+        </div>
+        <p class="ref-hint" id="refHintTo">Kode didapat dari teman atau admin CerdasBersama.</p>
+      </div>
+      <div class="warn-msg" id="warnMsgTo"></div>
+      <div class="order-box">
+        <div class="section-label">Ringkasan pesanan</div>
+        <div class="order-row"><div><div class="label" id="orderNameTo">—</div><div class="order-subbab" id="orderSubbabTo"></div></div><span id="orderBaseTo">—</span></div>
+        <div class="order-row disc" id="discRowTo" style="display:none"><span class="label">Diskon</span><span id="discAmtTo">—</span></div>
+        <div class="order-row total"><span>Total bayar</span><span id="totalAmtTo" style="color:#9b59b6">—</span></div>
+      </div>
+      <button class="btn-pay purple" id="btnPayTo" onclick="doPayTryout()">Bayar Sekarang</button>
+      <div class="secure-note">🔒 Pembayaran aman via Midtrans</div>
+    </div>
   </div>
+
   <!-- SUCCESS -->
   <div id="successView" style="display:none;text-align:center;padding:3rem 0">
     <div style="font-size:64px;margin-bottom:16px">🎉</div>
     <h2 style="font-size:24px;font-weight:900;margin-bottom:8px;color:#1a1714">Pembayaran Berhasil!</h2>
-    <p style="font-size:14px;color:#7a7168;margin-bottom:8px;font-weight:500">Akses sub-bab kamu sudah aktif.</p>
+    <p style="font-size:14px;color:#7a7168;margin-bottom:8px;font-weight:500" id="successTitle">Akses sudah aktif.</p>
     <p style="font-size:13px;color:#b0a89c;margin-bottom:24px" id="successSubbab"></p>
     <div style="background:#edfaf3;border:1.5px solid #b8e6d0;border-radius:16px;padding:20px 28px;display:inline-block;margin-bottom:24px">
       <div style="font-size:13px;color:#1a7a4a;font-weight:600;margin-bottom:4px">Kembali ke dashboard dalam</div>
@@ -226,7 +338,7 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <div style="font-size:12px;color:#2d8f5e;font-weight:500">detik</div>
     </div>
     <br/>
-    <a href="/latihan.html" style="display:inline-block;padding:14px 32px;background:#C0392B;color:#fff;border-radius:50px;font-weight:800;text-decoration:none;font-size:15px;box-shadow:0 4px 16px rgba(192,57,43,0.25);margin-bottom:12px">Mulai Latihan Sekarang →</a>
+    <a href="/dashboard.html" style="display:inline-block;padding:14px 32px;background:#C0392B;color:#fff;border-radius:50px;font-weight:800;text-decoration:none;font-size:15px;box-shadow:0 4px 16px rgba(192,57,43,0.25);margin-bottom:12px" id="successCta">Ke Dashboard →</a>
     <br/>
     <a href="/dashboard.html" style="font-size:13px;color:#7a7168;font-weight:600">← Kembali ke Dashboard</a>
   </div>
@@ -237,435 +349,572 @@ import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, arrayUnion, increment, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const HARGA = { alacarte:7900, bundling:{3:21900,5:34900,10:64900}, bulanan:99900 };
-const KOMISI_RATE = 0.15;
+const HARGA_LATIHAN = { alacarte:7900, bundling:{3:21900,5:34900,10:64900}, bulanan:99900 };
+const HARGA_TRYOUT  = 34900;
+const KOMISI_RATE   = 0.15;
 const MAPEL_ICON = {
   'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖',
   'Bahasa Inggris':'🔤','IPA':'🔬','IPS':'🌏','PKn':'🏛️',
   'Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'
 };
 
-// Cache sub-bab per sesi
+// Matriks segmen Try Out
+const TRYOUT_SEGMEN = {
+  'Try Out': [
+    { id:'Try Out STS Kelas 6',  icon:'🏫', desc:'Matematika, IPAS, B.Indonesia, B.Inggris' },
+    { id:'Try Out STS Kelas 7',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out STS Kelas 8',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out STS Kelas 9',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out STS Kelas 10', icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out STS Kelas 11', icon:'🏫', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+    { id:'Try Out STS Kelas 12', icon:'🏫', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+    { id:'Try Out SAS Kelas 6',  icon:'📋', desc:'Matematika, IPAS, B.Indonesia, B.Inggris' },
+    { id:'Try Out SAS Kelas 7',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out SAS Kelas 8',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out SAS Kelas 9',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out SAS Kelas 10', icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
+    { id:'Try Out SAS Kelas 11', icon:'📋', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+    { id:'Try Out SAS Kelas 12', icon:'📋', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
+  ],
+  'CBT': [
+    { id:'CBT Kelas 6 - MTSN',    icon:'🕌', desc:'Mat, IPAS, B.Indonesia, B.Inggris, PAI, Peng.Umum' },
+    { id:'CBT Kelas 6 - SMP UMUM',icon:'🏛️', desc:'Mat, IPAS, B.Indonesia, B.Inggris, Peng.Umum' },
+    { id:'CBT Kelas 9 - MA',      icon:'🕌', desc:'Mat, IPAS, B.Indonesia, B.Inggris, PAI, Peng.Umum' },
+    { id:'CBT Kelas 9 - SMA UMUM',icon:'🏛️', desc:'Mat, IPAS, B.Indonesia, B.Inggris, Peng.Umum' },
+    { id:'CBT Kelas 12',          icon:'🎓', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, Sosio, dll' },
+  ],
+};
+
 const subbabCache = {};
 async function fetchSubbab(segmen, mapel) {
   const key = `${segmen}__${mapel}`;
   if (subbabCache[key] !== undefined) return subbabCache[key];
   try {
-    const q    = query(collection(db,'subBab'), where('segmen','==',segmen), where('mapel','==',mapel));
+    const q = query(collection(db,'subBab'), where('segmen','==',segmen), where('mapel','==',mapel));
     const snap = await getDocs(q);
     subbabCache[key] = snap.empty ? [] : (snap.docs[0].data().list || []);
   } catch(e) { subbabCache[key] = []; }
   return subbabCache[key];
 }
 
-let selectedSegmen='', allSegmen=[];
-let curMapelAlacarte='', curMapelBundling='';
-let selAlacarte=[], selBundling=[];
-let bundlingMax=3, bundlingPrice=21900;
-let curPkg={name:'À la carte',price:7900,type:'alacarte'};
-let discApplied=false, validRefCode='';
-let currentUser=null, currentUserData=null;
+let currentProductTab = 'latihan'; // 'latihan' | 'tryout'
+let selectedSegmen = '', allSegmen = [];
+let curMapelAlacarte = '', curMapelBundling = '';
+let selAlacarte = [], selBundling = [];
+let bundlingMax = 3, bundlingPrice = 21900;
+let curPkg = {name:'À la carte',price:7900,type:'alacarte'};
+let discApplied = false, validRefCode = '';
+let isPromoCode = false, promoData = null;
+let discPct = 50, komisiPct = 15;
+let currentUser = null, currentUserData = null;
 
-const $=id=>document.getElementById(id);
+// Try Out state
+let selTryout = [];       // array of segmen id strings
+let discAppliedTo = false, validRefCodeTo = '';
+let isPromoCodeTo = false, promoDataTo = null;
+let discPctTo = 50, komisiPctTo = 15;
+
+const $ = id => document.getElementById(id);
 
 onAuthStateChanged(auth, async user => {
-  if(!user){window.location.href='/register.html';return;}
-  currentUser=user;
+  if (!user) { window.location.href = '/register.html'; return; }
+  currentUser = user;
   const [snap, segmenSnap] = await Promise.all([
     getDoc(doc(db,'users',user.uid)),
     getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
   ]);
-  if(!snap.exists()){window.location.href='/register.html';return;}
-  currentUserData=snap.data();
-  allSegmen=segmenSnap.docs.map(d=>d.data());
+  if (!snap.exists()) { window.location.href = '/register.html'; return; }
+  currentUserData = snap.data();
+  allSegmen = segmenSnap.docs.map(d => d.data());
 
-  if(currentUserData.referredBy && !currentUserData.hasUsedReferral){
-    validRefCode=currentUserData.referredBy; discApplied=true;
+  if (currentUserData.referredBy && !currentUserData.hasUsedReferral) {
+    validRefCode = currentUserData.referredBy; discApplied = true;
   }
 
-  $('loadingView').style.display='none';
-  $('mainView').style.display='block';
+  $('loadingView').style.display = 'none';
+  $('mainView').style.display = 'block';
   renderSegmenGrid();
+  renderTryoutSegmen();
   updateOrder();
 
-  // Auto-handle URL params
-  const params=new URLSearchParams(window.location.search);
-  const initTab=params.get('tab')||'alacarte';
-  const initPkg=params.get('pkg')||null;
-  if(initTab==='bulanan'||initTab==='bundling'||initTab==='alacarte'){
-    _pendingTab=initTab; _pendingPkg=initPkg;
+  // URL params
+  const params = new URLSearchParams(window.location.search);
+  const initTab = params.get('tab') || 'latihan';
+  if (initTab === 'tryout') {
+    switchProductTab('tryout', $('ptTryout'));
   }
+
+  if (discApplied && validRefCode) setTimeout(() => applyRefUI(50,'✅ Kode referral aktif! Diskon 50%'), 500);
 });
 
-let _pendingTab=null, _pendingPkg=null;
+// ── PRODUCT TAB SWITCH ──
+window.switchProductTab = function(tab, el) {
+  currentProductTab = tab;
+  document.querySelectorAll('.product-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  $('prodLatihan').style.display = tab === 'latihan' ? 'block' : 'none';
+  $('prodTryout').style.display  = tab === 'tryout'  ? 'block' : 'none';
+  // Reset step ke 1
+  $('viewProduk').style.display = 'block';
+  $('viewPaket').style.display  = 'none';
+  $('viewCheckoutTryout').style.display = 'none';
+  updateSteps(1);
+};
 
-// ── RENDER SEGMEN GRID (dinamis dari Firestore) ──
+// ── STEPS ──
+function updateSteps(step) {
+  for (let i = 1; i <= 3; i++) {
+    $(`step${i}`).className = 'step-item' + (i < step ? ' done' : i === step ? ' active' : '');
+    const l = $(`line${i}`); if (l) l.className = 'step-line' + (i < step ? ' done' : '');
+  }
+}
+function goStep(step) {
+  $('viewProduk').style.display = step === 1 ? 'block' : 'none';
+  $('viewPaket').style.display  = step === 2 ? 'block' : 'none';
+  updateSteps(step); window.scrollTo(0,0);
+}
+window.goStep = goStep;
+function goStepTryout(step) {
+  $('viewProduk').style.display          = step === 1 ? 'block' : 'none';
+  $('viewCheckoutTryout').style.display  = step === 2 ? 'block' : 'none';
+  updateSteps(step); window.scrollTo(0,0);
+}
+
+// ── LATIHAN: SEGMEN GRID ──
 function renderSegmenGrid() {
-  const grid=$('segmenGrid');
-  grid.innerHTML='';
+  const grid = $('segmenGrid');
+  grid.innerHTML = '';
   allSegmen.forEach(s => {
     const aktif = s.aktif === true;
-    const div=document.createElement('div');
-    div.className='segmen-card'+(aktif?'':' coming-soon');
-    div.innerHTML=`
-      ${!aktif?'<div class="coming-soon-badge">🚧 Coming Soon</div>':''}
-      <div class="segmen-icon">${s.icon||'📚'}</div>
+    const div = document.createElement('div');
+    div.className = 'segmen-card' + (aktif ? '' : ' coming-soon');
+    div.innerHTML = `
+      ${!aktif ? '<div class="coming-soon-badge">🚧 Coming Soon</div>' : ''}
+      <div class="segmen-icon">${s.icon || '📚'}</div>
       <div class="segmen-name">${s.id}</div>
-      <div class="segmen-desc">${s.desc||''}</div>`;
-    if(aktif) div.onclick=()=>selectSegmen(s.id, s);
-    else div.onclick=()=>{}; // coming soon — tidak bisa klik
+      <div class="segmen-desc">${s.desc || ''}</div>`;
+    if (aktif) div.addEventListener('click', () => selectSegmen(s.id, s));
     grid.appendChild(div);
   });
 }
 
-// ── STEPS ──
-function updateSteps(step){
-  for(let i=1;i<=3;i++){
-    $(`step${i}`).className='step-item'+(i<step?' done':i===step?' active':'');
-    const l=$(`line${i}`); if(l) l.className='step-line'+(i<step?' done':'');
+// ── TRYOUT: SEGMEN GRID ──
+function renderTryoutSegmen() {
+  const container = $('tryoutSegmenGroups');
+  container.innerHTML = '';
+  const ownedTryout = currentUserData?.tryOutAkses || [];
+  const isPremium = currentUserData?.plan === 'premium';
+
+  Object.entries(TRYOUT_SEGMEN).forEach(([group, items]) => {
+    const groupDiv = document.createElement('div');
+    groupDiv.innerHTML = `<div class="tryout-group-title">${group === 'Try Out' ? '📋 Try Out Sekolah' : '🏛️ CBT Ujian'}</div>`;
+    const grid = document.createElement('div');
+    grid.className = 'tryout-segmen-grid';
+
+    items.forEach(item => {
+      const isOwned = isPremium || ownedTryout.includes(item.id);
+      const card = document.createElement('div');
+      card.className = 'tryout-card' + (isOwned ? ' owned' : '');
+      card.id = `tryout_card_${item.id.replace(/\s/g,'_')}`;
+      card.innerHTML = `
+        ${isOwned ? '<div class="owned-badge">✓ Dimiliki</div>' : '<div class="check-badge">✓</div>'}
+        <div class="tryout-card-icon">${item.icon}</div>
+        <div class="tryout-card-name">${item.id}</div>
+        <div class="tryout-card-mapel">${item.desc}</div>
+        <div class="tryout-card-price">${isOwned ? '✅ Akses aktif' : 'Rp 34.900'}</div>`;
+      if (!isOwned) {
+        card.addEventListener('click', () => toggleTryout(item.id, card));
+      }
+      grid.appendChild(card);
+    });
+
+    groupDiv.appendChild(grid);
+    container.appendChild(groupDiv);
+  });
+}
+
+function toggleTryout(id, card) {
+  const idx = selTryout.indexOf(id);
+  if (idx > -1) {
+    selTryout.splice(idx, 1);
+    card.classList.remove('selected');
+  } else {
+    selTryout.push(id);
+    card.classList.add('selected');
   }
+  updateTryoutPreview();
+  $('btnLanjutTryout').disabled = selTryout.length === 0;
 }
-function goStep(step){
-  $('viewSegmen').style.display=step===1?'block':'none';
-  $('viewPaket').style.display=step===2?'block':'none';
-  updateSteps(step); window.scrollTo(0,0);
-}
-window.goStep=goStep;
 
-// ── STEP 1: PILIH SEGMEN ──
+function updateTryoutPreview() {
+  const preview = $('previewTryout');
+  if (!selTryout.length) { preview.style.display = 'none'; return; }
+  preview.style.display = 'block';
+  $('countTryout').textContent = selTryout.length;
+  $('tagsTryout').innerHTML = selTryout.map(id =>
+    `<div class="sel-tryout-tag" onclick="removeTryout('${id}')">🎯 ${id} ✕</div>`
+  ).join('');
+}
+
+window.removeTryout = function(id) {
+  const idx = selTryout.indexOf(id);
+  if (idx > -1) selTryout.splice(idx, 1);
+  const card = document.getElementById(`tryout_card_${id.replace(/\s/g,'_')}`);
+  if (card) card.classList.remove('selected');
+  updateTryoutPreview();
+  $('btnLanjutTryout').disabled = selTryout.length === 0;
+};
+
+window.lanjutTryout = function() {
+  if (!selTryout.length) return;
+  goStepTryout(2);
+  updateOrderTryout();
+};
+
+// ── LATIHAN: SEGMEN SELECT ──
 window.selectSegmen = async function(segmen, segData) {
-  selectedSegmen=segmen;
-  $('paketTitle').textContent=`Paket untuk ${segmen}`;
-  $('paketSub').textContent=`Pilih cara akses yang sesuai untuk ${segmen}.`;
-  selAlacarte=[]; selBundling=[];
-
-  // Mapel dari Firestore (field mapel di dokumen segmen)
+  selectedSegmen = segmen;
+  $('paketTitle').textContent = `Paket untuk ${segmen}`;
+  $('paketSub').textContent   = `Pilih cara akses yang sesuai untuk ${segmen}.`;
+  selAlacarte = []; selBundling = [];
   const mapelList = segData?.mapel || [];
   curMapelAlacarte = mapelList[0] || '';
   curMapelBundling = mapelList[0] || '';
-
   goStep(2);
   renderMapelGrid('alacarte', mapelList);
   renderMapelGrid('bundling', mapelList);
   await renderBabs('alacarte');
   await renderBabs('bundling');
-
-  // Handle pending tab dari URL
-  if(_pendingTab){
-    const tabMap={'alacarte':0,'bundling':1,'bulanan':2};
-    const idx=tabMap[_pendingTab]||0;
-    document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-    document.querySelectorAll('.tab')[idx].className='tab active';
-    ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
-    $(_pendingTab).style.display='block';
-    if(_pendingTab==='bundling'&&_pendingPkg){
-      const pkgMap={'3':0,'5':1,'10':2};
-      const pkgIdx=pkgMap[_pendingPkg]||0;
-      const pkgPrices={0:[3,21900],1:[5,34900],2:[10,64900]};
-      const [max,price]=pkgPrices[pkgIdx];
-      selBundlingPkg(document.querySelectorAll('#bundlingPkgs .pkg')[pkgIdx],max,price);
-    } else if(_pendingTab==='bulanan'){
-      curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};
-    }
-    _pendingTab=null; _pendingPkg=null;
-  }
   updateOrder();
 };
 
-// ── RENDER MAPEL GRID (dari data segmen Firestore) ──
 function renderMapelGrid(tab, mapelList) {
-  const grid=$(tab==='alacarte'?'mapelGridAlacarte':'mapelGridBundling');
-  const cur=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
-  grid.innerHTML=mapelList.map(m=>`
-    <div class="mapel ${m===cur?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
+  const grid = $(tab === 'alacarte' ? 'mapelGridAlacarte' : 'mapelGridBundling');
+  const cur  = tab === 'alacarte' ? curMapelAlacarte : curMapelBundling;
+  grid.innerHTML = mapelList.map(m =>
+    `<div class="mapel ${m===cur?'sel':''}" onclick="selMapel('${tab}',this,'${m}')">
       <div class="mapel-icon">${MAPEL_ICON[m]||'📚'}</div>
       <div class="mapel-name">${m}</div>
-    </div>`).join('');
+    </div>`
+  ).join('');
 }
 
-// ── RENDER SUB-BAB (dari Firestore, dinamis) ──
 async function renderBabs(tab) {
-  const mapel=tab==='alacarte'?curMapelAlacarte:curMapelBundling;
-  const sel=tab==='alacarte'?selAlacarte:selBundling;
-  const listEl=$(tab==='alacarte'?'babListAlacarte':'babListBundling');
-  listEl.innerHTML='<div class="subbab-loading"><span class="spin"></span>Memuat sub-bab…</div>';
-  const subbabs=await fetchSubbab(selectedSegmen,mapel);
-  listEl.innerHTML='';
-  if(!subbabs.length){
-    listEl.innerHTML='<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia untuk mapel ini.</div>';
+  const mapel  = tab === 'alacarte' ? curMapelAlacarte : curMapelBundling;
+  const sel    = tab === 'alacarte' ? selAlacarte : selBundling;
+  const listEl = $(tab === 'alacarte' ? 'babListAlacarte' : 'babListBundling');
+  listEl.innerHTML = '<div class="subbab-loading"><span class="spin"></span>Memuat sub-bab…</div>';
+  const subbabs = await fetchSubbab(selectedSegmen, mapel);
+  listEl.innerHTML = '';
+  if (!subbabs.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:#b0a89c;font-size:13px">Sub-bab belum tersedia.</div>';
     updateSelectedPreview(tab); return;
   }
-  subbabs.forEach(sb=>{
-    const isSel=sel.some(s=>s.mapel===mapel&&s.subbab===sb);
-    const isDisabled=tab==='bundling'&&!isSel&&sel.length>=bundlingMax;
-    const div=document.createElement('div');
-    div.className='bab'+(isSel?' sel':'')+(isDisabled?' disabled':'');
-    div.innerHTML=`<div class="bab-check">${isSel?'✓':''}</div><span>${sb}</span>`;
-    if(!isDisabled) div.onclick=()=>toggleBab(tab,mapel,sb);
+  subbabs.forEach(sb => {
+    const isSel = sel.some(s => s.mapel === mapel && s.subbab === sb);
+    const isDisabled = tab === 'bundling' && !isSel && sel.length >= bundlingMax;
+    const div = document.createElement('div');
+    div.className = 'bab' + (isSel ? ' sel' : '') + (isDisabled ? ' disabled' : '');
+    div.innerHTML = `<div class="bab-check">${isSel?'✓':''}</div><span>${sb}</span>`;
+    if (!isDisabled) div.addEventListener('click', () => toggleBab(tab, mapel, sb));
     listEl.appendChild(div);
   });
-  if(tab==='bundling') updateQuota();
+  if (tab === 'bundling') updateQuota();
   updateSelectedPreview(tab);
 }
 
-async function toggleBab(tab,mapel,sb){
-  const sel=tab==='alacarte'?selAlacarte:selBundling;
-  const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
-  if(idx>-1) sel.splice(idx,1);
-  else{if(tab==='bundling'&&sel.length>=bundlingMax)return;sel.push({mapel,subbab:sb});}
-  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
+async function toggleBab(tab, mapel, sb) {
+  const sel = tab === 'alacarte' ? selAlacarte : selBundling;
+  const idx = sel.findIndex(s => s.mapel === mapel && s.subbab === sb);
+  if (idx > -1) sel.splice(idx, 1);
+  else { if (tab === 'bundling' && sel.length >= bundlingMax) return; sel.push({mapel, subbab:sb}); }
+  if (tab === 'alacarte') { const n = selAlacarte.length||1; curPkg = {name:`À la carte (${n} sub-bab)`,price:n*HARGA_LATIHAN.alacarte,type:'alacarte'}; }
   await renderBabs(tab); updateOrder();
 }
 
-function updateSelectedPreview(tab){
-  const sel=tab==='alacarte'?selAlacarte:selBundling;
-  const preview=tab==='alacarte'?$('previewAlacarte'):$('previewBundling');
-  const count=tab==='alacarte'?$('countAlacarte'):$('countBundling');
-  const tags=tab==='alacarte'?$('tagsAlacarte'):$('tagsBundling');
-  if(!sel.length){preview.style.display='none';return;}
-  preview.style.display='block';count.textContent=sel.length;
-  tags.innerHTML=sel.map(s=>`<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">${MAPEL_ICON[s.mapel]||'📚'} ${s.subbab} ✕</div>`).join('');
+function updateSelectedPreview(tab) {
+  const sel     = tab === 'alacarte' ? selAlacarte : selBundling;
+  const preview = tab === 'alacarte' ? $('previewAlacarte') : $('previewBundling');
+  const count   = tab === 'alacarte' ? $('countAlacarte') : $('countBundling');
+  const tags    = tab === 'alacarte' ? $('tagsAlacarte') : $('tagsBundling');
+  if (!sel.length) { preview.style.display = 'none'; return; }
+  preview.style.display = 'block'; count.textContent = sel.length;
+  tags.innerHTML = sel.map(s => `<div class="sel-tag" onclick="removeSelBab('${tab}','${s.mapel}','${s.subbab}')">${MAPEL_ICON[s.mapel]||'📚'} ${s.subbab} ✕</div>`).join('');
 }
 
-window.removeSelBab=async function(tab,mapel,sb){
-  const sel=tab==='alacarte'?selAlacarte:selBundling;
-  const idx=sel.findIndex(s=>s.mapel===mapel&&s.subbab===sb);
-  if(idx>-1)sel.splice(idx,1);
-  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
+window.removeSelBab = async function(tab, mapel, sb) {
+  const sel = tab === 'alacarte' ? selAlacarte : selBundling;
+  const idx = sel.findIndex(s => s.mapel === mapel && s.subbab === sb);
+  if (idx > -1) sel.splice(idx, 1);
+  if (tab === 'alacarte') { const n = selAlacarte.length||1; curPkg = {name:`À la carte (${n} sub-bab)`,price:n*HARGA_LATIHAN.alacarte,type:'alacarte'}; }
   await renderBabs(tab); updateOrder();
 };
 
-function updateQuota(){$('quotaCount').textContent=selBundling.length;$('quotaMax').textContent=bundlingMax;}
+function updateQuota() { $('quotaCount').textContent = selBundling.length; $('quotaMax').textContent = bundlingMax; }
 
-window.selMapel=async function(tab,el,mapel){
-  const segData=allSegmen.find(s=>s.id===selectedSegmen);
-  const mapelList=segData?.mapel||[];
-  if(tab==='alacarte')curMapelAlacarte=mapel; else curMapelBundling=mapel;
-  renderMapelGrid(tab,mapelList); await renderBabs(tab);
+window.selMapel = async function(tab, el, mapel) {
+  const segData = allSegmen.find(s => s.id === selectedSegmen);
+  const mapelList = segData?.mapel || [];
+  if (tab === 'alacarte') curMapelAlacarte = mapel; else curMapelBundling = mapel;
+  renderMapelGrid(tab, mapelList); await renderBabs(tab);
 };
 
-window.selBundlingPkg=function(el,max,price){
-  document.querySelectorAll('#bundlingPkgs .pkg').forEach(p=>p.className='pkg');
-  el.className='pkg selected'; bundlingMax=max; bundlingPrice=price;
-  if(selBundling.length>max)selBundling=selBundling.slice(0,max);
-  curPkg={name:`Bundling ${max} sub-bab`,price,type:'bundling'};
+window.selBundlingPkg = function(el, max, price) {
+  document.querySelectorAll('#bundlingPkgs .pkg').forEach(p => p.className = 'pkg');
+  el.className = 'pkg selected'; bundlingMax = max; bundlingPrice = price;
+  if (selBundling.length > max) selBundling = selBundling.slice(0, max);
+  curPkg = {name:`Bundling ${max} sub-bab`,price,type:'bundling'};
   renderBabs('bundling'); updateOrder();
 };
 
-window.selPkg=function(el,price,name){
-  document.querySelectorAll('.pkg').forEach(p=>p.className='pkg');
-  el.className='pkg selected'; curPkg={name,price,type:'bulanan'}; updateOrder();
+window.selPkg = function(el, price, name) {
+  document.querySelectorAll('.pkg').forEach(p => p.className = 'pkg');
+  el.className = 'pkg selected'; curPkg = {name,price,type:'bulanan'}; updateOrder();
 };
 
-window.switchTab=async function(el,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.className='tab');
-  el.className='tab active';
-  ['alacarte','bundling','bulanan'].forEach(t=>$(t).style.display='none');
-  $(tab).style.display='block';
-  if(tab==='alacarte'){const n=selAlacarte.length||1;curPkg={name:`À la carte (${n} sub-bab)`,price:n*HARGA.alacarte,type:'alacarte'};}
-  else if(tab==='bundling'){curPkg={name:`Bundling ${bundlingMax} sub-bab`,price:bundlingPrice,type:'bundling'};}
-  else{curPkg={name:'Premium Bulanan',price:HARGA.bulanan,type:'bulanan'};}
+window.switchTab = async function(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.className = 'tab');
+  el.className = 'tab active';
+  ['alacarte','bundling','bulanan'].forEach(t => $(t).style.display = 'none');
+  $(tab).style.display = 'block';
+  if (tab === 'alacarte') { const n = selAlacarte.length||1; curPkg = {name:`À la carte (${n} sub-bab)`,price:n*HARGA_LATIHAN.alacarte,type:'alacarte'}; }
+  else if (tab === 'bundling') { curPkg = {name:`Bundling ${bundlingMax} sub-bab`,price:bundlingPrice,type:'bundling'}; }
+  else { curPkg = {name:'Premium Bulanan',price:HARGA_LATIHAN.bulanan,type:'bulanan'}; }
   updateOrder();
 };
 
-// ── State kode aktif ──
-// isPromoCode=true berarti kode dari promoCodes, false berarti kode referral user biasa
-let isPromoCode = false;
-let promoData   = null; // data dokumen promoCodes jika kode promo
-let discPct     = 50;   // default diskon % (kode referral biasa = 50%)
-let komisiPct   = 15;   // default komisi %
-
-// ── REFERRAL / PROMO ──
-function applyRefUI(discountPct, msg){
-  $('refBox').className='ref-box unlocked';
-  $('refStatus').className='ref-status ok';
-  $('refStatus').textContent='Diskon aktif ✓';
-  $('refInputRow').style.display='none';
-  $('refHint').className='ref-ok-msg';
-  $('refHint').textContent=msg||`✅ Kode valid! Diskon ${discountPct}%`;
-  discApplied=true;
-  discPct=discountPct;
-  updateOrder();
+// ── REFERRAL LATIHAN ──
+function applyRefUI(discountPct, msg) {
+  $('refBox').className = 'ref-box unlocked';
+  $('refStatus').className = 'ref-status ok';
+  $('refStatus').textContent = 'Diskon aktif ✓';
+  $('refInputRow').style.display = 'none';
+  $('refHint').className = 'ref-ok-msg';
+  $('refHint').textContent = msg;
+  discApplied = true; discPct = discountPct; updateOrder();
 }
 
-window.applyRef=async function(){
-  const code=$('refCode').value.trim().toUpperCase();
-  if(!code)return;
-  $('btnApply').disabled=true;$('btnApply').textContent='...';
-
-  try{
-    // 1. Cek di promoCodes dulu
-    const promoSnap=await getDocs(query(collection(db,'promoCodes'),where('code','==',code)));
-    if(!promoSnap.empty){
-      const pd=promoSnap.docs[0].data();
-      const pdId=promoSnap.docs[0].id;
-      // Cek aktif
-      if(!pd.aktif){
-        showRefError('Kode promo sudah tidak aktif.');return;
-      }
-      // Cek kuota
-      if(pd.kuota && (pd.usedCount||0)>=pd.kuota){
-        showRefError('Kuota kode promo sudah habis.');return;
-      }
-      // Valid — simpan data promo
-      isPromoCode=true;
-      promoData={...pd, docId:pdId};
-      validRefCode=code;
-      komisiPct=pd.komisi||15;
-      applyRefUI(pd.discount, `✅ Kode promo valid! Diskon ${pd.discount}%${pd.ownerEmail?' · Komisi untuk '+pd.ownerEmail:''}`);
-      return;
+window.applyRef = async function() {
+  const code = $('refCode').value.trim().toUpperCase();
+  if (!code) return;
+  $('btnApply').disabled = true; $('btnApply').textContent = '...';
+  try {
+    const promoSnap = await getDocs(query(collection(db,'promoCodes'), where('code','==',code)));
+    if (!promoSnap.empty) {
+      const pd = promoSnap.docs[0].data(), pdId = promoSnap.docs[0].id;
+      if (!pd.aktif) { showRefError('Kode promo sudah tidak aktif.'); return; }
+      if (pd.kuota && (pd.usedCount||0) >= pd.kuota) { showRefError('Kuota kode promo sudah habis.'); return; }
+      isPromoCode = true; promoData = {...pd, docId:pdId}; validRefCode = code; komisiPct = pd.komisi||15;
+      applyRefUI(pd.discount, `✅ Kode promo valid! Diskon ${pd.discount}%`); return;
     }
-
-    // 2. Cek di users (kode referral biasa)
-    if(currentUserData?.hasUsedReferral){
-      showRefError('Kamu sudah pernah pakai kode referral.');return;
-    }
-    const userSnap=await getDocs(query(collection(db,'users'),where('referralCode','==',code)));
-    if(!userSnap.empty){
-      isPromoCode=false;
-      promoData=null;
-      validRefCode=code;
-      komisiPct=15;
+    if (currentUserData?.hasUsedReferral) { showRefError('Kamu sudah pernah pakai kode referral.'); return; }
+    const userSnap = await getDocs(query(collection(db,'users'), where('referralCode','==',code)));
+    if (!userSnap.empty) {
+      isPromoCode = false; promoData = null; validRefCode = code; komisiPct = 15;
       applyRefUI(50,'✅ Kode referral valid! Diskon 50% untuk pembelian pertama.');
-    } else {
-      showRefError('Kode tidak ditemukan.');
-    }
-  }catch(e){
-    showRefError('Gagal verifikasi kode.');
-    $('btnApply').disabled=false;$('btnApply').textContent='Pakai';
-  }
+    } else { showRefError('Kode tidak ditemukan.'); }
+  } catch(e) { showRefError('Gagal verifikasi kode.'); $('btnApply').disabled = false; $('btnApply').textContent = 'Pakai'; }
 };
 
-function showRefError(msg){
-  $('refHint').style.color='#C0392B';
-  $('refHint').textContent=msg;
-  setTimeout(()=>{
-    $('refHint').style.color='';
-    $('refHint').textContent='Kode didapat dari teman atau admin CerdasBersama.';
-    $('refStatus').textContent='Belum dipakai';
-    $('btnApply').disabled=false;
-    $('btnApply').textContent='Pakai';
-  },2500);
+function showRefError(msg) {
+  $('refHint').style.color = '#C0392B'; $('refHint').textContent = msg;
+  setTimeout(() => {
+    $('refHint').style.color = ''; $('refHint').textContent = 'Kode didapat dari teman atau admin CerdasBersama.';
+    $('refStatus').textContent = 'Belum dipakai'; $('btnApply').disabled = false; $('btnApply').textContent = 'Pakai';
+  }, 2500);
 }
 
-// Auto-apply jika user sudah punya referredBy
-if(discApplied&&validRefCode) setTimeout(()=>applyRefUI(50,'✅ Kode referral aktif! Diskon 50%'),500);
-
-// ── UPDATE ORDER ──
-function updateOrder(){
-  const base=curPkg.price;
-  const disc=discApplied?Math.round(base*(discPct/100)):0;
-  const total=base-disc;
-  let subbabLabel='';
-  if(curPkg.type==='alacarte'&&selAlacarte.length)subbabLabel=selAlacarte.map(s=>s.subbab).join(', ');
-  else if(curPkg.type==='bundling'&&selBundling.length)subbabLabel=selBundling.map(s=>s.subbab).join(', ');
-  else if(curPkg.type==='bulanan')subbabLabel='Semua sub-bab';
-  $('orderName').textContent=curPkg.name;
-  $('orderSubbab').textContent=subbabLabel;
-  $('orderBase').textContent='Rp '+base.toLocaleString('id');
-  $('discRow').style.display=disc>0?'flex':'none';
-  $('discAmt').textContent=`-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
-  $('totalAmt').textContent='Rp '+total.toLocaleString('id');
+// ── REFERRAL TRYOUT ──
+function applyRefUITo(discountPct, msg) {
+  $('refBoxTo').className = 'ref-box unlocked';
+  $('refStatusTo').className = 'ref-status ok';
+  $('refStatusTo').textContent = 'Diskon aktif ✓';
+  $('refInputRowTo').style.display = 'none';
+  $('refHintTo').className = 'ref-ok-msg';
+  $('refHintTo').textContent = msg;
+  discAppliedTo = true; discPctTo = discountPct; updateOrderTryout();
 }
 
-// ── BAYAR ──
-window.doPay=async function(){
-  const btn=$('btnPay');$('warnMsg').style.display='none';
-  if(curPkg.type==='alacarte'&&selAlacarte.length===0){$('warnMsg').textContent='⚠️ Pilih minimal 1 sub-bab.';$('warnMsg').style.display='block';return;}
-  if(curPkg.type==='bundling'&&selBundling.length===0){$('warnMsg').textContent='⚠️ Pilih sub-bab sesuai paket bundling.';$('warnMsg').style.display='block';return;}
+window.applyRefTo = async function() {
+  const code = $('refCodeTo').value.trim().toUpperCase();
+  if (!code) return;
+  $('btnApplyTo').disabled = true; $('btnApplyTo').textContent = '...';
+  try {
+    const promoSnap = await getDocs(query(collection(db,'promoCodes'), where('code','==',code)));
+    if (!promoSnap.empty) {
+      const pd = promoSnap.docs[0].data(), pdId = promoSnap.docs[0].id;
+      if (!pd.aktif) { showRefErrorTo('Kode promo sudah tidak aktif.'); return; }
+      if (pd.kuota && (pd.usedCount||0) >= pd.kuota) { showRefErrorTo('Kuota habis.'); return; }
+      isPromoCodeTo = true; promoDataTo = {...pd, docId:pdId}; validRefCodeTo = code; komisiPctTo = pd.komisi||15;
+      applyRefUITo(pd.discount, `✅ Kode promo valid! Diskon ${pd.discount}%`); return;
+    }
+    if (currentUserData?.hasUsedReferral) { showRefErrorTo('Kamu sudah pernah pakai kode referral.'); return; }
+    const userSnap = await getDocs(query(collection(db,'users'), where('referralCode','==',code)));
+    if (!userSnap.empty) {
+      isPromoCodeTo = false; promoDataTo = null; validRefCodeTo = code; komisiPctTo = 15;
+      applyRefUITo(50,'✅ Kode referral valid! Diskon 50% untuk pembelian pertama.');
+    } else { showRefErrorTo('Kode tidak ditemukan.'); }
+  } catch(e) { showRefErrorTo('Gagal verifikasi kode.'); $('btnApplyTo').disabled = false; $('btnApplyTo').textContent = 'Pakai'; }
+};
 
-  const base  = curPkg.price;
-  const disc  = discApplied ? Math.round(base*(discPct/100)) : 0;
+function showRefErrorTo(msg) {
+  $('refHintTo').style.color = '#C0392B'; $('refHintTo').textContent = msg;
+  setTimeout(() => {
+    $('refHintTo').style.color = ''; $('refHintTo').textContent = 'Kode didapat dari teman atau admin CerdasBersama.';
+    $('refStatusTo').textContent = 'Belum dipakai'; $('btnApplyTo').disabled = false; $('btnApplyTo').textContent = 'Pakai';
+  }, 2500);
+}
+
+// ── UPDATE ORDER LATIHAN ──
+function updateOrder() {
+  const base = curPkg.price;
+  const disc = discApplied ? Math.round(base * (discPct/100)) : 0;
   const total = base - disc;
-  const komisi = Math.round(total*(komisiPct/100));
-  const referredBy = validRefCode || currentUserData?.referredBy || null;
-  const orderId = 'CB-'+Date.now()+'-'+currentUser.uid.slice(0,6);
+  let subbabLabel = '';
+  if (curPkg.type === 'alacarte' && selAlacarte.length) subbabLabel = selAlacarte.map(s=>s.subbab).join(', ');
+  else if (curPkg.type === 'bundling' && selBundling.length) subbabLabel = selBundling.map(s=>s.subbab).join(', ');
+  else if (curPkg.type === 'bulanan') subbabLabel = 'Semua sub-bab';
+  $('orderName').textContent  = curPkg.name;
+  $('orderSubbab').textContent = subbabLabel;
+  $('orderBase').textContent  = 'Rp ' + base.toLocaleString('id');
+  $('discRow').style.display  = disc > 0 ? 'flex' : 'none';
+  $('discAmt').textContent    = `-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
+  $('totalAmt').textContent   = 'Rp ' + total.toLocaleString('id');
+}
 
-  let subBabDibeli=[];
-  if(curPkg.type==='alacarte')subBabDibeli=selAlacarte.map(s=>s.subbab);
-  else if(curPkg.type==='bundling')subBabDibeli=selBundling.map(s=>s.subbab);
-  else subBabDibeli=['__premium__'];
+// ── UPDATE ORDER TRYOUT ──
+function updateOrderTryout() {
+  const base  = selTryout.length * HARGA_TRYOUT;
+  const disc  = discAppliedTo ? Math.round(base * (discPctTo/100)) : 0;
+  const total = base - disc;
+  $('orderNameTo').textContent   = `Try Out / CBT (${selTryout.length} segmen)`;
+  $('orderSubbabTo').textContent = selTryout.join(', ');
+  $('orderBaseTo').textContent   = 'Rp ' + base.toLocaleString('id');
+  $('discRowTo').style.display   = disc > 0 ? 'flex' : 'none';
+  $('discAmtTo').textContent     = `-Rp ${disc.toLocaleString('id')} (${discPctTo}%)`;
+  $('totalAmtTo').textContent    = 'Rp ' + total.toLocaleString('id');
+}
 
-  btn.disabled=true;btn.textContent='Memproses...';
-  try{
-    // Simpan order
-    await addDoc(collection(db,'orders'),{
-      uid:currentUser.uid, email:currentUser.email,
-      segmen:selectedSegmen, paket:curPkg.name, tipe:curPkg.type,
-      subBabDibeli, hargaBase:base, diskon:disc, discPct,
-      total, refCode:referredBy, komisi, komisiPct,
-      isPromoCode, midtransOrderId:orderId,
-      status:'pending', createdAt:serverTimestamp()
+// ── BAYAR LATIHAN ──
+window.doPay = async function() {
+  const btn = $('btnPay'); $('warnMsg').style.display = 'none';
+  if (curPkg.type === 'alacarte' && !selAlacarte.length) { showWarn('warnMsg','⚠️ Pilih minimal 1 sub-bab.'); return; }
+  if (curPkg.type === 'bundling' && !selBundling.length) { showWarn('warnMsg','⚠️ Pilih sub-bab sesuai paket bundling.'); return; }
+  await processPayment({
+    btn, warnId:'warnMsg',
+    orderName: curPkg.name,
+    itemName: `${selectedSegmen} - ${curPkg.name}`,
+    base: curPkg.price,
+    disc: discApplied ? Math.round(curPkg.price*(discPct/100)) : 0,
+    discPct, komisiPct,
+    refCode: validRefCode,
+    isPromo: isPromoCode, promoD: promoData,
+    tipe: curPkg.type,
+    subBabDibeli: curPkg.type==='alacarte' ? selAlacarte.map(s=>s.subbab) : curPkg.type==='bundling' ? selBundling.map(s=>s.subbab) : ['__premium__'],
+    segmen: selectedSegmen,
+    isTryout: false,
+  });
+};
+
+// ── BAYAR TRYOUT ──
+window.doPayTryout = async function() {
+  const btn = $('btnPayTo'); $('warnMsgTo').style.display = 'none';
+  if (!selTryout.length) { showWarn('warnMsgTo','⚠️ Pilih minimal 1 segmen.'); return; }
+  const base = selTryout.length * HARGA_TRYOUT;
+  await processPayment({
+    btn, warnId:'warnMsgTo',
+    orderName: `Try Out / CBT (${selTryout.length} segmen)`,
+    itemName: `Try Out / CBT: ${selTryout.join(', ')}`,
+    base,
+    disc: discAppliedTo ? Math.round(base*(discPctTo/100)) : 0,
+    discPct: discPctTo, komisiPct: komisiPctTo,
+    refCode: validRefCodeTo,
+    isPromo: isPromoCodeTo, promoD: promoDataTo,
+    tipe: 'tryout',
+    subBabDibeli: [],
+    segmen: selTryout.join(', '),
+    isTryout: true,
+  });
+};
+
+function showWarn(id, msg) { $(id).textContent = msg; $(id).style.display = 'block'; }
+
+async function processPayment({ btn, warnId, orderName, itemName, base, disc, discPct, komisiPct, refCode, isPromo, promoD, tipe, subBabDibeli, segmen, isTryout }) {
+  const total  = base - disc;
+  const komisi = Math.round(total * (komisiPct/100));
+  const orderId = 'CB-' + Date.now() + '-' + currentUser.uid.slice(0,6);
+  btn.disabled = true; btn.textContent = 'Memproses...';
+  try {
+    await addDoc(collection(db,'orders'), {
+      uid: currentUser.uid, email: currentUser.email,
+      segmen, paket: orderName, tipe,
+      subBabDibeli,
+      tryOutSegmen: isTryout ? selTryout : [],
+      hargaBase: base, diskon: disc, discPct, total,
+      refCode, komisi, komisiPct, isPromoCode: isPromo,
+      midtransOrderId: orderId, status:'pending', createdAt: serverTimestamp()
     });
 
-    // Update hasUsedReferral hanya untuk kode referral user biasa
-    if(!isPromoCode && referredBy && discApplied && !currentUserData?.hasUsedReferral){
-      await updateDoc(doc(db,'users',currentUser.uid),{hasUsedReferral:true,referredBy});
-      if(currentUserData)currentUserData.hasUsedReferral=true;
+    if (!isPromo && refCode && (isTryout ? discAppliedTo : discApplied) && !currentUserData?.hasUsedReferral) {
+      await updateDoc(doc(db,'users',currentUser.uid), {hasUsedReferral:true, referredBy:refCode});
+      if (currentUserData) currentUserData.hasUsedReferral = true;
+    }
+    if (isPromo && promoD?.docId) {
+      await updateDoc(doc(db,'promoCodes',promoD.docId), {usedCount:(promoD.usedCount||0)+1});
     }
 
-    // Update usedCount kode promo
-    if(isPromoCode && promoData?.docId){
-      await updateDoc(doc(db,'promoCodes',promoData.docId),{
-        usedCount: (promoData.usedCount||0)+1
-      });
-    }
-
-    const res=await fetch('/api/create-transaction',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({orderId,amount:total,customerEmail:currentUser.email,customerName:currentUserData?.nama||'User',itemName:`${selectedSegmen} - ${curPkg.name}`})
+    const res  = await fetch('/api/create-transaction', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({orderId, amount:total, customerEmail:currentUser.email, customerName:currentUserData?.nama||'User', itemName})
     });
-    const data=await res.json();
-    if(!data.token)throw new Error(JSON.stringify(data.error));
+    const data = await res.json();
+    if (!data.token) throw new Error(JSON.stringify(data.error));
 
-    window.snap.pay(data.token,{
-      onSuccess:async function(){
-        if(curPkg.type==='bulanan'){
-          const exp=new Date();exp.setMonth(exp.getMonth()+1);
-          await updateDoc(doc(db,'users',currentUser.uid),{plan:'premium',expiredAt:exp,subBabAkses:['__premium__']});
+    window.snap.pay(data.token, {
+      onSuccess: async function() {
+        if (isTryout) {
+          // Update tryOutAkses
+          await updateDoc(doc(db,'users',currentUser.uid), {tryOutAkses: arrayUnion(...selTryout)});
+        } else if (tipe === 'bulanan') {
+          const exp = new Date(); exp.setMonth(exp.getMonth()+1);
+          await updateDoc(doc(db,'users',currentUser.uid), {plan:'premium', expiredAt:exp, subBabAkses:['__premium__']});
         } else {
-          await updateDoc(doc(db,'users',currentUser.uid),{plan:'alacarte',subBabAkses:arrayUnion(...subBabDibeli)});
+          await updateDoc(doc(db,'users',currentUser.uid), {plan:'alacarte', subBabAkses:arrayUnion(...subBabDibeli)});
         }
-        // Kirim komisi ke owner kode
-        if(referredBy && komisi > 0){
-          // Cek kode promo dulu
-          if(isPromoCode && promoData?.ownerUid){
-            await updateDoc(doc(db,'users',promoData.ownerUid),{komisiTotal:increment(komisi)});
-          } else if(!isPromoCode){
-            // Kode referral user biasa
-            const rs=await getDocs(query(collection(db,'users'),where('referralCode','==',referredBy)));
-            if(!rs.empty)await updateDoc(doc(db,'users',rs.docs[0].id),{komisiTotal:increment(komisi)});
+        // Komisi
+        if (refCode && komisi > 0) {
+          if (isPromo && promoD?.ownerUid) {
+            await updateDoc(doc(db,'users',promoD.ownerUid), {komisiTotal:increment(komisi)});
+          } else if (!isPromo) {
+            const rs = await getDocs(query(collection(db,'users'), where('referralCode','==',refCode)));
+            if (!rs.empty) await updateDoc(doc(db,'users',rs.docs[0].id), {komisiTotal:increment(komisi)});
           }
         }
-        $('successSubbab').textContent=curPkg.type==='bulanan'?'Semua sub-bab sudah terbuka!':`Sub-bab aktif: ${subBabDibeli.join(', ')}`;
-        $('mainView').style.display='none';$('successView').style.display='block';
+        $('successTitle').textContent  = isTryout ? 'Akses Try Out sudah aktif!' : 'Akses sub-bab sudah aktif.';
+        $('successSubbab').textContent = isTryout ? `Segmen aktif: ${selTryout.join(', ')}` : `Sub-bab aktif: ${subBabDibeli.join(', ')}`;
+        $('successCta').href = isTryout ? `/cbt-engine-v2.html?segmen=${encodeURIComponent(selTryout[0])}` : '/dashboard.html';
+        $('successCta').textContent = isTryout ? 'Mulai Try Out Sekarang →' : 'Ke Dashboard →';
+        $('mainView').style.display = 'none'; $('successView').style.display = 'block';
         startCountdown();
       },
-      onPending:function(){$('mainView').style.display='none';$('successView').style.display='block';startCountdown();},
-      onError:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';alert('Pembayaran gagal.');},
-      onClose:function(){btn.disabled=false;btn.textContent='Bayar Sekarang';}
+      onPending: function() { $('mainView').style.display = 'none'; $('successView').style.display = 'block'; startCountdown(); },
+      onError:   function() { btn.disabled = false; btn.textContent = 'Bayar Sekarang'; alert('Pembayaran gagal.'); },
+      onClose:   function() { btn.disabled = false; btn.textContent = 'Bayar Sekarang'; }
     });
-  }catch(e){
-  btn.disabled=false;
-  btn.textContent='Bayar Sekarang';
-  $('warnMsg').textContent='❌ Error: '+e.message;
-  $('warnMsg').style.display='block';
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Bayar Sekarang';
+    showWarn(warnId, '❌ Error: ' + e.message);
+  }
 }
-};
 
-// ── COUNTDOWN ke dashboard setelah sukses ──
 function startCountdown() {
   let secs = 5;
-  const el = document.getElementById('countdownNum');
+  const el = $('countdownNum');
   if (!el) return;
   const interval = setInterval(() => {
     secs--;
     if (el) el.textContent = secs;
-    if (secs <= 0) {
-      clearInterval(interval);
-      window.location.href = '/dashboard.html';
-    }
+    if (secs <= 0) { clearInterval(interval); window.location.href = '/dashboard.html'; }
   }, 1000);
 }
 </script>
