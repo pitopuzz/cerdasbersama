@@ -297,12 +297,16 @@
 
     const params = new URLSearchParams(window.location.search);
     segmenAktif = params.get('segmen') || 'CBT Kelas 6 - MTSN';
+    const paketAktif = params.get('paket') || null;
     mapelList = SEGMEN_MAPEL[segmenAktif] || [];
 
     $('loadingMsg').textContent = 'Menarik soal dari server...';
 
     try {
-      const snap = await getDocs(query(collection(db, 'soal'), where('segmen', '==', segmenAktif)));
+      const qRef = paketAktif
+        ? query(collection(db,'soal'), where('segmen','==',segmenAktif), where('subKategori','==',paketAktif))
+        : query(collection(db,'soal'), where('segmen','==',segmenAktif));
+      const snap = await getDocs(qRef);
       const rawSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
       if (!rawSoal.length) { $('loadingMsg').textContent = '❌ Belum ada soal di segmen ini.'; return; }
