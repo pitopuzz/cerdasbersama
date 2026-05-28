@@ -406,19 +406,9 @@
 
     // Tombol Mulai Latihan → ke pool page kalau ada subbab, ke latihan.html kalau belum
     $('btnMulaiLatihan').onclick = () => {
-      if (!subBabAkses.length && !hasPremiumAll) {
-        window.location.href = '/pricing.html';
-        return;
-      }
-      // Cari sub-bab pertama yang belum done
-      const doneList = getDoneSubbab();
-      const firstUndone = subBabAkses.find(sb => !doneList.includes(sb));
-      if (firstUndone) {
-        const info = subBabIconMap[firstUndone] || { segmen: '', mapel: '' };
-        const params = new URLSearchParams({ subbab: firstUndone, segmen: info.segmen || '', mapel: info.mapel || '' });
-        window.location.href = `/latihan.html?${params}`;
+      if (subBabAkses.length || hasPremiumAll) {
+        window.location.href = '/pool.html';
       } else {
-        // Semua sudah done → ke pricing
         window.location.href = '/pricing.html';
       }
     };
