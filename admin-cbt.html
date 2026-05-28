@@ -191,7 +191,7 @@
         💡 <strong>Auto-sync:</strong> Setiap soal yang berhasil diupload akan otomatis mendaftarkan/memperbarui entri di koleksi <code>paketCBT</code>.
       </p>
       <!-- fileInput di luar zone agar tidak trigger double click -->
-      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none"/>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFile(this)"/>
       <label for="fileInput" class="upload-zone" id="uploadZone">
         <div class="upload-icon">📊</div>
         <div class="upload-title" id="uploadTitle">Klik atau drag & drop file Excel</div>
@@ -440,7 +440,8 @@
   }
 
   // ===== BULK EXCEL =====
-  function handleFile(input) {
+  // Expose ke window agar bisa dipanggil dari inline onchange juga
+  window.handleFile = function handleFile(input) {
     const file = Array.isArray(input.files) ? input.files[0] : input.files[0];
     if (!file) return;
     // Feedback nama file di zone
@@ -540,12 +541,6 @@
     logBulk('\n✨ Selesai! ' + sukses + ' soal berhasil, ' + gagal + ' gagal. ' + paketSet.size + ' entri paketCBT di-sync.',
       sukses === parsedRows.length ? 'ok' : 'info');
     setLoadingBulk(false);
-  }
-
-  function makePaketDocId(segmen, subKategori) {
-    return (segmen + '__' + subKategori)
-      .replace(/[\/\.#$\[\]]/g, '_')
-      .slice(0, 200);
   }
 
   function showBulkLog() { const log = $('bulkLog'); log.style.display = 'block'; log.innerHTML = ''; }
