@@ -19,16 +19,16 @@
     .tab { padding:9px 18px; border-radius:9px; border:none; font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; font-weight:700; cursor:pointer; background:none; color:#7a7168; transition:all 0.18s; white-space:nowrap; }
     .tab.active { background:#fff; color:#C0392B; box-shadow:0 1px 4px rgba(0,0,0,0.08); }
     .card { background:#fff; border:1px solid #e8e4dc; border-radius:20px; padding:28px; box-shadow:0 1px 3px rgba(0,0,0,0.06); margin-bottom:16px; }
-    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom: 2px solid #fff5f5; padding-bottom: 10px;}
+    .card-title { font-size:16px; font-weight:800; margin-bottom:20px; color:#C0392B; border-bottom:2px solid #fff5f5; padding-bottom:10px; }
     .field { margin-bottom:16px; }
     .field label { display:block; font-size:11px; font-weight:800; color:#7a7168; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
     .field input, .field select, .field textarea { width:100%; border:1.5px solid #e8e4dc; border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:#1a1714; background:#fafaf8; outline:none; transition:border-color 0.18s; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color:#C0392B; background:#fff; }
     .field textarea { resize:vertical; min-height:80px; line-height:1.5; }
     .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .opsi-row { display:flex; align-items:center; gap:10px; margin-bottom: 10px; }
+    .opsi-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
     .opsi-key { width:36px; height:36px; border-radius:50%; background:#f5f3ef; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; color:#7a7168; flex-shrink:0; transition:all 0.18s; }
-    .bobot-input { width: 80px !important; text-align: center; }
+    .bobot-input { width:80px !important; text-align:center; }
     .opsi-row input { flex:1; }
     .opsi-row.jawaban .opsi-key { background:#C0392B; color:#fff; }
     .jawaban-select { display:flex; gap:8px; flex-wrap:wrap; }
@@ -36,16 +36,16 @@
     .jaw-btn:hover, .jaw-btn.active { border-color:#C0392B; background:#C0392B; color:#fff; }
     .btn { padding:12px 24px; border-radius:50px; border:none; font-family:inherit; font-size:14px; font-weight:800; cursor:pointer; transition:all 0.18s; }
     .btn.primary { background:#C0392B; color:#fff; }
-    .btn.primary.full { width: 100%; margin-top: 10px; }
+    .btn.primary.full { width:100%; margin-top:10px; }
     .btn.primary:hover { background:#a93226; transform:translateY(-1px); }
-    .btn.secondary { background:#f5f3ef; color:#1a1714; border:1.5px solid #e8e4dc; font-size: 13px; padding: 10px 18px;}
+    .btn.secondary { background:#f5f3ef; color:#1a1714; border:1.5px solid #e8e4dc; font-size:13px; padding:10px 18px; }
     .btn.secondary:hover { background:#e8e4dc; }
-    .btn.danger { background:#fef2f2; color:#C0392B; border:1.5px solid #fdd; padding: 10px 14px;}
+    .btn.danger { background:#fef2f2; color:#C0392B; border:1.5px solid #fdd; padding:10px 14px; }
     .alert { border-radius:12px; padding:12px 16px; font-size:13px; font-weight:600; margin-bottom:16px; display:none; }
     .alert.ok { background:#edfaf3; border:1px solid #b8e6d0; color:#1a7a4a; }
     .alert.err { background:#fef2f2; border:1px solid #fdd; color:#C0392B; }
     .alert.info { background:#fff8e6; border:1px solid #f5d06a; color:#8a5e00; }
-    #majemukContainer { background: #fafaf8; padding: 16px; border-radius: 12px; border: 1.5px dashed #e8e4dc; }
+    #majemukContainer { background:#fafaf8; padding:16px; border-radius:12px; border:1.5px dashed #e8e4dc; }
     .upload-zone { border:2px dashed #e8e4dc; border-radius:16px; padding:36px; text-align:center; cursor:pointer; transition:all 0.2s; background:#fafaf8; margin-bottom:16px; }
     .upload-zone:hover, .upload-zone.drag { border-color:#C0392B; background:#fff5f5; }
     .upload-zone input { display:none; }
@@ -57,6 +57,8 @@
     .log-line.ok { color:#3ecf8e; }
     .log-line.err { color:#f76060; }
     .log-line.info { color:#f5c842; }
+    /* Paket sync info box */
+    .sync-info { background:#f0fdf4; border:1px solid #b8e6d0; border-radius:10px; padding:10px 14px; font-size:12px; color:#1a7a4a; font-weight:600; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
   </style>
 </head>
 <body>
@@ -67,6 +69,9 @@
 <main>
   <div class="page-title">Input Soal CBT Dinamis</div>
   <div class="page-sub">Kelola bank soal untuk sistem Computer Assisted Test.</div>
+  <div class="sync-info">
+    🔄 <span>Auto-sync aktif — setiap soal yang disimpan akan otomatis mendaftarkan <strong>paketCBT</strong> di Firestore (segmen + sub-kategori).</span>
+  </div>
 
   <div class="tabs">
     <button class="tab active" id="tabTambahBtn" onclick="switchTab('tabTambah', this)">➕ Tambah Manual</button>
@@ -105,6 +110,12 @@
               <option value="CBT Kelas 9">CBT Kelas 9</option>
               <option value="CBT Kelas 12">CBT Kelas 12</option>
             </optgroup>
+            <optgroup label="── CBT Spesifik ──">
+              <option value="CBT Kelas 6 - MTSN">CBT Kelas 6 - MTSN</option>
+              <option value="CBT Kelas 6 - SMP UMUM">CBT Kelas 6 - SMP UMUM</option>
+              <option value="CBT Kelas 9 - MA">CBT Kelas 9 - MA</option>
+              <option value="CBT Kelas 9 - SMA UMUM">CBT Kelas 9 - SMA UMUM</option>
+            </optgroup>
             <optgroup label="── Nasional ──">
               <option value="SNBT PTN">SNBT PTN</option>
               <option value="CBT CPNS">CBT CPNS</option>
@@ -141,6 +152,16 @@
           <input type="number" id="fDurasiMenit" value="30" min="1" placeholder="cth: 30"/>
         </div>
       </div>
+      <!-- Harga paket override (opsional) -->
+      <div class="field-row">
+        <div class="field">
+          <label>Harga Paket CBT (Rp) — default 34.900</label>
+          <input type="number" id="fHarga" value="34900" min="0" placeholder="34900"/>
+        </div>
+        <div class="field" style="display:flex;align-items:flex-end;padding-bottom:2px;">
+          <small style="color:#7a7168;font-size:12px;font-weight:500;line-height:1.5;">Harga ini akan disimpan ke <code>paketCBT</code> di Firestore dan ditampilkan di halaman pricing.</small>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -150,7 +171,7 @@
         <textarea id="fSoal" placeholder="Tulis deskripsi soal di sini..."></textarea>
       </div>
       <div id="dynamicUI"></div>
-      <div class="field" style="margin-top: 20px;">
+      <div class="field" style="margin-top:20px;">
         <label>Pembahasan</label>
         <textarea id="fPembahasan" placeholder="Jelaskan mengapa jawaban tersebut benar..."></textarea>
       </div>
@@ -163,14 +184,19 @@
     <div class="card">
       <div class="card-title">📤 Upload File Excel</div>
       <div class="alert" id="alertBulk"></div>
-      <p style="font-size:13px; color:#7a7168; margin-bottom:16px;">Gunakan template Excel yang disediakan. Pastikan baris data Anda sesuai dengan kolom yang ada untuk mendeteksi keempat tipe soal CBT beserta durasi waktunya.</p>
+      <p style="font-size:13px; color:#7a7168; margin-bottom:8px;">Gunakan template Excel yang disediakan. Pastikan baris data sesuai dengan kolom yang ada.</p>
+      <p style="font-size:12px; color:#7a7168; margin-bottom:16px; background:#f0fdf4; border-radius:8px; padding:10px 12px; border:1px solid #b8e6d0;">
+        💡 <strong>Kolom wajib:</strong> segmen, kategori, subKategori, tipeSoal, pertanyaan, pembahasan<br/>
+        💡 <strong>Kolom opsional:</strong> <code>harga</code> (default 34900), urutanSubtes, durasiMenit<br/>
+        💡 <strong>Auto-sync:</strong> Setiap soal yang berhasil diupload akan otomatis mendaftarkan/memperbarui entri di koleksi <code>paketCBT</code>.
+      </p>
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="fileInput" accept=".xlsx,.xls,.csv"/>
         <div class="upload-icon">📊</div>
         <div class="upload-title">Klik atau drag & drop file Excel</div>
         <div class="upload-sub">Format: .xlsx, .xls, atau .csv</div>
       </div>
-      <div id="previewWrap" style="display:none; text-align: right;">
+      <div id="previewWrap" style="display:none; text-align:right;">
         <button class="btn primary" id="btnUpload">🚀 Upload <span id="countPreview">0</span> Soal ke Database</button>
       </div>
       <div class="log" id="bulkLog"></div>
@@ -193,13 +219,15 @@
 <!-- Script 2: Module Firebase -->
 <script type="module">
   import { auth, db } from "./firebase-config.js";
-  import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import {
+    collection, addDoc, setDoc, doc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const $ = id => document.getElementById(id);
   let selectedJawabanPG = '';
   let parsedRows = [];
 
-  // ===== EVENT LISTENERS (tidak ada inline onclick untuk fungsi module) =====
+  // ===== EVENT LISTENERS =====
   document.getElementById('fileInput').addEventListener('change', function() { handleFile(this); });
   document.getElementById('btnUpload').addEventListener('click', uploadSemuaExcel);
 
@@ -218,27 +246,31 @@
     }
   });
 
-  // ===== KATEGORI & UI =====
+  // ===== KATEGORI MAP =====
   const KATEGORI_MAP = {
-    'Try Out STS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out STS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
-    'Try Out SAS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
-    'CBT Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
-    'CBT Kelas 9':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
-    'CBT Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
-    'SNBT PTN': ['Penalaran Umum','Pengetahuan & Pemahaman Umum','Pemahaman Bacaan & Menulis','Pengetahuan Kuantitatif','Literasi Bahasa Indonesia','Literasi Bahasa Inggris','Penalaran Matematika'],
-    'CBT CPNS': ['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi'],
+    'Try Out STS Kelas 6':   ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 7':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 8':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 9':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 10':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 11':  ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 12':  ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 6':   ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 7':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 8':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 9':   ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 10':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 11':  ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 12':  ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 6':           ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 6 - MTSN':   ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','PAI','Pengetahuan Umum'],
+    'CBT Kelas 6 - SMP UMUM':['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum'],
+    'CBT Kelas 9':           ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 9 - MA':      ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','PAI','Pengetahuan Umum'],
+    'CBT Kelas 9 - SMA UMUM':['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum'],
+    'CBT Kelas 12':          ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'SNBT PTN':              ['Penalaran Umum','Pengetahuan & Pemahaman Umum','Pemahaman Bacaan & Menulis','Pengetahuan Kuantitatif','Literasi Bahasa Indonesia','Literasi Bahasa Inggris','Penalaran Matematika'],
+    'CBT CPNS':              ['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi'],
   };
 
   window.updateKategoriOptions = function() {
@@ -305,7 +337,6 @@
         <option value="Salah">Salah</option>
       </select>
     `;
-    // Tombol hapus pakai addEventListener — tidak ada inline onclick
     const btnHapus = document.createElement('button');
     btnHapus.className = 'btn danger';
     btnHapus.textContent = '✕';
@@ -314,70 +345,108 @@
     $('majemukContainer').appendChild(div);
   };
 
+  // ===== CORE: upsert paketCBT =====
+  // Doc ID: sanitized "segmen__subKategori" — safe untuk Firestore doc ID
+  function makePaketDocId(segmen, subKategori) {
+    return (segmen + '__' + subKategori)
+      .replace(/[\/\.#$\[\]]/g, '_')  // karakter terlarang Firestore
+      .slice(0, 200);                  // maks 200 char
+  }
+
+  async function upsertPaketCBT(segmen, subKategori, harga = 34900) {
+    if (!segmen || !subKategori) return;
+    const docId = makePaketDocId(segmen, subKategori);
+    await setDoc(doc(db, 'paketCBT', docId), {
+      segmen,
+      subKategori,
+      harga,
+      aktif: true,
+      updatedAt: serverTimestamp()
+    }, { merge: true }); // merge: true → tidak overwrite field lain yg mungkin ada
+  }
+
+  // ===== MANUAL SAVE =====
   window.simpanSoalCBT = async function() {
     const tipe = $('fTipeSoal').value;
+    const segmen     = $('fSegmen').value;
+    const subKategori = $('fSub').value.trim();
+    const harga      = parseInt($('fHarga').value) || 34900;
+
     const data = {
-      segmen: $('fSegmen').value,
+      segmen,
       kategori: $('fKategori').value,
-      subKategori: $('fSub').value.trim(),
+      subKategori,
       urutanSubtes: parseInt($('fUrutanSubtes').value) || 1,
-      durasiMenit: parseInt($('fDurasiMenit').value) || 30,
+      durasiMenit:  parseInt($('fDurasiMenit').value)  || 30,
       tipeSoal: tipe,
       pertanyaan: $('fSoal').value.trim(),
       pembahasan: $('fPembahasan').value.trim(),
       createdAt: serverTimestamp()
     };
 
-    if (!data.subKategori || !data.pertanyaan || !data.pembahasan) { showAlert('alertManual','err','Form wajib diisi!'); return; }
+    if (!data.subKategori || !data.pertanyaan || !data.pembahasan) {
+      showAlert('alertManual', 'err', 'Form wajib diisi!'); return;
+    }
 
     if (tipe === 'pg_biasa') {
-      if (!selectedJawabanPG) { showAlert('alertManual','err','Pilih kunci jawaban!'); return; }
+      if (!selectedJawabanPG) { showAlert('alertManual', 'err', 'Pilih kunci jawaban!'); return; }
       data.opsi = { A: $('pg_A').value, B: $('pg_B').value, C: $('pg_C').value, D: $('pg_D').value, E: $('pg_E').value };
       data.jawaban = selectedJawabanPG;
     } else if (tipe === 'tkp') {
-      data.opsi = { A: $('tkp_opsi_A').value, B: $('tkp_opsi_B').value, C: $('tkp_opsi_C').value, D: $('tkp_opsi_D').value, E: $('tkp_opsi_E').value };
+      data.opsi    = { A: $('tkp_opsi_A').value, B: $('tkp_opsi_B').value, C: $('tkp_opsi_C').value, D: $('tkp_opsi_D').value, E: $('tkp_opsi_E').value };
       data.bobotTkp = { A: parseInt($('tkp_bobot_A').value)||0, B: parseInt($('tkp_bobot_B').value)||0, C: parseInt($('tkp_bobot_C').value)||0, D: parseInt($('tkp_bobot_D').value)||0, E: parseInt($('tkp_bobot_E').value)||0 };
     } else if (tipe === 'isian') {
-      if (!$('isian_kunci').value.trim()) { showAlert('alertManual','err','Jawaban isian kosong!'); return; }
+      if (!$('isian_kunci').value.trim()) { showAlert('alertManual', 'err', 'Jawaban isian kosong!'); return; }
       data.jawabanIsian = $('isian_kunci').value.trim();
     } else if (tipe === 'majemuk') {
       const rows = document.querySelectorAll('#majemukContainer .opsi-row');
       data.pernyataanMajemuk = [];
       rows.forEach(row => {
         const id = row.id.split('_')[2];
-        const teks = $('mjm_teks_' + id).value.trim();
-        const kunci = $('mjm_kunci_' + id).value;
+        const teks  = $('mjm_teks_'  + id)?.value.trim();
+        const kunci = $('mjm_kunci_' + id)?.value;
         if (teks) data.pernyataanMajemuk.push({ teks, kunci });
       });
     }
 
-    const btn = $('btnSimpan'); btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
+    const btn = $('btnSimpan');
+    btn.disabled = true; btn.textContent = '⏳ Menyimpan...';
     try {
+      // 1. Simpan soal
       await addDoc(collection(db, 'soal'), data);
-      showAlert('alertManual','ok','✅ Soal CBT berhasil disimpan!');
-      $('fSoal').value = ''; $('fPembahasan').value = ''; renderUI();
-    } catch(err) { showAlert('alertManual','err','❌ Gagal: ' + err.message); }
+      // 2. Sync paketCBT (upsert, tidak akan overwrite jika sudah ada dengan harga berbeda — merge:true)
+      await upsertPaketCBT(segmen, subKategori, harga);
+      showAlert('alertManual', 'ok', '✅ Soal disimpan & paketCBT di-sync!');
+      $('fSoal').value = ''; $('fPembahasan').value = '';
+      renderUI();
+    } catch(err) {
+      showAlert('alertManual', 'err', '❌ Gagal: ' + err.message);
+    }
     btn.disabled = false; btn.textContent = '💾 Simpan Soal CBT';
   };
 
   function showAlert(id, type, msg) {
-    const el = $(id); el.textContent = msg; el.className = 'alert ' + type; el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 4000);
+    const el = $(id);
+    el.textContent = msg; el.className = 'alert ' + type; el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4500);
   }
 
+  // ===== BULK EXCEL =====
   function handleFile(input) {
     const file = input.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = e => {
       try {
-        const wb = XLSX.read(e.target.result, {type:'binary'});
+        const wb = XLSX.read(e.target.result, { type: 'binary' });
         const ws = wb.Sheets[wb.SheetNames[0]];
-        parsedRows = XLSX.utils.sheet_to_json(ws, {defval:''});
+        parsedRows = XLSX.utils.sheet_to_json(ws, { defval: '' });
         $('countPreview').textContent = parsedRows.length;
         $('previewWrap').style.display = 'block';
-        showAlert('alertBulk','info','✅ ' + parsedRows.length + ' baris terdeteksi. Silakan klik tombol Upload di bawah.');
-      } catch(err) { showAlert('alertBulk','err','Gagal membaca file: ' + err.message); }
+        showAlert('alertBulk', 'info', '✅ ' + parsedRows.length + ' baris terdeteksi. Klik tombol Upload.');
+      } catch(err) {
+        showAlert('alertBulk', 'err', 'Gagal membaca file: ' + err.message);
+      }
     };
     reader.readAsBinaryString(file);
   }
@@ -387,16 +456,23 @@
     showBulkLog(); setLoadingBulk(true);
     let sukses = 0, gagal = 0;
 
+    // Track paketCBT upsert — batch per unique key, hindari duplicate writes
+    const paketSet = new Set();
+
     for (let i = 0; i < parsedRows.length; i++) {
       const r = parsedRows[i];
       try {
-        const tipe = String(r.tipeSoal || 'pg_biasa').trim().toLowerCase();
+        const tipe        = String(r.tipeSoal     || 'pg_biasa').trim().toLowerCase();
+        const segmen      = String(r.segmen        || '').trim();
+        const subKategori = String(r.subKategori   || '').trim();
+        const harga       = parseInt(r.harga)      || 34900;
+
         const data = {
-          segmen: String(r.segmen || '').trim(),
-          kategori: String(r.kategori || '').trim(),
-          subKategori: String(r.subKategori || '').trim(),
+          segmen,
+          kategori:     String(r.kategori     || '').trim(),
+          subKategori,
           urutanSubtes: parseInt(r.urutanSubtes) || 1,
-          durasiMenit: parseInt(r.durasiMenit) || 30,
+          durasiMenit:  parseInt(r.durasiMenit)  || 30,
           tipeSoal: tipe,
           pertanyaan: String(r.pertanyaan || '').trim(),
           pembahasan: String(r.pembahasan || '').trim(),
@@ -404,10 +480,10 @@
         };
 
         if (tipe === 'pg_biasa') {
-          data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
+          data.opsi    = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
           data.jawaban = String(r.jawaban||'').trim().toUpperCase();
         } else if (tipe === 'tkp') {
-          data.opsi = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
+          data.opsi     = { A: String(r.opsiA||''), B: String(r.opsiB||''), C: String(r.opsiC||''), D: String(r.opsiD||''), E: String(r.opsiE||'') };
           data.bobotTkp = { A: parseInt(r.bobotA)||0, B: parseInt(r.bobotB)||0, C: parseInt(r.bobotC)||0, D: parseInt(r.bobotD)||0, E: parseInt(r.bobotE)||0 };
         } else if (tipe === 'isian') {
           data.jawabanIsian = String(r.jawabanIsian||'').trim();
@@ -421,24 +497,47 @@
           }
         }
 
+        // 1. Upload soal
         await addDoc(collection(db, 'soal'), data);
         sukses++;
-        logBulk('✅ Soal ' + (i+1) + ' [' + data.tipeSoal + '] berhasil diupload.', 'ok');
-      } catch(err) { gagal++; logBulk('❌ Soal ' + (i+1) + ' Gagal: ' + err.message, 'err'); }
+        logBulk('✅ Soal ' + (i+1) + ' [' + tipe + '] berhasil.', 'ok');
+
+        // 2. Queue paketCBT upsert (deduplicated)
+        const key = makePaketDocId(segmen, subKategori);
+        if (segmen && subKategori && !paketSet.has(key)) {
+          paketSet.add(key);
+          await upsertPaketCBT(segmen, subKategori, harga);
+          logBulk('   ↳ paketCBT synced: ' + segmen + ' / ' + subKategori, 'info');
+        }
+
+      } catch(err) {
+        gagal++;
+        logBulk('❌ Soal ' + (i+1) + ' Gagal: ' + err.message, 'err');
+      }
     }
-    logBulk('\n✨ Selesai! ' + sukses + ' berhasil, ' + gagal + ' gagal.', sukses === parsedRows.length ? 'ok' : 'info');
+    logBulk('\n✨ Selesai! ' + sukses + ' soal berhasil, ' + gagal + ' gagal. ' + paketSet.size + ' entri paketCBT di-sync.',
+      sukses === parsedRows.length ? 'ok' : 'info');
     setLoadingBulk(false);
   }
 
-  function showBulkLog() { const log = $('bulkLog'); log.style.display='block'; log.innerHTML=''; }
-  function logBulk(msg, type='') {
-    const log = $('bulkLog'); const line = document.createElement('div');
+  function makePaketDocId(segmen, subKategori) {
+    return (segmen + '__' + subKategori)
+      .replace(/[\/\.#$\[\]]/g, '_')
+      .slice(0, 200);
+  }
+
+  function showBulkLog() { const log = $('bulkLog'); log.style.display = 'block'; log.innerHTML = ''; }
+  function logBulk(msg, type = '') {
+    const log = $('bulkLog');
+    const line = document.createElement('div');
     line.className = 'log-line ' + type; line.textContent = msg;
     log.appendChild(line); log.scrollTop = log.scrollHeight;
   }
   function setLoadingBulk(loading) {
     $('btnUpload').disabled = loading;
-    $('btnUpload').innerHTML = loading ? '⏳ Memproses...' : '🚀 Upload <span id="countPreview">' + parsedRows.length + '</span> Soal ke Database';
+    $('btnUpload').innerHTML = loading
+      ? '⏳ Memproses...'
+      : '🚀 Upload <span id="countPreview">' + parsedRows.length + '</span> Soal ke Database';
   }
 
   updateKategoriOptions();
