@@ -13,8 +13,9 @@
       --text: #1a1714; --muted: #7a7168; --muted2: #b0a89c;
       --red: #C0392B; --red2: #a93226;
       --gold: #e8970a; --gold-bg: #fff8e6; --gold-border: #f5d06a;
-      --green: #1a7a4a; --green-bg: #edfaf3;
+      --green: #1a7a4a; --green-bg: #edfaf3; --green-border: #b8e6d0;
       --blue: #1a5fb4; --blue-bg: #eef3fc;
+      --purple: #9b59b6; --purple-bg: #fdf5ff; --purple-border: #e0c8f5;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
       --shadow: 0 4px 16px rgba(0,0,0,0.08);
       --radius: 16px;
@@ -43,6 +44,7 @@
     .hero-left h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
     .hero-left p { margin-top: 6px; font-size: 14px; color: var(--muted); font-weight: 500; }
     .hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+    .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 
     .plan-badge { display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; }
     .plan-badge.premium { background: var(--gold-bg); border: 1.5px solid var(--gold-border); color: #b07008; }
@@ -51,10 +53,16 @@
     .plan-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-    .btn-latihan { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; box-shadow: 0 4px 14px rgba(192,57,43,0.25); white-space: nowrap; }
+    .btn-latihan { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; box-shadow: 0 4px 14px rgba(192,57,43,0.25); white-space: nowrap; }
     .btn-latihan:hover { background: var(--red2); transform: translateY(-1px); }
 
-    /* SUBBAB POOL CARD — tepat di bawah hero */
+    /* TRY OUT BUTTON */
+    .btn-tryout { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 50px; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
+    .btn-tryout:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(155,89,182,0.25); }
+    .btn-tryout.has-access { background: var(--purple); color: #fff; box-shadow: 0 4px 14px rgba(155,89,182,0.25); border-color: var(--purple); }
+    .btn-tryout.has-access:hover { background: #8e44ad; }
+
+    /* SUBBAB POOL CARD */
     .subbab-pool-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
     .subbab-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
     .subbab-pool-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
@@ -62,31 +70,40 @@
     .btn-beli-subbab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.18s; border: none; cursor: pointer; }
     .btn-beli-subbab:hover { background: var(--red2); transform: translateY(-1px); }
 
-    /* Chip sub-bab — clickable */
+    /* CHIPS */
     .subbab-chips { display: flex; flex-wrap: wrap; gap: 10px; }
     .subbab-chip { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; text-decoration: none; border: 1.5px solid transparent; }
-    .subbab-chip.active { background: var(--green-bg); border-color: #b8e6d0; color: var(--green); }
+    .subbab-chip.active { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
     .subbab-chip.active:hover { background: #d4f5e6; border-color: var(--green); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,122,74,0.15); }
     .subbab-chip.done { background: var(--surface2); border-color: var(--border); color: var(--muted); position: relative; }
     .subbab-chip.done:hover { background: var(--border); transform: translateY(-1px); }
     .subbab-chip.done .chip-check { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--green); border-radius: 50%; color: #fff; font-size: 9px; flex-shrink: 0; }
     .subbab-chip .mapel-icon { font-size: 13px; }
-    .subbab-chip-label { line-height: 1.2; }
 
-    /* Segmen group label */
+    /* TRYOUT CHIPS */
+    .tryout-chip { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; text-decoration: none; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); }
+    .tryout-chip:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(155,89,182,0.2); }
+    .tryout-chip-icon { font-size: 13px; }
+
+    /* SEGMEN GROUP LABEL */
     .chips-segmen-group { margin-bottom: 14px; }
     .chips-segmen-group:last-child { margin-bottom: 0; }
     .chips-segmen-title { font-size: 11px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
 
-    /* Empty pool state */
+    /* POOL EMPTY / ALL DONE */
     .pool-empty { text-align: center; padding: 20px 0; }
     .pool-empty p { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 12px; }
-
-    /* All-done state */
-    .pool-all-done { background: var(--green-bg); border: 1.5px solid #b8e6d0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .pool-all-done { background: var(--green-bg); border: 1.5px solid var(--green-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-top: 14px; }
     .pool-all-done .done-icon { font-size: 24px; }
     .pool-all-done .done-text { font-size: 13px; font-weight: 600; color: var(--green); }
     .pool-all-done .done-cta { margin-left: auto; padding: 8px 16px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+
+    /* TRYOUT POOL SECTION */
+    .tryout-pool-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .tryout-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+    .tryout-pool-label { font-size: 13px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
+    .btn-beli-tryout { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 50px; background: var(--purple-bg); color: var(--purple); border: 1.5px solid var(--purple-border); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.18s; cursor: pointer; }
+    .btn-beli-tryout:hover { background: var(--purple); color: #fff; }
 
     /* STATS */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
@@ -117,8 +134,6 @@
     .ref-stat .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
     .ref-stat .val { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
     .ref-stat .val.green { color: var(--green); }
-
-    /* Referral promo pill */
     .ref-promo { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; }
 
     .premium-banner { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 1.5px solid var(--gold-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
@@ -132,6 +147,14 @@
     .upgrade-cta p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
     .btn-upgrade { flex-shrink: 0; padding: 12px 28px; border-radius: 50px; border: none; background: #fff; color: var(--red); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
     .btn-upgrade:hover { transform: translateY(-2px); }
+
+    /* TRYOUT PROMO BANNER */
+    .tryout-promo-banner { background: linear-gradient(135deg, var(--purple-bg), #f0e6ff); border: 1.5px solid var(--purple-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .tryout-promo-banner::before { content: '🎯'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 48px; opacity: 0.15; }
+    .tryout-promo-banner h3 { font-size: 15px; font-weight: 800; color: #6c3483; }
+    .tryout-promo-banner p { font-size: 13px; color: #7d3c98; margin-top: 4px; line-height: 1.5; font-weight: 500; }
+    .btn-beli-tryout-banner { flex-shrink: 0; padding: 11px 24px; border-radius: 50px; border: none; background: var(--purple); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 14px rgba(155,89,182,0.25); }
+    .btn-beli-tryout-banner:hover { background: #8e44ad; transform: translateY(-1px); }
 
     .paket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width: 500px) { .paket-grid { grid-template-columns: 1fr; } }
@@ -174,10 +197,29 @@
     #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 22px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* TRYOUT MODAL PICKER */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; padding: 28px; max-width: 520px; width: calc(100% - 40px); box-shadow: var(--shadow); max-height: 85vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+    .modal-sub { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 20px; }
+    .modal-segmen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .modal-seg-card { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .modal-seg-card:hover { border-color: var(--purple); background: var(--purple-bg); color: var(--purple); }
+    .modal-seg-card.owned { border-color: var(--green-border); background: var(--green-bg); color: var(--green); cursor: default; }
+    .modal-seg-card.owned:hover { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
+    .modal-group-title { font-size: 11px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; margin-top: 14px; }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.15s; }
+    .modal-btn-primary { background: var(--purple); color: #fff; }
+    .modal-btn-primary:hover { background: #8e44ad; }
+    .modal-btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border) !important; }
+
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     @media(max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
     [data-s] { opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.4s; }
     [data-s].in { opacity: 1; transform: none; }
+    @media(max-width: 600px) { .hero-btns { justify-content: flex-start; } .modal-segmen-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -195,8 +237,20 @@
   <p>Memuat dashboard…</p>
 </div>
 
-<main id="mainContent">
+<!-- TRYOUT MODAL PICKER -->
+<div class="modal-overlay" id="modalTryout">
+  <div class="modal">
+    <div class="modal-title">🎯 Pilih Segmen Try Out</div>
+    <div class="modal-sub">Pilih segmen ujian yang ingin kamu kerjakan.</div>
+    <div id="modalSegmenContent"></div>
+    <div class="modal-actions">
+      <button class="modal-btn-secondary modal-actions" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer" onclick="document.getElementById('modalTryout').classList.remove('open')">Batal</button>
+      <button class="modal-btn-primary" style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--purple);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer" onclick="location.href='/pricing.html?tab=tryout'">+ Beli Segmen Lain</button>
+    </div>
+  </div>
+</div>
 
+<main id="mainContent">
   <!-- HERO -->
   <div class="hero" data-s>
     <div class="hero-left">
@@ -205,11 +259,14 @@
     </div>
     <div class="hero-right">
       <div id="planBadgeWrap"></div>
-      <button class="btn-latihan" id="btnMulaiLatihan">📝 Mulai Latihan</button>
+      <div class="hero-btns">
+        <button class="btn-latihan" id="btnMulaiLatihan">📝 Mulai Latihan</button>
+        <button class="btn-tryout" id="btnTryOut">🎯 Try Out</button>
+      </div>
     </div>
   </div>
 
-  <!-- SUBBAB POOL — muncul di sini kalau user sudah beli -->
+  <!-- SUBBAB POOL -->
   <div id="subbabPoolWrap"></div>
 
   <!-- STATS GRID -->
@@ -221,16 +278,16 @@
       <div class="stat-sub" id="statSubbabSub">sub-bab terbuka</div>
     </div>
     <div class="stat-card">
+      <div class="stat-icon" style="background:#fdf5ff">🎯</div>
+      <div class="stat-label">Try Out Aktif</div>
+      <div class="stat-value" id="statTryout">—</div>
+      <div class="stat-sub" id="statTryoutSub">segmen ujian</div>
+    </div>
+    <div class="stat-card">
       <div class="stat-icon" style="background:#edfaf3">💰</div>
       <div class="stat-label">Komisi Referral</div>
       <div class="stat-value" id="statKomisi" style="font-size:16px">—</div>
       <div class="stat-sub">total terkumpul</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#fff8e6">🏅</div>
-      <div class="stat-label">Status Akun</div>
-      <div class="stat-value" id="statPlan" style="font-size:16px">—</div>
-      <div class="stat-sub" id="statExpiry">—</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon" style="background:#eef3fc">🔗</div>
@@ -255,7 +312,6 @@
         Kirim WA
       </button>
     </div>
-    <!-- Promo referral — ganti "coba gratis" -->
     <div class="ref-promo">🎁 Diskon 50% untuk teman yang daftar pakai kode referralmu!</div>
     <div class="ref-stats">
       <div class="ref-stat"><div class="lbl">Teman Diundang</div><div class="val" id="refCount">—</div></div>
@@ -278,8 +334,8 @@
 
 <div id="stickyCta">
   <div class="info">
-    <strong>Beli Sub-Bab</strong>
-    <span>Mulai Rp 7.900/sub-bab · Premium Rp 99.900/bln</span>
+    <strong>Mulai Belajar</strong>
+    <span>Latihan Rp 7.900/sub-bab · Try Out Rp 34.900/segmen</span>
   </div>
   <button class="btn-sticky" onclick="location.href='/pricing.html'">Lihat Paket →</button>
 </div>
@@ -311,18 +367,23 @@
 
   const MAPEL_ICON = { Matematika:'📐', IPAS:'🔬', 'B.Inggris':'🔤', 'Bahasa Indonesia':'📖', 'Bahasa Inggris':'🔤', IPA:'🔬', IPS:'🌏', PKn:'🏛️', Fisika:'⚛️', Kimia:'🧪', Biologi:'🌿', Ekonomi:'📊', Sejarah:'📜', Geografi:'🗺️' };
 
+  const TRYOUT_SEGMEN_ALL = [
+    { group:'Try Out Sekolah', items:[
+      'Try Out STS Kelas 6','Try Out STS Kelas 7','Try Out STS Kelas 8','Try Out STS Kelas 9','Try Out STS Kelas 10','Try Out STS Kelas 11','Try Out STS Kelas 12',
+      'Try Out SAS Kelas 6','Try Out SAS Kelas 7','Try Out SAS Kelas 8','Try Out SAS Kelas 9','Try Out SAS Kelas 10','Try Out SAS Kelas 11','Try Out SAS Kelas 12',
+    ]},
+    { group:'CBT Ujian', items:[
+      'CBT Kelas 6 - MTSN','CBT Kelas 6 - SMP UMUM','CBT Kelas 9 - MA','CBT Kelas 9 - SMA UMUM','CBT Kelas 12',
+    ]},
+  ];
+
   function showToast(msg) {
     const t = $('toast'); t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // Simpan progress di localStorage
   function getDoneSubbab() {
     try { return JSON.parse(localStorage.getItem('cb_done_subbab') || '[]'); } catch { return []; }
-  }
-  function markSubbabDone(sb) {
-    const done = getDoneSubbab();
-    if (!done.includes(sb)) { done.push(sb); localStorage.setItem('cb_done_subbab', JSON.stringify(done)); }
   }
 
   onAuthStateChanged(auth, async user => {
@@ -338,13 +399,14 @@
         getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
       ]);
 
-      const ud          = userSnap.exists() ? userSnap.data() : {};
-      const plan        = ud.plan || 'none';
-      const isPremium   = plan === 'premium';
-      const subBabAkses = ud.subBabAkses || [];
+      const ud           = userSnap.exists() ? userSnap.data() : {};
+      const plan         = ud.plan || 'none';
+      const isPremium    = plan === 'premium';
+      const subBabAkses  = ud.subBabAkses || [];
+      const tryOutAkses  = ud.tryOutAkses || [];
       const hasPremiumAll = subBabAkses.includes('__premium__') || isPremium;
-      const orders      = ordSnap.docs.map(d => ({id:d.id,...d.data()}));
-      const allSegmen   = segmenSnap.docs.map(d => d.data()).filter(s => s.aktif);
+      const orders       = ordSnap.docs.map(d => ({id:d.id,...d.data()}));
+      const allSegmen    = segmenSnap.docs.map(d => d.data()).filter(s => s.aktif);
 
       let refCount = 0;
       try {
@@ -354,30 +416,23 @@
 
       const subBabIconMap = {};
       try {
-        // Build dari collection soal — lebih akurat karena langsung match subKategori
         const soalSnap = await getDocs(collection(db, 'soal'));
         soalSnap.docs.forEach(d => {
           const data = d.data();
           const sb   = data.subKategori;
           if (sb && !subBabIconMap[sb]) {
-            subBabIconMap[sb] = {
-              icon:   MAPEL_ICON[data.kategori] || '📚',
-              segmen: data.segmen  || '',
-              mapel:  data.kategori || '',
-            };
+            subBabIconMap[sb] = { icon: MAPEL_ICON[data.kategori] || '📚', segmen: data.segmen || '', mapel: data.kategori || '' };
           }
         });
       } catch(_) {}
 
-      renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount, allSegmen, subBabIconMap);
+      renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, orders, refCount, allSegmen, subBabIconMap);
 
       $('loadingScreen').style.opacity = '0';
       setTimeout(() => $('loadingScreen').style.display = 'none', 350);
       $('mainContent').classList.add('visible');
       setTimeout(() => {
-        document.querySelectorAll('[data-s]').forEach((el,i) => {
-          setTimeout(() => el.classList.add('in'), i * 70);
-        });
+        document.querySelectorAll('[data-s]').forEach((el,i) => setTimeout(() => el.classList.add('in'), i * 70));
       }, 50);
     } catch(err) {
       console.error(err);
@@ -385,17 +440,18 @@
     }
   }
 
-  function renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, orders, refCount, allSegmen, subBabIconMap) {
+  function renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, orders, refCount, allSegmen, subBabIconMap) {
     const nama      = ud.nama || user.email;
     const namaFirst = nama.split(' ')[0];
+    const hasTryout = isPremium || tryOutAkses.length > 0;
 
-    $('navName').textContent  = namaFirst;
+    $('navName').textContent   = namaFirst;
     $('greetText').textContent = `Halo, ${namaFirst}! 👋`;
     $('greetSub').textContent  = hasPremiumAll
       ? 'Akses penuh aktif — selamat belajar tanpa batas!'
       : subBabAkses.length
         ? `Kamu punya ${subBabAkses.length} sub-bab aktif. Selamat belajar!`
-        : 'Beli sub-bab untuk mulai latihan soal.';
+        : 'Beli sub-bab atau Try Out untuk mulai belajar.';
 
     // Badge
     const badge = document.createElement('div');
@@ -411,31 +467,28 @@
     }
     $('planBadgeWrap').appendChild(badge);
 
-    // Tombol Mulai Latihan → ke pool page kalau ada subbab, ke latihan.html kalau belum
-    $('btnMulaiLatihan').onclick = () => {
-      if (subBabAkses.length || hasPremiumAll) {
-        window.location.href = '/pool.html';
-      } else {
-        window.location.href = '/pricing.html';
-      }
-    };
+    // Tombol Mulai Latihan
+    $('btnMulaiLatihan').addEventListener('click', () => {
+      if (subBabAkses.length || hasPremiumAll) window.location.href = '/pool.html';
+      else window.location.href = '/pricing.html';
+    });
+
+    // Tombol Try Out
+    const btnTO = $('btnTryOut');
+    if (hasTryout) {
+      btnTO.classList.add('has-access');
+      btnTO.addEventListener('click', () => openTryoutModal(tryOutAkses, isPremium));
+    } else {
+      btnTO.addEventListener('click', () => window.location.href = '/pricing.html?tab=tryout');
+    }
 
     // Stats
-    $('statSubbab').textContent    = hasPremiumAll ? 'Semua' : subBabAkses.length;
-    $('statSubbabSub').textContent = hasPremiumAll ? 'akses penuh' : 'sub-bab terbuka';
-    $('statKomisi').textContent    = fmtRp(ud.komisiTotal || 0);
-    $('statPlan').textContent      = hasPremiumAll ? '⭐ Premium' : subBabAkses.length ? '📚 À la carte' : '—';
-    $('statRefCode').textContent   = ud.referralCode || '—';
-
-    if (isPremium && ud.expiredAt) {
-      const exp  = ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt);
-      const diff = Math.ceil((exp - new Date()) / 86400000);
-      $('statExpiry').textContent = diff > 0 ? `Aktif ${diff} hari lagi` : 'Sudah expired';
-    } else if (subBabAkses.length) {
-      $('statExpiry').textContent = 'Akses permanen';
-    } else {
-      $('statExpiry').textContent = 'Beli untuk mulai latihan';
-    }
+    $('statSubbab').textContent     = hasPremiumAll ? 'Semua' : subBabAkses.length;
+    $('statSubbabSub').textContent  = hasPremiumAll ? 'akses penuh' : 'sub-bab terbuka';
+    $('statTryout').textContent     = isPremium ? 'Semua' : tryOutAkses.length || '—';
+    $('statTryoutSub').textContent  = isPremium ? 'akses premium' : tryOutAkses.length ? 'segmen ujian' : 'belum ada akses';
+    $('statKomisi').textContent     = fmtRp(ud.komisiTotal || 0);
+    $('statRefCode').textContent    = ud.referralCode || '—';
 
     // Referral
     const code    = ud.referralCode || '';
@@ -460,95 +513,11 @@
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
 
-    // ── RENDER SUBBAB POOL (di atas stats) ──
-    renderSubbabPool(subBabAkses, hasPremiumAll, subBabIconMap);
+    // Subbab pool + tryout chips
+    renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap);
 
-    // ── DYNAMIC SECTION ──
-    const ds = $('dynamicSection');
-
-    if (hasPremiumAll) {
-      const exp     = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
-      const expStr  = exp ? fmtDate(exp) : '—';
-      const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
-      const isExpired = diff <= 0;
-      const segmenListHTML = allSegmen.map(s =>
-        `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
-          <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
-          ${s.icon || '📚'} ${s.id}
-        </div>`
-      ).join('');
-      ds.innerHTML = `
-        <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
-        <div class="premium-banner" data-s style="transition-delay:.22s">
-          <h3>✨ Akses Premium Aktif</h3>
-          <p>Kamu punya akses penuh ke semua soal & sub-bab tanpa batas.</p>
-          <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
-          ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:8px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
-        </div>
-        <div class="two-col" data-s style="transition-delay:.24s">
-          <div class="card" style="margin-bottom:0">
-            <div class="card-title">📚 Segmen Aktif</div>
-            <div style="display:flex;flex-direction:column;gap:8px">${segmenListHTML}</div>
-          </div>
-          <div class="card" style="margin-bottom:0">
-            <div class="card-title">📊 Statistik Belajar</div>
-            <div style="text-align:center;padding:24px 0">
-              <div style="font-size:40px">🚀</div>
-              <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Coming soon…</div>
-            </div>
-          </div>
-        </div>`;
-
-    } else if (subBabAkses.length) {
-      // Upgrade banner saja — sub-bab card sudah di atas
-      ds.innerHTML = `
-        <div class="upgrade-cta" data-s style="transition-delay:.26s">
-          <div>
-            <h3>⭐ Upgrade ke Premium Bulanan</h3>
-            <p>Rp 99.900/bln — buka semua sub-bab tanpa batas!</p>
-          </div>
-          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Upgrade →</button>
-        </div>`;
-      $('stickyCta').style.display = 'flex';
-
-    } else {
-      // Belum beli
-      $('stickyCta').style.display = 'flex';
-      const pakets = [
-        { nama:'À la carte', soal:'Per sub-bab pilihan', harga:7900, popular:false, url:'/pricing.html?tab=alacarte' },
-        { nama:'Bundling 5', soal:'5 sub-bab pilihan', harga:34900, popular:true, url:'/pricing.html?tab=bundling&pkg=5' },
-        { nama:'Bundling 10', soal:'10 sub-bab pilihan', harga:64900, popular:false, url:'/pricing.html?tab=bundling&pkg=10' },
-        { nama:'Premium Bulanan', soal:'Semua mapel & sub-bab', harga:99900, popular:false, url:'/pricing.html?tab=bulanan' },
-      ];
-      ds.innerHTML = `
-        <div class="section-label" data-s style="transition-delay:.2s">📦 Mulai Belajar</div>
-        <div class="card" data-s style="transition-delay:.22s">
-          <div class="card-title">🛒 Pilih Paket Belajar</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;line-height:1.6">Beli sub-bab yang kamu butuhkan, atau hemat lebih banyak dengan bundling & premium.</p>
-          <div class="paket-grid" id="paketGrid"></div>
-        </div>
-        <div class="upgrade-cta" data-s style="transition-delay:.28s">
-          <div>
-            <h3>🚀 Mulai Sekarang</h3>
-            <p>Mulai dari Rp 7.900 per sub-bab — belajar kapan saja, akses selamanya.</p>
-          </div>
-          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Lihat Semua Paket →</button>
-        </div>`;
-      const grid = document.getElementById('paketGrid');
-      if (grid) {
-        pakets.forEach(p => {
-          const div = document.createElement('div');
-          div.className = 'paket-item' + (p.popular ? ' popular' : '');
-          div.innerHTML = `
-            ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
-            <div class="paket-nama">${p.nama}</div>
-            <div class="paket-soal">${p.soal}</div>
-            <div class="paket-harga">${fmtRp(p.harga)} <span>${p.nama==='À la carte'?'/ sub-bab':'sekali bayar'}</span></div>
-            <button class="btn-beli" onclick="location.href='${p.url}'">Beli Sekarang</button>`;
-          grid.appendChild(div);
-        });
-      }
-    }
+    // Dynamic section
+    renderDynamicSection(ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, allSegmen, hasTryout);
 
     // Orders
     const list = $('orderList');
@@ -559,11 +528,13 @@
         const sc = o.status==='paid'?'paid':o.status==='pending'?'pending':'failed';
         const sl = o.status==='paid'?'Lunas':o.status==='pending'?'Menunggu':'Gagal';
         const subBabLabel = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
+        const tryoutLabel = o.tryOutSegmen?.length ? `🎯 ${o.tryOutSegmen.join(', ')}` : '';
         const segmenLabel = o.segmen ? `📚 ${o.segmen}` : '';
         return `<div class="order-item">
           <div class="order-info">
             <div class="order-paket">${o.paket||'—'} ${segmenLabel?`<span style="font-size:10px;font-weight:600;color:var(--muted);margin-left:4px">${segmenLabel}</span>`:''}</div>
             ${subBabLabel ? `<div class="order-subbab">${subBabLabel}</div>` : ''}
+            ${tryoutLabel ? `<div class="order-subbab" style="color:var(--purple)">${tryoutLabel}</div>` : ''}
             <div class="order-date">${fmtDate(o.createdAt)} · ${o.refCode?`Ref: ${o.refCode}`:'Tanpa referral'}</div>
           </div>
           <div class="order-total">${fmtRp(o.total||0)}</div>
@@ -578,74 +549,276 @@
       { lbl:'Email',          val: user.email },
       { lbl:'WhatsApp',       val: ud.wa||'—' },
       { lbl:'Plan',           val: hasPremiumAll?'Premium':subBabAkses.length?'À la carte':'Belum ada akses' },
+      { lbl:'Try Out',        val: isPremium?'Semua (Premium)':tryOutAkses.length?`${tryOutAkses.length} segmen`:'Belum ada' },
       { lbl:'Kode Referral',  val: ud.referralCode||'—' },
-      { lbl:'Direferral oleh',val: ud.referredBy||'Tidak ada' },
     ].map(r => `<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`).join('');
   }
 
-  // ── RENDER SUBBAB POOL CARD ──
-  function renderSubbabPool(subBabAkses, hasPremiumAll, subBabIconMap) {
+  // ── SUBBAB POOL + TRYOUT CHIPS ──
+  function renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap) {
     const wrap = $('subbabPoolWrap');
-    if (!subBabAkses.length && !hasPremiumAll) { wrap.innerHTML = ''; return; }
+    const hasSubbab  = subBabAkses.length > 0 || hasPremiumAll;
+    const hasTryout  = isPremium || tryOutAkses.length > 0;
+    if (!hasSubbab && !hasTryout) { wrap.innerHTML = ''; return; }
 
     const doneList = getDoneSubbab();
-    const allDone  = subBabAkses.length > 0 && subBabAkses.every(sb => doneList.includes(sb));
 
-    // Group by segmen
+    // Group subbab by segmen
     const segmenMap = {};
     subBabAkses.forEach(sb => {
-      const info = subBabIconMap[sb] || { icon: '📚', segmen: 'Lainnya', mapel: '' };
+      const info = subBabIconMap[sb] || { icon:'📚', segmen:'Lainnya', mapel:'' };
       if (!segmenMap[info.segmen]) segmenMap[info.segmen] = [];
-      segmenMap[info.segmen].push({ sb, icon: info.icon, segmen: info.segmen, mapel: info.mapel });
+      segmenMap[info.segmen].push({ sb, icon:info.icon, segmen:info.segmen, mapel:info.mapel });
     });
-
-    // Fallback
     if (!Object.keys(segmenMap).length && subBabAkses.length) {
-      segmenMap['Sub-Bab Kamu'] = subBabAkses.map(sb => ({ sb, icon: '📚', segmen: '', mapel: '' }));
+      segmenMap['Sub-Bab Kamu'] = subBabAkses.map(sb => ({ sb, icon:'📚', segmen:'', mapel:'' }));
     }
 
-    const segmenGroups = Object.entries(segmenMap).map(([seg, items]) => {
+    const allSubbabDone = subBabAkses.length > 0 && subBabAkses.every(sb => doneList.includes(sb));
+
+    const segmenGroupsHTML = Object.entries(segmenMap).map(([seg, items]) => {
       const chips = items.map(({ sb, icon, segmen, mapel }) => {
         const isDone = doneList.includes(sb);
-        const params = new URLSearchParams({ subbab: sb, segmen, mapel });
+        const params = new URLSearchParams({ subbab:sb, segmen, mapel });
         if (isDone) {
           return `<a href="/latihan.html?${params}" class="subbab-chip done" title="${sb} — sudah dikerjakan">
-            <span class="chip-check">✓</span>
-            <span class="mapel-icon">${icon}</span>
-            <span class="chip-label">${sb}</span>
+            <span class="chip-check">✓</span><span class="mapel-icon">${icon}</span><span>${sb}</span>
           </a>`;
         }
         return `<a href="/latihan.html?${params}" class="subbab-chip active" title="Mulai latihan: ${sb}">
-          <span class="mapel-icon">${icon}</span>
-          <span class="chip-label">${sb}</span>
+          <span class="mapel-icon">${icon}</span><span>${sb}</span>
         </a>`;
       }).join('');
-
-      const groupLabel = Object.keys(segmenMap).length > 1
-        ? `<div class="chips-segmen-title">📚 ${seg}</div>` : '';
-
-      return `<div class="chips-segmen-group">${groupLabel}<div class="subbab-chips">${chips}</div></div>`;
+      const label = Object.keys(segmenMap).length > 1 ? `<div class="chips-segmen-title">📚 ${seg}</div>` : '';
+      return `<div class="chips-segmen-group">${label}<div class="subbab-chips">${chips}</div></div>`;
     }).join('');
 
-    const allDoneBanner = allDone ? `
+    const allDoneBanner = allSubbabDone ? `
       <div class="pool-all-done">
         <span class="done-icon">🎉</span>
         <span class="done-text">Semua sub-bab sudah dikerjakan! Tambah lagi yuk.</span>
         <a href="/pricing.html" class="done-cta">+ Beli Sub-Bab</a>
       </div>` : '';
 
-    wrap.innerHTML = `
-      <div class="subbab-pool-card" data-s style="transition-delay:.03s">
-        <div class="subbab-pool-header">
-          <div>
-            <div class="subbab-pool-title">✅ Sub-Bab yang Sudah Dibeli</div>
-            <div class="subbab-pool-subtitle">Klik sub-bab untuk langsung mulai latihan</div>
+    // Tryout section inside pool card
+    let tryoutSectionHTML = '';
+    if (hasTryout) {
+      const toChips = isPremium
+        ? `<a href="/cbt-engine-v2.html" class="tryout-chip" title="Akses semua segmen (Premium)">
+            <span class="tryout-chip-icon">⭐</span><span>Semua Segmen (Premium)</span>
+          </a>`
+        : tryOutAkses.map(seg =>
+            `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip" title="Mulai Try Out: ${seg}">
+              <span class="tryout-chip-icon">🎯</span><span>${seg}</span>
+            </a>`
+          ).join('');
+      tryoutSectionHTML = `
+        <div class="tryout-pool-section">
+          <div class="tryout-pool-header">
+            <div class="tryout-pool-label">🎯 Try Out / CBT Aktif</div>
+            <a href="/pricing.html?tab=tryout" class="btn-beli-tryout">+ Beli Segmen</a>
           </div>
-          <a href="/pricing.html" class="btn-beli-subbab">+ Beli Sub-Bab</a>
+          <div class="subbab-chips">${toChips}</div>
+        </div>`;
+    }
+
+    // Render card
+    let cardHTML = '';
+    if (hasSubbab) {
+      cardHTML = `
+        <div class="subbab-pool-card" data-s style="transition-delay:.03s">
+          <div class="subbab-pool-header">
+            <div>
+              <div class="subbab-pool-title">✅ Sub-Bab yang Sudah Dibeli</div>
+              <div class="subbab-pool-subtitle">Klik sub-bab untuk langsung mulai latihan</div>
+            </div>
+            <a href="/pricing.html" class="btn-beli-subbab">+ Beli Sub-Bab</a>
+          </div>
+          ${segmenGroupsHTML}
+          ${allDoneBanner}
+          ${tryoutSectionHTML}
+        </div>`;
+    } else if (hasTryout) {
+      // Hanya punya try out, belum beli sub-bab
+      cardHTML = `
+        <div class="subbab-pool-card" data-s style="transition-delay:.03s">
+          <div class="subbab-pool-header">
+            <div>
+              <div class="subbab-pool-title">🎯 Try Out / CBT Aktif</div>
+              <div class="subbab-pool-subtitle">Klik segmen untuk mulai ujian</div>
+            </div>
+            <a href="/pricing.html?tab=tryout" class="btn-beli-subbab" style="background:var(--purple)">+ Beli Segmen</a>
+          </div>
+          <div class="subbab-chips">
+            ${isPremium
+              ? `<a href="/cbt-engine-v2.html" class="tryout-chip"><span class="tryout-chip-icon">⭐</span><span>Semua Segmen (Premium)</span></a>`
+              : tryOutAkses.map(seg =>
+                  `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip">
+                    <span class="tryout-chip-icon">🎯</span><span>${seg}</span>
+                  </a>`
+                ).join('')
+            }
+          </div>
+        </div>`;
+    }
+
+    wrap.innerHTML = cardHTML;
+  }
+
+  // ── MODAL TRYOUT PICKER ──
+  function openTryoutModal(tryOutAkses, isPremium) {
+    const content = $('modalSegmenContent');
+    content.innerHTML = '';
+
+    if (isPremium) {
+      // Premium → tampilkan semua segmen
+      TRYOUT_SEGMEN_ALL.forEach(({ group, items }) => {
+        const title = document.createElement('div');
+        title.className = 'modal-group-title';
+        title.textContent = group;
+        content.appendChild(title);
+        const grid = document.createElement('div');
+        grid.className = 'modal-segmen-grid';
+        items.forEach(id => {
+          const card = document.createElement('div');
+          card.className = 'modal-seg-card';
+          card.innerHTML = `🎯 ${id}`;
+          card.addEventListener('click', () => {
+            window.location.href = `/cbt-engine-v2.html?segmen=${encodeURIComponent(id)}`;
+          });
+          grid.appendChild(card);
+        });
+        content.appendChild(grid);
+      });
+    } else {
+      // Hanya tampil yang dimiliki
+      TRYOUT_SEGMEN_ALL.forEach(({ group, items }) => {
+        const owned = items.filter(id => tryOutAkses.includes(id));
+        if (!owned.length) return;
+        const title = document.createElement('div');
+        title.className = 'modal-group-title';
+        title.textContent = group;
+        content.appendChild(title);
+        const grid = document.createElement('div');
+        grid.className = 'modal-segmen-grid';
+        owned.forEach(id => {
+          const card = document.createElement('div');
+          card.className = 'modal-seg-card owned';
+          card.innerHTML = `✓ ${id}`;
+          card.addEventListener('click', () => {
+            window.location.href = `/cbt-engine-v2.html?segmen=${encodeURIComponent(id)}`;
+            $('modalTryout').classList.remove('open');
+          });
+          grid.appendChild(card);
+        });
+        content.appendChild(grid);
+      });
+    }
+
+    $('modalTryout').classList.add('open');
+  }
+
+  // Close modal on overlay click
+  $('modalTryout').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+
+  // ── DYNAMIC SECTION ──
+  function renderDynamicSection(ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, allSegmen, hasTryout) {
+    const ds = $('dynamicSection');
+    const fmtRp = n => 'Rp ' + Number(n).toLocaleString('id-ID');
+
+    if (hasPremiumAll) {
+      const exp     = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
+      const expStr  = exp ? exp.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+      const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
+      const isExpired = diff <= 0;
+      const segmenListHTML = allSegmen.map(s =>
+        `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
+          <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
+          ${s.icon||'📚'} ${s.id}
+        </div>`
+      ).join('');
+      ds.innerHTML = `
+        <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
+        <div class="premium-banner" data-s style="transition-delay:.22s">
+          <h3>✨ Akses Premium Aktif</h3>
+          <p>Kamu punya akses penuh ke semua soal, sub-bab, dan Try Out tanpa batas.</p>
+          <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
+          ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:8px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
         </div>
-        ${segmenGroups}
-        ${allDoneBanner}
-      </div>`;
+        <div class="two-col" data-s style="transition-delay:.24s">
+          <div class="card" style="margin-bottom:0"><div class="card-title">📚 Segmen Aktif</div><div style="display:flex;flex-direction:column;gap:8px">${segmenListHTML}</div></div>
+          <div class="card" style="margin-bottom:0"><div class="card-title">📊 Statistik Belajar</div><div style="text-align:center;padding:24px 0"><div style="font-size:40px">🚀</div><div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Coming soon…</div></div></div>
+        </div>`;
+
+    } else if (subBabAkses.length) {
+      const tryoutBanner = !hasTryout ? `
+        <div class="tryout-promo-banner" data-s style="transition-delay:.24s">
+          <div>
+            <h3>🎯 Coba Try Out / CBT!</h3>
+            <p>Uji kemampuan dengan ujian berbatas waktu. Nilai langsung muncul setelah submit. Mulai dari Rp 34.900/segmen.</p>
+          </div>
+          <button class="btn-beli-tryout-banner" onclick="location.href='/pricing.html?tab=tryout'">Beli Try Out →</button>
+        </div>` : '';
+      ds.innerHTML = `
+        ${tryoutBanner}
+        <div class="upgrade-cta" data-s style="transition-delay:.26s">
+          <div>
+            <h3>⭐ Upgrade ke Premium Bulanan</h3>
+            <p>Rp 99.900/bln — buka semua sub-bab & Try Out tanpa batas!</p>
+          </div>
+          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Upgrade →</button>
+        </div>`;
+      $('stickyCta').style.display = 'flex';
+
+    } else if (hasTryout) {
+      // Punya try out tapi belum beli sub-bab
+      ds.innerHTML = `
+        <div class="upgrade-cta" data-s style="transition-delay:.22s">
+          <div>
+            <h3>📚 Tambah Latihan Sub-Bab</h3>
+            <p>Mulai dari Rp 7.900/sub-bab — latihan soal kapan saja!</p>
+          </div>
+          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Beli Sub-Bab →</button>
+        </div>`;
+      $('stickyCta').style.display = 'flex';
+
+    } else {
+      // Belum beli apapun
+      $('stickyCta').style.display = 'flex';
+      const pakets = [
+        { nama:'À la carte',    soal:'Per sub-bab pilihan',    harga:7900,  popular:false, url:'/pricing.html?tab=latihan' },
+        { nama:'Try Out / CBT', soal:'Per segmen ujian',       harga:34900, popular:true,  url:'/pricing.html?tab=tryout' },
+        { nama:'Bundling 5',    soal:'5 sub-bab pilihan',      harga:34900, popular:false, url:'/pricing.html' },
+        { nama:'Premium Bulanan',soal:'Semua mapel & sub-bab', harga:99900, popular:false, url:'/pricing.html' },
+      ];
+      ds.innerHTML = `
+        <div class="section-label" data-s style="transition-delay:.2s">📦 Mulai Belajar</div>
+        <div class="card" data-s style="transition-delay:.22s">
+          <div class="card-title">🛒 Pilih Produk Belajar</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;line-height:1.6">Latihan soal per sub-bab, atau uji diri dengan Try Out berbatas waktu.</p>
+          <div class="paket-grid" id="paketGrid"></div>
+        </div>
+        <div class="upgrade-cta" data-s style="transition-delay:.28s">
+          <div><h3>🚀 Mulai Sekarang</h3><p>Latihan Rp 7.900/sub-bab · Try Out Rp 34.900/segmen.</p></div>
+          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Lihat Semua Paket →</button>
+        </div>`;
+      const grid = document.getElementById('paketGrid');
+      if (grid) {
+        pakets.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'paket-item' + (p.popular ? ' popular' : '');
+          div.innerHTML = `
+            ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
+            <div class="paket-nama">${p.nama}</div>
+            <div class="paket-soal">${p.soal}</div>
+            <div class="paket-harga">${fmtRp(p.harga)} <span>${p.nama==='À la carte'?'/ sub-bab':p.nama==='Try Out / CBT'?'/ segmen':'sekali bayar'}</span></div>
+            <button class="btn-beli" onclick="location.href='${p.url}'">${p.nama==='Try Out / CBT'?'Beli Try Out':'Beli Sekarang'}</button>`;
+          grid.appendChild(div);
+        });
+      }
+    }
   }
 
   $('btnLogout').addEventListener('click', async () => {
