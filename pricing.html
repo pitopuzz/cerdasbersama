@@ -383,7 +383,8 @@ function segmenIcon(segmenId) {
 // ── Group classifier untuk paketCBT ──
 function segmenGroup(segmenId) {
   if (segmenId.startsWith('Try Out')) return 'Try Out';
-  if (segmenId.startsWith('CBT')) return 'CBT';
+  if (segmenId.startsWith('CBT') || segmenId.startsWith('Latihan CBT')) return 'CBT';
+  if (segmenId.includes('SNBT') || segmenId.includes('CPNS')) return 'Nasional';
   return 'Lainnya';
 }
 
@@ -424,21 +425,33 @@ let paketCBTLoaded = false;
 const $ = id => document.getElementById(id);
 
 // ── LOAD paketCBT dari Firestore ──
+// Query semua dokumen, filter aktif di client — hindari composite index issue
 async function loadPaketCBT() {
   try {
-    const snap = await getDocs(query(collection(db,'paketCBT'), where('aktif','==',true)));
+    const snap = await getDocs(collection(db,'paketCBT'));
     paketCBTData = {};
     snap.docs.forEach(d => {
       const item = d.data();
+      // Filter: aktif !== false (termasuk dokumen tanpa field aktif)
+      if (item.aktif === false) return;
+      // Filter: hanya segmen yang relevan untuk tryout/CBT
+      // Segmen latihan soal (SD/SMP/SMA) tidak dimasukkan ke sini
+      const s = String(item.segmen || '');
+      const isTryoutSegmen = s.startsWith('Try Out') || s.startsWith('CBT') ||
+                             s.includes('SNBT') || s.includes('CPNS') ||
+                             s.startsWith('Latihan CBT');
+      if (!isTryoutSegmen) return;
+      if (!item.segmen || !item.subKategori) return;
       if (!paketCBTData[item.segmen]) paketCBTData[item.segmen] = [];
       paketCBTData[item.segmen].push({
         subKategori: item.subKategori,
         harga: item.harga || 34900
       });
     });
+    console.log('[paketCBT] loaded:', Object.keys(paketCBTData).length, 'segmen', Object.keys(paketCBTData));
     paketCBTLoaded = true;
   } catch(e) {
-    console.error('loadPaketCBT error:', e);
+    console.error('[paketCBT] load error:', e.message);
     paketCBTData = {};
     paketCBTLoaded = true;
   }
@@ -512,7 +525,17 @@ function goStepTryout(step) {
 function renderSegmenGrid() {
   const grid = $('segmenGrid');
   grid.innerHTML = '';
-  allSegmen.forEach(s => {
+  // Filter: exclude segmen CBT/TryOut — itu masuk tab Try Out, bukan Latihan Soal
+  const latihanSegmen = allSegmen.filter(s => {
+    const id = String(s.id || '');
+    return !id.startsWith('Try Out') && !id.startsWith('CBT') &&
+           !id.startsWith('Latihan CBT') && !id.includes('SNBT') && !id.includes('CPNS');
+  });
+  if (!latihanSegmen.length) {
+    grid.innerHTML = '<div style="color:#b0a89c;font-size:13px;padding:20px">Belum ada segmen latihan tersedia.</div>';
+    return;
+  }
+  latihanSegmen.forEach(s => {
     const aktif = s.aktif === true;
     const div = document.createElement('div');
     div.className = 'segmen-card' + (aktif ? '' : ' coming-soon');
@@ -576,6 +599,7 @@ function renderTryoutSegmen() {
   const groupLabels = {
     'Try Out': '📋 Try Out Sekolah',
     'CBT':     '🏛️ CBT Ujian',
+    'Nasional':'🎓 Ujian Nasional',
     'Lainnya': '📄 Lainnya',
   };
 
