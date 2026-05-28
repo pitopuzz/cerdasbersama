@@ -556,7 +556,7 @@ function goStepTryout(step) {
 // ── LATIHAN: SEGMEN GRID ──
 // Segmen yang masuk tab Latihan Soal: SD, SMP, SMA saja
 // CBT / Try Out / SNBT / CPNS masuk tab Try Out
-const LATIHAN_PREFIXES = ['SD','SMP','SMA'];
+const LATIHAN_PREFIXES = ['Latihan'];
 function isLatihanSegmen(id) {
   return LATIHAN_PREFIXES.some(p => id.startsWith(p));
 }
