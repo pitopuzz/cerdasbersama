@@ -298,7 +298,6 @@
     const params = new URLSearchParams(window.location.search);
     segmenAktif = params.get('segmen') || 'CBT Kelas 6 - MTSN';
     mapelList = SEGMEN_MAPEL[segmenAktif] || [];
-    totalDetik = mapelList.length * MENIT_PER_MAPEL * 60;
 
     $('loadingMsg').textContent = 'Menarik soal dari server...';
 
@@ -316,6 +315,9 @@
       });
       // Soal mapel tidak dikenal → taruh akhir
       rawSoal.filter(s => !mapelList.includes(s.kategori)).forEach(s => flatSoal.push(s));
+
+      // 1 soal = 1 menit
+      totalDetik = flatSoal.length * 60;
 
       $('loadingMsg').textContent = `✓ ${flatSoal.length} soal siap...`;
       await new Promise(r => setTimeout(r, 500));
