@@ -204,7 +204,7 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
       <div class="card">
         <div class="card-title">📤 Upload File Excel</div>
         <div class="alert" id="alertBulk"></div>
-        <div class="warning-box">⚠️ <strong>Hapus Soal Lama + Upload Baru</strong> = reset total soal + reset subBab sesuai Excel baru. <strong>Tambah ke Soal yang Ada</strong> = soal ditambah, subBab tetap di-reset sesuai Excel.</div>
+        <div class="warning-box">⚠️ <strong>Hapus Soal Lama + Upload Baru</strong> = reset total soal + reset subBab & segmen sesuai Excel baru. <strong>Tambah ke Soal yang Ada</strong> = soal ditambah, subBab & segmen di-reset dari Excel.</div>
         <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
           <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this)"/>
           <div class="upload-icon">📊</div>
@@ -267,9 +267,9 @@ main{max-width:900px;margin:0 auto;padding:28px 20px 80px}
         <div class="card-title">📖 Cara Tambah & Update Soal</div>
         <div style="font-size:14px;font-weight:800;margin-bottom:12px;color:#C0392B">Bulk Upload Excel</div>
         <div class="step-row"><div class="step-num">1</div><div class="step-text"><h4>Download template Excel</h4><p>Di tab "Bulk Excel" → klik Download Template.</p></div></div>
-        <div class="step-row"><div class="step-num">2</div><div class="step-text"><h4>Isi soal di Excel</h4><p>Setiap baris = 1 soal. Kolom segmen wajib diisi (contoh: SD Kelas 6).</p></div></div>
-        <div class="step-row"><div class="step-num">3</div><div class="step-text"><h4>Upload & pilih mode</h4><p><strong>Hapus + Upload Baru</strong> = reset total. <strong>Tambah</strong> = soal ditambah, subBab tetap di-reset dari Excel.</p></div></div>
-        <div class="warning-box" style="margin-top:16px">💡 <strong>Tips:</strong> Nama sub-bab harus konsisten. Kolom jawaban diisi A/B/C/D/E (huruf kapital).</div>
+        <div class="step-row"><div class="step-num">2</div><div class="step-text"><h4>Isi soal di Excel</h4><p>Setiap baris = 1 soal. Kolom segmen wajib diisi (contoh: Latihan SD Kelas 6).</p></div></div>
+        <div class="step-row"><div class="step-num">3</div><div class="step-text"><h4>Upload & pilih mode</h4><p><strong>Hapus + Upload Baru</strong> = reset total. <strong>Tambah</strong> = soal ditambah, subBab & segmen tetap di-reset dari Excel.</p></div></div>
+        <div class="warning-box" style="margin-top:16px">💡 <strong>Tips:</strong> Segmen latihan soal awali dengan "Latihan" (cth: Latihan SD Kelas 6). Kolom jawaban diisi A/B/C/D/E.</div>
       </div>
     </div>
   </div>
@@ -354,8 +354,8 @@ window.simpanManual = async function() {
 window.downloadTemplate = function() {
   const ws = XLSX.utils.aoa_to_sheet([
     ['segmen','kategori','subKategori','pertanyaan','opsiA','opsiB','opsiC','opsiD','opsiE','jawaban','pembahasan','tingkat','akses'],
-    ['SD Kelas 6','Matematika','Bilangan Bulat 1','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
-    ['SD Kelas 6','IPAS','Ekosistem 1','Proses pembuatan makanan tumbuhan disebut...','Respirasi','Transpirasi','Fotosintesis','Reproduksi','Evaporasi','C','Fotosintesis adalah proses tumbuhan membuat makanan.','mudah','gratis'],
+    ['Latihan SD Kelas 6','Matematika','Bilangan Bulat 1','Hasil dari 5 + 3 adalah...','6','7','8','9','10','C','5 + 3 = 8','mudah','gratis'],
+    ['Latihan SMP Kelas 7','Matematika','Aljabar Dasar','Nilai x dari 2x + 4 = 10 adalah...','1','2','3','4','5','C','2x = 6, x = 3','mudah','gratis'],
   ]);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Soal');
@@ -416,7 +416,7 @@ async function uploadRows(rows) {
     const r = rows[i];
     try {
       const data = buildSoalObj({
-        segmen: String(r.segmen||'SD Kelas 6').trim(),
+        segmen: String(r.segmen||'Latihan SD Kelas 6').trim(),
         kategori: String(r.kategori||'').trim(),
         subKategori: String(r.subKategori||'').trim(),
         pertanyaan: String(r.pertanyaan||'').trim(),
@@ -436,10 +436,7 @@ async function uploadRows(rows) {
     } catch(err) { gagal++; logBulk(`❌ Soal ${i+1}: ${err.message}`, 'err'); }
   }
   $('totalCount').textContent = allSoal.length;
-
-  // ── SYNC SUBBAB: hapus semua dulu, buat ulang dari Excel ──
   await syncSubBab(rows);
-
   logBulk(`\n✨ Selesai! ${sukses} berhasil, ${gagal} gagal.`, sukses===rows.length?'ok':'info');
   showAlert('alertBulk', sukses===rows.length?'ok':'info', `✅ ${sukses}/${rows.length} soal berhasil diupload!`);
 }
@@ -448,7 +445,7 @@ async function syncSubBab(rows) {
   // 1. Kelompokkan sub-bab dari Excel
   const map = {};
   rows.forEach(r => {
-    const segmen = String(r.segmen||'SD Kelas 6').trim();
+    const segmen = String(r.segmen||'Latihan SD Kelas 6').trim();
     const mapel  = String(r.kategori||'').trim();
     const sub    = String(r.subKategori||'').trim();
     if (!mapel || !sub) return;
@@ -459,7 +456,7 @@ async function syncSubBab(rows) {
 
   logBulk('🔄 Sync subBab...', 'info');
 
-  // 2. Hapus SEMUA dokumen subBab yang ada
+  // 2. Hapus SEMUA dokumen subBab
   try {
     const allSnap = await getDocs(collection(db,'subBab'));
     logBulk(`🗑️ Hapus ${allSnap.size} dokumen subBab lama...`, 'info');
@@ -480,63 +477,55 @@ async function syncSubBab(rows) {
     }
   }
 
-  // 4. ── SYNC SEGMEN (baru) ──
+  // 4. SYNC SEGMEN — hapus semua dulu, buat ulang dari Excel
   logBulk('🗂️ Sync koleksi segmen...', 'info');
 
-  const SEGMEN_DESC = {
-    'SD Kelas 6':'Matematika, IPAS, B.Inggris',
-    'SMP Kelas 7':'Mat, B.Indo, B.Ing, IPA, IPS',
-    'SMP Kelas 8':'Mat, B.Indo, B.Ing, IPA, IPS',
-    'SMP Kelas 9':'Mat, B.Indo, B.Ing, IPA, IPS',
-    'SMA Kelas 10':'Mat, B.Indo, B.Ing, Fisika, dll',
-    'SMA Kelas 11':'Mat, B.Indo, B.Ing, Fisika, dll',
-    'SMA Kelas 12':'Mat, B.Indo, B.Ing, Fisika, dll',
-    'SNBT PTN':'195 menit · 160 soal',
-    'CBT CPNS':'130 menit · 110 soal',
-  };
+  const SEGMEN_ORDER = [
+    'Latihan SD Kelas 6','Latihan SMP Kelas 7','Latihan SMP Kelas 8','Latihan SMP Kelas 9',
+    'Latihan SMA Kelas 10','Latihan SMA Kelas 11','Latihan SMA Kelas 12',
+  ];
 
-  const SEGMEN_ORDER = Object.keys(SEGMEN_DESC);
-
-  // Kumpulkan segmen unik dari Excel beserta mapel-nya
+  // Kumpulkan segmen unik dari Excel
   const segmenMap = {};
   rows.forEach(r => {
-    const segmen = String(r.segmen||'SD Kelas 6').trim();
+    const segmen = String(r.segmen||'').trim();
     const mapel  = String(r.kategori||'').trim();
     if (!segmen || !mapel) return;
     if (!segmenMap[segmen]) segmenMap[segmen] = new Set();
     segmenMap[segmen].add(mapel);
   });
 
+  // Hapus SEMUA segmen lama — sama persis pattern syncSubBab
+  try {
+    const allSegmenSnap = await getDocs(collection(db,'segmen'));
+    logBulk(`🗑️ Hapus ${allSegmenSnap.size} segmen lama...`, 'info');
+    await Promise.all(allSegmenSnap.docs.map(d => deleteDoc(d.ref)));
+    logBulk('✅ Segmen lama terhapus.', 'ok');
+  } catch(e) {
+    logBulk(`⚠️ Gagal hapus segmen lama: ${e.message}`, 'err');
+  }
+
+  // Buat ulang dari Excel
   for (const [segmen, mapelSet] of Object.entries(segmenMap)) {
     try {
-      // Cek apakah dokumen segmen sudah ada
-      const q    = query(collection(db,'segmen'), where('id','==',segmen));
-      const snap = await getDocs(q);
-
       const segData = {
         id:       segmen,
         icon:     '📚',
-        desc:     SEGMEN_DESC[segmen] || [...mapelSet].join(', '),
+        desc:     [...mapelSet].join(', '),
         mapel:    [...mapelSet],
         aktif:    true,
         urutan:   SEGMEN_ORDER.indexOf(segmen) + 1 || 99,
         updatedAt: serverTimestamp(),
       };
-
-      if (snap.empty) {
-        await addDoc(collection(db,'segmen'), segData);
-        logBulk(`✅ Segmen baru dibuat: ${segmen}`, 'ok');
-      } else {
-        await updateDoc(snap.docs[0].ref, segData);
-        logBulk(`✅ Segmen diperbarui: ${segmen}`, 'ok');
-      }
+      await addDoc(collection(db,'segmen'), segData);
+      logBulk(`✅ Segmen dibuat: ${segmen}`, 'ok');
     } catch(e) {
-      logBulk(`⚠️ Gagal sync segmen ${segmen}: ${e.message}`, 'err');
+      logBulk(`⚠️ Gagal buat segmen ${segmen}: ${e.message}`, 'err');
     }
   }
 }
 
-function buildSoalObj({segmen='SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
+function buildSoalObj({segmen='Latihan SD Kelas 6',kategori,subKategori,pertanyaan,opsiA,opsiB,opsiC,opsiD,opsiE,jawaban,pembahasan,tingkat,isPremium,urutan=1}) {
   const paket = isPremium ? ['value','pro','ultimate','premium'] : ['gratis','starter','value','pro','ultimate','premium'];
   return {segmen,kategori,subKategori,pertanyaan,opsi:{A:opsiA,B:opsiB,C:opsiC,D:opsiD,E:opsiE},jawaban,pembahasan,tingkat,isPremium,paket,urutan};
 }
@@ -558,7 +547,7 @@ function renderSoalList() {
         <div class="soal-no">Soal ${i+1}</div>
         <div class="soal-q">${s.pertanyaan}</div>
         <div class="soal-tags">
-          <span class="soal-tag sub">${s.segmen||'SD Kelas 6'}</span>
+          <span class="soal-tag sub">${s.segmen||''}</span>
           <span class="soal-tag kat">${s.kategori}</span>
           <span class="soal-tag sub">${s.subKategori}</span>
           <span class="soal-tag ${s.isPremium?'premium':'free'}">${s.isPremium?'🔒 Premium':'✓ Gratis'}</span>
