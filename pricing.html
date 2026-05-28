@@ -461,7 +461,7 @@ async function loadPaketCBT() {
       if (!item.segmen || !item.subKategori) return;
       const s = String(item.segmen);
       // exclude segmen latihan biasa
-      if (s.startsWith('SD') || s.startsWith('SMP') || s.startsWith('SMA')) return;
+      if (s.includes('Latihan')) return;
       if (!paketCBTData[item.segmen]) paketCBTData[item.segmen] = [];
       paketCBTData[item.segmen].push({ subKategori: item.subKategori, harga: item.harga || 34900 });
     });
