@@ -190,15 +190,14 @@
         💡 <strong>Kolom opsional:</strong> <code>harga</code> (default 34900), urutanSubtes, durasiMenit<br/>
         💡 <strong>Auto-sync:</strong> Setiap soal yang berhasil diupload akan otomatis mendaftarkan/memperbarui entri di koleksi <code>paketCBT</code>.
       </p>
-      <!-- fileInput di luar zone agar tidak trigger double click -->
-      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFile(this)"/>
-      <label for="fileInput" class="upload-zone" id="uploadZone">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFile(this)"/>
         <div class="upload-icon">📊</div>
         <div class="upload-title" id="uploadTitle">Klik atau drag & drop file Excel</div>
         <div class="upload-sub">Format: .xlsx, .xls, atau .csv</div>
-      </label>
+      </div>
       <div id="previewWrap" style="display:none; text-align:right; margin-top:12px;">
-        <button class="btn primary" id="btnUpload" type="button">🚀 Upload <span id="countPreview">0</span> Soal ke Database</button>
+        <button class="btn primary" id="btnUpload" type="button" onclick="uploadSemuaExcel()">🚀 Upload <span id="countPreview">0</span> Soal ke Database</button>
       </div>
       <div class="log" id="bulkLog"></div>
     </div>
@@ -229,29 +228,18 @@
   let parsedRows = [];
 
   // ===== EVENT LISTENERS =====
-  // fileInput change → parse Excel
-  document.getElementById('fileInput').addEventListener('change', function() {
-    handleFile(this);
-  });
-
-  // btnUpload — pakai onclick window agar bisa dipanggil kapan saja
-  window._doUpload = uploadSemuaExcel;
-  document.getElementById('btnUpload').onclick = function(e) {
-    e.preventDefault();
-    window._doUpload();
-  };
-
-  // Drag & drop pada zone (click sudah handled <label for="fileInput">)
+  // Drag & drop saja — click & onchange sudah inline di HTML (sama persis admin-soal.html)
   const zone = document.getElementById('uploadZone');
-  zone.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); zone.classList.add('drag'); });
-  zone.addEventListener('dragleave', e => { e.stopPropagation(); zone.classList.remove('drag'); });
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
   zone.addEventListener('drop', e => {
-    e.preventDefault(); e.stopPropagation(); zone.classList.remove('drag');
+    e.preventDefault(); zone.classList.remove('drag');
     const file = e.dataTransfer.files[0];
-    if (!file) return;
-    const input = document.getElementById('fileInput');
-    try { const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files; } catch(_) {}
-    handleFile({ files: [file] });
+    if (file) {
+      const input = document.getElementById('fileInput');
+      const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+      handleFile(input);
+    }
   });
 
   // ===== KATEGORI MAP =====
@@ -474,7 +462,7 @@
     reader.readAsBinaryString(file);
   }
 
-  async function uploadSemuaExcel() {
+  window.uploadSemuaExcel = async function() {
     if (!confirm('Mulai upload ' + parsedRows.length + ' soal ke database?')) return;
     showBulkLog(); setLoadingBulk(true);
     let sukses = 0, gagal = 0;
