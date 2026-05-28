@@ -432,16 +432,11 @@ async function loadPaketCBT() {
     paketCBTData = {};
     snap.docs.forEach(d => {
       const item = d.data();
-      // Filter: aktif !== false (termasuk dokumen tanpa field aktif)
-      if (item.aktif === false) return;
-      // Filter: hanya segmen yang relevan untuk tryout/CBT
-      // Segmen latihan soal (SD/SMP/SMA) tidak dimasukkan ke sini
-      const s = String(item.segmen || '');
-      const isTryoutSegmen = s.startsWith('Try Out') || s.startsWith('CBT') ||
-                             s.includes('SNBT') || s.includes('CPNS') ||
-                             s.startsWith('Latihan CBT');
-      if (!isTryoutSegmen) return;
-      if (!item.segmen || !item.subKategori) return;
+      if (item.aktif === false) return;       // skip yang eksplisit non-aktif
+      if (!item.segmen || !item.subKategori) return;  // skip data kotor
+      // Filter: exclude segmen latihan biasa (SD/SMP/SMA) — bukan produk tryout
+      const s = String(item.segmen);
+      if (s.startsWith('SD') || s.startsWith('SMP') || s.startsWith('SMA')) return;
       if (!paketCBTData[item.segmen]) paketCBTData[item.segmen] = [];
       paketCBTData[item.segmen].push({
         subKategori: item.subKategori,
@@ -500,6 +495,8 @@ window.switchProductTab = function(tab, el) {
   $('viewPaket').style.display  = 'none';
   $('viewCheckoutTryout').style.display = 'none';
   updateSteps(1);
+  // Re-render tryout setiap kali tab diklik — pastikan data sudah loaded
+  if (tab === 'tryout') renderTryoutSegmen();
 };
 
 // ── STEPS ──
@@ -522,15 +519,17 @@ function goStepTryout(step) {
 }
 
 // ── LATIHAN: SEGMEN GRID ──
+// Segmen yang masuk tab Latihan Soal: SD, SMP, SMA saja
+// CBT / Try Out / SNBT / CPNS masuk tab Try Out
+const LATIHAN_PREFIXES = ['SD','SMP','SMA'];
+function isLatihanSegmen(id) {
+  return LATIHAN_PREFIXES.some(p => id.startsWith(p));
+}
+
 function renderSegmenGrid() {
   const grid = $('segmenGrid');
   grid.innerHTML = '';
-  // Filter: exclude segmen CBT/TryOut — itu masuk tab Try Out, bukan Latihan Soal
-  const latihanSegmen = allSegmen.filter(s => {
-    const id = String(s.id || '');
-    return !id.startsWith('Try Out') && !id.startsWith('CBT') &&
-           !id.startsWith('Latihan CBT') && !id.includes('SNBT') && !id.includes('CPNS');
-  });
+  const latihanSegmen = allSegmen.filter(s => isLatihanSegmen(String(s.id || '')));
   if (!latihanSegmen.length) {
     grid.innerHTML = '<div style="color:#b0a89c;font-size:13px;padding:20px">Belum ada segmen latihan tersedia.</div>';
     return;
