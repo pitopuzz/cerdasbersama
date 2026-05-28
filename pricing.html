@@ -52,7 +52,7 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .segmen-skeleton{background:#f5f3ef;border:2px solid #e8e4dc;border-radius:16px;padding:18px 16px;height:96px;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 
-/* SUB TABS (inside latihan) */
+/* SUB TABS */
 .tabs{display:flex;gap:4px;background:#f5f3ef;padding:4px;border-radius:12px;margin-bottom:24px;width:fit-content;flex-wrap:wrap}
 .tab{padding:9px 18px;border-radius:9px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;background:none;color:#7a7168;transition:all 0.18s;white-space:nowrap}
 .tab.active{background:#fff;color:#C0392B;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
@@ -89,6 +89,12 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .sel-tryout-tag{background:#fff;border:1px solid #e0c8f5;border-radius:50px;padding:4px 12px;font-size:12px;font-weight:700;color:#9b59b6;display:flex;align-items:center;gap:4px;cursor:pointer}
 .sel-tryout-tag:hover{background:#f5ecff}
 
+/* Tryout loading state */
+.tryout-loading{text-align:center;padding:32px;color:#b0a89c;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #e8e4dc;border-top-color:#9b59b6;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tryout-empty{text-align:center;padding:32px 20px;background:#f5f3ef;border-radius:14px;color:#7a7168;font-size:13px;font-weight:600}
+
 /* PKG GRID */
 .pkg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
 .pkg{background:#fff;border:2px solid #e8e4dc;border-radius:16px;padding:18px;cursor:pointer;transition:all 0.18s}
@@ -116,8 +122,7 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 .quota-info{font-size:12px;color:#7a7168;margin-bottom:10px;font-weight:700}
 .quota-info span{color:#C0392B;font-weight:800}
 .subbab-loading{text-align:center;padding:20px;color:#b0a89c;font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
-.spin{display:inline-block;width:14px;height:14px;border:2px solid #e8e4dc;border-top-color:#C0392B;border-radius:50%;animation:spin 0.7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.spin-red{display:inline-block;width:14px;height:14px;border:2px solid #e8e4dc;border-top-color:#C0392B;border-radius:50%;animation:spin 0.7s linear infinite}
 .selected-preview{background:#fff5f5;border:1.5px solid #fdd;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:none}
 .selected-preview-title{font-size:12px;font-weight:800;color:#C0392B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
 .selected-tags{display:flex;gap:6px;flex-wrap:wrap}
@@ -203,7 +208,7 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
         </div>
       </div>
 
-      <!-- TRYOUT: pilih segmen CBT/TO -->
+      <!-- TRYOUT: dynamic dari Firestore paketCBT -->
       <div id="prodTryout" style="display:none">
         <div class="tryout-info-box">
           <h3>🎯 Apa itu Try Out / CBT?</h3>
@@ -214,8 +219,11 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
             <div class="tryout-info-item">🔄 Bisa diulang kapan saja, akses selamanya</div>
           </div>
         </div>
-        <div class="page-sub" style="margin-bottom:16px">Pilih satu atau lebih segmen ujian — <strong>Rp 34.900 / segmen</strong>.</div>
-        <div id="tryoutSegmenGroups" class="tryout-segmen-groups"></div>
+        <!-- Harga ditampilkan dinamis per segmen, bukan hardcoded -->
+        <div class="page-sub" id="tryoutPriceSub" style="margin-bottom:16px">Pilih satu atau lebih segmen ujian.</div>
+        <div id="tryoutSegmenGroups" class="tryout-segmen-groups">
+          <div class="tryout-loading"><span class="spin"></span>Memuat paket Try Out…</div>
+        </div>
         <div class="selected-tryout-preview" id="previewTryout">
           <div class="selected-tryout-title">Segmen dipilih (<span id="countTryout">0</span>)</div>
           <div class="selected-tryout-tags" id="tagsTryout"></div>
@@ -300,7 +308,6 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
       <button class="btn-back" onclick="goStepTryout(1)">← Ubah Pilihan</button>
       <div class="page-title">Konfirmasi Try Out</div>
       <div class="page-sub">Periksa segmen yang dipilih sebelum bayar.</div>
-      <!-- REFERRAL (reuse sama) -->
       <div class="section-label">Kode referral / promo</div>
       <div class="ref-box locked" id="refBoxTo">
         <div class="ref-top">
@@ -347,10 +354,13 @@ nav{background:#fff;border-bottom:1px solid #e8e4dc;display:flex;align-items:cen
 <script type="module">
 import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, arrayUnion, increment, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  collection, query, where, getDocs, addDoc,
+  doc, getDoc, updateDoc, arrayUnion, increment,
+  serverTimestamp, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const HARGA_LATIHAN = { alacarte:7900, bundling:{3:21900,5:34900,10:64900}, bulanan:99900 };
-const HARGA_TRYOUT  = 34900;
 const KOMISI_RATE   = 0.15;
 const MAPEL_ICON = {
   'Matematika':'📐','IPAS':'🔬','B.Inggris':'🔤','Bahasa Indonesia':'📖',
@@ -358,32 +368,24 @@ const MAPEL_ICON = {
   'Fisika':'⚛️','Kimia':'🧪','Biologi':'🌿','Ekonomi':'📊','Sejarah':'📜','Geografi':'🗺️'
 };
 
-// Matriks segmen Try Out
-const TRYOUT_SEGMEN = {
-  'Try Out': [
-    { id:'Try Out STS Kelas 6',  icon:'🏫', desc:'Matematika, IPAS, B.Indonesia, B.Inggris' },
-    { id:'Try Out STS Kelas 7',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out STS Kelas 8',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out STS Kelas 9',  icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out STS Kelas 10', icon:'🏫', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out STS Kelas 11', icon:'🏫', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
-    { id:'Try Out STS Kelas 12', icon:'🏫', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
-    { id:'Try Out SAS Kelas 6',  icon:'📋', desc:'Matematika, IPAS, B.Indonesia, B.Inggris' },
-    { id:'Try Out SAS Kelas 7',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out SAS Kelas 8',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out SAS Kelas 9',  icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out SAS Kelas 10', icon:'📋', desc:'Mat, IPA, IPS, B.Indonesia, B.Inggris' },
-    { id:'Try Out SAS Kelas 11', icon:'📋', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
-    { id:'Try Out SAS Kelas 12', icon:'📋', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, dll' },
-  ],
-  'CBT': [
-    { id:'CBT Kelas 6 - MTSN',    icon:'🕌', desc:'Mat, IPAS, B.Indonesia, B.Inggris, PAI, Peng.Umum' },
-    { id:'CBT Kelas 6 - SMP UMUM',icon:'🏛️', desc:'Mat, IPAS, B.Indonesia, B.Inggris, Peng.Umum' },
-    { id:'CBT Kelas 9 - MA',      icon:'🕌', desc:'Mat, IPAS, B.Indonesia, B.Inggris, PAI, Peng.Umum' },
-    { id:'CBT Kelas 9 - SMA UMUM',icon:'🏛️', desc:'Mat, IPAS, B.Indonesia, B.Inggris, Peng.Umum' },
-    { id:'CBT Kelas 12',          icon:'🎓', desc:'Mat, Fisika, Bio, Kimia, Ekonomi, Sosio, dll' },
-  ],
-};
+// ── Icon mapping untuk segmen tryout ──
+function segmenIcon(segmenId) {
+  if (segmenId.includes('MTSN') || segmenId.includes('- MA')) return '🕌';
+  if (segmenId.includes('SMP') || segmenId.includes('SMA UMUM')) return '🏛️';
+  if (segmenId.startsWith('Try Out STS')) return '🏫';
+  if (segmenId.startsWith('Try Out SAS')) return '📋';
+  if (segmenId.includes('Kelas 12')) return '🎓';
+  if (segmenId.includes('SNBT')) return '🎓';
+  if (segmenId.includes('CPNS')) return '🏢';
+  return '📋';
+}
+
+// ── Group classifier untuk paketCBT ──
+function segmenGroup(segmenId) {
+  if (segmenId.startsWith('Try Out')) return 'Try Out';
+  if (segmenId.startsWith('CBT')) return 'CBT';
+  return 'Lainnya';
+}
 
 const subbabCache = {};
 async function fetchSubbab(segmen, mapel) {
@@ -397,7 +399,7 @@ async function fetchSubbab(segmen, mapel) {
   return subbabCache[key];
 }
 
-let currentProductTab = 'latihan'; // 'latihan' | 'tryout'
+let currentProductTab = 'latihan';
 let selectedSegmen = '', allSegmen = [];
 let curMapelAlacarte = '', curMapelBundling = '';
 let selAlacarte = [], selBundling = [];
@@ -409,16 +411,43 @@ let discPct = 50, komisiPct = 15;
 let currentUser = null, currentUserData = null;
 
 // Try Out state
-let selTryout = [];       // array of segmen id strings
+// selTryout: array of { id, harga } objects
+let selTryout = [];
 let discAppliedTo = false, validRefCodeTo = '';
 let isPromoCodeTo = false, promoDataTo = null;
 let discPctTo = 50, komisiPctTo = 15;
 
+// paketCBT data dari Firestore: { segmen → [{ subKategori, harga, aktif }] }
+let paketCBTData = {}; // keyed by segmen
+let paketCBTLoaded = false;
+
 const $ = id => document.getElementById(id);
+
+// ── LOAD paketCBT dari Firestore ──
+async function loadPaketCBT() {
+  try {
+    const snap = await getDocs(query(collection(db,'paketCBT'), where('aktif','==',true)));
+    paketCBTData = {};
+    snap.docs.forEach(d => {
+      const item = d.data();
+      if (!paketCBTData[item.segmen]) paketCBTData[item.segmen] = [];
+      paketCBTData[item.segmen].push({
+        subKategori: item.subKategori,
+        harga: item.harga || 34900
+      });
+    });
+    paketCBTLoaded = true;
+  } catch(e) {
+    console.error('loadPaketCBT error:', e);
+    paketCBTData = {};
+    paketCBTLoaded = true;
+  }
+}
 
 onAuthStateChanged(auth, async user => {
   if (!user) { window.location.href = '/register.html'; return; }
   currentUser = user;
+
   const [snap, segmenSnap] = await Promise.all([
     getDoc(doc(db,'users',user.uid)),
     getDocs(query(collection(db,'segmen'), orderBy('urutan','asc'))),
@@ -431,18 +460,18 @@ onAuthStateChanged(auth, async user => {
     validRefCode = currentUserData.referredBy; discApplied = true;
   }
 
+  // Load paketCBT parallel
+  await loadPaketCBT();
+
   $('loadingView').style.display = 'none';
   $('mainView').style.display = 'block';
   renderSegmenGrid();
   renderTryoutSegmen();
   updateOrder();
 
-  // URL params
   const params = new URLSearchParams(window.location.search);
   const initTab = params.get('tab') || 'latihan';
-  if (initTab === 'tryout') {
-    switchProductTab('tryout', $('ptTryout'));
-  }
+  if (initTab === 'tryout') switchProductTab('tryout', $('ptTryout'));
 
   if (discApplied && validRefCode) setTimeout(() => applyRefUI(50,'✅ Kode referral aktif! Diskon 50%'), 500);
 });
@@ -454,7 +483,6 @@ window.switchProductTab = function(tab, el) {
   el.classList.add('active');
   $('prodLatihan').style.display = tab === 'latihan' ? 'block' : 'none';
   $('prodTryout').style.display  = tab === 'tryout'  ? 'block' : 'none';
-  // Reset step ke 1
   $('viewProduk').style.display = 'block';
   $('viewPaket').style.display  = 'none';
   $('viewCheckoutTryout').style.display = 'none';
@@ -475,8 +503,8 @@ function goStep(step) {
 }
 window.goStep = goStep;
 function goStepTryout(step) {
-  $('viewProduk').style.display          = step === 1 ? 'block' : 'none';
-  $('viewCheckoutTryout').style.display  = step === 2 ? 'block' : 'none';
+  $('viewProduk').style.display         = step === 1 ? 'block' : 'none';
+  $('viewCheckoutTryout').style.display = step === 2 ? 'block' : 'none';
   updateSteps(step); window.scrollTo(0,0);
 }
 
@@ -498,32 +526,86 @@ function renderSegmenGrid() {
   });
 }
 
-// ── TRYOUT: SEGMEN GRID ──
+// ── TRYOUT: DYNAMIC RENDER dari paketCBT ──
 function renderTryoutSegmen() {
   const container = $('tryoutSegmenGroups');
-  container.innerHTML = '';
-  const ownedTryout = currentUserData?.tryOutAkses || [];
-  const isPremium = currentUserData?.plan === 'premium';
 
-  Object.entries(TRYOUT_SEGMEN).forEach(([group, items]) => {
+  if (!paketCBTLoaded) {
+    container.innerHTML = '<div class="tryout-loading"><span class="spin"></span>Memuat paket Try Out…</div>';
+    return;
+  }
+
+  // Kumpulkan semua segmen unik dari paketCBT
+  const allPaketSegmen = Object.keys(paketCBTData);
+
+  if (!allPaketSegmen.length) {
+    container.innerHTML = '<div class="tryout-empty">Belum ada paket Try Out tersedia. Silakan cek kembali nanti.</div>';
+    return;
+  }
+
+  // Derive harga per segmen = harga minimum dari subKategori di segmen itu
+  // (biasanya semua sama, tapi kalau beda, tampilkan min)
+  function segmenHarga(segmenId) {
+    const items = paketCBTData[segmenId] || [];
+    if (!items.length) return 34900;
+    return Math.min(...items.map(i => i.harga));
+  }
+
+  // Update subtitle harga
+  const prices = allPaketSegmen.map(s => segmenHarga(s));
+  const minHarga = Math.min(...prices);
+  const maxHarga = Math.max(...prices);
+  const hargaLabel = minHarga === maxHarga
+    ? `Rp ${minHarga.toLocaleString('id')} / segmen`
+    : `Rp ${minHarga.toLocaleString('id')} – ${maxHarga.toLocaleString('id')} / segmen`;
+  $('tryoutPriceSub').innerHTML = `Pilih satu atau lebih segmen ujian — <strong>${hargaLabel}</strong>.`;
+
+  // Group segmen by prefix
+  const groups = {};
+  allPaketSegmen.sort().forEach(segmenId => {
+    const g = segmenGroup(segmenId);
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(segmenId);
+  });
+
+  const ownedTryout = currentUserData?.tryOutAkses || [];
+  const isPremium   = currentUserData?.plan === 'premium';
+
+  container.innerHTML = '';
+
+  const groupLabels = {
+    'Try Out': '📋 Try Out Sekolah',
+    'CBT':     '🏛️ CBT Ujian',
+    'Lainnya': '📄 Lainnya',
+  };
+
+  Object.entries(groups).forEach(([group, segmenList]) => {
     const groupDiv = document.createElement('div');
-    groupDiv.innerHTML = `<div class="tryout-group-title">${group === 'Try Out' ? '📋 Try Out Sekolah' : '🏛️ CBT Ujian'}</div>`;
+    const label = groupLabels[group] || group;
+    groupDiv.innerHTML = `<div class="tryout-group-title">${label}</div>`;
     const grid = document.createElement('div');
     grid.className = 'tryout-segmen-grid';
 
-    items.forEach(item => {
-      const isOwned = isPremium || ownedTryout.includes(item.id);
+    segmenList.forEach(segmenId => {
+      const harga   = segmenHarga(segmenId);
+      const isOwned = isPremium || ownedTryout.includes(segmenId);
+      const subItems = paketCBTData[segmenId] || [];
+      // Tampilkan ringkasan subKategori sebagai desc
+      const descText = subItems.map(i => i.subKategori).slice(0, 4).join(', ')
+        + (subItems.length > 4 ? ', …' : '');
+
       const card = document.createElement('div');
       card.className = 'tryout-card' + (isOwned ? ' owned' : '');
-      card.id = `tryout_card_${item.id.replace(/\s/g,'_')}`;
+      card.id = `tryout_card_${segmenId.replace(/[\s\/\-]/g,'_')}`;
       card.innerHTML = `
         ${isOwned ? '<div class="owned-badge">✓ Dimiliki</div>' : '<div class="check-badge">✓</div>'}
-        <div class="tryout-card-icon">${item.icon}</div>
-        <div class="tryout-card-name">${item.id}</div>
-        <div class="tryout-card-mapel">${item.desc}</div>
-        <div class="tryout-card-price">${isOwned ? '✅ Akses aktif' : 'Rp 34.900'}</div>`;
+        <div class="tryout-card-icon">${segmenIcon(segmenId)}</div>
+        <div class="tryout-card-name">${segmenId}</div>
+        <div class="tryout-card-mapel">${descText || '—'}</div>
+        <div class="tryout-card-price">${isOwned ? '✅ Akses aktif' : 'Rp ' + harga.toLocaleString('id')}</div>`;
+
       if (!isOwned) {
-        card.addEventListener('click', () => toggleTryout(item.id, card));
+        card.addEventListener('click', () => toggleTryout(segmenId, harga, card));
       }
       grid.appendChild(card);
     });
@@ -533,13 +615,13 @@ function renderTryoutSegmen() {
   });
 }
 
-function toggleTryout(id, card) {
-  const idx = selTryout.indexOf(id);
+function toggleTryout(id, harga, card) {
+  const idx = selTryout.findIndex(s => s.id === id);
   if (idx > -1) {
     selTryout.splice(idx, 1);
     card.classList.remove('selected');
   } else {
-    selTryout.push(id);
+    selTryout.push({ id, harga });
     card.classList.add('selected');
   }
   updateTryoutPreview();
@@ -551,15 +633,16 @@ function updateTryoutPreview() {
   if (!selTryout.length) { preview.style.display = 'none'; return; }
   preview.style.display = 'block';
   $('countTryout').textContent = selTryout.length;
-  $('tagsTryout').innerHTML = selTryout.map(id =>
-    `<div class="sel-tryout-tag" onclick="removeTryout('${id}')">🎯 ${id} ✕</div>`
+  $('tagsTryout').innerHTML = selTryout.map(s =>
+    `<div class="sel-tryout-tag" onclick="removeTryout('${s.id}')">🎯 ${s.id} ✕</div>`
   ).join('');
 }
 
 window.removeTryout = function(id) {
-  const idx = selTryout.indexOf(id);
+  const idx = selTryout.findIndex(s => s.id === id);
   if (idx > -1) selTryout.splice(idx, 1);
-  const card = document.getElementById(`tryout_card_${id.replace(/\s/g,'_')}`);
+  const cardId = `tryout_card_${id.replace(/[\s\/\-]/g,'_')}`;
+  const card = document.getElementById(cardId);
   if (card) card.classList.remove('selected');
   updateTryoutPreview();
   $('btnLanjutTryout').disabled = selTryout.length === 0;
@@ -603,7 +686,7 @@ async function renderBabs(tab) {
   const mapel  = tab === 'alacarte' ? curMapelAlacarte : curMapelBundling;
   const sel    = tab === 'alacarte' ? selAlacarte : selBundling;
   const listEl = $(tab === 'alacarte' ? 'babListAlacarte' : 'babListBundling');
-  listEl.innerHTML = '<div class="subbab-loading"><span class="spin"></span>Memuat sub-bab…</div>';
+  listEl.innerHTML = `<div class="subbab-loading"><span class="spin-red"></span>Memuat sub-bab…</div>`;
   const subbabs = await fetchSubbab(selectedSegmen, mapel);
   listEl.innerHTML = '';
   if (!subbabs.length) {
@@ -774,21 +857,21 @@ function updateOrder() {
   if (curPkg.type === 'alacarte' && selAlacarte.length) subbabLabel = selAlacarte.map(s=>s.subbab).join(', ');
   else if (curPkg.type === 'bundling' && selBundling.length) subbabLabel = selBundling.map(s=>s.subbab).join(', ');
   else if (curPkg.type === 'bulanan') subbabLabel = 'Semua sub-bab';
-  $('orderName').textContent  = curPkg.name;
+  $('orderName').textContent   = curPkg.name;
   $('orderSubbab').textContent = subbabLabel;
-  $('orderBase').textContent  = 'Rp ' + base.toLocaleString('id');
-  $('discRow').style.display  = disc > 0 ? 'flex' : 'none';
-  $('discAmt').textContent    = `-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
-  $('totalAmt').textContent   = 'Rp ' + total.toLocaleString('id');
+  $('orderBase').textContent   = 'Rp ' + base.toLocaleString('id');
+  $('discRow').style.display   = disc > 0 ? 'flex' : 'none';
+  $('discAmt').textContent     = `-Rp ${disc.toLocaleString('id')} (${discPct}%)`;
+  $('totalAmt').textContent    = 'Rp ' + total.toLocaleString('id');
 }
 
-// ── UPDATE ORDER TRYOUT ──
+// ── UPDATE ORDER TRYOUT (harga per item dari Firestore) ──
 function updateOrderTryout() {
-  const base  = selTryout.length * HARGA_TRYOUT;
+  const base  = selTryout.reduce((sum, s) => sum + s.harga, 0);
   const disc  = discAppliedTo ? Math.round(base * (discPctTo/100)) : 0;
   const total = base - disc;
   $('orderNameTo').textContent   = `Try Out / CBT (${selTryout.length} segmen)`;
-  $('orderSubbabTo').textContent = selTryout.join(', ');
+  $('orderSubbabTo').textContent = selTryout.map(s => s.id).join(', ');
   $('orderBaseTo').textContent   = 'Rp ' + base.toLocaleString('id');
   $('discRowTo').style.display   = disc > 0 ? 'flex' : 'none';
   $('discAmtTo').textContent     = `-Rp ${disc.toLocaleString('id')} (${discPctTo}%)`;
@@ -801,9 +884,9 @@ window.doPay = async function() {
   if (curPkg.type === 'alacarte' && !selAlacarte.length) { showWarn('warnMsg','⚠️ Pilih minimal 1 sub-bab.'); return; }
   if (curPkg.type === 'bundling' && !selBundling.length) { showWarn('warnMsg','⚠️ Pilih sub-bab sesuai paket bundling.'); return; }
   await processPayment({
-    btn, warnId:'warnMsg',
+    btn, warnId: 'warnMsg',
     orderName: curPkg.name,
-    itemName: `${selectedSegmen} - ${curPkg.name}`,
+    itemName:  `${selectedSegmen} - ${curPkg.name}`,
     base: curPkg.price,
     disc: discApplied ? Math.round(curPkg.price*(discPct/100)) : 0,
     discPct, komisiPct,
@@ -820,11 +903,11 @@ window.doPay = async function() {
 window.doPayTryout = async function() {
   const btn = $('btnPayTo'); $('warnMsgTo').style.display = 'none';
   if (!selTryout.length) { showWarn('warnMsgTo','⚠️ Pilih minimal 1 segmen.'); return; }
-  const base = selTryout.length * HARGA_TRYOUT;
+  const base = selTryout.reduce((sum, s) => sum + s.harga, 0);
   await processPayment({
-    btn, warnId:'warnMsgTo',
+    btn, warnId: 'warnMsgTo',
     orderName: `Try Out / CBT (${selTryout.length} segmen)`,
-    itemName: `Try Out / CBT: ${selTryout.join(', ')}`,
+    itemName:  `Try Out / CBT: ${selTryout.map(s=>s.id).join(', ')}`,
     base,
     disc: discAppliedTo ? Math.round(base*(discPctTo/100)) : 0,
     discPct: discPctTo, komisiPct: komisiPctTo,
@@ -832,7 +915,7 @@ window.doPayTryout = async function() {
     isPromo: isPromoCodeTo, promoD: promoDataTo,
     tipe: 'tryout',
     subBabDibeli: [],
-    segmen: selTryout.join(', '),
+    segmen: selTryout.map(s=>s.id).join(', '),
     isTryout: true,
   });
 };
@@ -844,28 +927,29 @@ async function processPayment({ btn, warnId, orderName, itemName, base, disc, di
   const komisi = Math.round(total * (komisiPct/100));
   const orderId = 'CB-' + Date.now() + '-' + currentUser.uid.slice(0,6);
   btn.disabled = true; btn.textContent = 'Memproses...';
+  const selTryoutIds = selTryout.map(s => s.id);
   try {
     await addDoc(collection(db,'orders'), {
       uid: currentUser.uid, email: currentUser.email,
       segmen, paket: orderName, tipe,
       subBabDibeli,
-      tryOutSegmen: isTryout ? selTryout : [],
+      tryOutSegmen: isTryout ? selTryoutIds : [],
       hargaBase: base, diskon: disc, discPct, total,
       refCode, komisi, komisiPct, isPromoCode: isPromo,
       midtransOrderId: orderId, status:'pending', createdAt: serverTimestamp()
     });
 
     if (!isPromo && refCode && (isTryout ? discAppliedTo : discApplied) && !currentUserData?.hasUsedReferral) {
-      await updateDoc(doc(db,'users',currentUser.uid), {hasUsedReferral:true, referredBy:refCode});
+      await updateDoc(doc(db,'users',currentUser.uid), { hasUsedReferral:true, referredBy:refCode });
       if (currentUserData) currentUserData.hasUsedReferral = true;
     }
     if (isPromo && promoD?.docId) {
-      await updateDoc(doc(db,'promoCodes',promoD.docId), {usedCount:(promoD.usedCount||0)+1});
+      await updateDoc(doc(db,'promoCodes',promoD.docId), { usedCount:(promoD.usedCount||0)+1 });
     }
 
     const res  = await fetch('/api/create-transaction', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({orderId, amount:total, customerEmail:currentUser.email, customerName:currentUserData?.nama||'User', itemName})
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ orderId, amount:total, customerEmail:currentUser.email, customerName:currentUserData?.nama||'User', itemName })
     });
     const data = await res.json();
     if (!data.token) throw new Error(JSON.stringify(data.error));
@@ -873,26 +957,24 @@ async function processPayment({ btn, warnId, orderName, itemName, base, disc, di
     window.snap.pay(data.token, {
       onSuccess: async function() {
         if (isTryout) {
-          // Update tryOutAkses
-          await updateDoc(doc(db,'users',currentUser.uid), {tryOutAkses: arrayUnion(...selTryout)});
+          await updateDoc(doc(db,'users',currentUser.uid), { tryOutAkses: arrayUnion(...selTryoutIds) });
         } else if (tipe === 'bulanan') {
           const exp = new Date(); exp.setMonth(exp.getMonth()+1);
-          await updateDoc(doc(db,'users',currentUser.uid), {plan:'premium', expiredAt:exp, subBabAkses:['__premium__']});
+          await updateDoc(doc(db,'users',currentUser.uid), { plan:'premium', expiredAt:exp, subBabAkses:['__premium__'] });
         } else {
-          await updateDoc(doc(db,'users',currentUser.uid), {plan:'alacarte', subBabAkses:arrayUnion(...subBabDibeli)});
+          await updateDoc(doc(db,'users',currentUser.uid), { plan:'alacarte', subBabAkses:arrayUnion(...subBabDibeli) });
         }
-        // Komisi
         if (refCode && komisi > 0) {
           if (isPromo && promoD?.ownerUid) {
-            await updateDoc(doc(db,'users',promoD.ownerUid), {komisiTotal:increment(komisi)});
+            await updateDoc(doc(db,'users',promoD.ownerUid), { komisiTotal:increment(komisi) });
           } else if (!isPromo) {
             const rs = await getDocs(query(collection(db,'users'), where('referralCode','==',refCode)));
-            if (!rs.empty) await updateDoc(doc(db,'users',rs.docs[0].id), {komisiTotal:increment(komisi)});
+            if (!rs.empty) await updateDoc(doc(db,'users',rs.docs[0].id), { komisiTotal:increment(komisi) });
           }
         }
         $('successTitle').textContent  = isTryout ? 'Akses Try Out sudah aktif!' : 'Akses sub-bab sudah aktif.';
-        $('successSubbab').textContent = isTryout ? `Segmen aktif: ${selTryout.join(', ')}` : `Sub-bab aktif: ${subBabDibeli.join(', ')}`;
-        $('successCta').href = isTryout ? `/cbt-engine-v2.html?segmen=${encodeURIComponent(selTryout[0])}` : '/dashboard.html';
+        $('successSubbab').textContent = isTryout ? `Segmen aktif: ${selTryoutIds.join(', ')}` : `Sub-bab aktif: ${subBabDibeli.join(', ')}`;
+        $('successCta').href        = isTryout ? `/cbt-engine-v2.html?segmen=${encodeURIComponent(selTryoutIds[0])}` : '/dashboard.html';
         $('successCta').textContent = isTryout ? 'Mulai Try Out Sekarang →' : 'Ke Dashboard →';
         $('mainView').style.display = 'none'; $('successView').style.display = 'block';
         startCountdown();
