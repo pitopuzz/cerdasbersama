@@ -194,9 +194,9 @@
         <div class="hasil-stat red"><div class="val" id="statSalah">0</div><div class="lbl">Salah</div></div>
         <div class="hasil-stat"><div class="val" id="statTotal">0</div><div class="lbl">Total</div></div>
       </div>
-      <button class="btn-hasil pdf" onclick="downloadPDF()">📄 Download PDF Hasil & Pembahasan</button>
-      <button class="btn-hasil primary" onclick="ulangiLatihan()">🔄 Ulangi Sub-Bab Ini</button>
-      <button class="btn-hasil secondary" id="btnBackFromHasil">← Kembali</button>
+      <button class="btn-hasil secondary" onclick="ulangiLatihan()">🔄 Ulangi</button>
+      <button class="btn-hasil primary" onclick="selesaiLatihan()">✅ Selesai</button>
+      <button class="btn-hasil pdf" onclick="downloadPDF()">📄 Download PDF</button>
     </div>
     <div id="reviewSection"></div>
   </div>
@@ -446,10 +446,7 @@
   // ── SCREEN 5: HASIL ──
   function showHasil(){
     const total=jawaban.length,benar=jawaban.filter(j=>j.benar).length,salah=total-benar,skor=Math.round((benar/total)*100);
-
-    // Tandai sub-bab sebagai done kalau selesai
-    markSubbabDone(currentSubbab);
-
+    // TIDAK auto mark done — tunggu user klik Selesai
     let emoji='😢',title='Terus Semangat!';
     if(skor>=80){emoji='🎉';title='Luar Biasa!';}
     else if(skor>=60){emoji='👍';title='Bagus!';}
@@ -470,7 +467,17 @@
     review.appendChild(reviewList);goToScreen('screenHasil');
   }
 
+  // Selesai → mark done → redirect ke pool
+  window.selesaiLatihan=function(){
+    markSubbabDone(currentSubbab);
+    window.location.href='/pool.html';
+  };
+
+  // Ulangi → confirm dulu karena sudah di halaman hasil
   window.ulangiLatihan=function(){
+    const konfirm=confirm('Kamu sudah menyelesaikan semua soal ini. Mau mengulang dari awal?');
+    if(!konfirm) return;
+    // chip tetap abu2 (tidak di-unmark), langsung ulang soal
     let soalList=allSoal.filter(s=>s.subKategori===currentSubbab);
     if(currentSegmen) soalList=soalList.filter(s=>s.segmen===currentSegmen||!s.segmen);
     startLatihan(currentSubbab,soalList);
