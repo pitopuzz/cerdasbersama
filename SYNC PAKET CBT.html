@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sync paketCBT — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#faf8f5;color:#1a1714;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px}
+.wrap{width:100%;max-width:640px}
+.card{background:#fff;border:1px solid #e8e4dc;border-radius:20px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-bottom:16px}
+h1{font-size:20px;font-weight:900;margin-bottom:6px;color:#1a1714}
+.sub{font-size:13px;color:#7a7168;margin-bottom:24px;font-weight:500;line-height:1.6}
+.info-box{background:#fff8e6;border:1.5px solid #f5d06a;border-radius:12px;padding:14px 16px;font-size:13px;color:#8a5e00;font-weight:600;margin-bottom:20px;line-height:1.6}
+.btn{width:100%;padding:14px;border-radius:50px;border:none;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;background:#C0392B;color:#fff;box-shadow:0 4px 14px rgba(192,57,43,0.2);transition:all 0.18s}
+.btn:hover{background:#a93226;transform:translateY(-1px)}
+.btn:disabled{background:#ccc;cursor:not-allowed;transform:none;box-shadow:none}
+.log{background:#1a1714;border-radius:12px;padding:16px;font-family:monospace;font-size:12px;color:#eef0f5;max-height:400px;overflow-y:auto;display:none;margin-top:16px;line-height:1.7}
+.log-line.ok{color:#3ecf8e}
+.log-line.err{color:#f76060}
+.log-line.info{color:#f5c842}
+.log-line.dim{color:#7a7168}
+.result{border-radius:12px;padding:14px 16px;font-size:14px;font-weight:700;margin-top:16px;display:none;text-align:center}
+.result.ok{background:#edfaf3;border:1.5px solid #b8e6d0;color:#1a7a4a}
+.result.err{background:#fef2f2;border:1.5px solid #fdd;color:#C0392B}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>🔄 Sync paketCBT dari Soal</h1>
+    <p class="sub">Tool ini membaca semua dokumen di collection <code>soal</code>, lalu generate/update collection <code>paketCBT</code> secara otomatis berdasarkan kombinasi <strong>segmen + subKategori</strong> yang ada.</p>
+    <div class="info-box">
+      ⚠️ Tool ini <strong>tidak menghapus</strong> paketCBT yang sudah ada — hanya menambah/update (<code>merge: true</code>).<br/>
+      Harga default: <strong>Rp 34.900</strong> per segmen (bisa diubah manual di Firestore setelahnya).
+    </div>
+    <button class="btn" id="btnSync" onclick="mulaiSync()">🚀 Mulai Sync paketCBT</button>
+    <div class="log" id="log"></div>
+    <div class="result" id="result"></div>
+  </div>
+</div>
+
+<script type="module">
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { collection, getDocs, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const ADMIN_EMAILS = ['bersamacerdas1@gmail.com','test2@gmail.com'];
+const $ = id => document.getElementById(id);
+
+onAuthStateChanged(auth, user => {
+  if (!user || !ADMIN_EMAILS.includes(user.email)) {
+    document.body.innerHTML = `<div style="text-align:center;padding:4rem;font-family:sans-serif"><h2 style="color:#C0392B">🔒 Akses Ditolak</h2><p style="margin-top:8px;color:#888">Halaman ini hanya untuk admin.</p></div>`;
+  }
+});
+
+function log(msg, type = 'dim') {
+  const logEl = $('log');
+  logEl.style.display = 'block';
+  const line = document.createElement('div');
+  line.className = 'log-line ' + type;
+  line.textContent = msg;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function makePaketDocId(segmen, subKategori) {
+  return (segmen + '__' + subKategori)
+    .replace(/[\/\.#$\[\]\s]/g, '_')
+    .slice(0, 200);
+}
+
+window.mulaiSync = async function() {
+  const btn = $('btnSync');
+  btn.disabled = true; btn.textContent = '⏳ Memproses...';
+  $('log').style.display = 'block'; $('log').innerHTML = '';
+  $('result').style.display = 'none';
+
+  try {
+    // 1. Baca semua soal
+    log('📖 Membaca collection soal...', 'info');
+    const soalSnap = await getDocs(collection(db, 'soal'));
+    log(`✅ Ditemukan ${soalSnap.size} soal.`, 'ok');
+
+    if (soalSnap.empty) {
+      log('⚠️ Tidak ada soal di database.', 'err');
+      showResult('err', '⚠️ Collection soal kosong.');
+      btn.disabled = false; btn.textContent = '🚀 Mulai Sync paketCBT';
+      return;
+    }
+
+    // 2. Kelompokkan per segmen + subKategori
+    // paketMap: { docId → { segmen, subKategori, harga } }
+    const paketMap = {};
+    let skipped = 0;
+
+    soalSnap.docs.forEach(d => {
+      const data = d.data();
+      const segmen      = String(data.segmen      || '').trim();
+      const subKategori = String(data.subKategori || '').trim();
+
+      if (!segmen || !subKategori) { skipped++; return; }
+
+      const docId = makePaketDocId(segmen, subKategori);
+      if (!paketMap[docId]) {
+        paketMap[docId] = { segmen, subKategori, harga: 34900 };
+      }
+    });
+
+    const entries = Object.entries(paketMap);
+    log(`📦 ${entries.length} kombinasi segmen+subKategori unik ditemukan. (${skipped} soal dilewati karena field kosong)`, 'info');
+    log('', 'dim');
+
+    // 3. Upsert ke paketCBT
+    let sukses = 0, gagal = 0;
+    for (const [docId, paket] of entries) {
+      try {
+        await setDoc(doc(db, 'paketCBT', docId), {
+          segmen:      paket.segmen,
+          subKategori: paket.subKategori,
+          harga:       paket.harga,
+          aktif:       true,
+          updatedAt:   serverTimestamp(),
+        }, { merge: true });
+        sukses++;
+        log(`✅ ${paket.segmen} / ${paket.subKategori}`, 'ok');
+      } catch(e) {
+        gagal++;
+        log(`❌ Gagal: ${paket.segmen} / ${paket.subKategori} — ${e.message}`, 'err');
+      }
+    }
+
+    log('', 'dim');
+    log(`✨ Selesai! ${sukses} paket berhasil, ${gagal} gagal.`, sukses === entries.length ? 'ok' : 'info');
+
+    showResult(
+      gagal === 0 ? 'ok' : 'err',
+      `✅ ${sukses} entri paketCBT berhasil di-sync! Refresh halaman pricing untuk melihat hasilnya.`
+    );
+
+  } catch(e) {
+    log('❌ Error: ' + e.message, 'err');
+    showResult('err', '❌ Gagal: ' + e.message);
+  }
+
+  btn.disabled = false; btn.textContent = '🔄 Sync Ulang';
+};
+
+function showResult(type, msg) {
+  const el = $('result');
+  el.textContent = msg; el.className = 'result ' + type; el.style.display = 'block';
+}
+</script>
+</body>
+</html>
