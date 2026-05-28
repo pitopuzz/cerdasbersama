@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CBT — CerdasBersama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #faf8f5; --white: #fff; --border: #e8e4dc;
+      --text: #1a1714; --muted: #7a7168; --muted2: #b0a89c;
+      --red: #C0392B; --red2: #a93226; --red-bg: #fff5f5; --red-border: #fdd;
+      --gold: #e8970a; --gold-bg: #fff8e6; --gold-border: #f5d06a;
+      --green: #1a7a4a; --green-bg: #edfaf3; --green-border: #b8e6d0;
+      --blue: #1a5fa8; --blue-bg: #eff6ff; --blue-border: #bfdbfe;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 4px 16px rgba(0,0,0,0.08);
+      --sidebar-w: 280px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 999; }
+    .spinner { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 56px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    .nav-logo { font-weight: 800; font-size: 16px; color: var(--red); }
+    .nav-logo span { color: var(--text); }
+    .nav-center { display: flex; flex-direction: column; align-items: center; }
+    .nav-exam-name { font-size: 13px; font-weight: 800; }
+    .nav-mapel-cur { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .timer-box { display: flex; align-items: center; gap: 8px; background: var(--red-bg); border: 1.5px solid var(--red-border); border-radius: 10px; padding: 6px 14px; }
+    .timer-val { font-size: 18px; font-weight: 900; color: var(--red); font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+    .timer-box.warning { background: var(--gold-bg); border-color: var(--gold-border); }
+    .timer-box.warning .timer-val { color: var(--gold); }
+    .timer-box.danger { animation: timerPulse 1s ease-in-out infinite; }
+    @keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+    .exam-layout { display: flex; min-height: calc(100vh - 56px); }
+
+    .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--white); border-right: 1px solid var(--border); position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted2); padding: 4px 8px; margin-top: 4px; }
+    .mapel-block { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg); }
+    .mapel-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; cursor: pointer; transition: background 0.15s; gap: 8px; }
+    .mapel-header:hover { background: var(--red-bg); }
+    .mapel-header.active { background: var(--red-bg); }
+    .mapel-name { font-size: 12px; font-weight: 800; flex: 1; }
+    .mapel-progress { font-size: 11px; font-weight: 700; color: var(--muted); background: var(--white); border: 1px solid var(--border); border-radius: 50px; padding: 2px 8px; white-space: nowrap; }
+    .mapel-progress.done { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+    .nomor-grid-mini { display: none; grid-template-columns: repeat(5,1fr); gap: 4px; padding: 10px; }
+    .mapel-block.expanded .nomor-grid-mini { display: grid; }
+    .n-btn { aspect-ratio:1; border: 1.5px solid var(--border); background: var(--white); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; transition: all 0.12s; }
+    .n-btn:hover { border-color: var(--red); color: var(--red); }
+    .n-btn.filled { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+    .n-btn.current { background: var(--text); border-color: var(--text); color: #fff; }
+
+    .main-content { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-width: 860px; }
+    .soal-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm); }
+    .soal-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+    .tag { font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; }
+    .tag-mapel { color: var(--red); background: var(--red-bg); border: 1px solid var(--red-border); }
+    .tag-nomor { color: var(--blue); background: var(--blue-bg); border: 1px solid var(--blue-border); }
+    .tag-tipe { color: var(--gold); background: var(--gold-bg); border: 1px solid var(--gold-border); }
+    .soal-text { font-size: 15px; font-weight: 600; line-height: 1.75; margin-bottom: 22px; white-space: pre-line; }
+    .opsi-list { display: flex; flex-direction: column; gap: 10px; }
+    .opsi-item { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.14s; background: var(--white); }
+    .opsi-item:hover { border-color: var(--red); background: var(--red-bg); }
+    .opsi-item.selected { border-color: var(--red); background: var(--red-bg); font-weight: 700; }
+    .opsi-key { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--muted); }
+    .opsi-item.selected .opsi-key { background: var(--red); color: #fff; border-color: var(--red); }
+    .opsi-text { font-size: 14px; font-weight: 500; line-height: 1.5; }
+    .input-isian { width: 100%; max-width: 420px; border: 2px solid var(--border); border-radius: 12px; padding: 13px 16px; font-size: 15px; font-weight: 700; font-family: inherit; outline: none; transition: border-color 0.2s; }
+    .input-isian:focus { border-color: var(--red); }
+    .tabel-majemuk { width: 100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+    .tabel-majemuk th, .tabel-majemuk td { padding: 11px 14px; border-bottom: 1px solid var(--border); }
+    .tabel-majemuk th { background: #f5f3ef; font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; }
+    .tabel-majemuk tr:last-child td { border-bottom: none; }
+    .tabel-majemuk td { font-size: 13px; font-weight: 600; }
+    .radio-cell { text-align: center; width: 80px; }
+    .radio-cell input { cursor: pointer; width: 17px; height: 17px; accent-color: var(--red); }
+
+    .soal-nav { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .nav-left, .nav-right { display: flex; gap: 8px; }
+    .btn { padding: 11px 22px; border-radius: 50px; border: none; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 7px; }
+    .btn.primary { background: var(--red); color: #fff; box-shadow: 0 4px 14px rgba(192,57,43,0.2); }
+    .btn.primary:hover { background: var(--red2); transform: translateY(-1px); }
+    .btn.secondary { background: #f5f3ef; color: var(--text); border: 1.5px solid var(--border); }
+    .btn.secondary:hover { background: var(--border); }
+    .btn.success { background: var(--green); color: #fff; box-shadow: 0 4px 14px rgba(26,122,74,0.2); }
+    .btn.success:hover { background: #15663d; }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; padding: 32px; max-width: 480px; width: calc(100% - 40px); box-shadow: var(--shadow); }
+    .modal-icon { font-size: 36px; margin-bottom: 12px; }
+    .modal-title { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+    .modal-sub { font-size: 14px; color: var(--muted); font-weight: 500; line-height: 1.6; margin-bottom: 20px; }
+    .warning-list { background: var(--gold-bg); border: 1px solid var(--gold-border); border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; font-weight: 600; color: #7a5800; line-height: 1.8; max-height: 200px; overflow-y: auto; }
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-actions .btn { flex: 1; justify-content: center; }
+
+    #hasilScreen { display: none; min-height: 100vh; background: var(--bg); padding: 0 0 80px; }
+    .hasil-wrap { max-width: 800px; margin: 24px auto; padding: 0 20px; }
+    .hasil-hero { background: linear-gradient(135deg, #C0392B 0%, #8e1c12 100%); border-radius: 24px; padding: 36px; text-align: center; color: #fff; margin-bottom: 24px; box-shadow: 0 8px 32px rgba(192,57,43,0.3); }
+    .hasil-skor { font-size: 72px; font-weight: 900; line-height: 1; margin-bottom: 8px; }
+    .hasil-skor-label { font-size: 15px; font-weight: 600; opacity: 0.8; }
+    .hasil-sub { font-size: 13px; opacity: 0.7; margin-top: 10px; }
+    .mapel-scores { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; margin-bottom: 24px; }
+    .mapel-score-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 18px; box-shadow: var(--shadow-sm); }
+    .msc-name { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+    .msc-score { font-size: 28px; font-weight: 900; }
+    .msc-detail { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+    .progress-bar-wrap { background: var(--border); border-radius: 50px; height: 6px; margin-top: 10px; overflow: hidden; }
+    .progress-bar { height: 100%; border-radius: 50px; background: var(--red); }
+    .progress-bar.good { background: var(--green); }
+    .progress-bar.mid { background: var(--gold); }
+    .btn-full { display: block; width: 100%; padding: 16px; border-radius: 14px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; font-family: inherit; transition: all 0.15s; text-align: center; margin-bottom: 10px; }
+    .btn-full.primary { background: var(--red); color: #fff; }
+    .btn-full.primary:hover { background: var(--red2); }
+    .btn-full.outline { background: var(--white); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-full.outline:hover { background: var(--bg); }
+
+    #pembahasanScreen { display: none; min-height: 100vh; background: var(--bg); padding: 0 0 80px; }
+    .pembahasan-wrap { max-width: 800px; margin: 24px auto; padding: 0 20px; }
+    .pembahasan-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+    .filter-btn { padding: 7px 16px; border-radius: 50px; border: 1.5px solid var(--border); background: var(--white); font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .filter-btn:hover, .filter-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+    .pembahasan-item { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+    .pb-header { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .pb-status { font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; }
+    .pb-status.benar { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .pb-status.salah { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+    .pb-status.kosong { background: #f5f3ef; color: var(--muted); border: 1px solid var(--border); }
+    .pb-soal { font-size: 14px; font-weight: 600; line-height: 1.6; margin-bottom: 14px; white-space: pre-line; }
+    .pb-opsi-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 14px; }
+    .pb-opsi { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); font-size: 13px; font-weight: 500; }
+    .pb-opsi.kunci { background: var(--green-bg); border-color: var(--green-border); font-weight: 700; color: var(--green); }
+    .pb-opsi.jawaban-salah { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+    .pb-opsi-key { font-weight: 800; flex-shrink: 0; }
+    .pb-pembahasan { background: var(--blue-bg); border: 1px solid var(--blue-border); border-radius: 10px; padding: 14px; font-size: 13px; font-weight: 600; line-height: 1.6; color: var(--blue); }
+    .pb-pembahasan-label { font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; opacity: 0.7; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main-content { padding: 14px; }
+      .soal-card { padding: 18px; }
+      .timer-val { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loadingScreen">
+  <div class="spinner"></div>
+  <div style="font-size:18px; font-weight:800">Menyiapkan Lembar Ujian</div>
+  <div style="font-size:13px; color:var(--muted); font-weight:500" id="loadingMsg">Menghubungkan ke server...</div>
+</div>
+
+<nav id="mainNav" style="display:none">
+  <div class="nav-logo">Cerdas<span>Bersama</span></div>
+  <div class="nav-center">
+    <div class="nav-exam-name" id="navExamName">—</div>
+    <div class="nav-mapel-cur" id="navMapelCur">—</div>
+  </div>
+  <div class="timer-box" id="timerBox">
+    <span>⏱</span>
+    <span class="timer-val" id="timerVal">00:00</span>
+  </div>
+</nav>
+
+<div id="examScreen" style="display:none">
+  <div class="exam-layout">
+    <div class="sidebar" id="sidebarEl">
+      <div class="sidebar-label">Navigasi Mapel & Soal</div>
+      <div id="sidebarMapel"></div>
+    </div>
+    <div class="main-content">
+      <div class="soal-card">
+        <div class="soal-meta">
+          <span class="tag tag-nomor" id="tagNomor">No. 1</span>
+          <span class="tag tag-mapel" id="tagMapel">—</span>
+          <span class="tag tag-tipe" id="tagTipe">—</span>
+        </div>
+        <div class="soal-text" id="boxPertanyaan">Memuat soal...</div>
+        <div id="boxJawaban"></div>
+      </div>
+      <div class="soal-nav">
+        <div class="nav-left">
+          <button class="btn secondary" id="btnPrev">← Sebelumnya</button>
+          <button class="btn secondary" id="btnSkip">Lewati →</button>
+        </div>
+        <div class="nav-right">
+          <button class="btn primary" id="btnNext">Selanjutnya →</button>
+          <button class="btn success" id="btnSelesai">✓ Selesai Ujian</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalSelesai">
+  <div class="modal">
+    <div class="modal-icon">📋</div>
+    <div class="modal-title">Konfirmasi Selesai Ujian</div>
+    <div class="modal-sub" id="modalSelesaiSub">Pastikan semua soal telah dijawab.</div>
+    <div class="warning-list" id="warningList" style="display:none"></div>
+    <div class="modal-actions">
+      <button class="btn secondary" id="btnBatalSelesai">← Kembali</button>
+      <button class="btn primary" id="btnKonfirmSelesai">Submit Ujian ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalWaktuHabis">
+  <div class="modal">
+    <div class="modal-icon">⏰</div>
+    <div class="modal-title">Waktu Ujian Habis!</div>
+    <div class="modal-sub">Sistem otomatis mengumpulkan jawaban Anda.</div>
+    <div class="modal-actions">
+      <button class="btn primary" style="width:100%;justify-content:center" id="btnLihatHasilWaktu">Lihat Hasil Ujian →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HASIL -->
+<div id="hasilScreen">
+  <nav style="background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)">
+    <div class="nav-logo">Cerdas<span>Bersama</span></div>
+    <div style="font-size:13px;font-weight:700;color:var(--muted)">Hasil Ujian</div>
+  </nav>
+  <div class="hasil-wrap">
+    <div class="hasil-hero">
+      <div style="font-size:13px;font-weight:700;opacity:0.7;margin-bottom:8px" id="hasilNamaUjian">—</div>
+      <div class="hasil-skor" id="hasilSkor">0</div>
+      <div class="hasil-skor-label">Skor Total (dari 100)</div>
+      <div class="hasil-sub" id="hasilSubInfo">—</div>
+    </div>
+    <div class="mapel-scores" id="mapelScores"></div>
+    <button class="btn-full primary" id="btnLihatPembahasan">📖 Lihat Pembahasan Lengkap</button>
+    <button class="btn-full outline" onclick="window.location.href='/dashboard.html'">← Kembali ke Dashboard</button>
+  </div>
+</div>
+
+<!-- PEMBAHASAN -->
+<div id="pembahasanScreen">
+  <nav style="background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)">
+    <div class="nav-logo">Cerdas<span>Bersama</span></div>
+    <div style="font-size:13px;font-weight:700;color:var(--muted)">Pembahasan</div>
+    <button class="btn secondary" style="padding:8px 16px;font-size:12px" id="btnBackToHasil">← Kembali ke Nilai</button>
+  </nav>
+  <div class="pembahasan-wrap">
+    <div class="pembahasan-filter" id="pembahasanFilter"></div>
+    <div id="pembahasanList"></div>
+  </div>
+</div>
+
+<script type="module">
+  import { auth, db } from "./firebase-config.js";
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const SEGMEN_MAPEL = {
+    'Try Out STS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out STS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 6':  ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 7':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 8':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 9':  ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 10': ['Matematika','IPA','IPS','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 11': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'Try Out SAS Kelas 12': ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'CBT Kelas 6 - MTSN':    ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum','Pendidikan Agama Islam'],
+    'CBT Kelas 6 - SMP UMUM':['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum'],
+    'CBT Kelas 9 - MA':       ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum','Pendidikan Agama Islam'],
+    'CBT Kelas 9 - SMA UMUM': ['Matematika','IPAS','Bahasa Indonesia','Bahasa Inggris','Pengetahuan Umum'],
+    'CBT Kelas 12':           ['Matematika','Fisika','Biologi','Kimia','Ekonomi','Sosiologi','Geografi','Bahasa Indonesia','Bahasa Inggris'],
+    'SNBT PTN': ['Penalaran Umum','Pengetahuan & Pemahaman Umum','Pemahaman Bacaan & Menulis','Pengetahuan Kuantitatif','Literasi Bahasa Indonesia','Literasi Bahasa Inggris','Penalaran Matematika'],
+    'CBT CPNS': ['TWK — Wawasan Kebangsaan','TIU — Intelejensi Umum','TKP — Karakteristik Pribadi'],
+  };
+
+  const MENIT_PER_MAPEL = 20;
+  const $ = id => document.getElementById(id);
+
+  let flatSoal = [], currentIdx = 0, jawabanUser = {};
+  let timerInterval = null, totalDetik = 0;
+  let segmenAktif = '', mapelList = [], hasilData = {};
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) { window.location.href = '/register.html'; return; }
+
+    const params = new URLSearchParams(window.location.search);
+    segmenAktif = params.get('segmen') || 'CBT Kelas 6 - MTSN';
+    mapelList = SEGMEN_MAPEL[segmenAktif] || [];
+    totalDetik = mapelList.length * MENIT_PER_MAPEL * 60;
+
+    $('loadingMsg').textContent = 'Menarik soal dari server...';
+
+    try {
+      const snap = await getDocs(query(collection(db, 'soal'), where('segmen', '==', segmenAktif)));
+      const rawSoal = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+      if (!rawSoal.length) { $('loadingMsg').textContent = '❌ Belum ada soal di segmen ini.'; return; }
+
+      // Urut: per mapel sesuai SEGMEN_MAPEL, lalu urutanSubtes
+      flatSoal = [];
+      mapelList.forEach(mapel => {
+        const sm = rawSoal.filter(s => s.kategori === mapel).sort((a,b) => (a.urutanSubtes||0)-(b.urutanSubtes||0));
+        flatSoal.push(...sm);
+      });
+      // Soal mapel tidak dikenal → taruh akhir
+      rawSoal.filter(s => !mapelList.includes(s.kategori)).forEach(s => flatSoal.push(s));
+
+      $('loadingMsg').textContent = `✓ ${flatSoal.length} soal siap...`;
+      await new Promise(r => setTimeout(r, 500));
+
+      $('loadingScreen').style.display = 'none';
+      $('mainNav').style.display = 'flex';
+      $('examScreen').style.display = 'block';
+      $('navExamName').textContent = segmenAktif;
+
+      buildSidebar();
+      tampilkanSoal();
+      startTimer();
+
+    } catch(err) { $('loadingMsg').textContent = '❌ ' + err.message; }
+  });
+
+  // ===== SIDEBAR =====
+  function buildSidebar() {
+    const container = $('sidebarMapel');
+    container.innerHTML = '';
+    mapelList.forEach((mapel, mIdx) => {
+      const sm = flatSoal.filter(s => s.kategori === mapel);
+      if (!sm.length) return;
+      const block = document.createElement('div');
+      block.className = 'mapel-block';
+      block.id = `mb_${mIdx}`;
+      const isCur = sm.some(s => flatSoal.indexOf(s) === currentIdx);
+      if (isCur) block.classList.add('expanded');
+
+      const header = document.createElement('div');
+      header.className = 'mapel-header' + (isCur ? ' active' : '');
+      header.innerHTML = `<div class="mapel-name">${mapel}</div><div class="mapel-progress" id="prog_${mIdx}">${getMapelProgress(mapel, sm.length)}</div>`;
+      header.addEventListener('click', () => block.classList.toggle('expanded'));
+
+      const grid = document.createElement('div');
+      grid.className = 'nomor-grid-mini';
+      grid.id = `grid_${mIdx}`;
+      sm.forEach(soal => {
+        const gi = flatSoal.indexOf(soal);
+        const btn = document.createElement('button');
+        btn.className = 'n-btn' + (jawabanUser[soal.id] !== undefined ? ' filled' : '') + (gi === currentIdx ? ' current' : '');
+        btn.id = `nb_${gi}`;
+        btn.textContent = gi + 1;
+        btn.addEventListener('click', () => lompatSoal(gi));
+        grid.appendChild(btn);
+      });
+
+      block.appendChild(header); block.appendChild(grid);
+      container.appendChild(block);
+    });
+  }
+
+  function getMapelProgress(mapel, total) {
+    const sm = flatSoal.filter(s => s.kategori === mapel);
+    const filled = sm.filter(s => jawabanUser[s.id] !== undefined).length;
+    return `${filled}/${total}`;
+  }
+
+  function refreshSidebar() {
+    mapelList.forEach((mapel, mIdx) => {
+      const sm = flatSoal.filter(s => s.kategori === mapel);
+      if (!sm.length) return;
+      const filled = sm.filter(s => jawabanUser[s.id] !== undefined).length;
+      const progEl = $(`prog_${mIdx}`);
+      if (progEl) {
+        progEl.textContent = `${filled}/${sm.length}`;
+        progEl.className = 'mapel-progress' + (filled === sm.length ? ' done' : '');
+      }
+      sm.forEach(soal => {
+        const gi = flatSoal.indexOf(soal);
+        const btn = $(`nb_${gi}`);
+        if (!btn) return;
+        btn.className = 'n-btn' + (jawabanUser[soal.id] !== undefined ? ' filled' : '') + (gi === currentIdx ? ' current' : '');
+      });
+      const block = $(`mb_${mIdx}`);
+      if (block) {
+        const isCur = sm.some(s => flatSoal.indexOf(s) === currentIdx);
+        block.querySelector('.mapel-header').classList.toggle('active', isCur);
+        if (isCur && !block.classList.contains('expanded')) block.classList.add('expanded');
+      }
+    });
+  }
+
+  // ===== TAMPILKAN SOAL =====
+  function tampilkanSoal() {
+    const soal = flatSoal[currentIdx];
+    if (!soal) return;
+    $('tagNomor').textContent = `No. ${currentIdx + 1}`;
+    $('tagMapel').textContent = soal.kategori || '—';
+    $('tagTipe').textContent = (soal.tipeSoal || 'pg_biasa').replace('_',' ');
+    $('boxPertanyaan').textContent = soal.pertanyaan || '';
+    $('navMapelCur').textContent = soal.kategori || '';
+    $('btnPrev').disabled = currentIdx === 0;
+    const isLast = currentIdx + 1 === flatSoal.length;
+    $('btnNext').style.display = isLast ? 'none' : '';
+    $('btnSkip').style.display = isLast ? 'none' : '';
+    renderJawaban(soal);
+    refreshSidebar();
+  }
+
+  function renderJawaban(soal) {
+    const box = $('boxJawaban');
+    box.innerHTML = '';
+    const tipe = soal.tipeSoal || 'pg_biasa';
+    const saved = jawabanUser[soal.id];
+
+    if (tipe === 'pg_biasa' || tipe === 'tkp') {
+      const list = document.createElement('div');
+      list.className = 'opsi-list';
+      ['A','B','C','D','E'].forEach(k => {
+        if (!soal.opsi?.[k]) return;
+        const item = document.createElement('div');
+        item.className = 'opsi-item' + (saved === k ? ' selected' : '');
+        item.innerHTML = `<div class="opsi-key">${k}</div><div class="opsi-text">${soal.opsi[k]}</div>`;
+        item.addEventListener('click', () => {
+          list.querySelectorAll('.opsi-item').forEach(i => {
+            i.classList.remove('selected');
+            i.querySelector('.opsi-key').style.cssText = '';
+          });
+          item.classList.add('selected');
+          item.querySelector('.opsi-key').style.background = 'var(--red)';
+          item.querySelector('.opsi-key').style.color = '#fff';
+          item.querySelector('.opsi-key').style.borderColor = 'var(--red)';
+          simpanJawaban(soal.id, k);
+        });
+        list.appendChild(item);
+      });
+      box.appendChild(list);
+    } else if (tipe === 'isian') {
+      const input = document.createElement('input');
+      input.type = 'text'; input.className = 'input-isian';
+      input.placeholder = 'Ketik jawaban Anda...'; input.value = saved || '';
+      input.addEventListener('input', () => simpanJawaban(soal.id, input.value.trim()));
+      box.appendChild(input);
+    } else if (tipe === 'majemuk' && soal.pernyataanMajemuk?.length) {
+      const table = document.createElement('table');
+      table.className = 'tabel-majemuk';
+      table.innerHTML = `<thead><tr><th>Pernyataan</th><th class="radio-cell">Benar</th><th class="radio-cell">Salah</th></tr></thead><tbody></tbody>`;
+      const tbody = table.querySelector('tbody');
+      const cur = saved ? {...saved} : {};
+      soal.pernyataanMajemuk.forEach((p, pIdx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${p.teks}</td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Benar" ${cur[pIdx]==='Benar'?'checked':''}></td>
+          <td class="radio-cell"><input type="radio" name="mjm_${currentIdx}_${pIdx}" value="Salah" ${cur[pIdx]==='Salah'?'checked':''}></td>`;
+        tr.querySelectorAll('input').forEach(r => r.addEventListener('change', () => {
+          cur[pIdx] = r.value; simpanJawaban(soal.id, {...cur});
+        }));
+        tbody.appendChild(tr);
+      });
+      box.appendChild(table);
+    }
+  }
+
+  function simpanJawaban(id, val) {
+    const empty = val === '' || (typeof val === 'object' && !Array.isArray(val) && !Object.keys(val).length);
+    if (empty) delete jawabanUser[id]; else jawabanUser[id] = val;
+    refreshSidebar();
+  }
+
+  // ===== NAVIGASI =====
+  function lompatSoal(idx) {
+    if (idx < 0 || idx >= flatSoal.length) return;
+    currentIdx = idx; tampilkanSoal();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  $('btnPrev').addEventListener('click', () => lompatSoal(currentIdx - 1));
+  $('btnNext').addEventListener('click', () => lompatSoal(currentIdx + 1));
+  $('btnSkip').addEventListener('click', () => lompatSoal(currentIdx + 1));
+
+  // ===== TIMER =====
+  function startTimer() {
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      totalDetik--;
+      updateTimerUI();
+      if (totalDetik <= 0) { clearInterval(timerInterval); $('modalWaktuHabis').classList.add('open'); }
+    }, 1000);
+  }
+  function updateTimerUI() {
+    const m = Math.floor(totalDetik / 60), s = totalDetik % 60;
+    $('timerVal').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    const box = $('timerBox');
+    box.className = 'timer-box';
+    if (totalDetik <= 300) box.classList.add('danger');
+    else if (totalDetik <= 600) box.classList.add('warning');
+  }
+  $('btnLihatHasilWaktu').addEventListener('click', () => {
+    $('modalWaktuHabis').classList.remove('open'); tampilkanHasil();
+  });
+
+  // ===== SELESAI =====
+  $('btnSelesai').addEventListener('click', () => {
+    const kosong = flatSoal.filter(s => jawabanUser[s.id] === undefined);
+    const wl = $('warningList');
+    if (kosong.length) {
+      wl.innerHTML = '⚠️ Soal belum dijawab:<br>' + kosong.map(s => `No. ${flatSoal.indexOf(s)+1} (${s.kategori})`).join('<br>');
+      wl.style.display = 'block';
+      $('modalSelesaiSub').textContent = `${kosong.length} soal belum dijawab. Anda tetap bisa submit.`;
+    } else {
+      wl.style.display = 'none';
+      $('modalSelesaiSub').textContent = 'Semua soal telah dijawab. Yakin ingin mengumpulkan ujian?';
+    }
+    $('modalSelesai').classList.add('open');
+  });
+  $('btnBatalSelesai').addEventListener('click', () => $('modalSelesai').classList.remove('open'));
+  $('btnKonfirmSelesai').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    $('modalSelesai').classList.remove('open');
+    tampilkanHasil();
+  });
+
+  // ===== HASIL =====
+  function hitungSkor() {
+    let totalBenar = 0;
+    const perMapel = {};
+    mapelList.forEach(m => { perMapel[m] = {benar:0, total:0}; });
+    flatSoal.forEach(soal => {
+      const m = soal.kategori;
+      if (!perMapel[m]) perMapel[m] = {benar:0, total:0};
+      perMapel[m].total++;
+      if (cekJawaban(soal, jawabanUser[soal.id])) { perMapel[m].benar++; totalBenar++; }
+    });
+    const total = flatSoal.length;
+    return { skorTotal: total > 0 ? Math.round((totalBenar/total)*100) : 0, totalBenar, totalSoal: total, perMapel };
+  }
+
+  function cekJawaban(soal, ans) {
+    if (ans === undefined || ans === null || ans === '') return false;
+    const t = soal.tipeSoal || 'pg_biasa';
+    if (t === 'pg_biasa') return ans === soal.jawaban;
+    if (t === 'tkp') return false;
+    if (t === 'isian') return String(ans).toLowerCase().trim() === String(soal.jawabanIsian||'').toLowerCase().trim();
+    if (t === 'majemuk') return soal.pernyataanMajemuk?.every((p,i) => ans[i] === p.kunci) ?? false;
+    return false;
+  }
+
+  function tampilkanHasil() {
+    clearInterval(timerInterval);
+    hasilData = hitungSkor();
+    $('examScreen').style.display = 'none';
+    $('mainNav').style.display = 'none';
+    $('hasilScreen').style.display = 'block';
+    $('hasilNamaUjian').textContent = segmenAktif;
+    $('hasilSkor').textContent = hasilData.skorTotal;
+    $('hasilSubInfo').textContent = `${hasilData.totalBenar} soal benar dari ${hasilData.totalSoal} soal`;
+
+    const container = $('mapelScores');
+    container.innerHTML = '';
+    Object.entries(hasilData.perMapel).forEach(([mapel, data]) => {
+      if (!data.total) return;
+      const pct = Math.round((data.benar/data.total)*100);
+      const cc = pct>=70?'good':pct>=50?'mid':'';
+      const card = document.createElement('div');
+      card.className = 'mapel-score-card';
+      card.innerHTML = `<div class="msc-name">${mapel}</div>
+        <div class="msc-score">${pct}<span style="font-size:16px;font-weight:600;color:var(--muted)">%</span></div>
+        <div class="msc-detail">${data.benar} benar / ${data.total} soal</div>
+        <div class="progress-bar-wrap"><div class="progress-bar ${cc}" style="width:${pct}%"></div></div>`;
+      container.appendChild(card);
+    });
+  }
+
+  $('btnLihatPembahasan').addEventListener('click', () => tampilkanPembahasan('Semua'));
+  $('btnBackToHasil').addEventListener('click', () => {
+    $('pembahasanScreen').style.display = 'none';
+    $('hasilScreen').style.display = 'block';
+  });
+
+  // ===== PEMBAHASAN =====
+  function tampilkanPembahasan(filterMapel) {
+    $('hasilScreen').style.display = 'none';
+    $('pembahasanScreen').style.display = 'block';
+
+    const fc = $('pembahasanFilter');
+    fc.innerHTML = '';
+    ['Semua', ...mapelList.filter(m => hasilData.perMapel[m]?.total > 0)].forEach(f => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (f === filterMapel ? ' active' : '');
+      btn.textContent = f;
+      btn.addEventListener('click', () => tampilkanPembahasan(f));
+      fc.appendChild(btn);
+    });
+
+    const list = $('pembahasanList');
+    list.innerHTML = '';
+    const filtered = filterMapel === 'Semua' ? flatSoal : flatSoal.filter(s => s.kategori === filterMapel);
+
+    filtered.forEach(soal => {
+      const gi = flatSoal.indexOf(soal);
+      const ans = jawabanUser[soal.id];
+      const tipe = soal.tipeSoal || 'pg_biasa';
+      let status = ans !== undefined && ans !== '' && ans !== null
+        ? (tipe === 'tkp' ? 'benar' : cekJawaban(soal, ans) ? 'benar' : 'salah')
+        : 'kosong';
+
+      let opsiHTML = '';
+      if ((tipe === 'pg_biasa' || tipe === 'tkp') && soal.opsi) {
+        opsiHTML = '<div class="pb-opsi-list">';
+        ['A','B','C','D','E'].forEach(k => {
+          if (!soal.opsi[k]) return;
+          const isK = k === soal.jawaban, isW = ans === k && !isK;
+          opsiHTML += `<div class="pb-opsi${isK?' kunci':''}${isW?' jawaban-salah':''}"><span class="pb-opsi-key">${k}.</span><span>${soal.opsi[k]}${isK?' ✓':''}${isW?' (jawaban Anda)':''}</span></div>`;
+        });
+        opsiHTML += '</div>';
+      } else if (tipe === 'isian') {
+        opsiHTML = `<div class="pb-opsi-list">
+          <div class="pb-opsi kunci"><span class="pb-opsi-key">Kunci:</span><span>${soal.jawabanIsian||'—'}</span></div>
+          <div class="pb-opsi${ans?'':' jawaban-salah'}"><span class="pb-opsi-key">Jawaban Anda:</span><span>${ans||'(tidak dijawab)'}</span></div>
+        </div>`;
+      } else if (tipe === 'majemuk' && soal.pernyataanMajemuk) {
+        opsiHTML = '<div class="pb-opsi-list">' + soal.pernyataanMajemuk.map((p,i) => {
+          const ua = ans?.[i], ok = ua === p.kunci;
+          return `<div class="pb-opsi${ok?' kunci':' jawaban-salah'}"><span class="pb-opsi-key">${i+1}.</span><span>${p.teks} — Kunci: <b>${p.kunci}</b> | Anda: <b>${ua||'—'}</b> ${ok?'✓':'✗'}</span></div>`;
+        }).join('') + '</div>';
+      }
+
+      const item = document.createElement('div');
+      item.className = 'pembahasan-item';
+      item.innerHTML = `
+        <div class="pb-header">
+          <span class="tag tag-nomor">No. ${gi+1}</span>
+          <span class="tag tag-mapel">${soal.kategori||'—'}</span>
+          <span class="pb-status ${status}">${status==='benar'?'✓ Benar':status==='salah'?'✗ Salah':'— Tidak Dijawab'}</span>
+        </div>
+        <div class="pb-soal">${soal.pertanyaan||''}</div>
+        ${opsiHTML}
+        <div class="pb-pembahasan"><div class="pb-pembahasan-label">💡 Pembahasan</div>${soal.pembahasan||'Belum tersedia.'}</div>`;
+      list.appendChild(item);
+    });
+    window.scrollTo({top:0});
+  }
+</script>
+</body>
+</html>
