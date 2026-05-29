@@ -5,221 +5,305 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard — CerdasBersama</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #faf8f5; --white: #fff; --surface2: #f5f3ef;
+      --bg: #faf8f5; --white: #fff; --surface2: #f5f3ef; --surface3: #efece6;
       --border: #e8e4dc; --border2: #d4cfc5;
       --text: #1a1714; --muted: #7a7168; --muted2: #b0a89c;
-      --red: #C0392B; --red2: #a93226;
-      --gold: #e8970a; --gold-bg: #fff8e6; --gold-border: #f5d06a;
+      --red: #C0392B; --red2: #a93226; --red-bg: #fff5f5; --red-border: #fdd;
+      --gold: #c47f0a; --gold-bg: #fff8e6; --gold-border: #f5d06a;
       --green: #1a7a4a; --green-bg: #edfaf3; --green-border: #b8e6d0;
-      --blue: #1a5fb4; --blue-bg: #eef3fc;
-      --purple: #9b59b6; --purple-bg: #fdf5ff; --purple-border: #e0c8f5;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow: 0 4px 16px rgba(0,0,0,0.08);
-      --radius: 16px;
+      --blue: #1a5fb4; --blue-bg: #eef3fc; --blue-border: #c2d6f5;
+      --purple: #7c3aed; --purple-bg: #f5f0ff; --purple-border: #ddd0f8;
+      --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
+      --radius-sm: 12px; --radius: 16px; --radius-lg: 20px; --radius-xl: 24px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 58px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-sm); }
+    /* ── LOADING ── */
+    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 200; transition: opacity 0.4s; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin .75s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
+
+    /* ── NAV ── */
+    nav { background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 58px; position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow-xs); }
     .nav-logo { font-weight: 800; font-size: 18px; color: var(--red); letter-spacing: -0.3px; }
     .nav-logo span { color: var(--text); }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     #navName { font-size: 13px; font-weight: 600; color: var(--muted); }
-    .btn-logout { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 7px 16px; cursor: pointer; transition: all 0.18s; }
+    .btn-logout { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 7px 16px; cursor: pointer; transition: all .18s; }
     .btn-logout:hover { background: var(--border); color: var(--text); }
 
-    #loadingScreen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 200; transition: opacity 0.35s; }
-    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--red); border-radius: 50%; animation: spin 0.75s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    #loadingScreen p { font-size: 14px; color: var(--muted); font-weight: 500; }
-
-    main { max-width: 960px; margin: 0 auto; padding: 32px 20px 120px; opacity: 0; transform: translateY(12px); transition: opacity 0.45s, transform 0.45s; }
+    /* ── MAIN ── */
+    main { max-width: 980px; margin: 0 auto; padding: 28px 20px 120px; opacity: 0; transform: translateY(14px); transition: opacity .45s, transform .45s; }
     main.visible { opacity: 1; transform: none; }
 
-    /* HERO */
-    .hero { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow-sm); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .hero-left h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
-    .hero-left p { margin-top: 6px; font-size: 14px; color: var(--muted); font-weight: 500; }
-    .hero-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-    .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-
-    .plan-badge { display: inline-flex; align-items: center; gap: 7px; padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .plan-badge.premium { background: var(--gold-bg); border: 1.5px solid var(--gold-border); color: #b07008; }
-    .plan-badge.alacarte { background: var(--blue-bg); border: 1.5px solid #c2d6f5; color: var(--blue); }
-    .plan-badge.none { background: var(--surface2); border: 1.5px solid var(--border); color: var(--muted); }
-    .plan-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: blink 2s ease-in-out infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
-
-    .btn-latihan { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; box-shadow: 0 4px 14px rgba(192,57,43,0.25); white-space: nowrap; }
-    .btn-latihan:hover { background: var(--red2); transform: translateY(-1px); }
-
-    /* TRY OUT BUTTON */
-    .btn-tryout { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 50px; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-    .btn-tryout:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(155,89,182,0.25); }
-    .btn-tryout.has-access { background: var(--purple); color: #fff; box-shadow: 0 4px 14px rgba(155,89,182,0.25); border-color: var(--purple); }
-    .btn-tryout.has-access:hover { background: #8e44ad; }
-
-    /* SUBBAB POOL CARD */
-    .subbab-pool-card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
-    .subbab-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
-    .subbab-pool-title { font-size: 15px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .subbab-pool-subtitle { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 2px; }
-    .btn-beli-subbab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.18s; border: none; cursor: pointer; }
-    .btn-beli-subbab:hover { background: var(--red2); transform: translateY(-1px); }
-
-    /* CHIPS */
-    .subbab-chips { display: flex; flex-wrap: wrap; gap: 10px; }
-    .subbab-chip { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; text-decoration: none; border: 1.5px solid transparent; }
-    .subbab-chip.active { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
-    .subbab-chip.active:hover { background: #d4f5e6; border-color: var(--green); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,122,74,0.15); }
-    .subbab-chip.done { background: var(--surface2); border-color: var(--border); color: var(--muted); position: relative; }
-    .subbab-chip.done:hover { background: var(--border); transform: translateY(-1px); }
-    .subbab-chip.done .chip-check { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--green); border-radius: 50%; color: #fff; font-size: 9px; flex-shrink: 0; }
-    .subbab-chip .mapel-icon { font-size: 13px; }
-
-    /* TRYOUT CHIPS */
-    .tryout-chip { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.18s; text-decoration: none; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); }
-    .tryout-chip:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(155,89,182,0.2); }
-    .tryout-chip-icon { font-size: 13px; }
-
-    /* SEGMEN GROUP LABEL */
-    .chips-segmen-group { margin-bottom: 14px; }
-    .chips-segmen-group:last-child { margin-bottom: 0; }
-    .chips-segmen-title { font-size: 11px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-
-    /* POOL EMPTY / ALL DONE */
-    .pool-empty { text-align: center; padding: 20px 0; }
-    .pool-empty p { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 12px; }
-    .pool-all-done { background: var(--green-bg); border: 1.5px solid var(--green-border); border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-top: 14px; }
-    .pool-all-done .done-icon { font-size: 24px; }
-    .pool-all-done .done-text { font-size: 13px; font-weight: 600; color: var(--green); }
-    .pool-all-done .done-cta { margin-left: auto; padding: 8px 16px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; flex-shrink: 0; }
-
-    /* TRYOUT POOL SECTION */
-    .tryout-pool-section { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
-    .tryout-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-    .tryout-pool-label { font-size: 13px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
-    .btn-beli-tryout { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 50px; background: var(--purple-bg); color: var(--purple); border: 1.5px solid var(--purple-border); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.18s; cursor: pointer; }
-    .btn-beli-tryout:hover { background: var(--purple); color: #fff; }
-
-    /* STATS */
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-    @media(max-width: 680px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
-    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 16px; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s, transform 0.2s; }
-    .stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
-    .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
-    .stat-label { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
-    .stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
-    .stat-sub { margin-top: 4px; font-size: 11px; color: var(--muted2); font-weight: 500; }
-
-    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    /* ── SECTION LABEL ── */
+    .section-label { font-size: 11px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--muted2); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
     .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    .card { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
-    .card-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    /* ── GREETING HERO ── */
+    .greeting-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 26px 28px; margin-bottom: 14px; box-shadow: var(--shadow-sm); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .greeting-left { flex: 1; min-width: 0; }
+    .greeting-left h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.25; }
+    .greeting-left p { margin-top: 5px; font-size: 14px; color: var(--muted); font-weight: 500; line-height: 1.55; }
+    .greeting-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; flex-shrink: 0; }
+    .greeting-btns { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
 
-    /* REFERRAL */
-    .ref-code-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .ref-code-box { font-size: 20px; font-weight: 800; letter-spacing: 3px; color: var(--red); background: #fff5f5; border: 2px dashed #f5b8b5; border-radius: 10px; padding: 10px 20px; }
-    .btn-sm { display: inline-flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 50px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-    .btn-sm:hover { background: var(--border); }
+    .plan-badge { display: inline-flex; align-items: center; gap: 7px; padding: 7px 16px; border-radius: 50px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .plan-badge.premium { background: var(--gold-bg); border: 1.5px solid var(--gold-border); color: #8a5e00; }
+    .plan-badge.alacarte { background: var(--blue-bg); border: 1.5px solid var(--blue-border); color: var(--blue); }
+    .plan-badge.none { background: var(--surface2); border: 1.5px solid var(--border); color: var(--muted); }
+    .plan-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 2.2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .btn-latihan { display: inline-flex; align-items: center; gap: 7px; padding: 11px 20px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .18s; box-shadow: 0 4px 12px rgba(192,57,43,.22); white-space: nowrap; }
+    .btn-latihan:hover { background: var(--red2); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(192,57,43,.28); }
+    .btn-tryout { display: inline-flex; align-items: center; gap: 7px; padding: 11px 20px; border-radius: 50px; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .18s; white-space: nowrap; }
+    .btn-tryout:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,58,237,.2); }
+    .btn-tryout.has-access { background: var(--purple); color: #fff; box-shadow: 0 4px 12px rgba(124,58,237,.22); border-color: var(--purple); }
+    .btn-tryout.has-access:hover { background: #6d28d9; }
+
+    /* ── HERO ANALYTICS ── */
+    .hero-analytics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+    @media (max-width: 760px) { .hero-analytics { grid-template-columns: 1fr; } }
+
+    .analytics-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 0; transition: box-shadow .2s, transform .2s; position: relative; overflow: hidden; }
+    .analytics-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .analytics-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+    .analytics-card.cbt::before { background: linear-gradient(90deg, var(--purple), #a78bfa); }
+    .analytics-card.learning::before { background: linear-gradient(90deg, var(--green), #34d399); }
+    .analytics-card.insight::before { background: linear-gradient(90deg, var(--red), #f87171); }
+
+    .ac-label { font-size: 10px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted2); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .ac-label .ac-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .cbt .ac-dot { background: var(--purple); }
+    .learning .ac-dot { background: var(--green); }
+    .insight .ac-dot { background: var(--red); }
+
+    .ac-body { flex: 1; }
+    .ac-headline { font-size: 15px; font-weight: 800; line-height: 1.35; margin-bottom: 6px; letter-spacing: -0.2px; }
+    .ac-sub { font-size: 13px; color: var(--muted); font-weight: 500; line-height: 1.6; }
+
+    /* CBT Score display */
+    .cbt-score-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .cbt-score-num { font-size: 40px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: var(--text); }
+    .cbt-score-delta { display: inline-flex; align-items: center; gap: 3px; font-size: 13px; font-weight: 800; padding: 3px 9px; border-radius: 50px; }
+    .cbt-score-delta.up { background: var(--green-bg); color: var(--green); }
+    .cbt-score-delta.down { background: var(--red-bg); color: var(--red); }
+    .cbt-score-delta.same { background: var(--surface2); color: var(--muted); }
+    .cbt-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+    .cbt-meta-row { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .cbt-meta-row .badge-label { font-weight: 700; color: var(--text); }
+
+    /* Learning progress bar */
+    .progress-track { background: var(--surface3); border-radius: 50px; height: 7px; overflow: hidden; margin: 10px 0 6px; }
+    .progress-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--green), #4ade80); transition: width .6s ease; }
+    .progress-fill.zero { background: var(--border2); }
+    .progress-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--muted); }
+
+    /* Insight card */
+    .insight-highlight { background: linear-gradient(135deg, #fff5f5, #fff8f8); border: 1px solid var(--red-border); border-radius: 10px; padding: 12px 14px; margin: 12px 0; font-size: 13px; font-weight: 600; line-height: 1.6; color: var(--text); font-style: italic; }
+
+    .ac-cta { margin-top: 16px; }
+    .btn-ac { display: inline-flex; align-items: center; gap: 6px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 800; padding: 9px 18px; border-radius: 50px; border: none; cursor: pointer; transition: all .16s; white-space: nowrap; text-decoration: none; }
+    .btn-ac.red { background: var(--red); color: #fff; box-shadow: 0 3px 10px rgba(192,57,43,.2); }
+    .btn-ac.red:hover { background: var(--red2); transform: translateY(-1px); }
+    .btn-ac.purple { background: var(--purple); color: #fff; box-shadow: 0 3px 10px rgba(124,58,237,.2); }
+    .btn-ac.purple:hover { background: #6d28d9; transform: translateY(-1px); }
+    .btn-ac.green { background: var(--green); color: #fff; box-shadow: 0 3px 10px rgba(26,122,74,.2); }
+    .btn-ac.green:hover { background: #15663d; transform: translateY(-1px); }
+    .btn-ac.outline { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-ac.outline:hover { background: var(--surface3); }
+
+    .ac-empty-icon { font-size: 32px; margin-bottom: 10px; display: block; }
+    .ac-badge-status { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 50px; margin-bottom: 12px; }
+    .ac-badge-status.positive { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .ac-badge-status.neutral { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+    .ac-badge-status.warm { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-border); }
+
+    /* ── QUICK LAUNCH ── */
+    .subbab-pool-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+    .subbab-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+    .subbab-pool-title { font-size: 14px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .subbab-pool-subtitle { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+    .btn-beli-subbab { display: inline-flex; align-items: center; gap: 5px; padding: 7px 16px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; transition: all .18s; border: none; cursor: pointer; }
+    .btn-beli-subbab:hover { background: var(--red2); transform: translateY(-1px); }
+
+    .subbab-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .subbab-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .16s; text-decoration: none; border: 1.5px solid transparent; }
+    .subbab-chip.active { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+    .subbab-chip.active:hover { background: #d4f5e6; border-color: var(--green); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(26,122,74,.12); }
+    .subbab-chip.done { background: var(--surface2); border-color: var(--border); color: var(--muted); }
+    .subbab-chip.done:hover { background: var(--surface3); transform: translateY(-1px); }
+    .subbab-chip.done .chip-check { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; background: var(--green); border-radius: 50%; color: #fff; font-size: 8px; flex-shrink: 0; }
+    .subbab-chip .mapel-icon { font-size: 12px; }
+
+    .tryout-chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .16s; text-decoration: none; border: 1.5px solid var(--purple-border); background: var(--purple-bg); color: var(--purple); }
+    .tryout-chip:hover { background: var(--purple); color: #fff; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(124,58,237,.18); }
+
+    .chips-segmen-group { margin-bottom: 12px; }
+    .chips-segmen-group:last-child { margin-bottom: 0; }
+    .chips-segmen-title { font-size: 10px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 7px; }
+
+    .pool-all-done { background: var(--green-bg); border: 1.5px solid var(--green-border); border-radius: 12px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+    .pool-all-done .done-icon { font-size: 22px; }
+    .pool-all-done .done-text { font-size: 13px; font-weight: 600; color: var(--green); flex: 1; }
+    .pool-all-done .done-cta { padding: 7px 15px; border-radius: 50px; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; flex-shrink: 0; transition: background .18s; }
+    .pool-all-done .done-cta:hover { background: var(--red2); }
+
+    .tryout-pool-section { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .tryout-pool-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+    .tryout-pool-label { font-size: 12px; font-weight: 800; color: var(--purple); display: flex; align-items: center; gap: 6px; }
+    .btn-beli-tryout { display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 50px; background: var(--purple-bg); color: var(--purple); border: 1.5px solid var(--purple-border); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-decoration: none; transition: all .18s; cursor: pointer; }
+    .btn-beli-tryout:hover { background: var(--purple); color: #fff; }
+
+    .pool-empty-state { text-align: center; padding: 24px 16px; }
+    .pool-empty-state .pes-icon { font-size: 32px; margin-bottom: 10px; }
+    .pool-empty-state p { font-size: 13px; color: var(--muted); font-weight: 500; line-height: 1.55; margin-bottom: 14px; }
+
+    /* ── STATS BAR ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 15px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
+    .stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .stat-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 11px; }
+    .stat-label { font-size: 10px; font-weight: 800; color: var(--muted2); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 3px; }
+    .stat-value { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
+    .stat-sub { margin-top: 3px; font-size: 11px; color: var(--muted2); font-weight: 500; }
+
+    /* ── CONTEXTUAL UPSELL ── */
+    .upsell-block { border-radius: var(--radius-lg); padding: 20px 22px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .upsell-block.red-theme { background: var(--red); }
+    .upsell-block.purple-theme { background: linear-gradient(135deg, var(--purple-bg), #ede9fe); border: 1.5px solid var(--purple-border); }
+    .upsell-block.gold-theme { background: linear-gradient(135deg, var(--gold-bg), #fef3c7); border: 1.5px solid var(--gold-border); }
+    .upsell-block.green-theme { background: var(--green-bg); border: 1.5px solid var(--green-border); }
+    .upsell-text h3 { font-size: 15px; font-weight: 800; }
+    .upsell-text p { font-size: 13px; margin-top: 4px; font-weight: 500; line-height: 1.5; }
+    .upsell-block.red-theme .upsell-text h3,
+    .upsell-block.red-theme .upsell-text p { color: #fff; }
+    .upsell-block.red-theme .upsell-text p { opacity: .85; }
+    .upsell-block.purple-theme .upsell-text h3 { color: #4c1d95; }
+    .upsell-block.purple-theme .upsell-text p { color: #6d28d9; }
+    .upsell-block.gold-theme .upsell-text h3 { color: #78350f; }
+    .upsell-block.gold-theme .upsell-text p { color: #92400e; }
+    .upsell-block.green-theme .upsell-text h3 { color: #065f46; }
+    .upsell-block.green-theme .upsell-text p { color: var(--green); }
+    .btn-upsell { flex-shrink: 0; padding: 11px 24px; border-radius: 50px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all .18s; box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+    .btn-upsell.white { background: #fff; color: var(--red); }
+    .btn-upsell.white:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(0,0,0,.16); }
+    .btn-upsell.purple { background: var(--purple); color: #fff; }
+    .btn-upsell.purple:hover { background: #6d28d9; transform: translateY(-1px); }
+    .btn-upsell.gold { background: var(--gold); color: #fff; }
+    .btn-upsell.gold:hover { background: #a16207; transform: translateY(-1px); }
+    .btn-upsell.green { background: var(--green); color: #fff; }
+    .btn-upsell.green:hover { background: #15663d; transform: translateY(-1px); }
+
+    /* Premium info block */
+    .premium-info { background: var(--gold-bg); border: 1.5px solid var(--gold-border); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .premium-info h3 { font-size: 14px; font-weight: 800; color: #78350f; }
+    .premium-info p { font-size: 13px; color: #92400e; font-weight: 500; margin-top: 3px; }
+    .expiry-pill { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 50px; background: #fff; border: 1px solid var(--gold-border); color: #78350f; }
+
+    /* ── REFERRAL (compact) ── */
+    .referral-compact { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm); }
+    .referral-compact-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+    .referral-compact-title { font-size: 13px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 7px; }
+    .ref-inline-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .ref-code-box { font-size: 17px; font-weight: 800; letter-spacing: 2.5px; color: var(--red); background: var(--red-bg); border: 1.5px dashed var(--red-border); border-radius: 9px; padding: 8px 16px; }
+    .btn-sm { display: inline-flex; align-items: center; gap: 5px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; padding: 8px 15px; border-radius: 50px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--text); cursor: pointer; transition: all .16s; white-space: nowrap; }
+    .btn-sm:hover { background: var(--surface3); }
     .btn-sm.red { background: var(--red); color: #fff; border-color: var(--red); }
     .btn-sm.red:hover { background: var(--red2); }
-    .btn-sm.copied { background: var(--green-bg); color: var(--green); border-color: #a3e0c0; }
-    .ref-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-    .ref-stat { background: var(--surface2); border-radius: 12px; padding: 14px 16px; }
-    .ref-stat .lbl { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .ref-stat .val { font-size: 20px; font-weight: 800; margin-top: 4px; letter-spacing: -0.5px; }
-    .ref-stat .val.green { color: var(--green); }
-    .ref-promo { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; }
+    .btn-sm.copied { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+    .ref-promo-line { font-size: 12px; font-weight: 600; color: var(--muted); margin: 10px 0 0; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .ref-promo-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; font-size: 11px; font-weight: 700; }
+    .ref-stats-mini { display: flex; align-items: center; gap: 18px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .ref-stat-mini { display: flex; flex-direction: column; gap: 2px; }
+    .ref-stat-mini .lbl { font-size: 10px; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; }
+    .ref-stat-mini .val { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+    .ref-stat-mini .val.green { color: var(--green); }
 
-    .premium-banner { background: linear-gradient(135deg, #fffbf0, #fff8e0); border: 1.5px solid var(--gold-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; }
-    .premium-banner::before { content: '⭐'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 56px; opacity: 0.12; }
-    .premium-banner h3 { font-size: 15px; font-weight: 800; color: #8a5e00; }
-    .premium-banner p { font-size: 13px; color: #9a7020; margin-top: 4px; line-height: 1.5; font-weight: 500; }
-    .expiry-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 50px; background: var(--gold-bg); border: 1px solid var(--gold-border); color: #8a5e00; }
+    /* ── CARD (generic) ── */
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+    .card-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
-    .upgrade-cta { background: var(--red); border-radius: 20px; padding: 24px 26px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .upgrade-cta h3 { font-size: 17px; font-weight: 800; color: #fff; }
-    .upgrade-cta p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 500; }
-    .btn-upgrade { flex-shrink: 0; padding: 12px 28px; border-radius: 50px; border: none; background: #fff; color: var(--red); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
-    .btn-upgrade:hover { transform: translateY(-2px); }
-
-    /* TRYOUT PROMO BANNER */
-    .tryout-promo-banner { background: linear-gradient(135deg, var(--purple-bg), #f0e6ff); border: 1.5px solid var(--purple-border); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .tryout-promo-banner::before { content: '🎯'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 48px; opacity: 0.15; }
-    .tryout-promo-banner h3 { font-size: 15px; font-weight: 800; color: #6c3483; }
-    .tryout-promo-banner p { font-size: 13px; color: #7d3c98; margin-top: 4px; line-height: 1.5; font-weight: 500; }
-    .btn-beli-tryout-banner { flex-shrink: 0; padding: 11px 24px; border-radius: 50px; border: none; background: var(--purple); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.18s; box-shadow: 0 4px 14px rgba(155,89,182,0.25); }
-    .btn-beli-tryout-banner:hover { background: #8e44ad; transform: translateY(-1px); }
-
-    .paket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media(max-width: 500px) { .paket-grid { grid-template-columns: 1fr; } }
-    .paket-item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; padding: 16px; cursor: pointer; transition: all 0.18s; position: relative; overflow: hidden; }
-    .paket-item:hover { border-color: var(--red); transform: translateY(-2px); }
-    .paket-item.popular { border-color: var(--gold); background: var(--gold-bg); }
-    .popular-tag { position: absolute; top: 0; right: 0; background: var(--gold); color: #fff; font-size: 9px; font-weight: 800; padding: 4px 10px; border-radius: 0 14px 0 10px; }
-    .paket-nama { font-size: 13px; font-weight: 700; }
-    .paket-soal { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 500; }
-    .paket-harga { margin-top: 10px; font-size: 18px; font-weight: 800; color: var(--red); }
-    .paket-harga span { font-size: 12px; font-weight: 500; color: var(--muted); }
-    .btn-beli { width: 100%; margin-top: 10px; padding: 9px; border-radius: 8px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.18s; }
-    .btn-beli:hover { background: var(--red2); }
-    .paket-item.popular .btn-beli { background: var(--gold); }
-
-    .order-list { display: flex; flex-direction: column; gap: 10px; }
-    .order-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 12px; padding: 13px 16px; }
+    /* ── ORDERS ── */
+    .order-list { display: flex; flex-direction: column; gap: 9px; }
+    .order-item { display: flex; align-items: center; gap: 12px; background: var(--surface2); border-radius: 11px; padding: 12px 15px; }
     .order-info { flex: 1; min-width: 0; }
     .order-paket { font-size: 13px; font-weight: 700; }
     .order-subbab { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .order-date { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .order-date { font-size: 11px; color: var(--muted2); font-weight: 500; margin-top: 1px; }
     .order-total { font-size: 14px; font-weight: 800; white-space: nowrap; }
-    .status-pill { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 50px; white-space: nowrap; }
+    .status-pill { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 9px; border-radius: 50px; white-space: nowrap; }
     .status-pill.paid { background: var(--green-bg); color: var(--green); }
     .status-pill.pending { background: var(--gold-bg); color: var(--gold); }
-    .status-pill.failed { background: #fef2f2; color: var(--red); }
-    .empty-state { text-align: center; padding: 28px; color: var(--muted2); font-size: 13px; font-weight: 500; }
+    .status-pill.failed { background: var(--red-bg); color: var(--red); }
+    .empty-state { text-align: center; padding: 26px; color: var(--muted2); font-size: 13px; font-weight: 500; }
 
-    .profile-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    /* ── PROFILE ── */
+    .profile-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     .profile-row:last-child { border-bottom: none; }
-    .profile-row .lbl { color: var(--muted); font-weight: 600; width: 100px; flex-shrink: 0; font-size: 12px; }
+    .profile-row .lbl { color: var(--muted); font-weight: 600; width: 110px; flex-shrink: 0; font-size: 12px; }
     .profile-row .val { font-weight: 700; word-break: break-all; }
 
-    #stickyCta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 20px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 90; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
-    #stickyCta .info strong { font-weight: 800; color: var(--red); font-size: 15px; }
-    #stickyCta .info span { color: var(--muted); font-weight: 500; font-size: 12px; display: block; }
-    .btn-sticky { padding: 12px 28px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.18s; }
-    .btn-sticky:hover { background: var(--red2); }
+    /* ── PREMIUM DETAIL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
+    .segmen-item { display: flex; align-items: center; gap: 9px; background: var(--surface2); border-radius: 9px; padding: 10px 13px; font-size: 13px; font-weight: 600; }
+    .segmen-check { width: 20px; height: 20px; background: var(--green-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 11px; flex-shrink: 0; }
 
-    #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 22px; font-size: 13px; font-weight: 600; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
-    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* TRYOUT MODAL PICKER */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); }
+    /* ── MODALS ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); }
     .modal-overlay.open { display: flex; }
-    .modal { background: var(--white); border-radius: 20px; padding: 28px; max-width: 520px; width: calc(100% - 40px); box-shadow: var(--shadow); max-height: 85vh; overflow-y: auto; }
-    .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+    .modal { background: var(--white); border-radius: var(--radius-xl); padding: 28px; max-width: 520px; width: calc(100% - 40px); box-shadow: var(--shadow-md); max-height: 85vh; overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 900; margin-bottom: 5px; }
     .modal-sub { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 20px; }
-    .modal-segmen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    .modal-seg-card { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .modal-segmen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 18px; }
+    .modal-seg-card { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 11px; padding: 11px 13px; cursor: pointer; transition: all .14s; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
     .modal-seg-card:hover { border-color: var(--purple); background: var(--purple-bg); color: var(--purple); }
     .modal-seg-card.owned { border-color: var(--green-border); background: var(--green-bg); color: var(--green); cursor: default; }
     .modal-seg-card.owned:hover { border-color: var(--green-border); background: var(--green-bg); color: var(--green); }
-    .modal-group-title { font-size: 11px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; margin-top: 14px; }
-    .modal-actions { display: flex; gap: 10px; }
-    .modal-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.15s; }
+    .modal-group-title { font-size: 10px; font-weight: 800; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 7px; margin-top: 12px; }
+    .modal-actions { display: flex; gap: 9px; }
+    .modal-actions button { flex: 1; padding: 12px; border-radius: 11px; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; transition: all .15s; }
     .modal-btn-primary { background: var(--purple); color: #fff; }
-    .modal-btn-primary:hover { background: #8e44ad; }
+    .modal-btn-primary:hover { background: #6d28d9; }
     .modal-btn-secondary { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border) !important; }
 
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-    @media(max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
-    [data-s] { opacity: 0; transform: translateY(10px); transition: opacity 0.4s, transform 0.4s; }
+    /* ── STICKY CTA ── */
+    #stickyCta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); border-top: 1px solid var(--border); padding: 12px 20px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 90; box-shadow: 0 -4px 20px rgba(0,0,0,.08); }
+    #stickyCta .info strong { font-weight: 800; color: var(--red); font-size: 15px; }
+    #stickyCta .info span { color: var(--muted); font-weight: 500; font-size: 12px; display: block; }
+    .btn-sticky { padding: 12px 26px; border-radius: 50px; border: none; background: var(--red); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background .18s; box-shadow: 0 4px 12px rgba(192,57,43,.22); }
+    .btn-sticky:hover { background: var(--red2); }
+
+    /* ── TOAST ── */
+    #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--text); color: #fff; border-radius: 50px; padding: 10px 20px; font-size: 13px; font-weight: 600; opacity: 0; transition: all .25s; pointer-events: none; z-index: 999; white-space: nowrap; box-shadow: var(--shadow); }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── ANIMATIONS ── */
+    [data-s] { opacity: 0; transform: translateY(10px); transition: opacity .4s, transform .4s; }
     [data-s].in { opacity: 1; transform: none; }
-    @media(max-width: 600px) { .hero-btns { justify-content: flex-start; } .modal-segmen-grid { grid-template-columns: 1fr; } }
+
+    /* ── MOBILE ADJUSTMENTS ── */
+    @media (max-width: 600px) {
+      .greeting-card { padding: 18px 18px; }
+      .greeting-left h1 { font-size: 20px; }
+      .greeting-btns { justify-content: flex-start; }
+      .modal-segmen-grid { grid-template-columns: 1fr; }
+      .hero-analytics { gap: 10px; }
+      .analytics-card { padding: 18px; }
+      .cbt-score-num { font-size: 34px; }
+    }
   </style>
 </head>
 <body>
@@ -244,97 +328,139 @@
     <div class="modal-sub">Pilih segmen ujian yang ingin kamu kerjakan.</div>
     <div id="modalSegmenContent"></div>
     <div class="modal-actions">
-      <button class="modal-btn-secondary modal-actions" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer" onclick="document.getElementById('modalTryout').classList.remove('open')">Batal</button>
-      <button class="modal-btn-primary" style="flex:1;padding:12px;border-radius:12px;border:none;background:var(--purple);color:#fff;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer" onclick="location.href='/pricing.html?tab=tryout'">+ Beli Segmen Lain</button>
+      <button class="modal-btn-secondary" style="border:1.5px solid var(--border);background:var(--surface2);font-family:inherit;cursor:pointer" onclick="document.getElementById('modalTryout').classList.remove('open')">Batal</button>
+      <button class="modal-btn-primary" onclick="location.href='/pricing.html?tab=tryout'">+ Beli Segmen Lain</button>
     </div>
   </div>
 </div>
 
 <main id="mainContent">
-  <!-- HERO -->
-  <div class="hero" data-s>
-    <div class="hero-left">
+
+  <!-- ── SECTION 1: GREETING ── -->
+  <div class="greeting-card" data-s>
+    <div class="greeting-left">
       <h1 id="greetText">Halo! 👋</h1>
       <p id="greetSub">Selamat datang di CerdasBersama.</p>
     </div>
-    <div class="hero-right">
+    <div class="greeting-right">
       <div id="planBadgeWrap"></div>
-      <div class="hero-btns">
+      <div class="greeting-btns">
         <button class="btn-latihan" id="btnMulaiLatihan">📝 Mulai Latihan</button>
         <button class="btn-tryout" id="btnTryOut">🎯 Try Out</button>
       </div>
     </div>
   </div>
 
-  <!-- SUBBAB POOL -->
-  <div id="subbabPoolWrap"></div>
+  <!-- ── SECTION 2: HERO ANALYTICS ── -->
+  <div class="hero-analytics" data-s style="transition-delay:.05s">
 
-  <!-- STATS GRID -->
-  <div class="stats-grid" data-s style="transition-delay:.06s">
+    <!-- Card 1: CBT Performance -->
+    <div class="analytics-card cbt" id="cardCBT">
+      <div class="ac-label"><span class="ac-dot"></span>Performa CBT</div>
+      <div class="ac-body" id="cardCBTBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Card 2: Learning Progress -->
+    <div class="analytics-card learning" id="cardLearning">
+      <div class="ac-label"><span class="ac-dot"></span>Progres Belajar</div>
+      <div class="ac-body" id="cardLearningBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Card 3: Smart Insight -->
+    <div class="analytics-card insight" id="cardInsight">
+      <div class="ac-label"><span class="ac-dot"></span>Insight Untukmu</div>
+      <div class="ac-body" id="cardInsightBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── SECTION 3: QUICK LAUNCH ── -->
+  <div id="subbabPoolWrap" data-s style="transition-delay:.08s"></div>
+
+  <!-- ── SECTION 4: PROGRESS STATS ── -->
+  <div class="stats-grid" data-s style="transition-delay:.11s">
     <div class="stat-card">
-      <div class="stat-icon" style="background:#fff0ef">📚</div>
-      <div class="stat-label">Sub-Bab Aktif</div>
-      <div class="stat-value" id="statSubbab">—</div>
-      <div class="stat-sub" id="statSubbabSub">sub-bab terbuka</div>
+      <div class="stat-icon" style="background:#edfaf3">📚</div>
+      <div class="stat-label">Sub-Bab Selesai</div>
+      <div class="stat-value" id="statSubbabDone">—</div>
+      <div class="stat-sub" id="statSubbabDoneSub">dari total aktif</div>
     </div>
     <div class="stat-card">
-      <div class="stat-icon" style="background:#fdf5ff">🎯</div>
-      <div class="stat-label">Try Out Aktif</div>
-      <div class="stat-value" id="statTryout">—</div>
-      <div class="stat-sub" id="statTryoutSub">segmen ujian</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon" style="background:#edfaf3">💰</div>
-      <div class="stat-label">Komisi Referral</div>
-      <div class="stat-value" id="statKomisi" style="font-size:16px">—</div>
-      <div class="stat-sub">total terkumpul</div>
+      <div class="stat-icon" style="background:#f5f0ff">🎯</div>
+      <div class="stat-label">Skor CBT Terakhir</div>
+      <div class="stat-value" id="statCBTSkor">—</div>
+      <div class="stat-sub" id="statCBTSkorSub">setelah ikuti CBT</div>
     </div>
     <div class="stat-card">
       <div class="stat-icon" style="background:#eef3fc">🔗</div>
       <div class="stat-label">Kode Referral</div>
-      <div class="stat-value" id="statRefCode" style="font-size:15px;color:var(--red);letter-spacing:1px">—</div>
+      <div class="stat-value" id="statRefCode" style="font-size:14px;color:var(--red);letter-spacing:1px">—</div>
       <div class="stat-sub">bagikan ke teman</div>
     </div>
   </div>
 
-  <!-- REFERRAL -->
-  <div class="section-label" data-s style="transition-delay:.12s">🔗 Referral Kamu</div>
-  <div class="card" data-s style="transition-delay:.14s">
-    <div class="card-title">Kode & Link Referral</div>
-    <div class="ref-code-row">
+  <!-- ── SECTION 5: CONTEXTUAL UPSELL ── -->
+  <div id="upsellBlock" data-s style="transition-delay:.14s"></div>
+
+  <!-- ── SECTION 6: REFERRAL COMPACT ── -->
+  <div class="section-label" data-s style="transition-delay:.17s">🔗 Referral</div>
+  <div class="referral-compact" data-s style="transition-delay:.19s">
+    <div class="referral-compact-header">
+      <div class="referral-compact-title">Kode & Link Referral</div>
+    </div>
+    <div class="ref-inline-row">
       <div class="ref-code-box" id="refCodeBig">———</div>
       <button class="btn-sm" id="btnCopyLink">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
         Salin Link
       </button>
       <button class="btn-sm red" id="btnCopyWA">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
         Kirim WA
       </button>
     </div>
-    <div class="ref-promo">🎁 Diskon 50% untuk teman yang daftar pakai kode referralmu!</div>
-    <div class="ref-stats">
-      <div class="ref-stat"><div class="lbl">Teman Diundang</div><div class="val" id="refCount">—</div></div>
-      <div class="ref-stat"><div class="lbl">Total Komisi</div><div class="val green" id="refKomisi">—</div></div>
+    <div class="ref-promo-line">
+      <span class="ref-promo-badge">🎁 Diskon 50% untuk temanmu</span>
+      <span>yang daftar pakai kode referralmu</span>
+    </div>
+    <div class="ref-stats-mini">
+      <div class="ref-stat-mini">
+        <span class="lbl">Teman Diundang</span>
+        <span class="val" id="refCount">—</span>
+      </div>
+      <div class="ref-stat-mini">
+        <span class="lbl">Total Komisi</span>
+        <span class="val green" id="refKomisi">—</span>
+      </div>
     </div>
   </div>
 
-  <div id="dynamicSection"></div>
+  <!-- PREMIUM DETAIL (only for premium users) -->
+  <div id="premiumDetailSection"></div>
 
-  <div class="section-label" data-s style="transition-delay:.28s">🧾 Riwayat Order</div>
-  <div class="card" data-s style="transition-delay:.3s">
+  <!-- ── SECTION 7: ORDER HISTORY ── -->
+  <div class="section-label" data-s style="transition-delay:.22s">🧾 Riwayat Order</div>
+  <div class="card" data-s style="transition-delay:.24s">
     <div class="order-list" id="orderList"><div class="empty-state">Memuat riwayat…</div></div>
   </div>
 
-  <div class="section-label" data-s style="transition-delay:.36s">👤 Profil Saya</div>
-  <div class="card" data-s style="transition-delay:.38s">
+  <!-- ── SECTION 8: PROFILE ── -->
+  <div class="section-label" data-s style="transition-delay:.28s">👤 Profil Saya</div>
+  <div class="card" data-s style="transition-delay:.3s">
     <div id="profileInfo"></div>
   </div>
+
 </main>
 
 <div id="stickyCta">
   <div class="info">
-    <strong>Mulai Belajar</strong>
+    <strong>Mulai Belajar Sekarang</strong>
     <span>Latihan Rp 7.900/sub-bab · Try Out Rp 34.900/segmen</span>
   </div>
   <button class="btn-sticky" onclick="location.href='/pricing.html'">Lihat Paket →</button>
@@ -429,51 +555,56 @@
       renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, orders, refCount, allSegmen, subBabIconMap);
 
       $('loadingScreen').style.opacity = '0';
-      setTimeout(() => $('loadingScreen').style.display = 'none', 350);
+      setTimeout(() => $('loadingScreen').style.display = 'none', 380);
       $('mainContent').classList.add('visible');
       setTimeout(() => {
-        document.querySelectorAll('[data-s]').forEach((el,i) => setTimeout(() => el.classList.add('in'), i * 70));
-      }, 50);
+        document.querySelectorAll('[data-s]').forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 65));
+      }, 60);
     } catch(err) {
       console.error(err);
-      $('loadingScreen').querySelector('p').textContent = 'Gagal memuat data. Coba refresh.';
+      $('loadingScreen').querySelector('p').textContent = 'Gagal memuat data. Coba refresh halaman.';
     }
   }
 
+  // ═══════════════════════════════════════
+  // MAIN RENDER
+  // ═══════════════════════════════════════
   function renderAll(user, ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, orders, refCount, allSegmen, subBabIconMap) {
-    const nama      = ud.nama || user.email;
-    const namaFirst = nama.split(' ')[0];
-    const hasTryout = isPremium || tryOutAkses.length > 0;
+    const nama       = ud.nama || user.email;
+    const namaFirst  = nama.split(' ')[0];
+    const hasTryout  = isPremium || tryOutAkses.length > 0;
+    const hasSubbab  = subBabAkses.length > 0 || hasPremiumAll;
+    const doneList   = getDoneSubbab();
+    const doneCount  = doneList.filter(sb => hasPremiumAll || subBabAkses.includes(sb)).length;
+    const totalSubbab = hasPremiumAll ? null : subBabAkses.length;
 
-    $('navName').textContent   = namaFirst;
+    // ── NAV ──
+    $('navName').textContent = namaFirst;
+
+    // ── GREETING ──
     $('greetText').textContent = `Halo, ${namaFirst}! 👋`;
-    $('greetSub').textContent  = hasPremiumAll
-      ? 'Akses penuh aktif — selamat belajar tanpa batas!'
-      : subBabAkses.length
-        ? `Kamu punya ${subBabAkses.length} sub-bab aktif. Selamat belajar!`
-        : 'Beli sub-bab atau Try Out untuk mulai belajar.';
+    $('greetSub').textContent = buildGreetSub(hasPremiumAll, subBabAkses, tryOutAkses, doneCount, totalSubbab);
 
-    // Badge
+    // ── PLAN BADGE ──
     const badge = document.createElement('div');
     if (hasPremiumAll) {
       badge.className = 'plan-badge premium';
       badge.innerHTML = `<span class="dot"></span>⭐ Akun Premium`;
-    } else if (subBabAkses.length) {
+    } else if (subBabAkses.length || tryOutAkses.length) {
+      const total = subBabAkses.length + tryOutAkses.length;
       badge.className = 'plan-badge alacarte';
-      badge.innerHTML = `<span class="dot"></span>📚 ${subBabAkses.length} Sub-Bab`;
+      badge.innerHTML = `<span class="dot"></span>📚 ${total} Akses Aktif`;
     } else {
       badge.className = 'plan-badge none';
-      badge.innerHTML = `🔓 Belum ada akses`;
+      badge.innerHTML = `🔓 Mulai Belajar`;
     }
     $('planBadgeWrap').appendChild(badge);
 
-    // Tombol Mulai Latihan
+    // ── BUTTONS ──
     $('btnMulaiLatihan').addEventListener('click', () => {
-      if (subBabAkses.length || hasPremiumAll) window.location.href = '/pool.html';
+      if (hasSubbab) window.location.href = '/pool.html';
       else window.location.href = '/pricing.html';
     });
-
-    // Tombol Try Out
     const btnTO = $('btnTryOut');
     if (hasTryout) {
       btnTO.classList.add('has-access');
@@ -482,15 +613,33 @@
       btnTO.addEventListener('click', () => window.location.href = '/pricing.html?tab=tryout');
     }
 
-    // Stats
-    $('statSubbab').textContent     = hasPremiumAll ? 'Semua' : subBabAkses.length;
-    $('statSubbabSub').textContent  = hasPremiumAll ? 'akses penuh' : 'sub-bab terbuka';
-    $('statTryout').textContent     = isPremium ? 'Semua' : tryOutAkses.length || '—';
-    $('statTryoutSub').textContent  = isPremium ? 'akses premium' : tryOutAkses.length ? 'segmen ujian' : 'belum ada akses';
-    $('statKomisi').textContent     = fmtRp(ud.komisiTotal || 0);
-    $('statRefCode').textContent    = ud.referralCode || '—';
+    // ── HERO ANALYTICS CARDS ──
+    renderCardCBT(hasTryout, tryOutAkses, isPremium, ud);
+    renderCardLearning(hasSubbab, hasPremiumAll, subBabAkses, doneCount, totalSubbab);
+    renderCardInsight(hasSubbab, hasTryout, hasPremiumAll, subBabAkses, tryOutAkses, doneCount, totalSubbab, ud);
 
-    // Referral
+    // ── QUICK LAUNCH POOL ──
+    renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap, doneList);
+
+    // ── STATS BAR ──
+    if (totalSubbab !== null) {
+      $('statSubbabDone').textContent = `${doneCount}/${totalSubbab}`;
+      $('statSubbabDoneSub').textContent = doneCount === totalSubbab && totalSubbab > 0 ? 'semua tuntas 🎉' : 'sub-bab selesai';
+    } else if (hasPremiumAll) {
+      $('statSubbabDone').textContent = doneCount > 0 ? doneCount : '—';
+      $('statSubbabDoneSub').textContent = 'sub-bab dikerjakan';
+    }
+    // CBT skor — Sprint 3 data (lastCbtScore field)
+    if (ud.lastCbtScore !== undefined) {
+      $('statCBTSkor').textContent = ud.lastCbtScore;
+      $('statCBTSkorSub').textContent = ud.lastCbtSegmen ? ud.lastCbtSegmen.substring(0, 20) : 'skor terakhir';
+    }
+    $('statRefCode').textContent = ud.referralCode || '—';
+
+    // ── CONTEXTUAL UPSELL ──
+    renderUpsell(hasPremiumAll, hasSubbab, hasTryout, isPremium, ud);
+
+    // ── REFERRAL ──
     const code    = ud.referralCode || '';
     const baseUrl = window.location.origin + '/register.html?ref=';
     $('refCodeBig').textContent = code || '—';
@@ -504,7 +653,7 @@
         showToast('Link referral berhasil disalin!');
         setTimeout(() => {
           $('btnCopyLink').classList.remove('copied');
-          $('btnCopyLink').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Salin Link`;
+          $('btnCopyLink').innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Salin Link`;
         }, 2500);
       });
     });
@@ -513,13 +662,12 @@
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     });
 
-    // Subbab pool + tryout chips
-    renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap);
+    // ── PREMIUM DETAIL ──
+    if (hasPremiumAll) {
+      renderPremiumDetail(ud, allSegmen);
+    }
 
-    // Dynamic section
-    renderDynamicSection(ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, allSegmen, hasTryout);
-
-    // Orders
+    // ── ORDERS ──
     const list = $('orderList');
     if (!orders.length) {
       list.innerHTML = '<div class="empty-state">Belum ada riwayat order.</div>';
@@ -527,15 +675,15 @@
       list.innerHTML = orders.map(o => {
         const sc = o.status==='paid'?'paid':o.status==='pending'?'pending':'failed';
         const sl = o.status==='paid'?'Lunas':o.status==='pending'?'Menunggu':'Gagal';
-        const subBabLabel = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
-        const tryoutLabel = o.tryOutSegmen?.length ? `🎯 ${o.tryOutSegmen.join(', ')}` : '';
-        const segmenLabel = o.segmen ? `📚 ${o.segmen}` : '';
+        const subBabLabel  = o.subBabDibeli?.length ? o.subBabDibeli.join(', ') : '';
+        const tryoutLabel  = o.tryOutSegmen?.length ? `🎯 ${o.tryOutSegmen.join(', ')}` : '';
+        const segmenLabel  = o.segmen ? `📚 ${o.segmen}` : '';
         return `<div class="order-item">
           <div class="order-info">
-            <div class="order-paket">${o.paket||'—'} ${segmenLabel?`<span style="font-size:10px;font-weight:600;color:var(--muted);margin-left:4px">${segmenLabel}</span>`:''}</div>
+            <div class="order-paket">${o.paket||'—'} ${segmenLabel ? `<span style="font-size:10px;font-weight:600;color:var(--muted);margin-left:4px">${segmenLabel}</span>` : ''}</div>
             ${subBabLabel ? `<div class="order-subbab">${subBabLabel}</div>` : ''}
             ${tryoutLabel ? `<div class="order-subbab" style="color:var(--purple)">${tryoutLabel}</div>` : ''}
-            <div class="order-date">${fmtDate(o.createdAt)} · ${o.refCode?`Ref: ${o.refCode}`:'Tanpa referral'}</div>
+            <div class="order-date">${fmtDate(o.createdAt)} · ${o.refCode ? `Ref: ${o.refCode}` : 'Tanpa referral'}</div>
           </div>
           <div class="order-total">${fmtRp(o.total||0)}</div>
           <span class="status-pill ${sc}">${sl}</span>
@@ -543,43 +691,274 @@
       }).join('');
     }
 
-    // Profile
+    // ── PROFILE ──
     $('profileInfo').innerHTML = [
-      { lbl:'Nama',           val: ud.nama||'—' },
-      { lbl:'Email',          val: user.email },
-      { lbl:'WhatsApp',       val: ud.wa||'—' },
-      { lbl:'Plan',           val: hasPremiumAll?'Premium':subBabAkses.length?'À la carte':'Belum ada akses' },
-      { lbl:'Try Out',        val: isPremium?'Semua (Premium)':tryOutAkses.length?`${tryOutAkses.length} segmen`:'Belum ada' },
-      { lbl:'Kode Referral',  val: ud.referralCode||'—' },
+      { lbl:'Nama',          val: ud.nama||'—' },
+      { lbl:'Email',         val: user.email },
+      { lbl:'WhatsApp',      val: ud.wa||'—' },
+      { lbl:'Plan',          val: hasPremiumAll ? 'Premium' : subBabAkses.length ? 'À la carte' : 'Belum ada akses' },
+      { lbl:'Try Out',       val: isPremium ? 'Semua (Premium)' : tryOutAkses.length ? `${tryOutAkses.length} segmen` : 'Belum ada' },
+      { lbl:'Kode Referral', val: ud.referralCode||'—' },
     ].map(r => `<div class="profile-row"><span class="lbl">${r.lbl}</span><span class="val">${r.val}</span></div>`).join('');
   }
 
-  // ── SUBBAB POOL + TRYOUT CHIPS ──
-  function renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap) {
+  // ═══════════════════════════════════════
+  // GREETING SUB TEXT
+  // ═══════════════════════════════════════
+  function buildGreetSub(hasPremiumAll, subBabAkses, tryOutAkses, doneCount, totalSubbab) {
+    if (hasPremiumAll) return 'Akses penuh aktif — semua materi dan Try Out tersedia untukmu!';
+    if (subBabAkses.length && tryOutAkses.length) {
+      if (doneCount > 0) return `${doneCount} dari ${totalSubbab} sub-bab sudah selesai — terus semangat!`;
+      return `Kamu punya ${subBabAkses.length} sub-bab latihan dan ${tryOutAkses.length} segmen Try Out. Mau mulai dari mana?`;
+    }
+    if (subBabAkses.length) {
+      if (doneCount === totalSubbab && totalSubbab > 0) return 'Semua sub-bab sudah selesai! Siap untuk tantangan berikutnya?';
+      if (doneCount > 0) return `${doneCount} dari ${totalSubbab} sub-bab selesai — sisanya menunggumu!`;
+      return `${subBabAkses.length} sub-bab siap dilatih. Mulai sesi pertamamu hari ini!`;
+    }
+    if (tryOutAkses.length) return `${tryOutAkses.length} segmen Try Out aktif — uji kemampuanmu sekarang!`;
+    return 'Selamat datang! Mulai perjalanan belajarmu dari sini.';
+  }
+
+  // ═══════════════════════════════════════
+  // CARD 1 — CBT PERFORMANCE
+  // ═══════════════════════════════════════
+  function renderCardCBT(hasTryout, tryOutAkses, isPremium, ud) {
+    const body = $('cardCBTBody');
+
+    // State: lastCbtScore exists (Sprint 3 data)
+    if (ud.lastCbtScore !== undefined) {
+      const score    = ud.lastCbtScore;
+      const prevScore = ud.prevCbtScore;
+      const segmen   = ud.lastCbtSegmen || '';
+      const hasDelta = prevScore !== undefined;
+      const delta    = hasDelta ? score - prevScore : 0;
+      const deltaClass = delta > 0 ? 'up' : delta < 0 ? 'down' : 'same';
+      const deltaLabel = delta > 0 ? `↑ +${delta} poin` : delta < 0 ? `↓ ${delta} poin` : '= Sama';
+      const badgeText = delta > 0 ? '🎉 Performa Meningkat' : delta < 0 ? '📈 Masih Bisa Naik' : '🎯 Konsisten';
+
+      body.innerHTML = `
+        ${hasDelta ? `<div class="ac-badge-status positive">${badgeText}</div>` : ''}
+        <div class="cbt-score-row">
+          <span class="cbt-score-num">${score}</span>
+          ${hasDelta ? `<span class="cbt-score-delta ${deltaClass}">${deltaLabel}</span>` : ''}
+        </div>
+        <div class="cbt-meta">
+          <div class="cbt-meta-row">Ujian terakhir: <span class="badge-label">${segmen}</span></div>
+          ${ud.kuatMapel ? `<div class="cbt-meta-row">✦ Terkuat: <span class="badge-label">${ud.kuatMapel}</span></div>` : ''}
+          ${ud.fokusMapel ? `<div class="cbt-meta-row">◎ Area fokus: <span class="badge-label">${ud.fokusMapel}</span></div>` : ''}
+        </div>
+        <div class="ac-cta">
+          <button class="btn-ac purple" onclick="document.getElementById('btnTryOut').click()">Ikuti CBT Berikutnya →</button>
+        </div>`;
+      return;
+    }
+
+    // State: has tryout access but no score yet
+    if (hasTryout) {
+      const segmenLabel = isPremium ? 'Semua segmen' : tryOutAkses[0] || 'Try Out';
+      body.innerHTML = `
+        <div class="ac-badge-status neutral">🎯 Siap Diuji</div>
+        <div class="ac-headline">Waktunya ikuti CBT pertamamu!</div>
+        <div class="ac-sub">Kamu sudah punya akses ${segmenLabel}. Ikuti sekarang untuk tahu posisimu — tanpa perlu persiapan khusus.</div>
+        <div class="ac-cta">
+          <button class="btn-ac purple" onclick="document.getElementById('btnTryOut').click()">Mulai CBT Sekarang →</button>
+        </div>`;
+      return;
+    }
+
+    // State: no tryout access at all
+    body.innerHTML = `
+      <span class="ac-empty-icon">📋</span>
+      <div class="ac-headline">Belum ada ujian? Tidak apa-apa!</div>
+      <div class="ac-sub">Ikuti CBT pertama untuk tahu di mana posisimu sekarang — ini titik awal, bukan penilaian akhir.</div>
+      <div class="ac-cta">
+        <a href="/pricing.html?tab=tryout" class="btn-ac purple">Lihat Paket CBT →</a>
+      </div>`;
+  }
+
+  // ═══════════════════════════════════════
+  // CARD 2 — LEARNING PROGRESS
+  // ═══════════════════════════════════════
+  function renderCardLearning(hasSubbab, hasPremiumAll, subBabAkses, doneCount, totalSubbab) {
+    const body = $('cardLearningBody');
+
+    // State: no subbab access
+    if (!hasSubbab) {
+      body.innerHTML = `
+        <span class="ac-empty-icon">🔒</span>
+        <div class="ac-headline">Perjalanan belajarmu dimulai di sini.</div>
+        <div class="ac-sub">Beli paket latihan untuk melacak perkembanganmu — topik per topik, hari per hari.</div>
+        <div class="ac-cta">
+          <a href="/pricing.html" class="btn-ac green">Lihat Paket Latihan →</a>
+        </div>`;
+      return;
+    }
+
+    // State: has access, nothing done yet
+    if (doneCount === 0) {
+      const total = hasPremiumAll ? 'banyak' : totalSubbab;
+      body.innerHTML = `
+        <div class="ac-badge-status neutral">📚 Paket Aktif</div>
+        <div class="ac-headline">Siap mulai!</div>
+        <div class="ac-sub">Kamu punya ${hasPremiumAll ? 'akses ke semua materi' : `${total} sub-bab siap dilatih`}. Bahkan 10 soal pertama sudah cukup untuk melihat polamu.</div>
+        <div class="progress-track"><div class="progress-fill zero" style="width:0%"></div></div>
+        <div class="progress-label"><span>0% selesai</span><span>Mulai sekarang!</span></div>
+        <div class="ac-cta">
+          <button class="btn-ac green" onclick="document.getElementById('btnMulaiLatihan').click()">Mulai Latihan Pertama →</button>
+        </div>`;
+      return;
+    }
+
+    // State: active progress
+    const pct = hasPremiumAll ? null : Math.round((doneCount / totalSubbab) * 100);
+    const remaining = hasPremiumAll ? null : totalSubbab - doneCount;
+    const allDone = !hasPremiumAll && remaining === 0;
+
+    if (allDone) {
+      body.innerHTML = `
+        <div class="ac-badge-status positive">✅ Semua Selesai!</div>
+        <div class="ac-headline">Luar biasa — semua sub-bab tuntas!</div>
+        <div class="ac-sub">Kamu sudah mengerjakan semua materi yang dimiliki. Saatnya tambah lebih banyak atau uji diri dengan CBT.</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%"></div></div>
+        <div class="progress-label"><span>100% selesai 🎉</span><span>${doneCount} sub-bab</span></div>
+        <div class="ac-cta">
+          <a href="/pricing.html" class="btn-ac green">Tambah Sub-Bab →</a>
+        </div>`;
+      return;
+    }
+
+    body.innerHTML = `
+      <div class="ac-headline">${doneCount} sub-bab selesai${!hasPremiumAll ? ` dari ${totalSubbab}` : ''}!</div>
+      <div class="ac-sub">${hasPremiumAll ? 'Terus konsisten — setiap sesi mendekatkanmu ke tujuan.' : `${remaining} sub-bab lagi menunggumu. Teruskan momentum ini!`}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct || 60}%"></div></div>
+      <div class="progress-label">
+        <span>${pct !== null ? pct + '%' : ''} selesai</span>
+        <span>${remaining !== null ? remaining + ' tersisa' : ''}</span>
+      </div>
+      <div class="ac-cta">
+        <button class="btn-ac green" onclick="document.getElementById('btnMulaiLatihan').click()">Lanjutkan Latihan →</button>
+      </div>`;
+  }
+
+  // ═══════════════════════════════════════
+  // CARD 3 — SMART INSIGHT
+  // ═══════════════════════════════════════
+  function renderCardInsight(hasSubbab, hasTryout, hasPremiumAll, subBabAkses, tryOutAkses, doneCount, totalSubbab, ud) {
+    const body = $('cardInsightBody');
+
+    // Has CBT score data (Sprint 3)
+    if (ud.lastCbtScore !== undefined && ud.prevCbtScore !== undefined) {
+      const delta = ud.lastCbtScore - ud.prevCbtScore;
+      if (delta > 0) {
+        body.innerHTML = `
+          <div class="insight-highlight">"Nilai naik ${delta} poin. Bukan kebetulan — ini hasil kerja kerasmu."</div>
+          <div class="ac-sub">Latihan yang konsisten membuat perbedaan nyata. Lanjutkan sebelum CBT berikutnya untuk hasil yang lebih baik lagi.</div>
+          <div class="ac-cta">
+            <button class="btn-ac red" onclick="document.getElementById('btnMulaiLatihan').click()">Lanjutkan Latihan →</button>
+          </div>`;
+        return;
+      }
+      if (delta < 0) {
+        body.innerHTML = `
+          <div class="insight-highlight">"Ada ruang untuk berkembang — dan itu hal yang bagus."</div>
+          <div class="ac-sub">Fokus latihan di area yang perlu perhatian sebelum CBT berikutnya. Satu sesi latihan sudah bisa membuat perbedaan.</div>
+          <div class="ac-cta">
+            <button class="btn-ac red" onclick="document.getElementById('btnMulaiLatihan').click()">Mulai Latihan Sekarang →</button>
+          </div>`;
+        return;
+      }
+    }
+
+    // Has both subbab and tryout, has done some
+    if (hasSubbab && hasTryout && doneCount > 0) {
+      body.innerHTML = `
+        <div class="insight-highlight">"Kamu sudah ${doneCount} langkah lebih jauh dari kemarin."</div>
+        <div class="ac-sub">Selesaikan sisa latihan, lalu uji hasilnya dengan CBT. Kombinasi ini yang paling efektif.</div>
+        <div class="ac-cta">
+          <button class="btn-ac red" onclick="document.getElementById('btnMulaiLatihan').click()">Lanjutkan →</button>
+        </div>`;
+      return;
+    }
+
+    // Has subbab, has done some, no tryout
+    if (hasSubbab && doneCount > 0 && !hasTryout) {
+      body.innerHTML = `
+        <div class="insight-highlight">"Latihan sudah jalan — saatnya diuji sungguhan."</div>
+        <div class="ac-sub">Kamu sudah mengerjakan ${doneCount} sub-bab. Coba ikuti CBT untuk lihat hasilnya dalam kondisi ujian asli.</div>
+        <div class="ac-cta">
+          <a href="/pricing.html?tab=tryout" class="btn-ac red">Coba Try Out →</a>
+        </div>`;
+      return;
+    }
+
+    // Has subbab, nothing done yet
+    if (hasSubbab && doneCount === 0) {
+      body.innerHTML = `
+        <div class="insight-highlight">"Langkah pertama selalu yang paling susah — tapi juga yang paling penting."</div>
+        <div class="ac-sub">Paket latihanmu sudah aktif. Mulai satu sub-bab hari ini — tidak perlu semuanya sekaligus.</div>
+        <div class="ac-cta">
+          <button class="btn-ac red" onclick="document.getElementById('btnMulaiLatihan').click()">Mulai Sekarang →</button>
+        </div>`;
+      return;
+    }
+
+    // Has tryout only, no subbab
+    if (hasTryout && !hasSubbab) {
+      body.innerHTML = `
+        <div class="insight-highlight">"Ujian tanpa latihan bisa mengejutkan — tapi latihan + ujian? Itu kombinasi pemenang."</div>
+        <div class="ac-sub">Kamu sudah punya akses CBT. Tambahkan paket latihan untuk mempersiapkan diri lebih matang.</div>
+        <div class="ac-cta">
+          <a href="/pricing.html" class="btn-ac red">Lihat Paket Latihan →</a>
+        </div>`;
+      return;
+    }
+
+    // No access at all — new user
+    body.innerHTML = `
+      <div class="insight-highlight">"Setiap perjalanan besar dimulai dari satu langkah kecil."</div>
+      <div class="ac-sub">Ikuti CBT pertama untuk tahu posisimu sekarang, atau mulai dari latihan sub-bab. Tidak ada cara yang salah.</div>
+      <div class="ac-cta">
+        <a href="/pricing.html" class="btn-ac red">Mulai Perjalananmu →</a>
+      </div>`;
+  }
+
+  // ═══════════════════════════════════════
+  // QUICK LAUNCH POOL
+  // ═══════════════════════════════════════
+  function renderSubbabPool(subBabAkses, hasPremiumAll, tryOutAkses, isPremium, subBabIconMap, doneList) {
     const wrap = $('subbabPoolWrap');
-    const hasSubbab  = subBabAkses.length > 0 || hasPremiumAll;
-    const hasTryout  = isPremium || tryOutAkses.length > 0;
-    if (!hasSubbab && !hasTryout) { wrap.innerHTML = ''; return; }
+    const hasSubbab = subBabAkses.length > 0 || hasPremiumAll;
+    const hasTryout = isPremium || tryOutAkses.length > 0;
 
-    const doneList = getDoneSubbab();
+    if (!hasSubbab && !hasTryout) {
+      wrap.innerHTML = `
+        <div class="subbab-pool-card">
+          <div class="pool-empty-state">
+            <div class="pes-icon">🚀</div>
+            <p>Belum ada akses aktif.<br>Beli sub-bab atau Try Out untuk mulai belajar.</p>
+            <a href="/pricing.html" class="btn-ac red" style="text-decoration:none">Lihat Semua Paket →</a>
+          </div>
+        </div>`;
+      return;
+    }
 
-    // Group subbab by segmen
+    // Group subbab by segmen, unfinished first
     const segmenMap = {};
     subBabAkses.forEach(sb => {
-      const info = subBabIconMap[sb] || { icon:'📚', segmen:'Lainnya', mapel:'' };
-      if (!segmenMap[info.segmen]) segmenMap[info.segmen] = [];
-      segmenMap[info.segmen].push({ sb, icon:info.icon, segmen:info.segmen, mapel:info.mapel });
+      const info = subBabIconMap[sb] || { icon:'📚', segmen:'Sub-Bab Kamu', mapel:'' };
+      if (!segmenMap[info.segmen]) segmenMap[info.segmen] = { active: [], done: [] };
+      const isDone = doneList.includes(sb);
+      segmenMap[info.segmen][isDone ? 'done' : 'active'].push({ sb, icon: info.icon, segmen: info.segmen, mapel: info.mapel });
     });
-    if (!Object.keys(segmenMap).length && subBabAkses.length) {
-      segmenMap['Sub-Bab Kamu'] = subBabAkses.map(sb => ({ sb, icon:'📚', segmen:'', mapel:'' }));
-    }
 
     const allSubbabDone = subBabAkses.length > 0 && subBabAkses.every(sb => doneList.includes(sb));
 
-    const segmenGroupsHTML = Object.entries(segmenMap).map(([seg, items]) => {
-      const chips = items.map(({ sb, icon, segmen, mapel }) => {
+    const segmenGroupsHTML = Object.entries(segmenMap).map(([seg, groups]) => {
+      const allItems = [...groups.active, ...groups.done];
+      const chips = allItems.map(({ sb, icon, segmen, mapel }) => {
         const isDone = doneList.includes(sb);
-        const params = new URLSearchParams({ subbab:sb, segmen, mapel });
+        const params = new URLSearchParams({ subbab: sb, segmen, mapel });
         if (isDone) {
           return `<a href="/latihan.html?${params}" class="subbab-chip done" title="${sb} — sudah dikerjakan">
             <span class="chip-check">✓</span><span class="mapel-icon">${icon}</span><span>${sb}</span>
@@ -589,28 +968,24 @@
           <span class="mapel-icon">${icon}</span><span>${sb}</span>
         </a>`;
       }).join('');
-      const label = Object.keys(segmenMap).length > 1 ? `<div class="chips-segmen-title">📚 ${seg}</div>` : '';
+      const label = Object.keys(segmenMap).length > 1
+        ? `<div class="chips-segmen-title">📚 ${seg || 'Sub-Bab Kamu'}</div>` : '';
       return `<div class="chips-segmen-group">${label}<div class="subbab-chips">${chips}</div></div>`;
     }).join('');
 
     const allDoneBanner = allSubbabDone ? `
       <div class="pool-all-done">
         <span class="done-icon">🎉</span>
-        <span class="done-text">Semua sub-bab sudah dikerjakan! Tambah lagi yuk.</span>
-        <a href="/pricing.html" class="done-cta">+ Beli Sub-Bab</a>
+        <span class="done-text">Semua sub-bab sudah dikerjakan — siap untuk lebih banyak lagi?</span>
+        <a href="/pricing.html" class="done-cta">+ Tambah Sub-Bab</a>
       </div>` : '';
 
-    // Tryout section inside pool card
     let tryoutSectionHTML = '';
     if (hasTryout) {
       const toChips = isPremium
-        ? `<a href="/cbt-engine-v2.html" class="tryout-chip" title="Akses semua segmen (Premium)">
-            <span class="tryout-chip-icon">⭐</span><span>Semua Segmen (Premium)</span>
-          </a>`
+        ? `<a href="/cbt-engine-v2.html" class="tryout-chip"><span>⭐</span><span>Semua Segmen (Premium)</span></a>`
         : tryOutAkses.map(seg =>
-            `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip" title="Mulai Try Out: ${seg}">
-              <span class="tryout-chip-icon">🎯</span><span>${seg}</span>
-            </a>`
+            `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip"><span>🎯</span><span>${seg}</span></a>`
           ).join('');
       tryoutSectionHTML = `
         <div class="tryout-pool-section">
@@ -622,14 +997,13 @@
         </div>`;
     }
 
-    // Render card
     let cardHTML = '';
     if (hasSubbab) {
       cardHTML = `
-        <div class="subbab-pool-card" data-s style="transition-delay:.03s">
+        <div class="subbab-pool-card">
           <div class="subbab-pool-header">
             <div>
-              <div class="subbab-pool-title">✅ Sub-Bab yang Sudah Dibeli</div>
+              <div class="subbab-pool-title">✅ Akses Belajarmu</div>
               <div class="subbab-pool-subtitle">Klik sub-bab untuk langsung mulai latihan</div>
             </div>
             <a href="/pricing.html" class="btn-beli-subbab">+ Beli Sub-Bab</a>
@@ -639,9 +1013,8 @@
           ${tryoutSectionHTML}
         </div>`;
     } else if (hasTryout) {
-      // Hanya punya try out, belum beli sub-bab
       cardHTML = `
-        <div class="subbab-pool-card" data-s style="transition-delay:.03s">
+        <div class="subbab-pool-card">
           <div class="subbab-pool-header">
             <div>
               <div class="subbab-pool-title">🎯 Try Out / CBT Aktif</div>
@@ -651,11 +1024,9 @@
           </div>
           <div class="subbab-chips">
             ${isPremium
-              ? `<a href="/cbt-engine-v2.html" class="tryout-chip"><span class="tryout-chip-icon">⭐</span><span>Semua Segmen (Premium)</span></a>`
+              ? `<a href="/cbt-engine-v2.html" class="tryout-chip"><span>⭐</span><span>Semua Segmen (Premium)</span></a>`
               : tryOutAkses.map(seg =>
-                  `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip">
-                    <span class="tryout-chip-icon">🎯</span><span>${seg}</span>
-                  </a>`
+                  `<a href="/cbt-engine-v2.html?segmen=${encodeURIComponent(seg)}" class="tryout-chip"><span>🎯</span><span>${seg}</span></a>`
                 ).join('')
             }
           </div>
@@ -665,13 +1036,134 @@
     wrap.innerHTML = cardHTML;
   }
 
-  // ── MODAL TRYOUT PICKER ──
+  // ═══════════════════════════════════════
+  // CONTEXTUAL UPSELL
+  // ═══════════════════════════════════════
+  function renderUpsell(hasPremiumAll, hasSubbab, hasTryout, isPremium, ud) {
+    const block = $('upsellBlock');
+
+    // Premium: no banner unless expiring soon
+    if (hasPremiumAll) {
+      const exp  = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
+      const diff = exp ? Math.ceil((exp - new Date()) / 86400000) : 999;
+      if (exp && diff <= 30) {
+        block.innerHTML = `
+          <div class="upsell-block gold-theme" style="align-items:flex-start;flex-direction:column">
+            <div class="upsell-text">
+              <h3>📅 Akses Premium akan berakhir dalam ${diff} hari</h3>
+              <p>Perpanjang sekarang agar belajarmu tidak terputus.</p>
+            </div>
+            <a href="/pricing.html" class="btn-upsell gold" style="margin-top:12px">Perpanjang Premium →</a>
+          </div>`;
+      }
+      return;
+    }
+
+    // Has subbab but no tryout → upsell tryout
+    if (hasSubbab && !hasTryout) {
+      block.innerHTML = `
+        <div class="upsell-block purple-theme">
+          <div class="upsell-text">
+            <h3>🎯 Uji kemampuanmu dengan Try Out</h3>
+            <p>Lihat seberapa siap kamu menghadapi ujian sungguhan. Mulai dari Rp 34.900/segmen.</p>
+          </div>
+          <button class="btn-upsell purple" onclick="location.href='/pricing.html?tab=tryout'">Lihat Paket Try Out →</button>
+        </div>`;
+      return;
+    }
+
+    // Has tryout but no subbab → upsell latihan
+    if (hasTryout && !hasSubbab) {
+      block.innerHTML = `
+        <div class="upsell-block green-theme">
+          <div class="upsell-text">
+            <h3>📚 Persiapkan diri dengan latihan</h3>
+            <p>Siswa yang rutin latihan jauh lebih siap saat CBT. Mulai dari Rp 7.900/sub-bab.</p>
+          </div>
+          <button class="btn-upsell green" onclick="location.href='/pricing.html'">Lihat Paket Latihan →</button>
+        </div>`;
+      return;
+    }
+
+    // Has both but not premium → upsell premium
+    if (hasSubbab && hasTryout && !isPremium) {
+      block.innerHTML = `
+        <div class="upsell-block red-theme">
+          <div class="upsell-text">
+            <h3>⭐ Upgrade ke Premium — akses segalanya</h3>
+            <p>Rp 99.900/bulan — buka semua sub-bab, semua Try Out, tanpa batas.</p>
+          </div>
+          <button class="btn-upsell white" onclick="location.href='/pricing.html'">Upgrade Sekarang →</button>
+        </div>`;
+      return;
+    }
+
+    // No access at all → first purchase nudge
+    if (!hasSubbab && !hasTryout) {
+      block.innerHTML = `
+        <div class="upsell-block red-theme">
+          <div class="upsell-text">
+            <h3>🚀 Mulai perjalanan belajarmu</h3>
+            <p>Latihan Rp 7.900/sub-bab · Try Out Rp 34.900/segmen · Premium Rp 99.900/bulan</p>
+          </div>
+          <button class="btn-upsell white" onclick="location.href='/pricing.html'">Lihat Semua Paket →</button>
+        </div>`;
+      $('stickyCta').style.display = 'flex';
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // PREMIUM DETAIL SECTION
+  // ═══════════════════════════════════════
+  function renderPremiumDetail(ud, allSegmen) {
+    const section = $('premiumDetailSection');
+    const exp     = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
+    const expStr  = exp ? exp.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+    const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
+    const isExpired = diff <= 0;
+
+    const segmenListHTML = allSegmen.map(s =>
+      `<div class="segmen-item"><div class="segmen-check">✓</div>${s.icon || '📚'} ${s.id}</div>`
+    ).join('');
+
+    section.innerHTML = `
+      <div class="section-label" data-s style="transition-delay:.2s">✨ Detail Premium</div>
+      <div class="premium-info" data-s style="transition-delay:.22s">
+        <div>
+          <h3>✨ Akses Premium Aktif</h3>
+          <p>Kamu punya akses penuh ke semua soal, sub-bab, dan Try Out.</p>
+          <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
+          ${isExpired ? `<div style="margin-top:10px"><a href="/pricing.html" style="display:inline-flex;align-items:center;gap:6px;padding:9px 20px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a></div>` : ''}
+        </div>
+      </div>
+      <div class="two-col" data-s style="transition-delay:.24s">
+        <div class="card" style="margin-bottom:0">
+          <div class="card-title">📚 Segmen Aktif</div>
+          <div style="display:flex;flex-direction:column;gap:7px">${segmenListHTML || '<div style="font-size:13px;color:var(--muted)">Memuat segmen…</div>'}</div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <div class="card-title">📊 Statistik Belajar</div>
+          <div style="text-align:center;padding:24px 0">
+            <div style="font-size:36px">🚀</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Segera hadir…</div>
+          </div>
+        </div>
+      </div>`;
+
+    // Animate new data-s elements
+    setTimeout(() => {
+      section.querySelectorAll('[data-s]').forEach(el => el.classList.add('in'));
+    }, 400);
+  }
+
+  // ═══════════════════════════════════════
+  // MODAL TRYOUT PICKER
+  // ═══════════════════════════════════════
   function openTryoutModal(tryOutAkses, isPremium) {
     const content = $('modalSegmenContent');
     content.innerHTML = '';
 
     if (isPremium) {
-      // Premium → tampilkan semua segmen
       TRYOUT_SEGMEN_ALL.forEach(({ group, items }) => {
         const title = document.createElement('div');
         title.className = 'modal-group-title';
@@ -683,15 +1175,12 @@
           const card = document.createElement('div');
           card.className = 'modal-seg-card';
           card.innerHTML = `🎯 ${id}`;
-          card.addEventListener('click', () => {
-            window.location.href = `/cbt-engine-v2.html?segmen=${encodeURIComponent(id)}`;
-          });
+          card.addEventListener('click', () => window.location.href = `/cbt-engine-v2.html?segmen=${encodeURIComponent(id)}`);
           grid.appendChild(card);
         });
         content.appendChild(grid);
       });
     } else {
-      // Hanya tampil yang dimiliki
       TRYOUT_SEGMEN_ALL.forEach(({ group, items }) => {
         const owned = items.filter(id => tryOutAkses.includes(id));
         if (!owned.length) return;
@@ -714,113 +1203,14 @@
         content.appendChild(grid);
       });
     }
-
     $('modalTryout').classList.add('open');
   }
 
-  // Close modal on overlay click
   $('modalTryout').addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('open');
   });
 
-  // ── DYNAMIC SECTION ──
-  function renderDynamicSection(ud, plan, isPremium, hasPremiumAll, subBabAkses, tryOutAkses, allSegmen, hasTryout) {
-    const ds = $('dynamicSection');
-    const fmtRp = n => 'Rp ' + Number(n).toLocaleString('id-ID');
-
-    if (hasPremiumAll) {
-      const exp     = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
-      const expStr  = exp ? exp.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}) : '—';
-      const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
-      const isExpired = diff <= 0;
-      const segmenListHTML = allSegmen.map(s =>
-        `<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600">
-          <div style="width:22px;height:22px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--green);font-size:12px;flex-shrink:0">✓</div>
-          ${s.icon||'📚'} ${s.id}
-        </div>`
-      ).join('');
-      ds.innerHTML = `
-        <div class="section-label" data-s style="transition-delay:.2s">✨ Akses Premium</div>
-        <div class="premium-banner" data-s style="transition-delay:.22s">
-          <h3>✨ Akses Premium Aktif</h3>
-          <p>Kamu punya akses penuh ke semua soal, sub-bab, dan Try Out tanpa batas.</p>
-          <div class="expiry-pill">📅 ${isExpired ? `Expired ${expStr} — silakan perpanjang` : `Aktif hingga ${expStr} (${diff} hari lagi)`}</div>
-          ${isExpired ? `<br><a href="/pricing.html" style="display:inline-block;margin-top:8px;padding:10px 22px;background:var(--red);color:#fff;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none">🔄 Perpanjang Premium</a>` : ''}
-        </div>
-        <div class="two-col" data-s style="transition-delay:.24s">
-          <div class="card" style="margin-bottom:0"><div class="card-title">📚 Segmen Aktif</div><div style="display:flex;flex-direction:column;gap:8px">${segmenListHTML}</div></div>
-          <div class="card" style="margin-bottom:0"><div class="card-title">📊 Statistik Belajar</div><div style="text-align:center;padding:24px 0"><div style="font-size:40px">🚀</div><div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:8px">Coming soon…</div></div></div>
-        </div>`;
-
-    } else if (subBabAkses.length) {
-      const tryoutBanner = !hasTryout ? `
-        <div class="tryout-promo-banner" data-s style="transition-delay:.24s">
-          <div>
-            <h3>🎯 Coba Try Out / CBT!</h3>
-            <p>Uji kemampuan dengan ujian berbatas waktu. Nilai langsung muncul setelah submit. Mulai dari Rp 34.900/segmen.</p>
-          </div>
-          <button class="btn-beli-tryout-banner" onclick="location.href='/pricing.html?tab=tryout'">Beli Try Out →</button>
-        </div>` : '';
-      ds.innerHTML = `
-        ${tryoutBanner}
-        <div class="upgrade-cta" data-s style="transition-delay:.26s">
-          <div>
-            <h3>⭐ Upgrade ke Premium Bulanan</h3>
-            <p>Rp 99.900/bln — buka semua sub-bab & Try Out tanpa batas!</p>
-          </div>
-          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Upgrade →</button>
-        </div>`;
-      $('stickyCta').style.display = 'flex';
-
-    } else if (hasTryout) {
-      // Punya try out tapi belum beli sub-bab
-      ds.innerHTML = `
-        <div class="upgrade-cta" data-s style="transition-delay:.22s">
-          <div>
-            <h3>📚 Tambah Latihan Sub-Bab</h3>
-            <p>Mulai dari Rp 7.900/sub-bab — latihan soal kapan saja!</p>
-          </div>
-          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Beli Sub-Bab →</button>
-        </div>`;
-      $('stickyCta').style.display = 'flex';
-
-    } else {
-      // Belum beli apapun
-      $('stickyCta').style.display = 'flex';
-      const pakets = [
-        { nama:'À la carte',    soal:'Per sub-bab pilihan',    harga:7900,  popular:false, url:'/pricing.html?tab=latihan' },
-        { nama:'Try Out / CBT', soal:'Per segmen ujian',       harga:34900, popular:true,  url:'/pricing.html?tab=tryout' },
-        { nama:'Bundling 5',    soal:'5 sub-bab pilihan',      harga:34900, popular:false, url:'/pricing.html' },
-        { nama:'Premium Bulanan',soal:'Semua mapel & sub-bab', harga:99900, popular:false, url:'/pricing.html' },
-      ];
-      ds.innerHTML = `
-        <div class="section-label" data-s style="transition-delay:.2s">📦 Mulai Belajar</div>
-        <div class="card" data-s style="transition-delay:.22s">
-          <div class="card-title">🛒 Pilih Produk Belajar</div>
-          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;line-height:1.6">Latihan soal per sub-bab, atau uji diri dengan Try Out berbatas waktu.</p>
-          <div class="paket-grid" id="paketGrid"></div>
-        </div>
-        <div class="upgrade-cta" data-s style="transition-delay:.28s">
-          <div><h3>🚀 Mulai Sekarang</h3><p>Latihan Rp 7.900/sub-bab · Try Out Rp 34.900/segmen.</p></div>
-          <button class="btn-upgrade" onclick="location.href='/pricing.html'">Lihat Semua Paket →</button>
-        </div>`;
-      const grid = document.getElementById('paketGrid');
-      if (grid) {
-        pakets.forEach(p => {
-          const div = document.createElement('div');
-          div.className = 'paket-item' + (p.popular ? ' popular' : '');
-          div.innerHTML = `
-            ${p.popular ? '<div class="popular-tag">POPULER</div>' : ''}
-            <div class="paket-nama">${p.nama}</div>
-            <div class="paket-soal">${p.soal}</div>
-            <div class="paket-harga">${fmtRp(p.harga)} <span>${p.nama==='À la carte'?'/ sub-bab':p.nama==='Try Out / CBT'?'/ segmen':'sekali bayar'}</span></div>
-            <button class="btn-beli" onclick="location.href='${p.url}'">${p.nama==='Try Out / CBT'?'Beli Try Out':'Beli Sekarang'}</button>`;
-          grid.appendChild(div);
-        });
-      }
-    }
-  }
-
+  // ── LOGOUT ──
   $('btnLogout').addEventListener('click', async () => {
     await signOut(auth);
     window.location.href = '/';
