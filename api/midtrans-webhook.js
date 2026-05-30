@@ -116,6 +116,21 @@ export default async function handler(req, res) {
         }
       }
 
+      // 5. Set hasUsedReferral + referredBy (hanya jika first-time referral)
+      if (orderData.shouldSetReferral === true) {
+        await userRef.update({
+          hasUsedReferral: true,
+          referredBy: refCode,
+        });
+      }
+
+      // 6. Increment usedCount promo code
+      if (orderData.isPromoCode === true && orderData.promoDocId) {
+        await db.collection('promoCodes').doc(orderData.promoDocId).update({
+          usedCount: FieldValue.increment(1),
+        });
+      }
+
       console.log(`✅ Order ${order_id} berhasil diproses. Akses: ${tipe} → ${subBabDibeli.join(', ')}`);
 
     } catch (e) {
