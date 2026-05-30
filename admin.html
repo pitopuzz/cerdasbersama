@@ -211,7 +211,7 @@ tr:last-child td{border-bottom:none}
       </div>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Nama</th><th>Email</th><th>Bank</th><th>Rekening</th><th>Jumlah</th><th>Saldo Saat Request</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+          <thead><tr><th>Nama</th><th>Email</th><th>Metode</th><th>Rekening / HP</th><th>Jumlah</th><th>Saldo Saat Request</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
           <tbody id="pencairanBody"><tr><td colspan="9" class="loading">Memuat...</td></tr></tbody>
         </table>
       </div>
@@ -285,6 +285,7 @@ import {
   collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
   Timestamp, query, orderBy, where, arrayUnion, serverTimestamp, runTransaction, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const SUPER_ADMINS = ['bersamacerdas1@gmail.com'];
 const ADMIN_EMAILS = ['bersamacerdas1@gmail.com']; // tambah admin lain di sini
@@ -728,37 +729,100 @@ function renderWithdrawals() {
     approved: '<span class="badge paid">Approved</span>',
     rejected: '<span class="badge" style="background:#FCEBEB;color:#A32D2D">Rejected</span>',
   };
-  tbody.innerHTML = list.map(w => `<tr>
-    <td style="font-size:13px;font-weight:600">${w.nama||'–'}</td>
-    <td style="font-size:12px">${w.email||'–'}</td>
-    <td style="font-size:12px">${w.bankName||'–'}</td>
-    <td style="font-size:12px;font-family:monospace">${w.accountNumber||'–'}<br><span style="font-size:10px;color:#aaa">${w.accountName||''}</span></td>
-    <td style="font-weight:700">${fmtRp(w.amount||0)}</td>
-    <td style="font-size:12px;color:#aaa">${fmtRp(w.komisiAvailableSnapshot||0)}</td>
-    <td style="font-size:12px">${fmtDate(w.createdAt)}${w.note?`<br><span style="font-size:10px;color:#aaa">Catatan: ${w.note}</span>`:''}</td>
-    <td>${statusBadge[w.status]||w.status}</td>
-    <td>
-      ${w.status==='pending' ? `
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn-sm green" onclick="approveWithdrawal('${w.docId}','${w.uid}',${w.amount})">✓ Approve</button>
-          <button class="btn-sm red" onclick="rejectWithdrawal('${w.docId}')">✕ Reject</button>
-        </div>` : '–'}
-    </td>
-  </tr>`).join('');
+  const methodLabel = { bank:'Bank Transfer', gopay:'GoPay', ovo:'OVO', dana:'DANA' };
+
+  tbody.innerHTML = list.map(w => {
+    const method  = w.withdrawalMethod || 'bank';
+    const isBank  = method === 'bank';
+    // Compatibility: old docs without withdrawalMethod show bankName
+    const methDisp = methodLabel[method] || method;
+    const destLine = isBank
+      ? `${w.bankName||'—'}<br><span style="font-size:10px;color:#aaa">${w.accountName||''}</span>`
+      : `<span style="font-size:10px;color:#aaa">${w.accountName||''}</span>`;
+
+    // Proof upload/view cell
+    let proofCell = '–';
+    if (w.status === 'pending') {
+      proofCell = w.proofUrl
+        ? `<a href="${w.proofUrl}" target="_blank" class="btn-sm green" style="font-size:11px;padding:4px 10px">📄 Lihat</a>
+           <button class="btn-sm" style="font-size:11px;padding:4px 10px" onclick="uploadProof('${w.docId}',this)">↺ Ganti</button>`
+        : `<button class="btn-sm amber" style="font-size:11px;padding:4px 10px" onclick="uploadProof('${w.docId}',this)">⬆ Upload Bukti</button>`;
+    } else if (w.status === 'approved' && w.proofUrl) {
+      proofCell = `<a href="${w.proofUrl}" target="_blank" class="btn-sm green" style="font-size:11px;padding:4px 10px">📄 Lihat</a>`;
+    }
+
+    return `<tr>
+      <td style="font-size:13px;font-weight:600">${w.nama||'–'}</td>
+      <td style="font-size:12px">${w.email||'–'}</td>
+      <td style="font-size:12px">${methDisp}<br><span style="font-size:10px;color:#aaa;font-family:monospace">${w.accountNumber||'–'}</span></td>
+      <td style="font-size:12px">${destLine}</td>
+      <td style="font-weight:700">${fmtRp(w.amount||0)}</td>
+      <td style="font-size:12px;color:#aaa">${fmtRp(w.komisiAvailableSnapshot||0)}</td>
+      <td style="font-size:12px">${fmtDate(w.createdAt)}${w.note?`<br><span style="font-size:10px;color:#aaa">Catatan: ${w.note}</span>`:''}</td>
+      <td>${statusBadge[w.status]||w.status}<br><div style="margin-top:4px">${proofCell}</div></td>
+      <td>
+        ${w.status==='pending' ? `
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn-sm green" onclick="approveWithdrawal('${w.docId}','${w.uid}',${w.amount})">✓ Approve</button>
+            <button class="btn-sm red" onclick="rejectWithdrawal('${w.docId}')">✕ Reject</button>
+          </div>` : '–'}
+      </td>
+    </tr>`;
+  }).join('');
 }
 
+window.uploadProof = async function(docId, btn) {
+  // Trigger hidden file input
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/jpeg,image/png,application/pdf';
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+    const origText = btn.textContent;
+    btn.disabled = true; btn.textContent = '⏳ Uploading…';
+    try {
+      const st      = getStorage();
+      const path    = `withdrawal-proofs/${docId}/${file.name}`;
+      const fileRef = storageRef(st, path);
+      await uploadBytes(fileRef, file);
+      const url = await getDownloadURL(fileRef);
+      await updateDoc(doc(db,'withdrawals',docId), {
+        proofUrl:      url,
+        proofFileName: file.name,
+      });
+      showToast('✅ Bukti transfer berhasil diupload!');
+      await loadWithdrawals();
+    } catch(e) {
+      showToast('Gagal upload: ' + e.message, true);
+      btn.disabled = false; btn.textContent = origText;
+    }
+  };
+  input.click();
+};
+
 window.approveWithdrawal = async function(docId, uid, amount) {
+  // Feature #4 guard: proof must exist before approve
+  const wdCheck = allWithdrawals.find(w => w.docId === docId);
+  if (!wdCheck || !wdCheck.proofUrl) {
+    showToast('Upload bukti transfer terlebih dahulu sebelum approve.', true);
+    return;
+  }
   if (!confirm(`Setujui pencairan ${fmtRp(amount)} untuk user ini?`)) return;
   try {
     await runTransaction(db, async (tx) => {
-      const wdRef   = doc(db, 'withdrawals', docId);
-      const userRef = doc(db, 'users', uid);
-      const wdSnap  = await tx.get(wdRef);
+      const wdRef    = doc(db, 'withdrawals', docId);
+      const userRef  = doc(db, 'users', uid);
+      const wdSnap   = await tx.get(wdRef);
       const userSnap = await tx.get(userRef);
 
       // Guard: idempotency
       if (!wdSnap.exists() || wdSnap.data().status !== 'pending') {
         throw new Error('Request sudah diproses sebelumnya.');
+      }
+      // Guard: proof masih ada (re-check dari DB)
+      if (!wdSnap.data().proofUrl) {
+        throw new Error('Bukti transfer belum diupload.');
       }
       // Guard: saldo cukup
       const available = userSnap.exists() ? (userSnap.data().komisiAvailable || 0) : 0;
