@@ -1014,22 +1014,6 @@ async function processPayment({ btn, warnId, orderName, itemName, base, disc, di
 
     window.snap.pay(data.token, {
       onSuccess: async function() {
-        if (isTryout) {
-          await updateDoc(doc(db,'users',currentUser.uid), { tryOutAkses: arrayUnion(...selTryoutIds) });
-        } else if (tipe === 'bulanan') {
-          const exp = new Date(); exp.setMonth(exp.getMonth()+1);
-          await updateDoc(doc(db,'users',currentUser.uid), { plan:'premium', expiredAt:exp, subBabAkses:['__premium__'] });
-        } else {
-          await updateDoc(doc(db,'users',currentUser.uid), { plan:'alacarte', subBabAkses:arrayUnion(...subBabDibeli) });
-        }
-        if (refCode && komisi > 0) {
-          if (isPromo && promoD?.ownerUid) {
-            await updateDoc(doc(db,'users',promoD.ownerUid), { komisiTotal:increment(komisi) });
-          } else if (!isPromo) {
-            const rs = await getDocs(query(collection(db,'users'), where('referralCode','==',refCode)));
-            if (!rs.empty) await updateDoc(doc(db,'users',rs.docs[0].id), { komisiTotal:increment(komisi) });
-          }
-        }
         $('successTitle').textContent  = isTryout ? 'Akses Try Out sudah aktif!' : 'Akses sub-bab sudah aktif.';
         $('successSubbab').textContent = isTryout ? `Segmen aktif: ${selTryoutIds.join(', ')}` : `Sub-bab aktif: ${subBabDibeli.join(', ')}`;
         $('successCta').href        = isTryout ? `/cbt-engine-v2.html?segmen=${encodeURIComponent(selTryoutIds[0])}` : '/dashboard.html';
