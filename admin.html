@@ -153,8 +153,8 @@ tr:last-child td{border-bottom:none}
       </div>
       <div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Nama</th><th>Email</th><th>WA</th><th>Role</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Ref Code</th><th>Aksi</th></tr></thead>
-          <tbody id="usersBody"><tr><td colspan="9" class="loading">Memuat...</td></tr></tbody>
+          <thead><tr><th>Nama</th><th>Email</th><th>WA</th><th>Role</th><th>Plan</th><th>Expired</th><th>Komisi</th><th>Ref Code</th><th>Referral Dari</th><th>Aksi</th></tr></thead>
+          <tbody id="usersBody"><tr><td colspan="10" class="loading">Memuat...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -333,7 +333,7 @@ function renderUsers() {
   if (filterUserPl !== 'semua') list = list.filter(u => filterUserPl === 'premium' ? u.plan==='premium' : u.plan!=='premium');
 
   const tbody = $('usersBody');
-  if (!list.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>'; return; }
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:#aaa;padding:2rem">Tidak ada user.</td></tr>'; return; }
 
   tbody.innerHTML = list.map(u => {
     const exp       = u.expiredAt ? (u.expiredAt.toDate ? u.expiredAt.toDate() : new Date(u.expiredAt.seconds*1000)) : null;
