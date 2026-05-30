@@ -408,10 +408,11 @@ window.hapusUser = async function(uid, email) {
 
   try {
     showToast('⏳ Menghapus user...');
+    const idToken = await currentUser.getIdToken();
     const res  = await fetch('/api/delete-user', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ uid, callerEmail: currentUser.email }),
+      headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+idToken},
+      body: JSON.stringify({ uid }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Gagal hapus');
@@ -441,10 +442,11 @@ window.tambahUserManual = async function() {
   try {
     // Buat user via Firebase Auth (akan auto login — perlu workaround)
     // Gunakan secondary app untuk buat user tanpa ganti sesi login
+    const idToken = await currentUser.getIdToken();
     const res = await fetch('/api/create-user', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email, password: pass, callerEmail: currentUser.email }),
+      headers: {'Content-Type':'application/json', 'Authorization':'Bearer '+idToken},
+      body: JSON.stringify({ email, password: pass }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Gagal buat user');
