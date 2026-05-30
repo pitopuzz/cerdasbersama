@@ -432,6 +432,69 @@
     </div>
   </div>
 
+  <!-- ── SECTION 6B: KOMISI & PENCAIRAN ── -->
+  <div class="section-label" data-s style="transition-delay:.20s">💸 Komisi & Pencairan</div>
+  <div class="card" id="komisiSection" data-s style="transition-delay:.21s">
+
+    <!-- Stats Row -->
+    <div class="stats-grid" style="margin-bottom:16px">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#eef3fc">📈</div>
+        <div class="stat-label">Total Earned</div>
+        <div class="stat-value" id="komisiEarnedVal" style="font-size:16px;color:var(--blue)">—</div>
+        <div class="stat-sub">lifetime komisi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#edfaf3">💰</div>
+        <div class="stat-label">Saldo Tersedia</div>
+        <div class="stat-value" id="komisiAvailableVal" style="font-size:16px;color:var(--green)">—</div>
+        <div class="stat-sub">bisa dicairkan</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#f5f3ef">✅</div>
+        <div class="stat-label">Sudah Dicairkan</div>
+        <div class="stat-value" id="komisiWithdrawnVal" style="font-size:16px">—</div>
+        <div class="stat-sub">total pencairan</div>
+      </div>
+    </div>
+
+    <!-- Pending warning -->
+    <div id="withdrawPendingWarn" style="display:none;background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:10px;padding:12px 16px;margin-bottom:14px;font-size:13px;font-weight:600;color:#78350f">
+      ⏳ Tunggu proses pencairan sebelumnya selesai.
+    </div>
+
+    <!-- Request Form -->
+    <div id="withdrawFormWrap">
+      <div style="font-size:13px;font-weight:800;margin-bottom:12px;color:var(--text)">Ajukan Pencairan</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nama Bank</div>
+          <input id="wdBankName" type="text" placeholder="BCA / BRI / Mandiri / ..." style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nomor Rekening</div>
+          <input id="wdAccountNumber" type="text" placeholder="1234567890" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nama Pemilik Rekening</div>
+          <input id="wdAccountName" type="text" placeholder="Sesuai buku tabungan" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Jumlah Penarikan (Rp)</div>
+          <input id="wdAmount" type="number" placeholder="Min. Rp 25.000" min="25000" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+        </div>
+      </div>
+      <div id="wdError" style="display:none;background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:9px;padding:10px 14px;font-size:12px;font-weight:600;color:var(--red);margin-bottom:10px"></div>
+      <button id="btnWithdraw" class="btn-ac green" style="width:100%;justify-content:center;padding:12px">💸 Ajukan Pencairan</button>
+    </div>
+
+    <!-- Riwayat Pencairan -->
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;font-weight:800;margin-bottom:12px;color:var(--text)">Riwayat Pencairan</div>
+      <div id="withdrawalHistory"><div class="empty-state" style="padding:16px">Memuat…</div></div>
+    </div>
+  </div>
+
   <!-- PREMIUM DETAIL (only for premium users) -->
   <div id="premiumDetailSection"></div>
 
@@ -462,7 +525,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   let firebaseConfig;
   try {
@@ -670,6 +733,9 @@
     if (hasPremiumAll) {
       renderPremiumDetail(ud, allSegmen);
     }
+
+    // ── KOMISI & PENCAIRAN ──
+    renderKomisiSection(ud, user);
 
     // ── ORDERS ──
     const list = $('orderList');
@@ -1162,6 +1228,135 @@
   $('modalTryout').addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('open');
   });
+
+  // ═══════════════════════════════════════
+  // KOMISI & PENCAIRAN
+  // ═══════════════════════════════════════
+  function renderKomisiSection(ud, user) {
+    const earned    = ud.komisiEarned    || 0;
+    const available = ud.komisiAvailable || 0;
+    const withdrawn = ud.komisiWithdrawn || 0;
+
+    $('komisiEarnedVal').textContent    = fmtRp(earned);
+    $('komisiAvailableVal').textContent = fmtRp(available);
+    $('komisiWithdrawnVal').textContent = fmtRp(withdrawn);
+
+    // Load riwayat
+    loadWithdrawalHistory(user.uid);
+
+    // Submit handler
+    $('btnWithdraw').addEventListener('click', async () => {
+      const bankName       = $('wdBankName').value.trim();
+      const accountNumber  = $('wdAccountNumber').value.trim();
+      const accountName    = $('wdAccountName').value.trim();
+      const amount         = parseInt($('wdAmount').value);
+      const errEl          = $('wdError');
+      errEl.style.display  = 'none';
+
+      // Validasi field kosong
+      if (!bankName || !accountNumber || !accountName || !$('wdAmount').value.trim()) {
+        errEl.textContent = '⚠️ Semua field wajib diisi.';
+        errEl.style.display = 'block'; return;
+      }
+      // Validasi nominal
+      if (isNaN(amount) || amount <= 0) {
+        errEl.textContent = '⚠️ Masukkan jumlah yang valid.';
+        errEl.style.display = 'block'; return;
+      }
+      if (amount < 25000) {
+        errEl.textContent = '⚠️ Minimum pencairan adalah Rp 25.000.';
+        errEl.style.display = 'block'; return;
+      }
+      // Baca komisiAvailable terbaru dari Firestore (bukan cached ud)
+      const freshSnap    = await getDoc(doc(db, 'users', user.uid));
+      const freshData    = freshSnap.exists() ? freshSnap.data() : {};
+      const freshAvail   = freshData.komisiAvailable || 0;
+      if (amount > freshAvail) {
+        errEl.textContent = `⚠️ Jumlah melebihi saldo tersedia (${fmtRp(freshAvail)}).`;
+        errEl.style.display = 'block'; return;
+      }
+
+      // Cek pending withdrawal
+      const pendingQ = query(
+        collection(db, 'withdrawals'),
+        where('uid', '==', user.uid),
+        where('status', '==', 'pending')
+      );
+      const pendingSnap = await getDocs(pendingQ);
+      if (!pendingSnap.empty) {
+        $('withdrawPendingWarn').style.display = 'block';
+        $('withdrawFormWrap').style.display    = 'none';
+        return;
+      }
+
+      // Submit
+      const btn = $('btnWithdraw');
+      btn.disabled = true; btn.textContent = '⏳ Memproses…';
+      try {
+        await addDoc(collection(db, 'withdrawals'), {
+          uid:                     user.uid,
+          nama:                    freshData.nama    || '',
+          email:                   user.email,
+          amount,
+          bankName,
+          accountNumber,
+          accountName,
+          status:                  'pending',
+          note:                    '',
+          createdAt:               serverTimestamp(),
+          processedAt:             null,
+          processedBy:             null,
+          komisiAvailableSnapshot: freshAvail,
+        });
+        showToast('✅ Request pencairan dikirim, menunggu persetujuan admin.');
+        // Reset form
+        ['wdBankName','wdAccountNumber','wdAccountName','wdAmount'].forEach(id => $(id).value = '');
+        loadWithdrawalHistory(user.uid);
+      } catch (e) {
+        errEl.textContent = '❌ Gagal mengirim request: ' + e.message;
+        errEl.style.display = 'block';
+      }
+      btn.disabled = false; btn.textContent = '💸 Ajukan Pencairan';
+    });
+  }
+
+  async function loadWithdrawalHistory(uid) {
+    const histEl = $('withdrawalHistory');
+    if (!histEl) return;
+    try {
+      const q    = query(collection(db,'withdrawals'), where('uid','==',uid), orderBy('createdAt','desc'), limit(10));
+      const snap = await getDocs(q);
+
+      // Cek pending
+      const hasPending = snap.docs.some(d => d.data().status === 'pending');
+      $('withdrawPendingWarn').style.display = hasPending ? 'block' : 'none';
+      $('withdrawFormWrap').style.display    = hasPending ? 'none'  : 'block';
+
+      if (snap.empty) {
+        histEl.innerHTML = '<div class="empty-state" style="padding:16px">Belum ada riwayat pencairan.</div>';
+        return;
+      }
+
+      const statusLabel = { pending:'Menunggu', approved:'Disetujui', rejected:'Ditolak' };
+      const statusClass = { pending:'pending',  approved:'paid',      rejected:'failed'  };
+
+      histEl.innerHTML = snap.docs.map(d => {
+        const w = d.data();
+        const tgl = w.createdAt ? fmtDate(w.createdAt) : '—';
+        return `<div class="order-item" style="flex-wrap:wrap;gap:8px">
+          <div class="order-info">
+            <div class="order-paket">${w.bankName||'—'} · ${w.accountNumber||'—'}</div>
+            <div class="order-subbab">${w.accountName||'—'}</div>
+            <div class="order-date">${tgl}${w.note ? ` · Catatan: ${w.note}` : ''}</div>
+          </div>
+          <div class="order-total">${fmtRp(w.amount||0)}</div>
+          <span class="status-pill ${statusClass[w.status]||'pending'}">${statusLabel[w.status]||w.status}</span>
+        </div>`;
+      }).join('');
+    } catch(e) {
+      histEl.innerHTML = `<div class="empty-state" style="padding:16px;color:var(--red)">Gagal memuat riwayat.</div>`;
+    }
+  }
 
   // ── LOGOUT ──
   $('btnLogout').addEventListener('click', async () => {
