@@ -994,16 +994,11 @@ async function processPayment({ btn, warnId, orderName, itemName, base, disc, di
       tryOutSegmen: isTryout ? selTryoutIds : [],
       hargaBase: base, diskon: disc, discPct, total,
       refCode, komisi, komisiPct, isPromoCode: isPromo,
+      promoDocId:        isPromo ? (promoD?.docId || null) : null,
+      promoOwnerUid:     isPromo ? (promoD?.ownerUid || null) : null,
+      shouldSetReferral: !isPromo && !!refCode && (isTryout ? discAppliedTo : discApplied) && !(currentUserData?.hasUsedReferral),
       midtransOrderId: orderId, status:'pending', createdAt: serverTimestamp()
     });
-
-    if (!isPromo && refCode && (isTryout ? discAppliedTo : discApplied) && !currentUserData?.hasUsedReferral) {
-      await updateDoc(doc(db,'users',currentUser.uid), { hasUsedReferral:true, referredBy:refCode });
-      if (currentUserData) currentUserData.hasUsedReferral = true;
-    }
-    if (isPromo && promoD?.docId) {
-      await updateDoc(doc(db,'promoCodes',promoD.docId), { usedCount:(promoD.usedCount||0)+1 });
-    }
 
     const res  = await fetch('/api/create-transaction', {
       method: 'POST', headers: {'Content-Type':'application/json'},
