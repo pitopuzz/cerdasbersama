@@ -466,7 +466,28 @@
     <!-- Request Form -->
     <div id="withdrawFormWrap">
       <div style="font-size:13px;font-weight:800;margin-bottom:12px;color:var(--text)">Ajukan Pencairan</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+
+      <!-- Method Picker -->
+      <div style="margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Metode Pencairan</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="wdMethodPicker">
+          <label style="display:flex;align-items:center;gap:6px;padding:9px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);transition:all .15s" id="wdMethodLabel_bank">
+            <input type="radio" name="wdMethod" value="bank" style="accent-color:var(--green)"> 🏦 Bank Transfer
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:9px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);transition:all .15s" id="wdMethodLabel_gopay">
+            <input type="radio" name="wdMethod" value="gopay" style="accent-color:var(--green)"> 💚 GoPay
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:9px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);transition:all .15s" id="wdMethodLabel_ovo">
+            <input type="radio" name="wdMethod" value="ovo" style="accent-color:var(--green)"> 💜 OVO
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:9px 14px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;background:var(--surface2);transition:all .15s" id="wdMethodLabel_dana">
+            <input type="radio" name="wdMethod" value="dana" style="accent-color:var(--green)"> 💙 DANA
+          </label>
+        </div>
+      </div>
+
+      <!-- Bank Transfer Fields -->
+      <div id="wdFieldsBank" style="display:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
         <div>
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nama Bank</div>
           <input id="wdBankName" type="text" placeholder="BCA / BRI / Mandiri / ..." style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
@@ -475,17 +496,40 @@
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nomor Rekening</div>
           <input id="wdAccountNumber" type="text" placeholder="1234567890" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
         </div>
-        <div>
+        <div style="grid-column:1/-1">
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nama Pemilik Rekening</div>
           <input id="wdAccountName" type="text" placeholder="Sesuai buku tabungan" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
         </div>
+      </div>
+
+      <!-- E-Wallet Fields -->
+      <div id="wdFieldsEwallet" style="display:none;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
         <div>
-          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Jumlah Penarikan (Rp)</div>
-          <input id="wdAmount" type="number" placeholder="Min. Rp 25.000" min="25000" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nomor HP</div>
+          <input id="wdPhoneNumber" type="tel" placeholder="08123456789" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nama Pemilik Akun</div>
+          <input id="wdEwalletName" type="text" placeholder="Nama sesuai akun" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
         </div>
       </div>
+
+      <!-- Amount (always visible after method selected) -->
+      <div id="wdFieldsAmount" style="display:none;margin-bottom:10px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Jumlah Penarikan (Rp)</div>
+        <input id="wdAmount" type="number" placeholder="Min. Rp 25.000" min="25000" style="width:100%;border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--surface2);outline:none" />
+      </div>
+
       <div id="wdError" style="display:none;background:var(--red-bg);border:1.5px solid var(--red-border);border-radius:9px;padding:10px 14px;font-size:12px;font-weight:600;color:var(--red);margin-bottom:10px"></div>
       <button id="btnWithdraw" class="btn-ac green" style="width:100%;justify-content:center;padding:12px">💸 Ajukan Pencairan</button>
+
+      <!-- Fee Note -->
+      <div style="margin-top:12px;padding:12px 14px;background:var(--surface2);border-radius:9px;font-size:12px;color:var(--muted);line-height:1.7">
+        <div style="font-weight:700;margin-bottom:4px;color:var(--text)">Catatan:</div>
+        <div>• Pencairan diproses maksimal 1×24 jam.</div>
+        <div>• Nominal diterima dapat berkurang biaya transfer antar bank/e-wallet.</div>
+        <div>• Bank yang direkomendasikan: BCA dan Mandiri.</div>
+      </div>
     </div>
 
     <!-- Riwayat Pencairan -->
@@ -525,7 +569,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, collection, query, where, orderBy, limit, getDocs, addDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   let firebaseConfig;
   try {
@@ -1233,6 +1277,202 @@
   // KOMISI & PENCAIRAN
   // ═══════════════════════════════════════
   function renderKomisiSection(ud, user) {
+    const earned    = ud.komisiEarned    || 0;
+    const available = ud.komisiAvailable || 0;
+    const withdrawn = ud.komisiWithdrawn || 0;
+
+    $('komisiEarnedVal').textContent    = fmtRp(earned);
+    $('komisiAvailableVal').textContent = fmtRp(available);
+    $('komisiWithdrawnVal').textContent = fmtRp(withdrawn);
+
+    // ── Method picker logic ──
+    const isBankMethod = m => m === 'bank';
+    const methodFields = {
+      bank:  () => { $('wdFieldsBank').style.display='grid';   $('wdFieldsEwallet').style.display='none';  },
+      gopay: () => { $('wdFieldsBank').style.display='none';   $('wdFieldsEwallet').style.display='grid'; },
+      ovo:   () => { $('wdFieldsBank').style.display='none';   $('wdFieldsEwallet').style.display='grid'; },
+      dana:  () => { $('wdFieldsBank').style.display='none';   $('wdFieldsEwallet').style.display='grid'; },
+    };
+
+    document.querySelectorAll('input[name="wdMethod"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const m = radio.value;
+        (methodFields[m] || methodFields.bank)();
+        $('wdFieldsAmount').style.display = 'block';
+        // Highlight selected label
+        ['bank','gopay','ovo','dana'].forEach(k => {
+          const lbl = $('wdMethodLabel_' + k);
+          if (lbl) lbl.style.borderColor = k === m ? 'var(--green)' : 'var(--border)';
+        });
+      });
+    });
+
+    // ── Feature #3: Prefill from last withdrawal data ──
+    const lastMethod = ud.lastWithdrawalMethod || 'bank';
+    const radioToCheck = document.querySelector(`input[name="wdMethod"][value="${lastMethod}"]`);
+    if (radioToCheck) {
+      radioToCheck.checked = true;
+      radioToCheck.dispatchEvent(new Event('change'));
+    }
+    if (lastMethod === 'bank') {
+      if (ud.lastBankName)       $('wdBankName').value       = ud.lastBankName;
+      if (ud.lastAccountNumber)  $('wdAccountNumber').value  = ud.lastAccountNumber;
+      if (ud.lastAccountName)    $('wdAccountName').value    = ud.lastAccountName;
+    } else {
+      if (ud.lastPhoneNumber)    $('wdPhoneNumber').value    = ud.lastPhoneNumber;
+      if (ud.lastAccountName)    $('wdEwalletName').value    = ud.lastAccountName;
+    }
+
+    // Load riwayat
+    loadWithdrawalHistory(user.uid);
+
+    // ── Submit handler ──
+    $('btnWithdraw').addEventListener('click', async () => {
+      const errEl   = $('wdError');
+      errEl.style.display = 'none';
+
+      const selectedRadio = document.querySelector('input[name="wdMethod"]:checked');
+      if (!selectedRadio) {
+        errEl.textContent = '⚠️ Pilih metode pencairan terlebih dahulu.';
+        errEl.style.display = 'block'; return;
+      }
+      const method = selectedRadio.value;
+      const isBank = method === 'bank';
+
+      const bankName      = isBank ? $('wdBankName').value.trim()      : '';
+      const accountNumber = isBank ? $('wdAccountNumber').value.trim() : $('wdPhoneNumber').value.trim();
+      const accountName   = isBank ? $('wdAccountName').value.trim()   : $('wdEwalletName').value.trim();
+      const amount        = parseInt($('wdAmount').value);
+
+      // Validasi field
+      if (!accountNumber || !accountName) {
+        errEl.textContent = '⚠️ Semua field wajib diisi.';
+        errEl.style.display = 'block'; return;
+      }
+      if (isBank && !bankName) {
+        errEl.textContent = '⚠️ Nama bank wajib diisi.';
+        errEl.style.display = 'block'; return;
+      }
+      if (!$('wdAmount').value.trim() || isNaN(amount) || amount <= 0) {
+        errEl.textContent = '⚠️ Masukkan jumlah yang valid.';
+        errEl.style.display = 'block'; return;
+      }
+      if (amount < 25000) {
+        errEl.textContent = '⚠️ Minimum pencairan adalah Rp 25.000.';
+        errEl.style.display = 'block'; return;
+      }
+
+      // Fresh read saldo
+      const freshSnap  = await getDoc(doc(db, 'users', user.uid));
+      const freshData  = freshSnap.exists() ? freshSnap.data() : {};
+      const freshAvail = freshData.komisiAvailable || 0;
+      if (amount > freshAvail) {
+        errEl.textContent = `⚠️ Jumlah melebihi saldo tersedia (${fmtRp(freshAvail)}).`;
+        errEl.style.display = 'block'; return;
+      }
+
+      // Cek pending
+      const pendingQ    = query(collection(db,'withdrawals'), where('uid','==',user.uid), where('status','==','pending'));
+      const pendingSnap = await getDocs(pendingQ);
+      if (!pendingSnap.empty) {
+        $('withdrawPendingWarn').style.display = 'block';
+        $('withdrawFormWrap').style.display    = 'none';
+        return;
+      }
+
+      // Submit
+      const btn = $('btnWithdraw');
+      btn.disabled = true; btn.textContent = '⏳ Memproses…';
+      try {
+        await addDoc(collection(db,'withdrawals'), {
+          uid:                     user.uid,
+          nama:                    freshData.nama || '',
+          email:                   user.email,
+          amount,
+          withdrawalMethod:        method,
+          bankName:                isBank ? bankName : '',
+          accountNumber,
+          accountName,
+          status:                  'pending',
+          note:                    '',
+          createdAt:               serverTimestamp(),
+          processedAt:             null,
+          processedBy:             null,
+          proofUrl:                null,
+          proofFileName:           null,
+          komisiAvailableSnapshot: freshAvail,
+        });
+
+        // Feature #3: save last withdrawal account to users doc (non-blocking)
+        const saveFields = { lastWithdrawalMethod: method, lastAccountName: accountName };
+        if (isBank) { saveFields.lastBankName = bankName; saveFields.lastAccountNumber = accountNumber; }
+        else         { saveFields.lastPhoneNumber = accountNumber; }
+        updateDoc(doc(db,'users',user.uid), saveFields).catch(() => {});
+
+        showToast('✅ Request pencairan dikirim, menunggu persetujuan admin.');
+        // Reset form (amount only, keep account details for convenience)
+        $('wdAmount').value = '';
+        loadWithdrawalHistory(user.uid);
+      } catch(e) {
+        errEl.textContent = '❌ Gagal mengirim request: ' + e.message;
+        errEl.style.display = 'block';
+      }
+      btn.disabled = false; btn.textContent = '💸 Ajukan Pencairan';
+    });
+  }
+
+  async function loadWithdrawalHistory(uid) {
+    const histEl = $('withdrawalHistory');
+    if (!histEl) return;
+    try {
+      const q    = query(collection(db,'withdrawals'), where('uid','==',uid), orderBy('createdAt','desc'), limit(10));
+      const snap = await getDocs(q);
+
+      // Cek pending — kontrol form visibility
+      const hasPending = snap.docs.some(d => d.data().status === 'pending');
+      $('withdrawPendingWarn').style.display = hasPending ? 'block' : 'none';
+      $('withdrawFormWrap').style.display    = hasPending ? 'none'  : 'block';
+
+      if (snap.empty) {
+        histEl.innerHTML = '<div class="empty-state" style="padding:16px">Belum ada riwayat pencairan.</div>';
+        return;
+      }
+
+      const statusLabel = { pending:'Menunggu', approved:'Disetujui', rejected:'Ditolak' };
+      const statusClass = { pending:'pending',  approved:'paid',      rejected:'failed'  };
+
+      const methodLabel = { bank:'Bank Transfer', gopay:'GoPay', ovo:'OVO', dana:'DANA' };
+
+      histEl.innerHTML = snap.docs.map(d => {
+        const w      = d.data();
+        const tgl    = w.createdAt ? fmtDate(w.createdAt) : '—';
+        const method = w.withdrawalMethod || 'bank';
+        const dest   = method === 'bank'
+          ? `${w.bankName||'—'} · ${w.accountNumber||'—'}`
+          : `${methodLabel[method]||method} · ${w.accountNumber||'—'}`;
+
+        // Feature #4: Lihat Bukti Transfer (only if approved and proofUrl exists)
+        const proofBtn = (w.status === 'approved' && w.proofUrl)
+          ? `<a href="${w.proofUrl}" target="_blank" rel="noopener" class="btn-sm" style="font-size:11px;padding:5px 10px;margin-top:4px;display:inline-flex">📄 Lihat Bukti Transfer</a>`
+          : '';
+
+        return `<div class="order-item" style="flex-wrap:wrap;gap:8px;align-items:flex-start">
+          <div class="order-info">
+            <div class="order-paket">${dest}</div>
+            <div class="order-subbab">${w.accountName||'—'} · ${methodLabel[method]||method}</div>
+            <div class="order-date">${tgl}${w.note ? ` · Catatan: ${w.note}` : ''}</div>
+            ${proofBtn}
+          </div>
+          <div class="order-total">${fmtRp(w.amount||0)}</div>
+          <span class="status-pill ${statusClass[w.status]||'pending'}">${statusLabel[w.status]||w.status}</span>
+        </div>`;
+      }).join('');
+    } catch(e) {
+      histEl.innerHTML = `<div class="empty-state" style="padding:16px;color:var(--red)">Gagal memuat riwayat.</div>`;
+    }
+  }
+
+  // ── LOGOUT ──
     const earned    = ud.komisiEarned    || 0;
     const available = ud.komisiAvailable || 0;
     const withdrawn = ud.komisiWithdrawn || 0;
