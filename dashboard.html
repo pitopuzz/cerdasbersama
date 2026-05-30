@@ -426,7 +426,7 @@
         <span class="val" id="refCount">—</span>
       </div>
       <div class="ref-stat-mini">
-        <span class="lbl">Total Komisi</span>
+        <span class="lbl">Saldo Komisi</span>
         <span class="val green" id="refKomisi">—</span>
       </div>
     </div>
@@ -648,7 +648,7 @@
     const baseUrl = window.location.origin + '/register.html?ref=';
     $('refCodeBig').textContent = code || '—';
     $('refCount').textContent   = refCount;
-    $('refKomisi').textContent  = fmtRp(ud.komisiTotal || 0);
+    $('refKomisi').textContent  = fmtRp(ud.komisiAvailable || 0);
 
     $('btnCopyLink').addEventListener('click', () => {
       navigator.clipboard.writeText(baseUrl + code).then(() => {
