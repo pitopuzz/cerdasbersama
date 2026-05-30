@@ -197,11 +197,24 @@ tr:last-child td{border-bottom:none}
   <!-- PENCAIRAN -->
   <div id="pencairan" style="display:none">
     <div class="card">
-      <div class="card-title">💸 Request Pencairan</div>
-      <table>
-        <thead><tr><th>User</th><th>Rekening</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead>
-        <tbody><tr><td colspan="5" style="text-align:center;color:#aaa;padding:2rem">Belum ada request pencairan.</td></tr></tbody>
-      </table>
+      <div class="card-title">
+        <span>💸 Request Pencairan</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <select class="select-sm" id="filterPencairanStatus" onchange="filterWithdrawals(this.value)">
+            <option value="semua">Semua status</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <button class="btn-sm green" onclick="loadWithdrawals()">↻ Refresh</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Nama</th><th>Email</th><th>Bank</th><th>Rekening</th><th>Jumlah</th><th>Saldo Saat Request</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead>
+          <tbody id="pencairanBody"><tr><td colspan="9" class="loading">Memuat...</td></tr></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -270,7 +283,7 @@ import { auth, db } from "./firebase-config.js";
 import { onAuthStateChanged, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   collection, getDocs, doc, getDoc, setDoc, updateDoc, deleteDoc, addDoc,
-  Timestamp, query, orderBy, where, arrayUnion, serverTimestamp
+  Timestamp, query, orderBy, where, arrayUnion, serverTimestamp, runTransaction, increment
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const SUPER_ADMINS = ['bersamacerdas1@gmail.com'];
@@ -568,6 +581,7 @@ window.switchTab = function(el, tab) {
   ['transaksi','users','tambahUser','pencairan','kodePromo'].forEach(t=>$(t).style.display='none');
   $(tab).style.display='block';
   if(tab==='kodePromo') loadKodePromo();
+  if(tab==='pencairan') loadWithdrawals();
 };
 
 window.doLogout = async function() {
@@ -679,6 +693,109 @@ window.hapusKodePromo = async function(docId, code) {
     showToast('✅ Kode berhasil dihapus!');
     await loadKodePromo();
   } catch(e) { showToast('Gagal: '+e.message, true); }
+};
+
+// ── PENCAIRAN ──
+let allWithdrawals = [];
+let filterWithdrawalStatus = 'semua';
+
+window.loadWithdrawals = async function() {
+  $('pencairanBody').innerHTML = '<tr><td colspan="9" class="loading">Memuat...</td></tr>';
+  try {
+    const snap = await getDocs(query(collection(db,'withdrawals'), orderBy('createdAt','desc')));
+    allWithdrawals = snap.docs.map(d => ({...d.data(), docId:d.id}));
+    renderWithdrawals();
+  } catch(e) {
+    $('pencairanBody').innerHTML = `<tr><td colspan="9" style="color:#E24B4A;padding:1rem">Error: ${e.message}</td></tr>`;
+  }
+};
+
+window.filterWithdrawals = function(val) {
+  filterWithdrawalStatus = val;
+  renderWithdrawals();
+};
+
+function renderWithdrawals() {
+  let list = allWithdrawals;
+  if (filterWithdrawalStatus !== 'semua') list = list.filter(w => w.status === filterWithdrawalStatus);
+  const tbody = $('pencairanBody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:2rem">Tidak ada request pencairan.</td></tr>';
+    return;
+  }
+  const statusBadge = {
+    pending:  '<span class="badge pending">Pending</span>',
+    approved: '<span class="badge paid">Approved</span>',
+    rejected: '<span class="badge" style="background:#FCEBEB;color:#A32D2D">Rejected</span>',
+  };
+  tbody.innerHTML = list.map(w => `<tr>
+    <td style="font-size:13px;font-weight:600">${w.nama||'–'}</td>
+    <td style="font-size:12px">${w.email||'–'}</td>
+    <td style="font-size:12px">${w.bankName||'–'}</td>
+    <td style="font-size:12px;font-family:monospace">${w.accountNumber||'–'}<br><span style="font-size:10px;color:#aaa">${w.accountName||''}</span></td>
+    <td style="font-weight:700">${fmtRp(w.amount||0)}</td>
+    <td style="font-size:12px;color:#aaa">${fmtRp(w.komisiAvailableSnapshot||0)}</td>
+    <td style="font-size:12px">${fmtDate(w.createdAt)}${w.note?`<br><span style="font-size:10px;color:#aaa">Catatan: ${w.note}</span>`:''}</td>
+    <td>${statusBadge[w.status]||w.status}</td>
+    <td>
+      ${w.status==='pending' ? `
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn-sm green" onclick="approveWithdrawal('${w.docId}','${w.uid}',${w.amount})">✓ Approve</button>
+          <button class="btn-sm red" onclick="rejectWithdrawal('${w.docId}')">✕ Reject</button>
+        </div>` : '–'}
+    </td>
+  </tr>`).join('');
+}
+
+window.approveWithdrawal = async function(docId, uid, amount) {
+  if (!confirm(`Setujui pencairan ${fmtRp(amount)} untuk user ini?`)) return;
+  try {
+    await runTransaction(db, async (tx) => {
+      const wdRef   = doc(db, 'withdrawals', docId);
+      const userRef = doc(db, 'users', uid);
+      const wdSnap  = await tx.get(wdRef);
+      const userSnap = await tx.get(userRef);
+
+      // Guard: idempotency
+      if (!wdSnap.exists() || wdSnap.data().status !== 'pending') {
+        throw new Error('Request sudah diproses sebelumnya.');
+      }
+      // Guard: saldo cukup
+      const available = userSnap.exists() ? (userSnap.data().komisiAvailable || 0) : 0;
+      if (available < amount) {
+        throw new Error(`Saldo tidak cukup. Tersedia: ${fmtRp(available)}`);
+      }
+
+      tx.update(wdRef, {
+        status:      'approved',
+        processedAt: serverTimestamp(),
+        processedBy: currentUser.email,
+      });
+      tx.update(userRef, {
+        komisiWithdrawn: increment(amount),
+        komisiAvailable: increment(-amount),
+      });
+    });
+    showToast('✅ Pencairan disetujui dan saldo diperbarui!');
+    await loadWithdrawals();
+    await loadUsers();
+  } catch(e) { showToast('Gagal: ' + e.message, true); }
+};
+
+window.rejectWithdrawal = async function(docId) {
+  const note = prompt('Alasan penolakan (wajib diisi):');
+  if (note === null) return; // cancelled
+  if (!note.trim()) { showToast('Alasan penolakan wajib diisi!', true); return; }
+  try {
+    await updateDoc(doc(db,'withdrawals',docId), {
+      status:      'rejected',
+      note:        note.trim(),
+      processedAt: serverTimestamp(),
+      processedBy: currentUser.email,
+    });
+    showToast('✅ Request ditolak.');
+    await loadWithdrawals();
+  } catch(e) { showToast('Gagal: ' + e.message, true); }
 };
 
 function showAlertKP(msg, isErr) {
