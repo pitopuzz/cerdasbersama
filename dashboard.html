@@ -174,6 +174,9 @@
     @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
     .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 18px 15px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
     .stat-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    /* FIX #1 — referral card clickable styling */
+    .stat-card.clickable { cursor: pointer; }
+    .stat-card.clickable:active { transform: translateY(0); }
     .stat-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; margin-bottom: 11px; }
     .stat-label { font-size: 10px; font-weight: 800; color: var(--muted2); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 3px; }
     .stat-value { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
@@ -353,31 +356,18 @@
 
   <!-- ── SECTION 2: HERO ANALYTICS ── -->
   <div class="hero-analytics" data-s style="transition-delay:.05s">
-
-    <!-- Card 1: CBT Performance -->
     <div class="analytics-card cbt" id="cardCBT">
       <div class="ac-label"><span class="ac-dot"></span>Performa CBT</div>
-      <div class="ac-body" id="cardCBTBody">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="ac-body" id="cardCBTBody"></div>
     </div>
-
-    <!-- Card 2: Learning Progress -->
     <div class="analytics-card learning" id="cardLearning">
       <div class="ac-label"><span class="ac-dot"></span>Progres Belajar</div>
-      <div class="ac-body" id="cardLearningBody">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="ac-body" id="cardLearningBody"></div>
     </div>
-
-    <!-- Card 3: Smart Insight -->
     <div class="analytics-card insight" id="cardInsight">
       <div class="ac-label"><span class="ac-dot"></span>Insight Untukmu</div>
-      <div class="ac-body" id="cardInsightBody">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="ac-body" id="cardInsightBody"></div>
     </div>
-
   </div>
 
   <!-- ── SECTION 3: QUICK LAUNCH ── -->
@@ -397,11 +387,12 @@
       <div class="stat-value" id="statCBTSkor">—</div>
       <div class="stat-sub" id="statCBTSkorSub">setelah ikuti CBT</div>
     </div>
-    <div class="stat-card">
+    <!-- FIX #1: stat card kode referral sekarang clickable copy link -->
+    <div class="stat-card clickable" id="statRefCodeCard" title="Klik untuk salin link referral">
       <div class="stat-icon" style="background:#eef3fc">🔗</div>
       <div class="stat-label">Kode Referral</div>
       <div class="stat-value" id="statRefCode" style="font-size:14px;color:var(--red);letter-spacing:1px">—</div>
-      <div class="stat-sub">bagikan ke teman</div>
+      <div class="stat-sub" id="statRefCodeSub">klik untuk salin link</div>
     </div>
   </div>
 
@@ -629,12 +620,25 @@
       $('statSubbabDone').textContent = doneCount > 0 ? doneCount : '—';
       $('statSubbabDoneSub').textContent = 'sub-bab dikerjakan';
     }
-    // CBT skor — Sprint 3 data (lastCbtScore field)
     if (ud.lastCbtScore !== undefined) {
       $('statCBTSkor').textContent = ud.lastCbtScore;
       $('statCBTSkorSub').textContent = ud.lastCbtSegmen ? ud.lastCbtSegmen.substring(0, 20) : 'skor terakhir';
     }
     $('statRefCode').textContent = ud.referralCode || '—';
+
+    // FIX #1 — stat card kode referral: klik untuk salin link referral
+    const refLink = 'https://cerdasbersama.vercel.app/register.html?ref=' + (ud.referralCode || '');
+    $('statRefCodeCard').addEventListener('click', () => {
+      navigator.clipboard.writeText(refLink).then(() => {
+        $('statRefCodeSub').textContent = '✓ Link tersalin!';
+        $('statRefCodeSub').style.color = 'var(--green)';
+        showToast('Link referral berhasil disalin!');
+        setTimeout(() => {
+          $('statRefCodeSub').textContent = 'klik untuk salin link';
+          $('statRefCodeSub').style.color = '';
+        }, 2500);
+      });
+    });
 
     // ── CONTEXTUAL UPSELL ──
     renderUpsell(hasPremiumAll, hasSubbab, hasTryout, isPremium, ud);
@@ -725,8 +729,6 @@
   // ═══════════════════════════════════════
   function renderCardCBT(hasTryout, tryOutAkses, isPremium, ud) {
     const body = $('cardCBTBody');
-
-    // State: lastCbtScore exists (Sprint 3 data)
     if (ud.lastCbtScore !== undefined) {
       const score    = ud.lastCbtScore;
       const prevScore = ud.prevCbtScore;
@@ -736,7 +738,6 @@
       const deltaClass = delta > 0 ? 'up' : delta < 0 ? 'down' : 'same';
       const deltaLabel = delta > 0 ? `↑ +${delta} poin` : delta < 0 ? `↓ ${delta} poin` : '= Sama';
       const badgeText = delta > 0 ? '🎉 Performa Meningkat' : delta < 0 ? '📈 Masih Bisa Naik' : '🎯 Konsisten';
-
       body.innerHTML = `
         ${hasDelta ? `<div class="ac-badge-status positive">${badgeText}</div>` : ''}
         <div class="cbt-score-row">
@@ -753,8 +754,6 @@
         </div>`;
       return;
     }
-
-    // State: has tryout access but no score yet
     if (hasTryout) {
       const segmenLabel = isPremium ? 'Semua segmen' : tryOutAkses[0] || 'Try Out';
       body.innerHTML = `
@@ -766,8 +765,6 @@
         </div>`;
       return;
     }
-
-    // State: no tryout access at all
     body.innerHTML = `
       <span class="ac-empty-icon">📋</span>
       <div class="ac-headline">Belum ada ujian? Tidak apa-apa!</div>
@@ -782,8 +779,6 @@
   // ═══════════════════════════════════════
   function renderCardLearning(hasSubbab, hasPremiumAll, subBabAkses, doneCount, totalSubbab) {
     const body = $('cardLearningBody');
-
-    // State: no subbab access
     if (!hasSubbab) {
       body.innerHTML = `
         <span class="ac-empty-icon">🔒</span>
@@ -794,8 +789,6 @@
         </div>`;
       return;
     }
-
-    // State: has access, nothing done yet
     if (doneCount === 0) {
       const total = hasPremiumAll ? 'banyak' : totalSubbab;
       body.innerHTML = `
@@ -809,12 +802,9 @@
         </div>`;
       return;
     }
-
-    // State: active progress
     const pct = hasPremiumAll ? null : Math.round((doneCount / totalSubbab) * 100);
     const remaining = hasPremiumAll ? null : totalSubbab - doneCount;
     const allDone = !hasPremiumAll && remaining === 0;
-
     if (allDone) {
       body.innerHTML = `
         <div class="ac-badge-status positive">✅ Semua Selesai!</div>
@@ -827,7 +817,6 @@
         </div>`;
       return;
     }
-
     body.innerHTML = `
       <div class="ac-headline">${doneCount} sub-bab selesai${!hasPremiumAll ? ` dari ${totalSubbab}` : ''}!</div>
       <div class="ac-sub">${hasPremiumAll ? 'Terus konsisten — setiap sesi mendekatkanmu ke tujuan.' : `${remaining} sub-bab lagi menunggumu. Teruskan momentum ini!`}</div>
@@ -846,8 +835,6 @@
   // ═══════════════════════════════════════
   function renderCardInsight(hasSubbab, hasTryout, hasPremiumAll, subBabAkses, tryOutAkses, doneCount, totalSubbab, ud) {
     const body = $('cardInsightBody');
-
-    // Has CBT score data (Sprint 3)
     if (ud.lastCbtScore !== undefined && ud.prevCbtScore !== undefined) {
       const delta = ud.lastCbtScore - ud.prevCbtScore;
       if (delta > 0) {
@@ -869,8 +856,6 @@
         return;
       }
     }
-
-    // Has both subbab and tryout, has done some
     if (hasSubbab && hasTryout && doneCount > 0) {
       body.innerHTML = `
         <div class="insight-highlight">"Kamu sudah ${doneCount} langkah lebih jauh dari kemarin."</div>
@@ -880,8 +865,6 @@
         </div>`;
       return;
     }
-
-    // Has subbab, has done some, no tryout
     if (hasSubbab && doneCount > 0 && !hasTryout) {
       body.innerHTML = `
         <div class="insight-highlight">"Latihan sudah jalan — saatnya diuji sungguhan."</div>
@@ -891,8 +874,6 @@
         </div>`;
       return;
     }
-
-    // Has subbab, nothing done yet
     if (hasSubbab && doneCount === 0) {
       body.innerHTML = `
         <div class="insight-highlight">"Langkah pertama selalu yang paling susah — tapi juga yang paling penting."</div>
@@ -902,8 +883,6 @@
         </div>`;
       return;
     }
-
-    // Has tryout only, no subbab
     if (hasTryout && !hasSubbab) {
       body.innerHTML = `
         <div class="insight-highlight">"Ujian tanpa latihan bisa mengejutkan — tapi latihan + ujian? Itu kombinasi pemenang."</div>
@@ -913,8 +892,6 @@
         </div>`;
       return;
     }
-
-    // No access at all — new user
     body.innerHTML = `
       <div class="insight-highlight">"Setiap perjalanan besar dimulai dari satu langkah kecil."</div>
       <div class="ac-sub">Ikuti CBT pertama untuk tahu posisimu sekarang, atau mulai dari latihan sub-bab. Tidak ada cara yang salah.</div>
@@ -930,7 +907,6 @@
     const wrap = $('subbabPoolWrap');
     const hasSubbab = subBabAkses.length > 0 || hasPremiumAll;
     const hasTryout = isPremium || tryOutAkses.length > 0;
-
     if (!hasSubbab && !hasTryout) {
       wrap.innerHTML = `
         <div class="subbab-pool-card">
@@ -942,8 +918,6 @@
         </div>`;
       return;
     }
-
-    // Group subbab by segmen, unfinished first
     const segmenMap = {};
     subBabAkses.forEach(sb => {
       const info = subBabIconMap[sb] || { icon:'📚', segmen:'Sub-Bab Kamu', mapel:'' };
@@ -951,9 +925,7 @@
       const isDone = doneList.includes(sb);
       segmenMap[info.segmen][isDone ? 'done' : 'active'].push({ sb, icon: info.icon, segmen: info.segmen, mapel: info.mapel });
     });
-
     const allSubbabDone = subBabAkses.length > 0 && subBabAkses.every(sb => doneList.includes(sb));
-
     const segmenGroupsHTML = Object.entries(segmenMap).map(([seg, groups]) => {
       const allItems = [...groups.active, ...groups.done];
       const chips = allItems.map(({ sb, icon, segmen, mapel }) => {
@@ -972,14 +944,12 @@
         ? `<div class="chips-segmen-title">📚 ${seg || 'Sub-Bab Kamu'}</div>` : '';
       return `<div class="chips-segmen-group">${label}<div class="subbab-chips">${chips}</div></div>`;
     }).join('');
-
     const allDoneBanner = allSubbabDone ? `
       <div class="pool-all-done">
         <span class="done-icon">🎉</span>
         <span class="done-text">Semua sub-bab sudah dikerjakan — siap untuk lebih banyak lagi?</span>
         <a href="/pricing.html" class="done-cta">+ Tambah Sub-Bab</a>
       </div>` : '';
-
     let tryoutSectionHTML = '';
     if (hasTryout) {
       const toChips = isPremium
@@ -996,7 +966,6 @@
           <div class="subbab-chips">${toChips}</div>
         </div>`;
     }
-
     let cardHTML = '';
     if (hasSubbab) {
       cardHTML = `
@@ -1032,7 +1001,6 @@
           </div>
         </div>`;
     }
-
     wrap.innerHTML = cardHTML;
   }
 
@@ -1041,8 +1009,6 @@
   // ═══════════════════════════════════════
   function renderUpsell(hasPremiumAll, hasSubbab, hasTryout, isPremium, ud) {
     const block = $('upsellBlock');
-
-    // Premium: no banner unless expiring soon
     if (hasPremiumAll) {
       const exp  = ud.expiredAt ? (ud.expiredAt.toDate ? ud.expiredAt.toDate() : new Date(ud.expiredAt)) : null;
       const diff = exp ? Math.ceil((exp - new Date()) / 86400000) : 999;
@@ -1058,8 +1024,6 @@
       }
       return;
     }
-
-    // Has subbab but no tryout → upsell tryout
     if (hasSubbab && !hasTryout) {
       block.innerHTML = `
         <div class="upsell-block purple-theme">
@@ -1071,8 +1035,6 @@
         </div>`;
       return;
     }
-
-    // Has tryout but no subbab → upsell latihan
     if (hasTryout && !hasSubbab) {
       block.innerHTML = `
         <div class="upsell-block green-theme">
@@ -1084,8 +1046,6 @@
         </div>`;
       return;
     }
-
-    // Has both but not premium → upsell premium
     if (hasSubbab && hasTryout && !isPremium) {
       block.innerHTML = `
         <div class="upsell-block red-theme">
@@ -1097,8 +1057,6 @@
         </div>`;
       return;
     }
-
-    // No access at all → first purchase nudge
     if (!hasSubbab && !hasTryout) {
       block.innerHTML = `
         <div class="upsell-block red-theme">
@@ -1121,11 +1079,9 @@
     const expStr  = exp ? exp.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }) : '—';
     const diff    = exp ? Math.ceil((exp - new Date()) / 86400000) : 0;
     const isExpired = diff <= 0;
-
     const segmenListHTML = allSegmen.map(s =>
       `<div class="segmen-item"><div class="segmen-check">✓</div>${s.icon || '📚'} ${s.id}</div>`
     ).join('');
-
     section.innerHTML = `
       <div class="section-label" data-s style="transition-delay:.2s">✨ Detail Premium</div>
       <div class="premium-info" data-s style="transition-delay:.22s">
@@ -1149,8 +1105,6 @@
           </div>
         </div>
       </div>`;
-
-    // Animate new data-s elements
     setTimeout(() => {
       section.querySelectorAll('[data-s]').forEach(el => el.classList.add('in'));
     }, 400);
@@ -1162,7 +1116,6 @@
   function openTryoutModal(tryOutAkses, isPremium) {
     const content = $('modalSegmenContent');
     content.innerHTML = '';
-
     if (isPremium) {
       TRYOUT_SEGMEN_ALL.forEach(({ group, items }) => {
         const title = document.createElement('div');
