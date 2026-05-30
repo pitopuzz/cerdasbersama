@@ -59,19 +59,32 @@ export default async function handler(req, res) {
       const orderDoc = snap.docs[0];
       const orderData = orderDoc.data();
 
-      // 2. Update status order → paid
+      // 2. Idempotency check — jangan proses ulang jika sudah paid
+      if (orderData.status === 'paid') {
+        console.log(`Order ${order_id} sudah diproses sebelumnya, diabaikan.`);
+        return res.status(200).json({ status: 'ok' });
+      }
+
+      // 3. Update status order → paid
       await orderDoc.ref.update({ status: 'paid' });
 
-      // 3. Update akses user berdasarkan tipe paket
+      // 4. Update akses user berdasarkan tipe paket
       const uid = orderData.uid;
       const tipe = orderData.tipe || 'alacarte';
       const subBabDibeli = orderData.subBabDibeli || [];
+      const tryOutSegmen = orderData.tryOutSegmen || [];
       const komisi = orderData.komisi || 0;
       const refCode = orderData.refCode || null;
 
       const userRef = db.collection('users').doc(uid);
 
-      if (tipe === 'bulanan') {
+      if (tipe === 'tryout') {
+        // Try out → tambah segmen ke tryOutAkses
+        await userRef.update({
+          tryOutAkses: FieldValue.arrayUnion(...tryOutSegmen),
+        });
+
+      } else if (tipe === 'bulanan') {
         // Premium bulanan → buka semua akses
         const expiredAt = new Date();
         expiredAt.setMonth(expiredAt.getMonth() + 1);
